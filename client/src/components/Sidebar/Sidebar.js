@@ -49,7 +49,7 @@ import {
   Table,
   Container,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 
 var ps;
@@ -92,12 +92,12 @@ const Sidebar = (props) => {
   if (logo && logo.innerLink) {
     navbarBrandProps = {
       to: logo.innerLink,
-      tag: Link
+      tag: Link,
     };
   } else if (logo && logo.outterLink) {
     navbarBrandProps = {
       href: logo.outterLink,
-      target: "_blank"
+      target: "_blank",
     };
   }
 
@@ -232,9 +232,7 @@ const Sidebar = (props) => {
           <Nav navbar>{createLinks(routes)}</Nav>
           {/* Divider */}
           <hr className="my-3" />
-          {/* Heading */}
-          <h6 className="navbar-heading text-muted">Documentation</h6>
-          {/* Navigation */}
+          {/* Navigation 
           <Nav className="mb-md-3" navbar>
             <NavItem>
               <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
@@ -262,7 +260,7 @@ const Sidebar = (props) => {
                 Upgrade to PRO
               </NavLink>
             </NavItem>
-          </Nav>
+          </Nav>*/}
         </Collapse>
       </Container>
     </Navbar>
@@ -270,7 +268,7 @@ const Sidebar = (props) => {
 };
 
 Sidebar.defaultProps = {
-  routes: [{}]
+  routes: [{}],
 };
 
 Sidebar.propTypes = {
@@ -286,8 +284,8 @@ Sidebar.propTypes = {
     // the image src of the logo
     imgSrc: PropTypes.string.isRequired,
     // the alt for the img
-    imgAlt: PropTypes.string.isRequired
-  })
+    imgAlt: PropTypes.string.isRequired,
+  }),
 };
 
 export default Sidebar;

@@ -3390,6 +3390,23 @@ input[type="button"].btn-block {
     transition: none;
   }
 }
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
 .fade:not(.show) {
   opacity: 0;
 }
@@ -15749,6 +15766,11 @@ a.text-lighter:focus {
 .btn-lg,
 .btn-group-lg > .btn {
   font-size: 0.875rem;
+}
+
+.btn-xl,
+.btn-group-xl > .btn {
+  font-size: 1.5rem;
 }
 
 [class*="btn-outline-"] {

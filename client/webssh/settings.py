@@ -12,6 +12,7 @@ from webssh.utils import (
 )
 from webssh._version import __version__
 
+
 def print_version(flag):
     if flag:
         print(__version__)
@@ -161,7 +162,6 @@ def get_origin_setting(options):
             )
         else:
             return '*'
-    
 
     origin = options.origin.lower()
     if origin in ['same', 'primary']:

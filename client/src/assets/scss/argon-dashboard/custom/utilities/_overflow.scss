@@ -3,9 +3,12 @@
 //
 
 .overflow-visible {
-    overflow: visible !important;
+  overflow: visible !important;
 }
 
 .overflow-hidden {
-    overflow: hidden !important;
+  overflow: hidden !important;
+}
+.overflow-auto {
+  overflow: auto !important;
 }
