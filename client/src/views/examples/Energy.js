@@ -57,13 +57,141 @@ import Header from "components/Headers/Header.js";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 
 const Energy = () => {
+  //Login Data
   const [loginData, setLoginData] = useState([]);
 
-  const [modalSets, setModalSets] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://10.0.5.123:40400/login_data");
+        setLoginData([
+          response.data.DBMS,
+          response.data.Host,
+          response.data.Port,
+          response.data.Demo,
+        ]);
+      } catch (error) {
+        console.error("CSV 파일 가져오기 중 오류 발생:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //Query Input
+  const [value, setValue] = useState("Select Query");
+  const [ind, setInd] = useState(0);
+  const [valueErr, setValueErr] = useState(false);
+  const [optionErr, setOptionErr] = useState(false);
+
+  const Query = useRef();
+
+  const handleDropdownClick = (index, e) => {
+    setValue(e.target.getAttribute("value"));
+    setInd(index);
+  };
+
+  const handleQuerySimul = (e) => {
+    if (!selectedOptions) setOptionErr(true);
+    else setOptionErr(false);
+    if (!Query.current.value) setValueErr(true);
+    else setValueErr(false);
+    if (value !== "Select Query" && selectedOptions && Query.current.value) {
+      setIsSimul(true);
+      setOptionResult([...optionResult, customSet[selectedOptions].Set]);
+      fetch("http://10.0.5.123:40400/pushdown", {
+        //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          queryID: ind,
+          query: Query.current.value
+            .replace(/[\n\t]/g, " ")
+            .replace(/\s{2,}/g, " "),
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setSnippet(data.snippet);
+          setNormalizedQuery([...NormalizedQuery, data.query]);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (value !== "Select Query") {
+      if (ind < 10) {
+        fetch(`/query/tpch0${ind}.sql`)
+          .then((response) => response.text())
+          .then((text) => {
+            Query.current.value = text;
+          });
+      } else {
+        fetch(`/query/tpch${ind}.sql`)
+          .then((response) => response.text())
+          .then((text) => {
+            Query.current.value = text;
+          });
+      }
+    }
+  }, [ind, value]);
+
+  //Option Modal
+  const [StorageSelected, setStorageSelected] = useState("SSD");
+  const [CSDNumSelected, setCSDNumSelected] = useState("8");
+  const [CSDKindSelected, setCSDKindSelected] = useState("NGD");
+  const [DBMSSelected, setDBMSSelected] = useState("MySQL");
+  const [AlgorithmSelected, setAlgorithmSelected] =
+    useState("CSD Metric Score");
+  const [IndexSelected, setIndexSelected] = useState("Use");
+  const [BlockSizeSelected, setBlockSizeSelected] = useState("4096");
+  const [addModal, setAddModal] = useState(false);
+  const [modifyModal, setModifyModal] = useState(false);
+
+  const handleStorage = (e) => {
+    setStorageSelected(e.target.value);
+    if (StorageSelected === "SSD" && e.target.value === "CSD") {
+      setCSDNumSelected("8");
+      setCSDKindSelected("NGD");
+    }
+  };
+  const handleDBMS = (e) => {
+    setDBMSSelected(e.target.value);
+  };
+  const handleCSDCount = (e) => {
+    setCSDNumSelected(e.target.value);
+  };
+  const handleCSDKind = (e) => {
+    setCSDKindSelected(e.target.value);
+  };
+  const handleAlgorithm = (e) => {
+    setAlgorithmSelected(e.target.value);
+  };
+  const handleIndex = (e) => {
+    setIndexSelected(e.target.value);
+  };
+  const handleBlockSize = (e) => {
+    setBlockSizeSelected(e.target.value);
+  };
+
+  //(Add)
+  const resetOptions = () => {
+    setStorageSelected("SSD");
+    setDBMSSelected("MySQL");
+    setCSDNumSelected("8");
+    setCSDKindSelected("NGD");
+    setAlgorithmSelected("CSD Metric Score");
+    setIndexSelected("Use");
+    setBlockSizeSelected("4096");
+  };
+
   const toggle = () => {
-    setModalSets(!modalSets);
+    setAddModal(!addModal);
     resetOptions();
   };
+
   const add = () => {
     toggle();
     if (StorageSelected === "CSD")
@@ -100,11 +228,14 @@ const Energy = () => {
     setSelectedOptions(customSet.length);
   };
 
-  const [modal, setModal] = useState(false);
+  //(Modify)
+  const toggle2 = (e) => {
+    setModifyModal(!modifyModal);
+  };
   const modify = () => {
     toggle2();
     const updatedOption = [...customSet];
-    // 특정 인덱스의 요소 수정
+
     if (StorageSelected === "CSD")
       updatedOption[set].Set = [
         StorageSelected,
@@ -125,57 +256,14 @@ const Energy = () => {
         IndexSelected,
         BlockSizeSelected,
       ];
-    // 상태 업데이트
     setCustomSet(updatedOption);
   };
-  const resetOptions = () => {
-    setStorageSelected("SSD");
-    setDBMSSelected("MySQL");
-    setCSDNumSelected("8");
-    setCSDKindSelected("NGD");
-    setAlgorithmSelected("CSD Metric Score");
-    setIndexSelected("Use");
-    setBlockSizeSelected("4096");
-  };
-  const toggle2 = (e) => {
-    setModal(!modal);
-  };
-  const [StorageSelected, setStorageSelected] = useState("SSD");
-  const [CSDNumSelected, setCSDNumSelected] = useState("8");
-  const [CSDKindSelected, setCSDKindSelected] = useState("NGD");
-  const [DBMSSelected, setDBMSSelected] = useState("MySQL");
-  const [AlgorithmSelected, setAlgorithmSelected] =
-    useState("CSD Metric Score");
-  const [IndexSelected, setIndexSelected] = useState("Use");
-  const [BlockSizeSelected, setBlockSizeSelected] = useState("4096");
-  const [selectedOptions, setSelectedOptions] = useState(0);
 
+  //OptionSet Handling
+  const [customSet, setCustomSet] = useState([{ Set: [, , , ,] }]);
+  const [selectedOptions, setSelectedOptions] = useState(0);
   const [set, setSet] = useState(0);
-  const handleStorage = (e) => {
-    setStorageSelected(e.target.value);
-    if (StorageSelected === "SSD" && e.target.value === "CSD") {
-      setCSDNumSelected("8");
-      setCSDKindSelected("NGD");
-    }
-  };
-  const handleDBMS = (e) => {
-    setDBMSSelected(e.target.value);
-  };
-  const handleCSDCount = (e) => {
-    setCSDNumSelected(e.target.value);
-  };
-  const handleCSDKind = (e) => {
-    setCSDKindSelected(e.target.value);
-  };
-  const handleAlgorithm = (e) => {
-    setAlgorithmSelected(e.target.value);
-  };
-  const handleIndex = (e) => {
-    setIndexSelected(e.target.value);
-  };
-  const handleBlockSize = (e) => {
-    setBlockSizeSelected(e.target.value);
-  };
+  const [optionResult, setOptionResult] = useState([]);
 
   const handleOptionInfo = (index, e) => {
     toggle2();
@@ -193,131 +281,34 @@ const Energy = () => {
     setSelectedOptions(index);
   };
 
-  const [value, setValue] = useState("Select Query");
-  const [source, setSource] = useState("/img/TPC-H 1.png");
+  //Selected Query
+  const [NormalizedQuery, setNormalizedQuery] = useState([]);
+  const [checkedInputs, setCheckedInputs] = useState([]);
+
+  const changeHandler = (checked, id) => {
+    if (checked) {
+      setCheckedInputs([...checkedInputs, id]);
+    } else {
+      setCheckedInputs(checkedInputs.filter((el) => el !== id));
+    }
+  };
+  useEffect(() => {
+    console.log(checkedInputs.map((index) => optionResult[index]));
+  }, [checkedInputs]);
+
+  //Template
+  const [template, setShowTemplate] = useState(false);
   const [tableName, setTableName] = useState("");
   const [whereClause, setWhereClause] = useState("");
   const [columnName, setColumnName] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [groupBy, setGroupBy] = useState("");
-  const [analysis, setAnalysis] = useState(false);
-  const [template, setShowTemplate] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [generate, setGenerate] = useState(false);
-  const [open, setOpen] = useState("1");
-  const [ind, setInd] = useState(0);
-  const [snippet, setSnippet] = useState([]);
-  const [valueErr, setValueErr] = useState(false);
-  const [optionErr, setOptionErr] = useState(false);
 
-  const [NormalizedQuery, setNormalizedQuery] = useState([]);
-  const [CSDEnergyUsageForcast, setCSDEnergyUsageForcast] = useState();
-  const [conservationEffectForcast, setConservationEffectForcast] = useState();
-  const [efficientOption, setEfficientOption] = useState();
-  const [error, setError] = useState();
-  const [energyUsage, setEnergyUsage] = useState();
-  const [conservationEffect, setConservationEffect] = useState();
-  const [isSimul, setIsSimul] = useState(false);
-
-  const [customSet, setCustomSet] = useState([{ Set: [, , , ,] }]);
-  const Query = useRef();
-  const handleQuerySimul = (e) => {
-    if (!selectedOptions) setOptionErr(true);
-    else setOptionErr(false);
-    if (!Query.current.value) setValueErr(true);
-    else setValueErr(false);
-    if (value !== "Select Query" && selectedOptions && Query.current.value) {
-      setIsSimul(true);
-      fetch("http://10.0.5.123:40400/pushdown", {
-        //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          queryID: ind,
-          query: Query.current.value
-            .replace(/[\n\t]/g, " ")
-            .replace(/\s{2,}/g, " "),
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          //const values = Object.values(data); // JSON 데이터의 값들을 배열로 추출
-          setGenerate(data.query);
-          setSnippet(data.snippet);
-          setNormalizedQuery([...NormalizedQuery, data.query]);
-        });
-    }
-  };
   const inputRef = useRef();
-  if (window.Chart) {
-    parseOptions(Chart, chartOptions());
-  }
-  const [activeNav, setActiveNav] = useState(true);
-  const [activeNav2, setActiveNav2] = useState(true);
-  const toggleNavs = (e, index) => {
-    e.preventDefault();
-    setActiveNav(index);
-  };
-  const toggleNavs2 = (e, index) => {
-    e.preventDefault();
-    setActiveNav2(index);
-  };
-  const changeImage = (value) => {
-    setSource("/img/" + value + ".png");
-  };
-  const analysisQuery = (e) => {
-    setAnalysis(true);
-  };
-  const generateAPI = (e) => {
-    setGenerate(true);
-  };
+
   const showTemp = (e) => {
     setShowTemplate(true);
   };
-  const handleDropdownClick = (index, e) => {
-    setValue(e.target.getAttribute("value"));
-    setInd(index);
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // CSV 파일 가져오기
-        const response = await axios.get("http://10.0.5.123:40400/login_data");
-        setLoginData([
-          response.data.DBMS,
-          response.data.Host,
-          response.data.Port,
-          response.data.Demo,
-        ]);
-      } catch (error) {
-        console.error("CSV 파일 가져오기 중 오류 발생:", error);
-      }
-    };
-
-    fetchData();
-
-    if (value !== "Select Query") {
-      if (ind < 10) {
-        fetch(`/query/tpch0${ind}.sql`)
-          .then((response) => response.text())
-          .then((text) => {
-            Query.current.value = text;
-          });
-      } else {
-        fetch(`/query/tpch${ind}.sql`)
-          .then((response) => response.text())
-          .then((text) => {
-            Query.current.value = text;
-          });
-      }
-    }
-  }, [ind, value]);
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleInputValue = () => {
     const queryParts = [];
     if (columnName) queryParts.push(`SELECT ${columnName}`);
@@ -327,6 +318,34 @@ const Energy = () => {
     if (groupBy) queryParts.push(`GroupBy=${groupBy}`);
     const query = queryParts.join("\n");
     inputRef.current.value = query;
+  };
+
+  //Snippet Info
+  const [snippet, setSnippet] = useState([]);
+
+  //Result
+  const [isSimul, setIsSimul] = useState(false);
+  const [CSDEnergyUsageForcast, setCSDEnergyUsageForcast] = useState();
+  const [conservationEffectForcast, setConservationEffectForcast] = useState();
+  const [efficientOption, setEfficientOption] = useState();
+  const [error, setError] = useState();
+  const [energyUsage, setEnergyUsage] = useState();
+  const [conservationEffect, setConservationEffect] = useState();
+
+  if (window.Chart) {
+    parseOptions(Chart, chartOptions());
+  }
+
+  //Others
+  const [activeNav, setActiveNav] = useState(true);
+  const [activeNav2, setActiveNav2] = useState(true);
+  const toggleNavs = (e, index) => {
+    e.preventDefault();
+    setActiveNav(index);
+  };
+  const toggleNavs2 = (e, index) => {
+    e.preventDefault();
+    setActiveNav2(index);
   };
 
   //For Demo
@@ -383,7 +402,6 @@ const Energy = () => {
             })
               .then((response) => response.json())
               .then((data) => {
-                setGenerate(data.query);
                 setSnippet(data.snippet);
               });
           }
@@ -628,12 +646,7 @@ const Energy = () => {
                       New Option
                       <i className="ni ni-settings-gear-65 ml-2" />
                     </Button>
-                    <Modal
-                      centered
-                      isOpen={modalSets}
-                      toggle={toggle}
-                      size="lg"
-                    >
+                    <Modal centered isOpen={addModal} toggle={toggle} size="lg">
                       <ModalHeader toggle={toggle}>
                         Set Simulator Option
                       </ModalHeader>
@@ -927,7 +940,7 @@ const Energy = () => {
                     ))}
                   </tbody>
                 </Table>
-                <Modal centered isOpen={modal} toggle={toggle2} size="lg">
+                <Modal centered isOpen={modifyModal} toggle={toggle2} size="lg">
                   <ModalHeader toggle={toggle2}>
                     Set Simulator Option
                   </ModalHeader>
@@ -1279,7 +1292,7 @@ const Energy = () => {
                   <thead className="thead-light">
                     <tr>
                       <th scope="col" className="text-sm w-50">
-                        Normaized Query
+                        Normalized Query
                       </th>
                       <th scope="col" className="text-sm">
                         Requests
@@ -1307,7 +1320,16 @@ const Energy = () => {
                         <td>
                           <Row>
                             <Col xl="1">
-                              <Input type="checkbox" />
+                              <Input
+                                type="checkbox"
+                                key={index}
+                                onChange={(e) => {
+                                  changeHandler(e.target.checked, index);
+                                }}
+                                checked={
+                                  checkedInputs.includes(index) ? true : false
+                                }
+                              />
                             </Col>
                             <Col xl="10">
                               {NormalizedQuery[index].length < 105
