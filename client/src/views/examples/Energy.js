@@ -92,13 +92,18 @@ const Energy = () => {
   };
 
   const handleQuerySimul = (e) => {
-    if (!selectedOptions) setOptionErr(true);
+    setNormalizedQuery([...NormalizedQuery, Query.current.value]);
+    setOptionResult([
+      ...optionResult,
+      [...customSet[selectedOption].Set, selectedOption],
+    ]);
+    if (!selectedOption) setOptionErr(true);
     else setOptionErr(false);
     if (!Query.current.value) setValueErr(true);
     else setValueErr(false);
-    if (value !== "Select Query" && selectedOptions && Query.current.value) {
+    if (value !== "Select Query" && selectedOption && Query.current.value) {
       setIsSimul(true);
-      setOptionResult([...optionResult, customSet[selectedOptions].Set]);
+
       fetch("http://10.0.5.123:40400/pushdown", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
@@ -115,7 +120,6 @@ const Energy = () => {
         .then((response) => response.json())
         .then((data) => {
           setSnippet(data.snippet);
-          setNormalizedQuery([...NormalizedQuery, data.query]);
         });
     }
   };
@@ -149,6 +153,7 @@ const Energy = () => {
   const [BlockSizeSelected, setBlockSizeSelected] = useState("4096");
   const [addModal, setAddModal] = useState(false);
   const [modifyModal, setModifyModal] = useState(false);
+  const [resultModal, setResultModal] = useState(false);
 
   const handleStorage = (e) => {
     setStorageSelected(e.target.value);
@@ -259,9 +264,14 @@ const Energy = () => {
     setCustomSet(updatedOption);
   };
 
+  //(Result)
+  const toggle3 = (e) => {
+    setResultModal(!resultModal);
+  };
+
   //OptionSet Handling
   const [customSet, setCustomSet] = useState([{ Set: [, , , ,] }]);
-  const [selectedOptions, setSelectedOptions] = useState(0);
+  const [selectedOption, setSelectedOptions] = useState(0);
   const [set, setSet] = useState(0);
   const [optionResult, setOptionResult] = useState([]);
 
@@ -284,6 +294,7 @@ const Energy = () => {
   //Selected Query
   const [NormalizedQuery, setNormalizedQuery] = useState([]);
   const [checkedInputs, setCheckedInputs] = useState([]);
+  const [QueryOption, setQueryOption] = useState([, , , , , , , 0]);
 
   const changeHandler = (checked, id) => {
     if (checked) {
@@ -291,6 +302,10 @@ const Energy = () => {
     } else {
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
     }
+  };
+  const handleResultOptions = (index, e) => {
+    setQueryOption(optionResult[index]);
+    toggle3();
   };
   useEffect(() => {
     console.log(checkedInputs.map((index) => optionResult[index]));
@@ -374,13 +389,13 @@ const Energy = () => {
         setCurrentIns("Simulator");
         setTimeout(() => {
           setIsSimul(true);
-          if (selectedOptions.length !== 2) setOptionErr(true);
+          if (selectedOption.length !== 2) setOptionErr(true);
           else setOptionErr(false);
           if (!Query.current.value) setValueErr(true);
           else setValueErr(false);
           if (
             value !== "Select Query" &&
-            selectedOptions.length === 2 &&
+            selectedOption.length === 2 &&
             Query.current.value
           ) {
             fetch("http://10.0.5.123:40400", {
@@ -395,8 +410,8 @@ const Energy = () => {
                   .replace(/[\n\t]/g, " ")
                   .replace(/\s{2,}/g, " "),
                 options: [
-                  customSet[selectedOptions[0]],
-                  customSet[selectedOptions[1]],
+                  customSet[selectedOption[0]],
+                  customSet[selectedOption[1]],
                 ],
               }),
             })
@@ -922,7 +937,7 @@ const Energy = () => {
                             type="button"
                             onClick={(e) => handleOptionInfo(index, e)}
                           >
-                            CSD Option {index}
+                            {customSet[index].Set[0]} Option {index}
                           </Button>
                         </th>
                         <td className="w-25">
@@ -930,7 +945,7 @@ const Energy = () => {
                             className="btn-icon btn-2"
                             color="success"
                             type="button"
-                            outline={index !== selectedOptions}
+                            outline={index !== selectedOption}
                             onClick={(e) => handleSelectOption(index, e)}
                           >
                             <i className="ni ni-check-bold text-xl" />
@@ -1152,7 +1167,8 @@ const Energy = () => {
             <Card className="bg-white  h-100">
               <CardTitle className="h2 py-1 pl-3 mb-0 bg-light text-darker">
                 <Row className="pl-3 justify-content-center">
-                  CSD Option {" " + selectedOptions}
+                  {QueryOption[0]} Option{" "}
+                  {" " + QueryOption[QueryOption.length - 1]}
                 </Row>
               </CardTitle>
               <CardBody className="py-0 px-0">
@@ -1167,7 +1183,7 @@ const Energy = () => {
                         <h3>Storage</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[0]}</h4>
+                        <h4>{QueryOption[0]}</h4>
                       </td>
                     </tr>
 
@@ -1184,7 +1200,7 @@ const Energy = () => {
                         <h3>DBMS</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[1]}</h4>
+                        <h4>{QueryOption[1]}</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1192,7 +1208,7 @@ const Energy = () => {
                         <h3>CSD Count</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[2]}</h4>
+                        <h4>{QueryOption[2]}</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1200,7 +1216,7 @@ const Energy = () => {
                         <h3>CSD Kind</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[3]}</h4>
+                        <h4>{QueryOption[3]}</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1208,7 +1224,7 @@ const Energy = () => {
                         <h3>Algorithm</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[4]}</h4>
+                        <h4>{QueryOption[4]}</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1216,7 +1232,7 @@ const Energy = () => {
                         <h3>Index</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[5]}</h4>
+                        <h4>{QueryOption[5]}</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1224,7 +1240,7 @@ const Energy = () => {
                         <h3>Block Size</h3>
                       </th>
                       <td>
-                        <h4>{customSet[selectedOptions].Set[6]}</h4>
+                        <h4>{QueryOption[6]}</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1322,6 +1338,7 @@ const Energy = () => {
                             <Col xl="1">
                               <Input
                                 type="checkbox"
+                                className="mt-2"
                                 key={index}
                                 onChange={(e) => {
                                   changeHandler(e.target.checked, index);
@@ -1331,10 +1348,14 @@ const Energy = () => {
                                 }
                               />
                             </Col>
-                            <Col xl="10">
-                              {NormalizedQuery[index].length < 105
+                            <Col
+                              xl="11"
+                              className="btn btn-sm"
+                              onClick={(e) => handleResultOptions(index)}
+                            >
+                              {NormalizedQuery[index].length < 140
                                 ? NormalizedQuery[index]
-                                : NormalizedQuery[index].slice(0, 95) + "..."}
+                                : NormalizedQuery[index].slice(0, 140) + "..."}
                             </Col>
                           </Row>
                         </td>
@@ -1382,6 +1403,17 @@ const Energy = () => {
                     ))}
                   </tbody>
                 </Table>
+                <Modal centered isOpen={resultModal} toggle={toggle3} size="lg">
+                  <ModalHeader toggle={toggle3}>
+                    Set Simulator Option
+                  </ModalHeader>
+                  <ModalBody></ModalBody>
+                  <ModalFooter className="text-right">
+                    <Button color="light" onClick={toggle3}>
+                      CLOSE
+                    </Button>
+                  </ModalFooter>
+                </Modal>
               </CardBody>
             </Card>
           </Col>
