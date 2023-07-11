@@ -1,1 +1,3 @@
 node_modules
+server/logins.csv
+client/node_modules
