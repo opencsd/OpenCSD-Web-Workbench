@@ -48,10 +48,17 @@ import {
   ButtonGroup,
   ModalFooter,
   Progress,
+  PopoverBody,
+  UncontrolledPopover,
 } from "reactstrap";
 
 import { chartOptions, parseOptions } from "variables/charts.js";
-import { energychart, pushdownchart } from "variables/charts";
+import {
+  energychart,
+  pushdowneffectcheckchart,
+  querychart,
+  pushdownchart,
+} from "variables/charts";
 // core components
 import Header from "components/Headers/Header.js";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
@@ -83,6 +90,7 @@ const Energy = () => {
   const [ind, setInd] = useState(0);
   const [valueErr, setValueErr] = useState(false);
   const [optionErr, setOptionErr] = useState(false);
+  const [chart, setChart] = useState({});
 
   const Query = useRef();
 
@@ -92,18 +100,17 @@ const Energy = () => {
   };
 
   const handleQuerySimul = (e) => {
-    setNormalizedQuery([...NormalizedQuery, Query.current.value]);
-    setOptionResult([
-      ...optionResult,
-      [...customSet[selectedOption].Set, selectedOption],
-    ]);
     if (!selectedOption) setOptionErr(true);
     else setOptionErr(false);
     if (!Query.current.value) setValueErr(true);
     else setValueErr(false);
-    if (value !== "Select Query" && selectedOption && Query.current.value) {
+    if (selectedOption && Query.current.value) {
       setIsSimul(true);
-
+      setNormalizedQuery([...NormalizedQuery, Query.current.value]);
+      setOptionResult([
+        ...optionResult,
+        [...customSet[selectedOption].Set, selectedOption],
+      ]);
       fetch("http://10.0.5.123:40400/pushdown", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
@@ -121,6 +128,24 @@ const Energy = () => {
         .then((data) => {
           setSnippet(data.snippet);
         });
+      // axios
+      //   .post("http://10.0.5.123:40400/charts", {
+      //     body: JSON.stringify({
+      //       queryID: ind,
+      //       query: Query.current.value
+      //         .replace(/[\n\t]/g, " ")
+      //         .replace(/\s{2,}/g, " "),
+      //     }),
+      //   })
+      //   .then((response) => {
+      //     // 응답 처리
+      //     console.log(response.data);
+      //     setChart(response.data);
+      //   })
+      //   .catch((error) => {
+      //     // 오류 처리
+      //     console.error(error);
+      //   });
     }
   };
 
@@ -154,36 +179,38 @@ const Energy = () => {
   const [addModal, setAddModal] = useState(false);
   const [modifyModal, setModifyModal] = useState(false);
   const [resultModal, setResultModal] = useState(false);
+  const [snippetModal, setSnippetModal] = useState(false);
+  const [pushdownModal, setPushdownModal] = useState(false);
 
   const handleStorage = (e) => {
-    setStorageSelected(e.target.value);
+    if (set !== -1) setStorageSelected(e.target.value);
     if (StorageSelected === "SSD" && e.target.value === "CSD") {
       setCSDNumSelected("8");
       setCSDKindSelected("NGD");
     }
   };
   const handleDBMS = (e) => {
-    setDBMSSelected(e.target.value);
+    if (set !== -1) setDBMSSelected(e.target.value);
   };
   const handleCSDCount = (e) => {
-    setCSDNumSelected(e.target.value);
+    if (set !== -1) setCSDNumSelected(e.target.value);
   };
   const handleCSDKind = (e) => {
-    setCSDKindSelected(e.target.value);
+    if (set !== -1) setCSDKindSelected(e.target.value);
   };
   const handleAlgorithm = (e) => {
-    setAlgorithmSelected(e.target.value);
+    if (set !== -1) setAlgorithmSelected(e.target.value);
   };
   const handleIndex = (e) => {
-    setIndexSelected(e.target.value);
+    if (set !== -1) setIndexSelected(e.target.value);
   };
   const handleBlockSize = (e) => {
-    setBlockSizeSelected(e.target.value);
+    if (set !== -1) setBlockSizeSelected(e.target.value);
   };
 
   //(Add)
   const resetOptions = () => {
-    setStorageSelected("SSD");
+    setStorageSelected("CSD");
     setDBMSSelected("MySQL");
     setCSDNumSelected("8");
     setCSDKindSelected("NGD");
@@ -269,6 +296,15 @@ const Energy = () => {
     setResultModal(!resultModal);
   };
 
+  //(Snippet)
+  const toggle4 = (e) => {
+    setSnippetModal(!snippetModal);
+  };
+  //(Pushdown)
+  const toggle5 = (e) => {
+    setPushdownModal(!pushdownModal);
+  };
+
   //OptionSet Handling
   const [customSet, setCustomSet] = useState([{ Set: [, , , ,] }]);
   const [selectedOption, setSelectedOptions] = useState(0);
@@ -278,13 +314,23 @@ const Energy = () => {
   const handleOptionInfo = (index, e) => {
     toggle2();
     setSet(index);
-    setStorageSelected(customSet[index].Set[0]);
-    setDBMSSelected(customSet[index].Set[1]);
-    setCSDNumSelected(customSet[index].Set[2]);
-    setCSDKindSelected(customSet[index].Set[3]);
-    setAlgorithmSelected(customSet[index].Set[4]);
-    setIndexSelected(customSet[index].Set[5]);
-    setBlockSizeSelected(customSet[index].Set[6]);
+    if (index == -1) {
+      setStorageSelected("SSD");
+      setDBMSSelected("MySQL");
+      setCSDNumSelected("8");
+      setCSDKindSelected("NGD");
+      setAlgorithmSelected("CSD Metric Score");
+      setIndexSelected("Use");
+      setBlockSizeSelected("4096");
+    } else {
+      setStorageSelected(customSet[index].Set[0]);
+      setDBMSSelected(customSet[index].Set[1]);
+      setCSDNumSelected(customSet[index].Set[2]);
+      setCSDKindSelected(customSet[index].Set[3]);
+      setAlgorithmSelected(customSet[index].Set[4]);
+      setIndexSelected(customSet[index].Set[5]);
+      setBlockSizeSelected(customSet[index].Set[6]);
+    }
   };
 
   const handleSelectOption = (index, e) => {
@@ -305,6 +351,7 @@ const Energy = () => {
   };
   const handleResultOptions = (index, e) => {
     setQueryOption(optionResult[index]);
+    Query.current.value = NormalizedQuery[index];
     toggle3();
   };
   useEffect(() => {
@@ -347,9 +394,18 @@ const Energy = () => {
   const [energyUsage, setEnergyUsage] = useState();
   const [conservationEffect, setConservationEffect] = useState();
 
+  //Chart
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
   }
+  const [metric, setMetric] = useState("CPU");
+  const [storage, setStorage] = useState("Total");
+  const handleMetric = (e) => {
+    setMetric(e.target.getAttribute("value"));
+  };
+  const handleStorageChart = (e) => {
+    setStorage(e.target.getAttribute("value"));
+  };
 
   //Others
   const [activeNav, setActiveNav] = useState(true);
@@ -398,7 +454,7 @@ const Energy = () => {
             selectedOption.length === 2 &&
             Query.current.value
           ) {
-            fetch("http://10.0.5.123:40400", {
+            fetch("http://10.0.5.123:40400/pushdown", {
               //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
               method: "POST",
               headers: {
@@ -923,6 +979,20 @@ const Energy = () => {
                   bordered
                 >
                   <tbody>
+                    <tr>
+                      <th scope="row" colSpan={2} className="w-75">
+                        <Button
+                          className="mt-1 "
+                          color="warning"
+                          size="lg"
+                          block
+                          type="button"
+                          onClick={(e) => handleOptionInfo(-1)}
+                        >
+                          User Environment
+                        </Button>
+                      </th>
+                    </tr>
                     {Array.from(
                       { length: customSet.length - 1 },
                       (_, i) => i + 1
@@ -931,7 +1001,7 @@ const Energy = () => {
                         <th scope="row" className="w-75">
                           <Button
                             className="mt-1 "
-                            color="light"
+                            color="primary"
                             size="lg"
                             block
                             type="button"
@@ -999,6 +1069,7 @@ const Energy = () => {
                                 id="DBMS"
                                 placeholder="DBMS"
                                 type="text"
+                                disabled={set === -1}
                                 onChange={handleDBMS}
                                 defaultValue={DBMSSelected}
                               />
@@ -1017,6 +1088,7 @@ const Energy = () => {
                                 <Input
                                   id="CSD Count"
                                   type="number"
+                                  disabled={set === -1}
                                   onChange={handleCSDCount}
                                   defaultValue={
                                     StorageSelected === "CSD" &&
@@ -1143,6 +1215,7 @@ const Energy = () => {
                                 id="BlockSize"
                                 placeholder="Block Size"
                                 type="text"
+                                disabled={set === -1}
                                 onChange={handleBlockSize}
                                 defaultValue={BlockSizeSelected}
                               />
@@ -1153,9 +1226,15 @@ const Energy = () => {
                     </Form>
                   </ModalBody>
                   <ModalFooter>
-                    <Button block color="primary" onClick={modify}>
-                      MODIFY
-                    </Button>
+                    {set === -1 ? (
+                      <Button block color="light" onClick={toggle2}>
+                        CLOSE
+                      </Button>
+                    ) : (
+                      <Button block color="primary" onClick={modify}>
+                        MODIFY
+                      </Button>
+                    )}
                   </ModalFooter>
                 </Modal>
               </CardBody>
@@ -1184,15 +1263,6 @@ const Energy = () => {
                       </th>
                       <td>
                         <h4>{QueryOption[0]}</h4>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th scope="row">
-                        <h3>Network</h3>
-                      </th>
-                      <td>
-                        <h4>1024 KB/s</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1243,22 +1313,6 @@ const Energy = () => {
                         <h4>{QueryOption[6]}</h4>
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row">
-                        <h3>CPU</h3>
-                      </th>
-                      <td>
-                        <h4>8 Core</h4>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        <h3>Memory</h3>
-                      </th>
-                      <td>
-                        <h4>200 G</h4>
-                      </td>
-                    </tr>
                   </tbody>
                 </Table>
               </CardBody>
@@ -1271,28 +1325,174 @@ const Energy = () => {
                   Pushdown Effect Check
                 </Row>
               </CardTitle>
-              <CardBody className="py-0 px-0">
+              <CardBody className="py-0 px-0 align-items-end">
                 {isSimul && (
-                  <Row className="h-100">
-                    <Col xl="6">
-                      <div className="chart h-100">
-                        {/* Chart wrapper */}
-                        <Bar
-                          data={pushdownchart.powerData}
-                          options={pushdownchart.options}
-                        />
-                      </div>
-                    </Col>
-                    <Col xl="6">
-                      <div className="chart h-100">
-                        {/* Chart wrapper */}
-                        <Line
-                          data={energychart.data}
-                          options={energychart.options}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
+                  <div className="h-100">
+                    <Row
+                      style={{ height: "10%" }}
+                      className="align-items-center mt--3"
+                    >
+                      <Col xl="6">
+                        <UncontrolledDropdown nav>
+                          <DropdownToggle className=" ml-3" split size="sm">
+                            {metric + " "}
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow">
+                            <DropdownItem onClick={handleMetric} value="CPU">
+                              <i
+                                onClick={handleMetric}
+                                value="CPU"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleMetric} value="CPU">
+                                CPU
+                              </span>
+                            </DropdownItem>
+                            <DropdownItem onClick={handleMetric} value="Net">
+                              <i
+                                onClick={handleMetric}
+                                value="Net"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleMetric} value="Net">
+                                Net
+                              </span>
+                            </DropdownItem>
+                            <DropdownItem onClick={handleMetric} value="Power">
+                              <i
+                                onClick={handleMetric}
+                                value="Power"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleMetric} value="Power">
+                                Power
+                              </span>
+                            </DropdownItem>
+                            <DropdownItem onClick={handleMetric} value="Time">
+                              <i
+                                onClick={handleMetric}
+                                value="Time"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleMetric} value="Time">
+                                Time
+                              </span>
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </Col>
+                      <Col xl="6">
+                        <Row className="align-items-center">
+                          <Col xl="2">
+                            <UncontrolledDropdown nav>
+                              <DropdownToggle className=" ml-3" split size="sm">
+                                {storage + " "}
+                              </DropdownToggle>
+                              <DropdownMenu className="dropdown-menu-arrow">
+                                <DropdownItem
+                                  onClick={handleStorageChart}
+                                  value="SE"
+                                >
+                                  <i
+                                    onClick={handleStorageChart}
+                                    value="SE"
+                                    className="ni ni-bold-right"
+                                  />
+                                  <span onClick={handleStorageChart} value="SE">
+                                    SE
+                                  </span>
+                                </DropdownItem>
+                                <DropdownItem
+                                  onClick={handleStorageChart}
+                                  value="CSD"
+                                >
+                                  <i
+                                    onClick={handleStorageChart}
+                                    value="CSD"
+                                    className="ni ni-bold-right"
+                                  />
+                                  <span onClick={handleStorageChart}>CSD</span>
+                                </DropdownItem>
+                                <DropdownItem
+                                  onClick={handleStorageChart}
+                                  value="Total"
+                                >
+                                  <i
+                                    onClick={handleStorageChart}
+                                    value="Total"
+                                    className="ni ni-bold-right"
+                                  />
+                                  <span
+                                    onClick={handleStorageChart}
+                                    value="Total"
+                                  >
+                                    Total
+                                  </span>
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </Col>
+                          <Col xl="8">
+                            <Form className="text-sm row mt-4 pt-1 ">
+                              <FormGroup row className="col-3">
+                                <Label className="mt-1">CPU:</Label>
+                                <Col xl="8">
+                                  {" "}
+                                  <Input bsSize="sm" id="CPU" type="text" />
+                                </Col>
+                              </FormGroup>
+                              <FormGroup row className="col-3">
+                                <Label className="mt-1">Net:</Label>
+                                <Col xl="8">
+                                  {" "}
+                                  <Input bsSize="sm" id="NET" type="text" />
+                                </Col>
+                              </FormGroup>
+                              <FormGroup row className="col-3">
+                                <Label className="mt-1">Pow:</Label>
+                                <Col xl="8">
+                                  {" "}
+                                  <Input bsSize="sm" id="POWER" type="text" />
+                                </Col>
+                              </FormGroup>
+                              <FormGroup row className="col-3">
+                                <Label className="mt-1">Time:</Label>
+                                <Col xl="8">
+                                  {" "}
+                                  <Input bsSize="sm" id="TIME" type="text" />
+                                </Col>
+                              </FormGroup>
+                            </Form>
+                          </Col>
+                          <Col xl="2" className="text-left">
+                            <Button color="light" size="sm" className="text-sm">
+                              Calculate
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                    <Row style={{ height: "90%" }} className="mt-3">
+                      <Col xl="6">
+                        <div className="chart h-100">
+                          {/* Chart wrapper */}
+                          <Bar
+                            data={pushdowneffectcheckchart.powerData}
+                            options={pushdowneffectcheckchart.options}
+                          />
+                        </div>
+                      </Col>
+                      <Col xl="6">
+                        <div className="chart h-100">
+                          {/* Chart wrapper */}
+                          <Line
+                            data={energychart.data}
+                            options={energychart.options}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
                 )}
               </CardBody>
             </Card>
@@ -1310,20 +1510,33 @@ const Energy = () => {
                       <th scope="col" className="text-sm w-50">
                         Normalized Query
                       </th>
-                      <th scope="col" className="text-sm">
-                        Requests
+                      <th
+                        scope="col"
+                        className="text-sm"
+                        style={{ width: "12.5%" }}
+                      >
+                        CPU
                       </th>
-                      <th scope="col" className="text-sm">
-                        AVG Latency
+                      <th
+                        scope="col"
+                        className="text-sm"
+                        style={{ width: "12.5%" }}
+                      >
+                        Network
                       </th>
-                      <th scope="col" className="text-sm">
-                        Total Time
+                      <th
+                        scope="col"
+                        className="text-sm"
+                        style={{ width: "12.5%" }}
+                      >
+                        Power
                       </th>
-                      <th scope="col" className="text-sm">
-                        Percent Time
-                      </th>
-                      <th scope="col" className="text-sm">
-                        Rows/Query
+                      <th
+                        scope="col"
+                        className="text-sm"
+                        style={{ width: "12.5%" }}
+                      >
+                        Time
                       </th>
                     </tr>
                   </thead>
@@ -1350,66 +1563,220 @@ const Energy = () => {
                             </Col>
                             <Col
                               xl="11"
-                              className="btn btn-sm"
+                              className="btn btn-sm text-sm text-darker"
                               onClick={(e) => handleResultOptions(index)}
                             >
-                              {NormalizedQuery[index].length < 140
+                              {NormalizedQuery[index].length <= 60
                                 ? NormalizedQuery[index]
-                                : NormalizedQuery[index].slice(0, 140) + "..."}
+                                : NormalizedQuery[index].slice(0, 60) + "..."}
                             </Col>
                           </Row>
                         </td>
                         <td>
-                          <Progress
-                            max="100"
-                            value={index * 10}
-                            color="primary"
-                            style={{ height: "20px", width: "60px" }}
-                          />
+                          <Row>
+                            0%
+                            <Progress
+                              className="ml-1"
+                              max="100"
+                              value={index * 10}
+                              color="primary"
+                              style={{ height: "20px", width: "65%" }}
+                            />
+                          </Row>
                         </td>
                         <td>
-                          <Progress
-                            max="100"
-                            value={100 - index * 10}
-                            color="primary"
-                            style={{ height: "20px", width: "60px" }}
-                          />
+                          <Row>
+                            0%
+                            <Progress
+                              className="ml-1"
+                              max="100"
+                              value={100 - index * 10}
+                              color="primary"
+                              style={{ height: "20px", width: "65%" }}
+                            />
+                          </Row>
                         </td>
                         <td>
-                          <Progress
-                            max="100"
-                            value={100 - index * 10}
-                            color="primary"
-                            style={{ height: "20px", width: "60px" }}
-                          />
+                          <Row>
+                            0%
+                            <Progress
+                              className="ml-1"
+                              max="100"
+                              value={100 - index * 10}
+                              color="primary"
+                              style={{ height: "20px", width: "65%" }}
+                            />
+                          </Row>
                         </td>
                         <td>
-                          <Progress
-                            max="100"
-                            value={100 - index * 10}
-                            color="primary"
-                            style={{ height: "20px", width: "60px" }}
-                          />
+                          <Row className=" align-items-center">
+                            0%
+                            <Progress
+                              className="ml-1"
+                              max="100"
+                              value={100 - index * 10}
+                              color="primary"
+                              style={{ height: "20px", width: "70%" }}
+                            />
+                            <Button
+                              className="btn-icon btn-2 pl-0 pr-0 py-0"
+                              color="transparent"
+                              id={`aaa${index}`}
+                              type="button"
+                            >
+                              <span className="btn-inner--icon text-xl">
+                                <i className="ni ni-fat-add" />
+                              </span>
+                            </Button>
+                          </Row>
                         </td>
-                        <td>
-                          <Progress
-                            max="100"
-                            value={100 - index * 10}
-                            color="primary"
-                            style={{ height: "20px", width: "60px" }}
-                          />
-                        </td>
+                        <UncontrolledPopover
+                          placement="top"
+                          target={`aaa${index}`}
+                        >
+                          <PopoverBody>
+                            <ButtonGroup className="ml-3">
+                              <Button
+                                color="info"
+                                outline
+                                size="sm"
+                                value={"Snippet"}
+                                onClick={toggle4}
+                                active
+                              >
+                                Snippet
+                              </Button>
+                              <Button
+                                color="primary"
+                                outline
+                                size="sm"
+                                value={"Pushdown"}
+                                onClick={toggle5}
+                                disabled={optionResult[index][0] === "SSD"}
+                                active={optionResult[index][0] === "CSD"}
+                              >
+                                Pushdown
+                              </Button>
+                            </ButtonGroup>
+                          </PopoverBody>
+                        </UncontrolledPopover>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-                <Modal centered isOpen={resultModal} toggle={toggle3} size="lg">
-                  <ModalHeader toggle={toggle3}>
-                    Set Simulator Option
-                  </ModalHeader>
-                  <ModalBody></ModalBody>
+                <Modal centered isOpen={resultModal} toggle={toggle3} size="xl">
+                  <ModalHeader toggle={toggle3}>Query Analysis</ModalHeader>
+                  <ModalBody>
+                    <Row>
+                      <Col xl="8">
+                        <div className="chart">
+                          {/* Chart wrapper */}
+                          <Bar
+                            data={querychart.data}
+                            options={querychart.options}
+                          />
+                        </div>
+                      </Col>
+                      <Col xl="4">
+                        <div className="overflow-hidden"></div>
+                      </Col>
+                    </Row>
+                  </ModalBody>
                   <ModalFooter className="text-right">
                     <Button color="light" onClick={toggle3}>
+                      CLOSE
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+                <Modal isOpen={snippetModal} toggle={toggle4} size="xl">
+                  <ModalHeader toggle={toggle4}>Snippet</ModalHeader>
+                  <ModalBody>
+                    <Table
+                      className="align-items-center text-center bg-white"
+                      responsive
+                    >
+                      <thead className="thead-light">
+                        <tr>
+                          <th scope="col" className="text-sm">
+                            Num
+                          </th>
+                          <th scope="col" className="text-sm">
+                            Snippet Type
+                          </th>
+                          <th scope="col" className="text-sm">
+                            Projection Colume
+                          </th>
+                          <th scope="col" className="text-sm">
+                            Filter Clause
+                          </th>
+                          <th scope="col" className="text-sm">
+                            Order by
+                          </th>
+                          <th scope="col" className="text-sm">
+                            Group by
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Array.from(
+                          { length: snippet.length },
+                          (_, i) => i
+                        ).map((index) => (
+                          <tr>
+                            <th scope="row">
+                              {snippet[index]["Snippet Type"] && index + 1}
+                            </th>
+                            <td>
+                              <h4>{snippet[index]["Snippet Type"]}</h4>
+                            </td>
+                            <td>
+                              <h4>{snippet[index]["Projection Column"]}</h4>
+                            </td>
+                            <td>
+                              <h4>{snippet[index]["Filter Clause"]}</h4>
+                            </td>
+                            <td>
+                              <h4>{snippet[index]["Order by"]}</h4>
+                            </td>
+                            <td>
+                              <h4>{snippet[index]["Group by"]}</h4>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </ModalBody>
+                  <ModalFooter className="text-right">
+                    <Button color="light" onClick={toggle4}>
+                      CLOSE
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+                <Modal
+                  centered
+                  isOpen={pushdownModal}
+                  toggle={toggle5}
+                  size="xl"
+                >
+                  <ModalHeader toggle={toggle5}>Query Analysis</ModalHeader>
+                  <ModalBody>
+                    <Row>
+                      <Col xl="8">
+                        <div className="chart">
+                          {/* Chart wrapper */}
+                          <Bar
+                            data={pushdownchart.data}
+                            options={pushdownchart.options}
+                          />
+                        </div>
+                      </Col>
+                      <Col xl="4">
+                        <div className="overflow-hidden"></div>
+                      </Col>
+                    </Row>
+                  </ModalBody>
+                  <ModalFooter className="text-right">
+                    <Button color="light" onClick={toggle5}>
                       CLOSE
                     </Button>
                   </ModalFooter>
@@ -1497,11 +1864,6 @@ const Energy = () => {
         </Row>
 
         {/* Query snippet
-        <Card className="bg-white h-50">
-              <CardTitle className="h1 py-1 pl-3 mb-0 bg-gradient-light text-darker">
-                Query Snippet
-              </CardTitle>
-              <CardBody className="py-0 px-0">
                 <Table
                   className="align-items-center text-center bg-white"
                   responsive
@@ -1554,9 +1916,7 @@ const Energy = () => {
                       )
                     )}
                   </tbody>
-                </Table>
-              </CardBody>
-            </Card> */}
+                </Table>*/}
 
         {/* <Row className="mt-5">
           <Col xl="12">

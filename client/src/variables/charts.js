@@ -191,28 +191,28 @@ function chartOptions() {
         responsive: true,
         maintainAspectRatio: false,
         defaultColor: mode === "dark" ? colors.gray[700] : colors.gray[600],
-        defaultFontColor: mode === "dark" ? colors.gray[700] : colors.gray[600],
+        defaultFontColor: mode === "dark" ? colors.gray[700] : colors.black,
         defaultFontFamily: fonts.base,
-        defaultFontSize: 13,
+        defaultFontSize: 15,
         layout: {
           padding: 0,
         },
         legend: {
           display: true,
-          position: "bottom",
+          position: "top",
           labels: {
-            usePointStyle: true,
+            usePointStyle: false,
             padding: 16,
           },
         },
         elements: {
           point: {
-            radius: 3,
+            radius: 5,
             backgroundColor: colors.theme["info"],
           },
           line: {
             tension: 0,
-            borderWidth: 3,
+            borderWidth: 5,
             borderColor: colors.theme["info"],
             backgroundColor: colors.transparent,
           },
@@ -307,7 +307,7 @@ function parseOptions(parent, options) {
 }
 
 // Example 1 of Chart inside src/views/Index.js (Sales value - Card)
-let pushdownchart = {
+let pushdowneffectcheckchart = {
   options: {
     scales: {
       yAxes: [
@@ -348,92 +348,87 @@ let pushdownchart = {
   },
   powerData: (canvas) => {
     const pushdowndata = {
-      labels: [
-        "Total without CSD (SSD)",
-        "Total with CSD",
-        "Storage Engine",
-        "CSD",
-      ],
+      labels: ["Query 1", "Query 2", "Query 3", "Query 4"],
       datasets: [
         {
-          label: "SSD",
-          data: [661, 0, 0, 0],
+          label: "Storage Engine",
+          data: [300, 200, 200, 400],
           backgroundColor: colors.theme["primary"],
           pointBackgroundColor: colors.theme["primary"],
-          maxBarThickness: 10,
-          stack: "power",
-        },
-        {
-          label: "Storage Engine",
-          data: [0, 111, 111, 0],
-          backgroundColor: colors.theme["warning"],
-          pointBackgroundColor: colors.theme["warning"],
-          maxBarThickness: 10,
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD1",
-          data: [0, 21, 0, 21],
-          backgroundColor: colors.theme["primary"],
-          pointBackgroundColor: colors.theme["primary"],
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD2",
-          data: [0, 21, 0, 21],
-          backgroundColor: colors.theme["danger"],
-          pointBackgroundColor: colors.theme["danger"],
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD3",
-          data: [0, 21, 0, 21],
-          backgroundColor: colors.theme["success"],
-          pointBackgroundColor: colors.theme["success"],
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["info"],
+          pointBackgroundColor: colors.theme["info"],
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD4",
-          data: [0, 21, 0, 21],
-          backgroundColor: colors.theme["info"],
-          pointBackgroundColor: colors.theme["info"],
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD5",
-          data: [0, 21, 0, 21],
-          backgroundColor: colors.theme["warning"],
-          pointBackgroundColor: colors.theme["warning"],
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD6",
-          data: [0, 21, 0, 21],
-          backgroundColor: "#8965e0",
-          pointBackgroundColor: "#8965e0",
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD7",
-          data: [0, 21, 0, 21],
-          backgroundColor: "#ffd600",
-          pointBackgroundColor: "#ffd600",
-          maxBarThickness: 10,
+          data: [21, 21, 21, 21],
+          backgroundColor: "#8965e0",
+          pointBackgroundColor: "#8965e0",
+          maxBarThickness: 25,
           stack: "power",
         },
         {
           label: "CSD8",
-          data: [0, 21, 0, 21],
+          data: [21, 21, 21, 21],
           backgroundColor: "#f3a4b5",
           pointBackgroundColor: "#f3a4b5",
-          maxBarThickness: 10,
+          maxBarThickness: 25,
           stack: "power",
+        },
+        {
+          label: "SSD",
+          data: [500, 600, 400, 800],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "SSD",
         },
       ],
     };
@@ -655,33 +650,366 @@ let energychart = {
   },
   data: (canvas) => {
     const energydata = {
-      labels: ["CPU", "Net", "Power", "Time"],
+      labels: ["CPU", "Net", "Power", "Time", "Result(Score)"],
       datasets: [
         {
           label: "Query 1",
-          data: [90, 80, 60, 80],
+          data: [90, 80, 60, 80, 95],
           pointBackgroundColor: colors.theme["primary"],
           borderColor: colors.theme["primary"],
         },
         {
           label: "Query 2",
-          data: [45, 60, 50, 60],
+          data: [45, 60, 50, 60, 55],
         },
         {
           label: "Query 3",
-          data: [85, 80, 75, 90],
+          data: [85, 80, 75, 90, 100],
           pointBackgroundColor: colors.theme["warning"],
           borderColor: colors.theme["warning"],
         },
         {
           label: "Query 4",
-          data: [10, 20, 40, 20],
+          data: [10, 20, 40, 20, 25],
           pointBackgroundColor: colors.theme["danger"],
           borderColor: colors.theme["danger"],
         },
       ],
     };
     return energydata;
+  },
+};
+
+let querychart = {
+  options: {
+    scales: {
+      yAxes: [
+        {
+          gridLines: {
+            color: colors.gray[900],
+            zeroLineColor: colors.gray[900],
+          },
+          ticks: {
+            callback: function (value) {
+              if (!(value % 10)) {
+                return value;
+              }
+            },
+          },
+        },
+      ],
+    },
+    centerAlign: true, // 가운데 정렬 스타일 추가
+    tooltips: {
+      callbacks: {
+        label: function (item, data) {
+          var label = data.datasets[item.datasetIndex].label || "";
+          var yLabel = item.yLabel;
+          var content = "";
+
+          if (data.datasets.length > 1 && item.yLabel > 0) {
+            content += label;
+          }
+
+          if (data.datasets.length > 1 && item.yLabel > 0) {
+            content += " " + yLabel;
+          }
+          return content;
+        },
+      },
+    },
+  },
+  data: (canvas) => {
+    const pushdowndata = {
+      labels: ["CPU", "Net", "Power", "Time"],
+      datasets: [
+        {
+          label: "SSD",
+          data: [500, 600, 400, 800],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "SSD",
+        },
+        {
+          label: "Storage Engine",
+          data: [300, 200, 200, 400],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD1",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD2",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD3",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["info"],
+          pointBackgroundColor: colors.theme["info"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD4",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD5",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD6",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD7",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#8965e0",
+          pointBackgroundColor: "#8965e0",
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD8",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#f3a4b5",
+          pointBackgroundColor: "#f3a4b5",
+          maxBarThickness: 25,
+          stack: "power",
+        },
+      ],
+    };
+    return pushdowndata;
+  },
+};
+
+let pushdownchart = {
+  options: {
+    legend: {
+      display: false,
+    },
+    scales: {
+      yAxes: [
+        {
+          gridLines: {
+            color: colors.gray[900],
+            zeroLineColor: colors.gray[900],
+          },
+          ticks: {
+            callback: function (value) {
+              if (!(value % 10)) {
+                return value;
+              }
+            },
+          },
+        },
+      ],
+    },
+    centerAlign: true, // 가운데 정렬 스타일 추가
+    tooltips: {
+      callbacks: {
+        label: function (item, data) {
+          var label = data.datasets[item.datasetIndex].label || "";
+          var yLabel = item.yLabel;
+          var content = "";
+
+          if (data.datasets.length > 1 && item.yLabel > 0) {
+            content += label;
+          }
+
+          if (data.datasets.length > 1 && item.yLabel > 0) {
+            content += " " + yLabel;
+          }
+          return content;
+        },
+      },
+    },
+  },
+  data: (canvas) => {
+    const pushdowndata = {
+      labels: ["CPU", "Net", "Power", "Time"],
+      datasets: [
+        {
+          label: "SSD",
+          data: [500, 600, 400, 800],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "SSD",
+        },
+        {
+          label: "Storage Engine",
+          data: [300, 200, 200, 400],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD1",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD2",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD3",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["info"],
+          pointBackgroundColor: colors.theme["info"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD4",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD5",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD6",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD7",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#8965e0",
+          pointBackgroundColor: "#8965e0",
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "CSD8",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#f3a4b5",
+          pointBackgroundColor: "#f3a4b5",
+          maxBarThickness: 25,
+          stack: "power",
+        },
+        {
+          label: "Storage Engine",
+          data: [300, 200, 200, 400],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD1",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD2",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD3",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["info"],
+          pointBackgroundColor: colors.theme["info"],
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD4",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD5",
+          data: [21, 21, 21, 21],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD6",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD7",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#8965e0",
+          pointBackgroundColor: "#8965e0",
+          maxBarThickness: 25,
+          stack: "real",
+        },
+        {
+          label: "CSD8",
+          data: [21, 21, 21, 21],
+          backgroundColor: "#f3a4b5",
+          pointBackgroundColor: "#f3a4b5",
+          maxBarThickness: 25,
+          stack: "real",
+        },
+      ],
+    };
+    return pushdowndata;
   },
 };
 
@@ -1008,8 +1336,10 @@ let chartExample5 = {
 module.exports = {
   chartOptions, // used inside src/views/Index.js
   parseOptions, // used inside src/views/Index.js
-  pushdownchart, // used inside src/views/Index.js
+  pushdowneffectcheckchart, // used inside src/views/Index.js
   energychart, // used inside src/views/Index.js
+  querychart,
+  pushdownchart,
   chartExample3, // used inside src/views/Index.js
   chartExample4, // used inside src/views/Index.js
   chartExample5, // used inside src/views/Index.js

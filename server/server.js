@@ -63,6 +63,7 @@ analysisApp.post("/admin/workbench", (req, res) => {
   // 로그인 성공 응답
   res.status(200).json({ message: "로그인 성공" });
 });
+
 analysisApp.get("/login_data", (req, res) => {
   fs.createReadStream("logins.csv")
     .pipe(csv())
@@ -73,6 +74,127 @@ analysisApp.get("/login_data", (req, res) => {
       res.end(); // response 종료
     });
 });
+
+// analysisApp.post("/charts", (req, res) => {
+//   var colors = {
+//     gray: {
+//       100: "#f6f9fc",
+//       200: "#e9ecef",
+//       300: "#dee2e6",
+//       400: "#ced4da",
+//       500: "#adb5bd",
+//       600: "#8898aa",
+//       700: "#525f7f",
+//       800: "#32325d",
+//       900: "#212529",
+//     },
+//     theme: {
+//       gradient_primary: "linear-gradient(87deg, #5e72e4 0, #825ee4 100%)",
+//       default: "#172b4d",
+//       primary: "#5e72e4",
+//       secondary: "#f4f5f7",
+//       info: "#11cdef",
+//       success: "#2dce89",
+//       danger: "#f5365c",
+//       warning: "#fb6340",
+//     },
+//     black: "#12263F",
+//     white: "#FFFFFF",
+//     transparent: "transparent",
+//   };
+
+//   const jsonData = {
+//     labels: [
+//       "Total without CSD (SSD)",
+//       "Total with CSD",
+//       "Storage Engine",
+//       "CSD",
+//     ],
+//     datasets: [
+//       {
+//         label: "SSD",
+//         data: [661, 0, 0, 0],
+//         backgroundColor: colors.theme["primary"],
+//         pointBackgroundColor: colors.theme["primary"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "Storage Engine",
+//         data: [0, 111, 111, 0],
+//         backgroundColor: colors.theme["warning"],
+//         pointBackgroundColor: colors.theme["warning"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD1",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: colors.theme["primary"],
+//         pointBackgroundColor: colors.theme["primary"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD2",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: colors.theme["danger"],
+//         pointBackgroundColor: colors.theme["danger"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD3",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: colors.theme["success"],
+//         pointBackgroundColor: colors.theme["success"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD4",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: colors.theme["info"],
+//         pointBackgroundColor: colors.theme["info"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD5",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: colors.theme["warning"],
+//         pointBackgroundColor: colors.theme["warning"],
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD6",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: "#8965e0",
+//         pointBackgroundColor: "#8965e0",
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD7",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: "#ffd600",
+//         pointBackgroundColor: "#ffd600",
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//       {
+//         label: "CSD8",
+//         data: [0, 21, 0, 21],
+//         backgroundColor: "#f3a4b5",
+//         pointBackgroundColor: "#f3a4b5",
+//         maxBarThickness: 10,
+//         stack: "power",
+//       },
+//     ],
+//   };
+//   res.send(jsonData);
+// });
 
 analysisApp.post("/pushdown", (req, res) => {
   const requestData = req.body; // 요청으로 받은 JSON 데이터
