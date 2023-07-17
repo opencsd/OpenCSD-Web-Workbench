@@ -1507,33 +1507,33 @@ const Energy = () => {
                 >
                   <thead className="thead-light">
                     <tr>
-                      <th scope="col" className="text-sm w-50">
+                      <th scope="col" className="text-lg w-50">
                         Normalized Query
                       </th>
                       <th
                         scope="col"
-                        className="text-sm"
+                        className="text-lg"
                         style={{ width: "12.5%" }}
                       >
                         CPU
                       </th>
                       <th
                         scope="col"
-                        className="text-sm"
+                        className="text-lg"
                         style={{ width: "12.5%" }}
                       >
                         Network
                       </th>
                       <th
                         scope="col"
-                        className="text-sm"
+                        className="text-lg"
                         style={{ width: "12.5%" }}
                       >
                         Power
                       </th>
                       <th
                         scope="col"
-                        className="text-sm"
+                        className="text-lg"
                         style={{ width: "12.5%" }}
                       >
                         Time
@@ -1563,7 +1563,7 @@ const Energy = () => {
                             </Col>
                             <Col
                               xl="11"
-                              className="btn btn-sm text-sm text-darker"
+                              className="btn btn-sm text-lg text-darker"
                               onClick={(e) => handleResultOptions(index)}
                             >
                               {NormalizedQuery[index].length <= 60
@@ -1572,67 +1572,27 @@ const Energy = () => {
                             </Col>
                           </Row>
                         </td>
-                        <td>
-                          <Row>
-                            0%
-                            <Progress
-                              className="ml-1"
-                              max="100"
-                              value={index * 10}
-                              color="primary"
-                              style={{ height: "20px", width: "65%" }}
-                            />
-                          </Row>
-                        </td>
-                        <td>
-                          <Row>
-                            0%
-                            <Progress
-                              className="ml-1"
-                              max="100"
-                              value={100 - index * 10}
-                              color="primary"
-                              style={{ height: "20px", width: "65%" }}
-                            />
-                          </Row>
-                        </td>
-                        <td>
-                          <Row>
-                            0%
-                            <Progress
-                              className="ml-1"
-                              max="100"
-                              value={100 - index * 10}
-                              color="primary"
-                              style={{ height: "20px", width: "65%" }}
-                            />
-                          </Row>
-                        </td>
-                        <td>
-                          <Row className=" align-items-center">
-                            0%
-                            <Progress
-                              className="ml-1"
-                              max="100"
-                              value={100 - index * 10}
-                              color="primary"
-                              style={{ height: "20px", width: "70%" }}
-                            />
+                        <td className="text-lg">0%</td>
+                        <td className="text-lg">0%</td>
+                        <td className="text-lg">0%</td>
+                        <td className="text-lg">0%</td>
+                        <td className="text-lg">
+                          <Col xl="3" className="text-right">
                             <Button
                               className="btn-icon btn-2 pl-0 pr-0 py-0"
                               color="transparent"
-                              id={`aaa${index}`}
+                              id={`popover${index}`}
                               type="button"
                             >
                               <span className="btn-inner--icon text-xl">
                                 <i className="ni ni-fat-add" />
                               </span>
                             </Button>
-                          </Row>
+                          </Col>
                         </td>
                         <UncontrolledPopover
                           placement="top"
-                          target={`aaa${index}`}
+                          target={`popover${index}`}
                         >
                           <PopoverBody>
                             <ButtonGroup className="ml-3">
@@ -1667,8 +1627,8 @@ const Energy = () => {
                 <Modal centered isOpen={resultModal} toggle={toggle3} size="xl">
                   <ModalHeader toggle={toggle3}>Query Analysis</ModalHeader>
                   <ModalBody>
-                    <Row>
-                      <Col xl="8">
+                    <Row className="align-items-center">
+                      <Col xl="6">
                         <div className="chart">
                           {/* Chart wrapper */}
                           <Bar
@@ -1677,8 +1637,38 @@ const Energy = () => {
                           />
                         </div>
                       </Col>
-                      <Col xl="4">
-                        <div className="overflow-hidden"></div>
+                      <Col xl="6">
+                        <Table striped responsive>
+                          <thead className="text-center thead-light">
+                            <tr>
+                              <th scope="col">Metric</th>
+                              <th scope="col">SSD</th>
+                              <th scope="col">CSD</th>
+                            </tr>
+                          </thead>
+                          <tbody className="text-center">
+                            <tr>
+                              <th scope="row">CPU</th>
+                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">0</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Net</th>
+                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">0</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Power</th>
+                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">0</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Time</th>
+                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">0</td>
+                            </tr>
+                          </tbody>
+                        </Table>
                       </Col>
                     </Row>
                   </ModalBody>

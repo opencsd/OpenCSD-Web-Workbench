@@ -202,7 +202,7 @@ function chartOptions() {
           position: "top",
           labels: {
             usePointStyle: false,
-            padding: 16,
+            padding: 15,
           },
         },
         elements: {
