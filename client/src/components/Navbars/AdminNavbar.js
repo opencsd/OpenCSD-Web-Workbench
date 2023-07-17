@@ -47,11 +47,11 @@ const AdminNavbar = (props) => {
               alt="..."
             />
           </Link>
-          <Link className="h1 mr-3 mt-2" to="/admin/energy">
-            <i className="ni ni-button-power"></i>
+          <Link className="h1 mr-3 mt-2" to="/admin/pushdown">
+            <i className="ni ni-single-02"></i>
           </Link>
-          <Link className="h1 mr-2 mt-2" to="/admin/pushdown">
-            <i className="ni ni-chart-bar-32"></i>
+          <Link className="h1 mr-2 mt-2" to="/admin/energy">
+            <i className="ni ni-tv-2"></i>
           </Link>
         </Navbar>
       </Col>

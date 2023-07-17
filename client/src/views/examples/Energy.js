@@ -427,7 +427,7 @@ const Energy = () => {
   const [CSDPushdown, setCSDPushdown] = useState(false);
   const [result, setResult] = useState(false);
 
-  const [currentIns, setCurrentIns] = useState("");
+  const [currentIns, setCurrentIns] = useState("Console Log");
   const [clear, setClear] = useState(["", "", "", ""]);
 
   const [host, setHost] = useState(
@@ -637,21 +637,6 @@ const Energy = () => {
               For Demo
             </span>
           </div>
-          <Col xl="7">
-            {!workbench && (
-              <Card className="bg-light h-100 mt-5">
-                <CardTitle className="h1 py-1 pl-3 mb-0 bg-gradient-light text-darker">
-                  <Row className="pl-3">{currentIns}</Row>
-                </CardTitle>
-                <CardBody
-                  className="py-0 px-0 bg-darker"
-                  style={{ minHeight: "25vh" }}
-                >
-                  <iframe src={host} width="100%" height="500px" title="wssh" />
-                </CardBody>
-              </Card>
-            )}
-          </Col>
         </Row>
       )}
       <AdminNavbar />
@@ -660,17 +645,28 @@ const Energy = () => {
       <Container className="mt--7 px-0" fluid>
         <Row className="mt-7 justify-content-center">
           <Col xl="3" className="px-0">
-            <Card className="h-100 bg-lighter">
-              <CardTitle className="h2 py-1  pl-3 mb-0 bg-lighter">
-                MANAGEMENT
-              </CardTitle>
-              <CardBody className="h2 bg-lighter mb-0">
-                <span>Information</span>
-                <hr className="my-2" />
-                <span>Options</span>
-                <hr className="my-2" />
-              </CardBody>
-            </Card>
+            {!workbench ? (
+              <Card className="bg-light h-100">
+                <CardTitle className="h2 py-1 pl-2 mb-0 bg-gradient-light text-darker text-left">
+                  <Row className="pl-3">{currentIns}</Row>
+                </CardTitle>
+                <CardBody className="py-0 px-0 bg-darker overflow-hidden">
+                  <iframe src={host} width="100%" height="100%" title="wssh" />
+                </CardBody>
+              </Card>
+            ) : (
+              <Card className="h-100 bg-lighter">
+                <CardTitle className="h2 py-1  pl-3 mb-0 bg-lighter">
+                  MANAGEMENT
+                </CardTitle>
+                <CardBody className="h2 bg-lighter mb-0">
+                  <span>Information</span>
+                  <hr className="my-2" />
+                  <span>Options</span>
+                  <hr className="my-2" />
+                </CardBody>
+              </Card>
+            )}
           </Col>
           <Col xl="7" className="px-0">
             <Card className="bg-light h-100">

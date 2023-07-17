@@ -115,6 +115,8 @@ const Pushdown = () => {
   const [columnName, setColumnName] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [groupBy, setGroupBy] = useState("");
+
+  const [optionErr, setOptionErr] = useState(false);
   const [valueErr, setValueErr] = useState(false);
 
   const [template, setShowTemplate] = useState(false);
@@ -152,13 +154,13 @@ const Pushdown = () => {
 
   const handelNewQuery = (e) => {
     Query.current.value = "";
-    setValue("Select Query");
   };
 
   const handleEffectCheckClick = (e) => {
+    if (option.length === 0) setOptionErr(true);
     if (!Query.current.value) setValueErr(true);
     else setValueErr(false);
-    if (Query.current.value) {
+    if (Query.current.value && option.length !== 0) {
       setIsEffectCheck(true);
       setGenerate(Query.current.value);
       fetch("http://10.0.5.123:40400/pushdown", {
@@ -171,6 +173,7 @@ const Pushdown = () => {
           query: Query.current.value
             .replace(/[\n\t]/g, " ")
             .replace(/\s{2,}/g, " "),
+          options: { Set: option },
         }),
       })
         .then((response) => response.json())
@@ -184,6 +187,34 @@ const Pushdown = () => {
           setConservationEffect(data.PushdownConservationEffect);
         });
     }
+  };
+
+  //setting option
+  const toggle = () => {
+    setModal(!modal);
+    resetOptions();
+  };
+  const resetOptions = () => {
+    setDBMSSelected("MySQL");
+    setAlgorithmSelected("CSD Metric Score");
+    setIndexSelected("Use");
+    setBlockSizeSelected("4096");
+  };
+  const add = () => {
+    toggle();
+    setOptionErr(false);
+    setOption([
+      DBMSSelected,
+      AlgorithmSelected,
+      IndexSelected,
+      BlockSizeSelected,
+    ]);
+  };
+  const handleDBMS = (e) => {
+    setDBMSSelected(e.target.value);
+  };
+  const handleBlockSize = (e) => {
+    setBlockSizeSelected(e.target.value);
   };
 
   //generate api
@@ -222,7 +253,7 @@ const Pushdown = () => {
   };
 
   //dropdown
-  const handleDropdownClick = (index, e) => {
+  const handleQueryDropdown = (index, e) => {
     setValue(e.target.getAttribute("value"));
     setInd(index);
   };
@@ -260,10 +291,11 @@ const Pushdown = () => {
       case "Simulator":
         setWorkbench(!workbench);
         setCurrentIns("Simulator");
+        if (option.length === 0) setOptionErr(true);
         if (!Query.current.value) setValueErr(true);
         else setValueErr(false);
         setTimeout(() => {
-          if (Query.current.value) {
+          if (Query.current.value && option.length !== 0) {
             setIsEffectCheck(true);
             setGenerate(Query.current.value);
             fetch("http://10.0.5.123:40400/pushdown", {
@@ -276,6 +308,7 @@ const Pushdown = () => {
                 query: Query.current.value
                   .replace(/[\n\t]/g, " ")
                   .replace(/\s{2,}/g, " "),
+                options: { Set: option },
               }),
             })
               .then((response) => response.json())
@@ -460,125 +493,251 @@ const Pushdown = () => {
         {/*<TabMenu className="mt-1" />*/}
         <Row className="mt-7 justify-content-center">
           <Col xl="3" className="px-0">
-            {!workbench ? (
-              <Card className="bg-light h-100">
-                <CardTitle className="h2 py-1 pl-2 mb-0 bg-gradient-light text-darker text-left">
-                  <Row className="pl-3">{currentIns}</Row>
-                </CardTitle>
-                <CardBody className="py-0 px-0 bg-darker overflow-hidden">
-                  <iframe src={host} width="100%" height="100%" title="wssh" />
-                </CardBody>
-              </Card>
-            ) : (
-              <Card className="h-100 bg-lighter">
-                <CardTitle className="h2 py-1  pl-3 mb-0 bg-lighter">
-                  MANAGEMENT
-                </CardTitle>
-                <CardBody
-                  className="h2 bg-lighter mb-0"
-                  style={{ minHeight: "25vh" }}
-                >
-                  <span>Information</span>
-                  <hr className="my-2" />
-                  <span>Options</span>
-                  <hr className="my-2" />
-                  <a onClick={toggleCollapse}>
-                    <i className="ni ni-bold-down"></i> CSD
-                  </a>
-                  <Collapse isOpen={isOpen} className="ml-5">
-                    <span>
-                      CSD 1 <i className="ni ni-check-bold text-success"></i>
-                      <br />
-                      CSD 2 <i className="ni ni-check-bold text-success"></i>
-                      <br />
-                      CSD 3{" "}
-                      <i className="ni ni-ni ni-fat-remove text-danger"></i>
-                      <br />
-                      CSD 4 <i className="ni ni-check-bold text-success"></i>
-                      <br />
-                      CSD 5 <i className="ni ni-check-bold text-success"></i>
-                      <br />
-                      CSD 6 <i className="ni ni-check-bold text-success"></i>
-                      <br />
-                      CSD 7{" "}
-                      <i className="ni ni-ni ni-fat-remove text-danger"></i>
-                      <br />
-                      CSD 8 <i className="ni ni-check-bold text-success"></i>
-                      <br />
-                    </span>
-                  </Collapse>
+            <Card className="h-100 bg-lighter">
+              <CardTitle className="h2 py-1  pl-3 mb-0 bg-lighter">
+                MANAGEMENT
+              </CardTitle>
+              <CardBody
+                className="h2 bg-lighter mb-0"
+                style={{ minHeight: "25vh" }}
+              >
+                <span>Information</span>
+                <hr className="my-2" />
+                <span>Options</span>
+                <hr className="my-2" />
+                <a onClick={toggleCollapse}>
+                  <i className="ni ni-bold-down"></i> CSD
+                </a>
+                <Collapse isOpen={isOpen} className="ml-5">
+                  <span>
+                    CSD 1 <i className="ni ni-check-bold text-success"></i>
+                    <br />
+                    CSD 2 <i className="ni ni-check-bold text-success"></i>
+                    <br />
+                    CSD 3 <i className="ni ni-ni ni-fat-remove text-danger"></i>
+                    <br />
+                    CSD 4 <i className="ni ni-check-bold text-success"></i>
+                    <br />
+                    CSD 5 <i className="ni ni-check-bold text-success"></i>
+                    <br />
+                    CSD 6 <i className="ni ni-check-bold text-success"></i>
+                    <br />
+                    CSD 7 <i className="ni ni-ni ni-fat-remove text-danger"></i>
+                    <br />
+                    CSD 8 <i className="ni ni-check-bold text-success"></i>
+                    <br />
+                  </span>
+                </Collapse>
 
-                  <hr className="my-2" />
-                </CardBody>
-              </Card>
-            )}
+                <hr className="my-2" />
+              </CardBody>
+            </Card>
           </Col>
           <Col xl="7" className="px-0">
             <Card className="bg-light h-100">
               <CardTitle className="h1 py-1 pl-3 mb-0 bg-gradient-light text-darker">
-                <Row className="ml-1 align-items-center">
-                  Query Input
-                  <div className="ml-3 mr-9">
-                    <Button
-                      color="primary"
-                      size="lg"
-                      type="button"
-                      onClick={handleEffectCheckClick}
-                      className="rounded-circle"
-                    >
-                      <i className="ni ni-button-play" />
-                    </Button>
-                    <Button
-                      color="info"
-                      size="lg"
-                      type="button"
-                      onClick={(e) => {
-                        Query.current.value = "";
-                        setValue("Select Query");
-                      }}
-                    >
-                      NEW Query
-                    </Button>
-                    <Button
-                      color="warning"
-                      size="lg"
-                      type="button"
-                      className="ml-2"
-                    >
-                      Template
-                    </Button>
-                  </div>
-                  <div className="ml-6">
-                    <UncontrolledDropdown nav>
-                      <DropdownToggle className=" ml-3" split size="sm">
-                        {value + " "}
-                      </DropdownToggle>
-                      <DropdownMenu className="dropdown-menu-arrow">
-                        {Array.from({ length: 22 }, (_, i) => i + 1).map(
-                          (index) => (
-                            <DropdownItem
-                              value={`TPC-H ${index}`}
-                              onClick={(e) => handleDropdownClick(index, e)}
-                            >
-                              <i
-                                value={`TPC-H ${index}`}
-                                onClick={(e) => handleDropdownClick(index, e)}
-                                className="ni ni-bold-right"
+                Query Input
+                <Button
+                  color="primary"
+                  size="sm"
+                  type="button"
+                  className="ml-3"
+                  onClick={handelNewQuery}
+                >
+                  New Query
+                </Button>
+                <Button
+                  disabled={!isEffectCheck}
+                  color="warning"
+                  size="sm"
+                  type="button"
+                  onClick={generateAPI}
+                  className="ml-3"
+                >
+                  Generate API
+                </Button>
+                <Button
+                  outline
+                  color="dark"
+                  size="sm"
+                  type="button"
+                  className="btn-icon btn-2 rounded-circle ml-3"
+                  onClick={toggle}
+                >
+                  <i className="ni ni-settings-gear-65"></i>
+                </Button>
+                <Modal centered isOpen={modal} toggle={toggle} size="lg">
+                  <ModalHeader toggle={toggle}>
+                    Set Simulator Option
+                  </ModalHeader>
+                  <ModalBody>
+                    <Form>
+                      <Row>
+                        <Col md="12">
+                          <FormGroup row>
+                            <Label for="DBMS" sm="2" className="ml-2 h3">
+                              DBMS :
+                            </Label>
+                            <Col sm="9">
+                              <Input
+                                id="DBMS"
+                                placeholder="DBMS"
+                                type="text"
+                                onChange={handleDBMS}
+                                defaultValue={DBMSSelected}
                               />
-                              <span
-                                value={`TPC-H ${index}`}
-                                onClick={(e) => handleDropdownClick(index, e)}
-                              >{`TPC-H ${index}`}</span>
-                            </DropdownItem>
-                          )
-                        )}
-                      </DropdownMenu>
-                    </UncontrolledDropdown>
-                  </div>
-                </Row>
+                            </Col>
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md="12">
+                          <Row className="align-tiems-center ml-2">
+                            <Label className="h3">
+                              Scheduling Algorithm :{" "}
+                            </Label>
+                            <ButtonGroup className="ml-5 px-4">
+                              <Button
+                                className="px-4"
+                                color="light"
+                                outline
+                                size="sm"
+                                onClick={() =>
+                                  setAlgorithmSelected("CSD Metric Score")
+                                }
+                                active={
+                                  AlgorithmSelected === "CSD Metric Score"
+                                }
+                              >
+                                CSD Metric Score
+                              </Button>
+                              <Button
+                                className="px-4"
+                                color="light"
+                                outline
+                                size="sm"
+                                onClick={() =>
+                                  setAlgorithmSelected("Block Count")
+                                }
+                                active={AlgorithmSelected === "Block Count"}
+                              >
+                                Block Count
+                              </Button>
+                              <Button
+                                className="px-4"
+                                color="light"
+                                outline
+                                size="sm"
+                                onClick={() =>
+                                  setAlgorithmSelected("Minimum Overlap SST")
+                                }
+                                active={
+                                  AlgorithmSelected === "Minimum Overlap SST"
+                                }
+                              >
+                                Minimum Overlap SST
+                              </Button>
+                            </ButtonGroup>
+                          </Row>
+                        </Col>
+                      </Row>
+                      <Row className="mt-4">
+                        <Col md="6">
+                          <Row className="align-tiems-center ml-2">
+                            <Label className="h3">Using Index : </Label>
+                            <ButtonGroup className="ml-3">
+                              <Button
+                                color="light"
+                                outline
+                                size="sm"
+                                onClick={() => setIndexSelected("Use")}
+                                active={IndexSelected === "Use"}
+                              >
+                                ACTIVE
+                              </Button>
+                              <Button
+                                color="light"
+                                outline
+                                size="sm"
+                                onClick={() => setIndexSelected("Disuse")}
+                                active={IndexSelected === "Disuse"}
+                              >
+                                INACTIVE
+                              </Button>
+                            </ButtonGroup>
+                          </Row>
+                        </Col>
+                        <Col md="6">
+                          <FormGroup row>
+                            <Label for="BlockSize" sm="4" className="h3">
+                              Block Size :{" "}
+                            </Label>
+                            <Col sm="8">
+                              <Input
+                                id="BlockSize"
+                                placeholder="Block Size"
+                                type="text"
+                                onChange={handleBlockSize}
+                                defaultValue={BlockSizeSelected}
+                              />
+                            </Col>
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button block color="primary" onClick={add}>
+                      ADD
+                    </Button>
+                  </ModalFooter>
+                </Modal>
+                <Button
+                  disabled={!isGenerateApi}
+                  color="success"
+                  size="sm"
+                  type="button"
+                  className="ml-3"
+                  onClick={handlePushdownClick}
+                >
+                  Pushdown
+                </Button>
+                <Button color="info" size="sm" type="button" className="ml-3">
+                  Template
+                </Button>
+                <UncontrolledDropdown nav>
+                  <DropdownToggle className=" ml-3" split size="sm">
+                    {value + " "}
+                  </DropdownToggle>
+                  <DropdownMenu className="dropdown-menu-arrow">
+                    {Array.from({ length: 22 }, (_, i) => i + 1).map(
+                      (index) => (
+                        <DropdownItem
+                          value={`TPC-H ${index}`}
+                          onClick={(e) => handleQueryDropdown(index, e)}
+                        >
+                          <i
+                            value={`TPC-H ${index}`}
+                            onClick={(e) => handleQueryDropdown(index, e)}
+                            className="ni ni-bold-right"
+                          />
+                          <span
+                            value={`TPC-H ${index}`}
+                            onClick={(e) => handleQueryDropdown(index, e)}
+                          >{`TPC-H ${index}`}</span>
+                        </DropdownItem>
+                      )
+                    )}
+                  </DropdownMenu>
+                </UncontrolledDropdown>
               </CardTitle>
 
               <CardBody className="py-0 px-0 h-100">
+                {optionErr && (
+                  <Alert color="danger">
+                    <strong>Danger!</strong> Setting Option First!
+                  </Alert>
+                )}
                 {valueErr && (
                   <Alert color="danger">
                     <strong>Danger!</strong> Input Value First!
