@@ -62,6 +62,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import useDidMountEffect from "components/Hooks/useDidMountEffect.js";
 
 const Energy = () => {
   //Login Data
@@ -86,11 +87,15 @@ const Energy = () => {
   }, []);
 
   //Query Input
+  const [isFirstRequest, setIsFirstRequest] = useState(true);
+
   const [value, setValue] = useState("Select Query");
   const [ind, setInd] = useState(0);
   const [valueErr, setValueErr] = useState(false);
   const [optionErr, setOptionErr] = useState(false);
-  const [chart, setChart] = useState({});
+  const [barChart, setBarChart] = useState({});
+  const [lineChart, setLineChart] = useState({});
+  const [Data, setData] = useState([]);
 
   const Query = useRef();
 
@@ -111,41 +116,55 @@ const Energy = () => {
         ...optionResult,
         [...customSet[selectedOption].Set, selectedOption],
       ]);
+      const dataToSend = isFirstRequest
+        ? {
+            environment: {
+              net: userEnv[1],
+              dbms: userEnv[2],
+              csdCount: userEnv[3],
+              csdKind: userEnv[4],
+              algorithm: userEnv[5],
+              index: userEnv[6],
+              blockSize: userEnv[7],
+            },
+            queryID: ind - 1,
+            options: {
+              net: customSet[selectedOption].Set[0],
+              dbms: customSet[selectedOption].Set[1],
+              csdCount: customSet[selectedOption].Set[2],
+              csdKind: customSet[selectedOption].Set[3],
+              algorithm: customSet[selectedOption].Set[4],
+              index: customSet[selectedOption].Set[5],
+              blockSize: customSet[selectedOption].Set[6],
+            },
+          }
+        : {
+            queryID: ind - 1,
+            options: {
+              net: customSet[selectedOption].Set[0],
+              dbms: customSet[selectedOption].Set[1],
+              csdCount: customSet[selectedOption].Set[2],
+              csdKind: customSet[selectedOption].Set[3],
+              algorithm: customSet[selectedOption].Set[4],
+              index: customSet[selectedOption].Set[5],
+              blockSize: customSet[selectedOption].Set[6],
+            },
+          };
       fetch("http://10.0.5.123:40400/pushdown", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          queryID: ind,
-          query: Query.current.value
-            .replace(/[\n\t]/g, " ")
-            .replace(/\s{2,}/g, " "),
-        }),
+        body: JSON.stringify(dataToSend),
       })
         .then((response) => response.json())
         .then((data) => {
-          setSnippet(data.snippet);
+          if ("userCPU" in data) console.log("Environment");
+          else console.log("Option");
+          setData([...Data, data]);
         });
-      // axios
-      //   .post("http://10.0.5.123:40400/charts", {
-      //     body: JSON.stringify({
-      //       queryID: ind,
-      //       query: Query.current.value
-      //         .replace(/[\n\t]/g, " ")
-      //         .replace(/\s{2,}/g, " "),
-      //     }),
-      //   })
-      //   .then((response) => {
-      //     // 응답 처리
-      //     console.log(response.data);
-      //     setChart(response.data);
-      //   })
-      //   .catch((error) => {
-      //     // 오류 처리
-      //     console.error(error);
-      //   });
+      setIsFirstRequest(false);
     }
   };
 
@@ -168,7 +187,17 @@ const Energy = () => {
   }, [ind, value]);
 
   //Option Modal
-  const [StorageSelected, setStorageSelected] = useState("SSD");
+  const [userEnv, setUserEnv] = useState([
+    "CSD",
+    "145",
+    "MySQL",
+    "8",
+    "NGD",
+    "CSD Metric Score",
+    "Use",
+    "4096",
+  ]);
+  const [NetSelected, setNetSelected] = useState("145");
   const [CSDNumSelected, setCSDNumSelected] = useState("8");
   const [CSDKindSelected, setCSDKindSelected] = useState("NGD");
   const [DBMSSelected, setDBMSSelected] = useState("MySQL");
@@ -182,35 +211,31 @@ const Energy = () => {
   const [snippetModal, setSnippetModal] = useState(false);
   const [pushdownModal, setPushdownModal] = useState(false);
 
-  const handleStorage = (e) => {
-    if (set !== -1) setStorageSelected(e.target.value);
-    if (StorageSelected === "SSD" && e.target.value === "CSD") {
-      setCSDNumSelected("8");
-      setCSDKindSelected("NGD");
-    }
+  const handleNet = (e) => {
+    setNetSelected(e.target.value);
   };
   const handleDBMS = (e) => {
-    if (set !== -1) setDBMSSelected(e.target.value);
+    setDBMSSelected(e.target.value);
   };
   const handleCSDCount = (e) => {
-    if (set !== -1) setCSDNumSelected(e.target.value);
+    setCSDNumSelected(e.target.value);
   };
   const handleCSDKind = (e) => {
-    if (set !== -1) setCSDKindSelected(e.target.value);
+    setCSDKindSelected(e.target.value);
   };
   const handleAlgorithm = (e) => {
-    if (set !== -1) setAlgorithmSelected(e.target.value);
+    setAlgorithmSelected(e.target.value);
   };
   const handleIndex = (e) => {
-    if (set !== -1) setIndexSelected(e.target.value);
+    setIndexSelected(e.target.value);
   };
   const handleBlockSize = (e) => {
-    if (set !== -1) setBlockSizeSelected(e.target.value);
+    setBlockSizeSelected(e.target.value);
   };
 
   //(Add)
   const resetOptions = () => {
-    setStorageSelected("CSD");
+    setNetSelected("145");
     setDBMSSelected("MySQL");
     setCSDNumSelected("8");
     setCSDKindSelected("NGD");
@@ -226,37 +251,20 @@ const Energy = () => {
 
   const add = () => {
     toggle();
-    if (StorageSelected === "CSD")
-      setCustomSet([
-        ...customSet,
-        {
-          Set: [
-            StorageSelected,
-            DBMSSelected,
-            CSDNumSelected,
-            CSDKindSelected,
-            AlgorithmSelected,
-            IndexSelected,
-            BlockSizeSelected,
-          ],
-        },
-      ]);
-    else
-      setCustomSet([
-        ...customSet,
-        {
-          Set: [
-            StorageSelected,
-            DBMSSelected,
-            "X",
-            "X",
-            AlgorithmSelected,
-            IndexSelected,
-            BlockSizeSelected,
-          ],
-        },
-      ]);
-    setSet(customSet.length);
+    setCustomSet([
+      ...customSet,
+      {
+        Set: [
+          NetSelected,
+          DBMSSelected,
+          CSDNumSelected,
+          CSDKindSelected,
+          AlgorithmSelected,
+          IndexSelected,
+          BlockSizeSelected,
+        ],
+      },
+    ]);
     setSelectedOptions(customSet.length);
   };
 
@@ -267,27 +275,15 @@ const Energy = () => {
   const modify = () => {
     toggle2();
     const updatedOption = [...customSet];
-
-    if (StorageSelected === "CSD")
-      updatedOption[set].Set = [
-        StorageSelected,
-        DBMSSelected,
-        CSDNumSelected,
-        CSDKindSelected,
-        AlgorithmSelected,
-        IndexSelected,
-        BlockSizeSelected,
-      ];
-    else
-      updatedOption[set].Set = [
-        StorageSelected,
-        DBMSSelected,
-        "X",
-        "X",
-        AlgorithmSelected,
-        IndexSelected,
-        BlockSizeSelected,
-      ];
+    updatedOption[set].Set = [
+      NetSelected,
+      DBMSSelected,
+      CSDNumSelected,
+      CSDKindSelected,
+      AlgorithmSelected,
+      IndexSelected,
+      BlockSizeSelected,
+    ];
     setCustomSet(updatedOption);
   };
 
@@ -314,16 +310,8 @@ const Energy = () => {
   const handleOptionInfo = (index, e) => {
     toggle2();
     setSet(index);
-    if (index == -1) {
-      setStorageSelected("SSD");
-      setDBMSSelected("MySQL");
-      setCSDNumSelected("8");
-      setCSDKindSelected("NGD");
-      setAlgorithmSelected("CSD Metric Score");
-      setIndexSelected("Use");
-      setBlockSizeSelected("4096");
-    } else {
-      setStorageSelected(customSet[index].Set[0]);
+    if (index !== -1) {
+      setNetSelected(customSet[index].Set[0]);
       setDBMSSelected(customSet[index].Set[1]);
       setCSDNumSelected(customSet[index].Set[2]);
       setCSDKindSelected(customSet[index].Set[3]);
@@ -341,6 +329,7 @@ const Energy = () => {
   const [NormalizedQuery, setNormalizedQuery] = useState([]);
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [QueryOption, setQueryOption] = useState([, , , , , , , 0]);
+  const [selectedData, setSelectedData] = useState([]);
 
   const changeHandler = (checked, id) => {
     if (checked) {
@@ -349,6 +338,44 @@ const Energy = () => {
       setCheckedInputs(checkedInputs.filter((el) => el !== id));
     }
   };
+
+  //Result Chart
+  useDidMountEffect(() => {
+    const updateSelectedData = checkedInputs.map((index) => Data[index]);
+    setSelectedData(updateSelectedData);
+  }, [checkedInputs]);
+  useDidMountEffect(() => {
+    console.log(checkedInputs);
+    console.log(selectedData);
+    fetch("http://10.0.5.123:40400/charts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ssd: {
+          userCPU: Data[0].userCPU,
+          userNet: Data[0].userNet,
+          userPower: Data[0].userPower,
+          userTime: Data[0].userTime,
+        },
+        data: selectedData,
+        index: checkedInputs,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // 응답 처리
+        console.log(data);
+        setBarChart(data.bar);
+        setLineChart(data.line);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.error(error);
+      });
+  }, [selectedData, checkedInputs]);
+
   const handleResultOptions = (index, e) => {
     setQueryOption(optionResult[index]);
     Query.current.value = NormalizedQuery[index];
@@ -721,31 +748,20 @@ const Energy = () => {
                         <Form>
                           <Row>
                             <Col md="6">
-                              <Row className="align-tiems-center ml-2">
-                                <Label className="h3">Storage : </Label>
-                                <ButtonGroup className="ml-3">
-                                  <Button
-                                    color="light"
-                                    outline
-                                    size="sm"
-                                    value={"SSD"}
-                                    onClick={handleStorage}
-                                    active={StorageSelected === "SSD"}
-                                  >
-                                    SSD
-                                  </Button>
-                                  <Button
-                                    color="light"
-                                    outline
-                                    size="sm"
-                                    value={"CSD"}
-                                    onClick={handleStorage}
-                                    active={StorageSelected === "CSD"}
-                                  >
-                                    CSD
-                                  </Button>
-                                </ButtonGroup>
-                              </Row>
+                              <FormGroup row>
+                                <Label for="Network" sm="3" className="h3">
+                                  Net :
+                                </Label>
+                                <Col sm="9">
+                                  <Input
+                                    id="Network"
+                                    placeholder="Network"
+                                    type="text"
+                                    onChange={handleNet}
+                                    defaultValue={"145"}
+                                  />
+                                </Col>
+                              </FormGroup>
                             </Col>
                             <Col md="6">
                               <FormGroup row>
@@ -764,52 +780,50 @@ const Energy = () => {
                               </FormGroup>
                             </Col>
                           </Row>
-                          {StorageSelected === "CSD" && (
-                            <Row>
-                              <Col md="6">
-                                <FormGroup row>
-                                  <Label for="CSD Count" sm="4" className="h3">
-                                    CSD Count :
-                                  </Label>
-                                  <Col sm="8">
-                                    <Input
-                                      id="CSD Count"
-                                      type="number"
-                                      onChange={handleCSDCount}
-                                      defaultValue={"8"}
-                                    />
-                                  </Col>
-                                </FormGroup>
-                              </Col>
-                              <Col md="6">
-                                <Row className="align-tiems-center ml-2">
-                                  <Label className="h3">CSD Kind : </Label>
-                                  <ButtonGroup className="ml-3">
-                                    <Button
-                                      color="light"
-                                      outline
-                                      size="sm"
-                                      value={"NGD"}
-                                      onClick={handleCSDKind}
-                                      active={CSDKindSelected === "NGD"}
-                                    >
-                                      NGD
-                                    </Button>
-                                    <Button
-                                      color="light"
-                                      outline
-                                      size="sm"
-                                      value={"Scaleflux"}
-                                      onClick={handleCSDKind}
-                                      active={CSDKindSelected === "Scaleflux"}
-                                    >
-                                      Scaleflux
-                                    </Button>
-                                  </ButtonGroup>
-                                </Row>
-                              </Col>
-                            </Row>
-                          )}
+                          <Row>
+                            <Col md="6">
+                              <FormGroup row>
+                                <Label for="CSD Count" sm="4" className="h3">
+                                  CSD Count :
+                                </Label>
+                                <Col sm="8">
+                                  <Input
+                                    id="CSD Count"
+                                    type="number"
+                                    onChange={handleCSDCount}
+                                    defaultValue={"8"}
+                                  />
+                                </Col>
+                              </FormGroup>
+                            </Col>
+                            <Col md="6">
+                              <Row className="align-tiems-center ml-2">
+                                <Label className="h3">CSD Kind : </Label>
+                                <ButtonGroup className="ml-3">
+                                  <Button
+                                    color="light"
+                                    outline
+                                    size="sm"
+                                    value={"NGD"}
+                                    onClick={handleCSDKind}
+                                    active={CSDKindSelected === "NGD"}
+                                  >
+                                    NGD
+                                  </Button>
+                                  <Button
+                                    color="light"
+                                    outline
+                                    size="sm"
+                                    value={"Scaleflux"}
+                                    onClick={handleCSDKind}
+                                    active={CSDKindSelected === "Scaleflux"}
+                                  >
+                                    Scaleflux
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            </Col>
+                          </Row>
                           <Row>
                             <Col md="12">
                               <Row className="align-tiems-center ml-2">
@@ -1003,7 +1017,7 @@ const Energy = () => {
                             type="button"
                             onClick={(e) => handleOptionInfo(index, e)}
                           >
-                            {customSet[index].Set[0]} Option {index}
+                            CSD Option {index}
                           </Button>
                         </th>
                         <td className="w-25">
@@ -1025,55 +1039,123 @@ const Energy = () => {
                   <ModalHeader toggle={toggle2}>
                     Set Simulator Option
                   </ModalHeader>
-                  <ModalBody>
-                    <Form>
-                      <Row>
-                        <Col md="6">
-                          <Row className="align-tiems-center ml-2">
-                            <Label className="h3">Storage : </Label>
-                            <ButtonGroup className="ml-3">
-                              <Button
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"SSD"}
-                                onClick={handleStorage}
-                                active={StorageSelected === "SSD"}
-                              >
-                                SSD
-                              </Button>
-                              <Button
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"CSD"}
-                                onClick={handleStorage}
-                                active={StorageSelected === "CSD"}
-                              >
-                                CSD
-                              </Button>
-                            </ButtonGroup>
-                          </Row>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup row>
-                            <Label for="DBMS" sm="3" className="h3">
-                              DBMS :
-                            </Label>
-                            <Col sm="9">
-                              <Input
-                                id="DBMS"
-                                placeholder="DBMS"
-                                type="text"
-                                disabled={set === -1}
-                                onChange={handleDBMS}
-                                defaultValue={DBMSSelected}
-                              />
-                            </Col>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      {StorageSelected === "CSD" && (
+                  {set === -1 ? (
+                    <ModalBody>
+                      <Table
+                        className="align-items-center text-center bg-white"
+                        responsive
+                        bordered
+                      >
+                        <tbody>
+                          <tr>
+                            <th scope="row">
+                              <h3>Storage</h3>
+                            </th>
+                            <td>
+                              <h4>{userEnv[0]}</h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">
+                              <h3>Net</h3>
+                            </th>
+                            <td>
+                              <h4>{userEnv[1]} Mbps</h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">
+                              <h3>DBMS</h3>
+                            </th>
+                            <td>
+                              <h4>{userEnv[2]}</h4>
+                            </td>
+                          </tr>
+                          {userEnv[0] === "CSD" && (
+                            <tr>
+                              <th scope="row">
+                                <h3>CSD Count</h3>
+                              </th>
+                              <td>
+                                <h4>{userEnv[3]}</h4>
+                              </td>
+                            </tr>
+                          )}
+                          {userEnv[0] === "CSD" && (
+                            <tr>
+                              <th scope="row">
+                                <h3>CSD Kind</h3>
+                              </th>
+                              <td>
+                                <h4>{userEnv[4]}</h4>
+                              </td>
+                            </tr>
+                          )}
+                          <tr>
+                            <th scope="row">
+                              <h3>Algorithm</h3>
+                            </th>
+                            <td>
+                              <h4>{userEnv[5]}</h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">
+                              <h3>Index</h3>
+                            </th>
+                            <td>
+                              <h4>{userEnv[6]}</h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">
+                              <h3>Block Size</h3>
+                            </th>
+                            <td>
+                              <h4>{userEnv[7]}</h4>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </ModalBody>
+                  ) : (
+                    <ModalBody>
+                      <Form>
+                        <Row>
+                          <Col md="6">
+                            <FormGroup row>
+                              <Label for="Network" sm="3" className="h3">
+                                Net :
+                              </Label>
+                              <Col sm="9">
+                                <Input
+                                  id="Network"
+                                  placeholder="Network"
+                                  type="text"
+                                  onChange={handleNet}
+                                  defaultValue={NetSelected}
+                                />
+                              </Col>
+                            </FormGroup>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup row>
+                              <Label for="DBMS" sm="3" className="h3">
+                                DBMS :
+                              </Label>
+                              <Col sm="9">
+                                <Input
+                                  id="DBMS"
+                                  placeholder="DBMS"
+                                  type="text"
+                                  disabled
+                                  onChange={handleDBMS}
+                                  defaultValue={DBMSSelected}
+                                />
+                              </Col>
+                            </FormGroup>
+                          </Col>
+                        </Row>
                         <Row>
                           <Col md="6">
                             <FormGroup row>
@@ -1084,14 +1166,9 @@ const Energy = () => {
                                 <Input
                                   id="CSD Count"
                                   type="number"
-                                  disabled={set === -1}
+                                  disabled
                                   onChange={handleCSDCount}
-                                  defaultValue={
-                                    StorageSelected === "CSD" &&
-                                    CSDNumSelected === "X"
-                                      ? "8"
-                                      : CSDNumSelected
-                                  }
+                                  defaultValue={CSDNumSelected}
                                 />
                               </Col>
                             </FormGroup>
@@ -1106,7 +1183,7 @@ const Energy = () => {
                                   size="sm"
                                   value={"NGD"}
                                   onClick={handleCSDKind}
-                                  active={CSDKindSelected === "NGD" || "X"}
+                                  active={CSDKindSelected === "NGD"}
                                 >
                                   NGD
                                 </Button>
@@ -1124,103 +1201,103 @@ const Energy = () => {
                             </Row>
                           </Col>
                         </Row>
-                      )}
-                      <Row>
-                        <Col md="12">
-                          <Row className="align-tiems-center ml-2">
-                            <Label className="h3">
-                              Scheduling Algorithm :{" "}
-                            </Label>
-                            <ButtonGroup className="ml-5 px-4">
-                              <Button
-                                className="px-4"
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"CSD Metric Score"}
-                                onClick={handleAlgorithm}
-                                active={
-                                  AlgorithmSelected === "CSD Metric Score"
-                                }
-                              >
-                                CSD Metric Score
-                              </Button>
-                              <Button
-                                className="px-4"
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"Block Count"}
-                                onClick={handleAlgorithm}
-                                active={AlgorithmSelected === "Block Count"}
-                              >
-                                Block Count
-                              </Button>
-                              <Button
-                                className="px-4"
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"Minimum Overlap SST"}
-                                onClick={handleAlgorithm}
-                                active={
-                                  AlgorithmSelected === "Minimum Overlap SST"
-                                }
-                              >
-                                Minimum Overlap SST
-                              </Button>
-                            </ButtonGroup>
-                          </Row>
-                        </Col>
-                      </Row>
-                      <Row className="mt-4">
-                        <Col md="6">
-                          <Row className="align-tiems-center ml-2">
-                            <Label className="h3">Using Index : </Label>
-                            <ButtonGroup className="ml-3">
-                              <Button
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"Use"}
-                                onClick={handleIndex}
-                                active={IndexSelected === "Use"}
-                              >
-                                ACTIVE
-                              </Button>
-                              <Button
-                                color="light"
-                                outline
-                                size="sm"
-                                value={"Disuse"}
-                                onClick={handleIndex}
-                                active={IndexSelected === "Disuse"}
-                              >
-                                INACTIVE
-                              </Button>
-                            </ButtonGroup>
-                          </Row>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup row>
-                            <Label for="BlockSize" sm="4" className="h3">
-                              Block Size :{" "}
-                            </Label>
-                            <Col sm="8">
-                              <Input
-                                id="BlockSize"
-                                placeholder="Block Size"
-                                type="text"
-                                disabled={set === -1}
-                                onChange={handleBlockSize}
-                                defaultValue={BlockSizeSelected}
-                              />
-                            </Col>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </ModalBody>
+                        <Row>
+                          <Col md="12">
+                            <Row className="align-tiems-center ml-2">
+                              <Label className="h3">
+                                Scheduling Algorithm :{" "}
+                              </Label>
+                              <ButtonGroup className="ml-5 px-4">
+                                <Button
+                                  className="px-4"
+                                  color="light"
+                                  outline
+                                  size="sm"
+                                  value={"CSD Metric Score"}
+                                  onClick={handleAlgorithm}
+                                  active={
+                                    AlgorithmSelected === "CSD Metric Score"
+                                  }
+                                >
+                                  CSD Metric Score
+                                </Button>
+                                <Button
+                                  className="px-4"
+                                  color="light"
+                                  outline
+                                  size="sm"
+                                  value={"Block Count"}
+                                  onClick={handleAlgorithm}
+                                  active={AlgorithmSelected === "Block Count"}
+                                >
+                                  Block Count
+                                </Button>
+                                <Button
+                                  className="px-4"
+                                  color="light"
+                                  outline
+                                  size="sm"
+                                  value={"Minimum Overlap SST"}
+                                  onClick={handleAlgorithm}
+                                  active={
+                                    AlgorithmSelected === "Minimum Overlap SST"
+                                  }
+                                >
+                                  Minimum Overlap SST
+                                </Button>
+                              </ButtonGroup>
+                            </Row>
+                          </Col>
+                        </Row>
+                        <Row className="mt-4">
+                          <Col md="6">
+                            <Row className="align-tiems-center ml-2">
+                              <Label className="h3">Using Index : </Label>
+                              <ButtonGroup className="ml-3">
+                                <Button
+                                  color="light"
+                                  outline
+                                  size="sm"
+                                  value={"Use"}
+                                  onClick={handleIndex}
+                                  active={IndexSelected === "Use"}
+                                >
+                                  ACTIVE
+                                </Button>
+                                <Button
+                                  color="light"
+                                  outline
+                                  size="sm"
+                                  value={"Disuse"}
+                                  onClick={handleIndex}
+                                  active={IndexSelected === "Disuse"}
+                                >
+                                  INACTIVE
+                                </Button>
+                              </ButtonGroup>
+                            </Row>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup row>
+                              <Label for="BlockSize" sm="4" className="h3">
+                                Block Size :{" "}
+                              </Label>
+                              <Col sm="8">
+                                <Input
+                                  id="BlockSize"
+                                  placeholder="Block Size"
+                                  type="text"
+                                  disabled
+                                  onChange={handleBlockSize}
+                                  defaultValue={BlockSizeSelected}
+                                />
+                              </Col>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </ModalBody>
+                  )}
                   <ModalFooter>
                     {set === -1 ? (
                       <Button block color="light" onClick={toggle2}>
@@ -1242,8 +1319,7 @@ const Energy = () => {
             <Card className="bg-white  h-100">
               <CardTitle className="h2 py-1 pl-3 mb-0 bg-light text-darker">
                 <Row className="pl-3 justify-content-center">
-                  {QueryOption[0]} Option{" "}
-                  {" " + QueryOption[QueryOption.length - 1]}
+                  CSD Option {" " + QueryOption[QueryOption.length - 1]}
                 </Row>
               </CardTitle>
               <CardBody className="py-0 px-0">
@@ -1255,10 +1331,14 @@ const Energy = () => {
                   <tbody>
                     <tr>
                       <th scope="row">
-                        <h3>Storage</h3>
+                        <h3>Network</h3>
                       </th>
-                      <td>
-                        <h4>{QueryOption[0]}</h4>
+                      <td
+                        className={
+                          QueryOption[0] ? "text-center" : "text-right"
+                        }
+                      >
+                        <h4>{QueryOption[0]} Mbps</h4>
                       </td>
                     </tr>
                     <tr>
@@ -1407,7 +1487,12 @@ const Energy = () => {
                                     value="CSD"
                                     className="ni ni-bold-right"
                                   />
-                                  <span onClick={handleStorageChart}>CSD</span>
+                                  <span
+                                    onClick={handleStorageChart}
+                                    value="CSD"
+                                  >
+                                    CSD
+                                  </span>
                                 </DropdownItem>
                                 <DropdownItem
                                   onClick={handleStorageChart}
@@ -1468,26 +1553,28 @@ const Energy = () => {
                         </Row>
                       </Col>
                     </Row>
-                    <Row style={{ height: "90%" }} className="mt-3">
-                      <Col xl="6">
-                        <div className="chart h-100">
-                          {/* Chart wrapper */}
-                          <Bar
-                            data={pushdowneffectcheckchart.powerData}
-                            options={pushdowneffectcheckchart.options}
-                          />
-                        </div>
-                      </Col>
-                      <Col xl="6">
-                        <div className="chart h-100">
-                          {/* Chart wrapper */}
-                          <Line
-                            data={energychart.data}
-                            options={energychart.options}
-                          />
-                        </div>
-                      </Col>
-                    </Row>
+                    {checkedInputs.length > 0 && (
+                      <Row style={{ height: "90%" }} className="mt-3">
+                        <Col xl="6">
+                          <div className="chart h-100">
+                            {/* Chart wrapper */}
+                            <Bar
+                              data={barChart[metric]}
+                              options={pushdowneffectcheckchart.options}
+                            />
+                          </div>
+                        </Col>
+                        <Col xl="6">
+                          <div className="chart h-100">
+                            {/* Chart wrapper */}
+                            <Line
+                              data={lineChart[storage]}
+                              options={energychart.options}
+                            />
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
                   </div>
                 )}
               </CardBody>
@@ -1555,6 +1642,12 @@ const Energy = () => {
                                 checked={
                                   checkedInputs.includes(index) ? true : false
                                 }
+                                disabled={
+                                  !checkedInputs.includes(index) &&
+                                  checkedInputs.length >= 6
+                                    ? true
+                                    : false
+                                }
                               />
                             </Col>
                             <Col
@@ -1608,8 +1701,8 @@ const Energy = () => {
                                 size="sm"
                                 value={"Pushdown"}
                                 onClick={toggle5}
-                                disabled={optionResult[index][0] === "SSD"}
-                                active={optionResult[index][0] === "CSD"}
+                                disabled={userEnv[0] === "SSD"}
+                                active={userEnv[0] === "CSD"}
                               >
                                 Pushdown
                               </Button>

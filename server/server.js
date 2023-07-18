@@ -75,174 +75,685 @@ analysisApp.get("/login_data", (req, res) => {
     });
 });
 
-// analysisApp.post("/charts", (req, res) => {
-//   var colors = {
-//     gray: {
-//       100: "#f6f9fc",
-//       200: "#e9ecef",
-//       300: "#dee2e6",
-//       400: "#ced4da",
-//       500: "#adb5bd",
-//       600: "#8898aa",
-//       700: "#525f7f",
-//       800: "#32325d",
-//       900: "#212529",
-//     },
-//     theme: {
-//       gradient_primary: "linear-gradient(87deg, #5e72e4 0, #825ee4 100%)",
-//       default: "#172b4d",
-//       primary: "#5e72e4",
-//       secondary: "#f4f5f7",
-//       info: "#11cdef",
-//       success: "#2dce89",
-//       danger: "#f5365c",
-//       warning: "#fb6340",
-//     },
-//     black: "#12263F",
-//     white: "#FFFFFF",
-//     transparent: "transparent",
-//   };
+analysisApp.post("/charts", (req, res) => {
+  const requestData = req.body;
+  console.log(requestData);
+  var colors = {
+    gray: {
+      100: "#f6f9fc",
+      200: "#e9ecef",
+      300: "#dee2e6",
+      400: "#ced4da",
+      500: "#adb5bd",
+      600: "#8898aa",
+      700: "#525f7f",
+      800: "#32325d",
+      900: "#212529",
+    },
+    theme: {
+      gradient_primary: "linear-gradient(87deg, #5e72e4 0, #825ee4 100%)",
+      default: "#172b4d",
+      primary: "#5e72e4",
+      secondary: "#f4f5f7",
+      info: "#11cdef",
+      success: "#2dce89",
+      danger: "#f5365c",
+      warning: "#fb6340",
+    },
+    black: "#12263F",
+    white: "#FFFFFF",
+    transparent: "transparent",
+  };
+  const colorList = [
+    "primary",
+    "info",
+    "success",
+    "danger",
+    "warning",
+    "default",
+  ];
 
-//   const jsonData = {
-//     labels: [
-//       "Total without CSD (SSD)",
-//       "Total with CSD",
-//       "Storage Engine",
-//       "CSD",
-//     ],
-//     datasets: [
-//       {
-//         label: "SSD",
-//         data: [661, 0, 0, 0],
-//         backgroundColor: colors.theme["primary"],
-//         pointBackgroundColor: colors.theme["primary"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "Storage Engine",
-//         data: [0, 111, 111, 0],
-//         backgroundColor: colors.theme["warning"],
-//         pointBackgroundColor: colors.theme["warning"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD1",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: colors.theme["primary"],
-//         pointBackgroundColor: colors.theme["primary"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD2",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: colors.theme["danger"],
-//         pointBackgroundColor: colors.theme["danger"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD3",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: colors.theme["success"],
-//         pointBackgroundColor: colors.theme["success"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD4",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: colors.theme["info"],
-//         pointBackgroundColor: colors.theme["info"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD5",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: colors.theme["warning"],
-//         pointBackgroundColor: colors.theme["warning"],
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD6",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: "#8965e0",
-//         pointBackgroundColor: "#8965e0",
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD7",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: "#ffd600",
-//         pointBackgroundColor: "#ffd600",
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//       {
-//         label: "CSD8",
-//         data: [0, 21, 0, 21],
-//         backgroundColor: "#f3a4b5",
-//         pointBackgroundColor: "#f3a4b5",
-//         maxBarThickness: 10,
-//         stack: "power",
-//       },
-//     ],
-//   };
-//   res.send(jsonData);
-// });
+  const jsonData = {
+    line: {
+      Total: {
+        labels: ["CPU", "Net", "Power", "Time"],
+        datasets: Array.from({ length: requestData.data.length }, (_, i) => ({
+          label: `Query ${requestData.index[i] + 1}`,
+          data: [
+            requestData.data[i].effectCheck.reduce(
+              (total, item) => total + item.cpuForcast,
+              0
+            ),
+            requestData.data[i].effectCheck.reduce(
+              (total, item) => total + item.netForcast,
+              0
+            ),
+            requestData.data[i].effectCheck.reduce(
+              (total, item) => total + item.powerForcast,
+              0
+            ),
+            requestData.data[i].effectCheck.reduce(
+              (total, item) => total + item.timeForcast,
+              0
+            ),
+          ],
+          pointBackgroundColor: colors.theme[colorList[i]],
+          borderColor: colors.theme[colorList[i]],
+        })),
+      },
+      SE: {
+        labels: ["CPU", "Net", "Power", "Time"],
+        datasets: Array.from({ length: requestData.data.length }, (_, i) => ({
+          label: `Query ${requestData.index[i] + 1}`,
+          data: [
+            requestData.data[i].effectCheck[0].cpuForcast,
+            requestData.data[i].effectCheck[0].netForcast,
+            requestData.data[i].effectCheck[0].powerForcast,
+            requestData.data[i].effectCheck[0].timeForcast,
+          ],
+          pointBackgroundColor: colors.theme[colorList[i]],
+          borderColor: colors.theme[colorList[i]],
+        })),
+      },
+      CSD: {
+        labels: ["CPU", "Net", "Power", "Time"],
+        datasets: Array.from({ length: requestData.data.length }, (_, i) => ({
+          label: `Query ${requestData.index[i] + 1}`,
+          data: [
+            requestData.data[i].effectCheck
+              .slice(1)
+              .reduce((total, item) => total + item.cpuForcast, 0),
+            requestData.data[i].effectCheck
+              .slice(1)
+              .reduce((total, item) => total + item.netForcast, 0),
+            requestData.data[i].effectCheck
+              .slice(1)
+              .reduce((total, item) => total + item.powerForcast, 0),
+            requestData.data[i].effectCheck
+              .slice(1)
+              .reduce((total, item) => total + item.timeForcast, 0),
+          ],
+          pointBackgroundColor: colors.theme[colorList[i]],
+          borderColor: colors.theme[colorList[i]],
+        })),
+      },
+    },
+    bar: {
+      CPU: {
+        labels: requestData.index.map((item) => `Query ${item + 1}`),
+        datasets: [
+          {
+            label: "Storage Engine",
+            data: requestData.data.map(
+              (item) => item.effectCheck[0].cpuForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD1",
+            data: requestData.data.map(
+              (item) => item.effectCheck[1].cpuForcast
+            ),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD2",
+            data: requestData.data.map(
+              (item) => item.effectCheck[2].cpuForcast
+            ),
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD3",
+            data: requestData.data.map(
+              (item) => item.effectCheck[3].cpuForcast
+            ),
+            backgroundColor: colors.theme["info"],
+            pointBackgroundColor: colors.theme["info"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD4",
+            data: requestData.data.map(
+              (item) => item.effectCheck[4].cpuForcast
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD5",
+            data: requestData.data.map(
+              (item) => item.effectCheck[5].cpuForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD6",
+            data: requestData.data.map(
+              (item) => item.effectCheck[6].cpuForcast
+            ),
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD7",
+            data: requestData.data.map(
+              (item) => item.effectCheck[7].cpuForcast
+            ),
+            backgroundColor: "#8965e0",
+            pointBackgroundColor: "#8965e0",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD8",
+            data: requestData.data.map(
+              (item) => item.effectCheck[8].cpuForcast
+            ),
+            backgroundColor: "#f3a4b5",
+            pointBackgroundColor: "#f3a4b5",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "SSD",
+            data: Array.from(
+              { length: requestData.data.length },
+              () => requestData.ssd.userCPU
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "SSD",
+          },
+        ],
+      },
+      Net: {
+        labels: requestData.index.map((item) => `Query ${item + 1}`),
+        datasets: [
+          {
+            label: "Storage Engine",
+            data: requestData.data.map(
+              (item) => item.effectCheck[0].netForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD1",
+            data: requestData.data.map(
+              (item) => item.effectCheck[1].netForcast
+            ),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD2",
+            data: requestData.data.map(
+              (item) => item.effectCheck[2].netForcast
+            ),
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD3",
+            data: requestData.data.map(
+              (item) => item.effectCheck[3].netForcast
+            ),
+            backgroundColor: colors.theme["info"],
+            pointBackgroundColor: colors.theme["info"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD4",
+            data: requestData.data.map(
+              (item) => item.effectCheck[4].netForcast
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD5",
+            data: requestData.data.map(
+              (item) => item.effectCheck[5].netForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD6",
+            data: requestData.data.map(
+              (item) => item.effectCheck[6].netForcast
+            ),
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD7",
+            data: requestData.data.map(
+              (item) => item.effectCheck[7].netForcast
+            ),
+            backgroundColor: "#8965e0",
+            pointBackgroundColor: "#8965e0",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD8",
+            data: requestData.data.map(
+              (item) => item.effectCheck[8].netForcast
+            ),
+            backgroundColor: "#f3a4b5",
+            pointBackgroundColor: "#f3a4b5",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "SSD",
+            data: Array.from(
+              { length: requestData.data.length },
+              () => requestData.ssd.userNet
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "SSD",
+          },
+        ],
+      },
+      Power: {
+        labels: requestData.index.map((item) => `Query ${item + 1}`),
+        datasets: [
+          {
+            label: "Storage Engine",
+            data: requestData.data.map(
+              (item) => item.effectCheck[0].powerForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD1",
+            data: requestData.data.map(
+              (item) => item.effectCheck[1].powerForcast
+            ),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD2",
+            data: requestData.data.map(
+              (item) => item.effectCheck[2].powerForcast
+            ),
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD3",
+            data: requestData.data.map(
+              (item) => item.effectCheck[3].powerForcast
+            ),
+            backgroundColor: colors.theme["info"],
+            pointBackgroundColor: colors.theme["info"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD4",
+            data: requestData.data.map(
+              (item) => item.effectCheck[4].powerForcast
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD5",
+            data: requestData.data.map(
+              (item) => item.effectCheck[5].powerForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD6",
+            data: requestData.data.map(
+              (item) => item.effectCheck[6].powerForcast
+            ),
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD7",
+            data: requestData.data.map(
+              (item) => item.effectCheck[7].powerForcast
+            ),
+            backgroundColor: "#8965e0",
+            pointBackgroundColor: "#8965e0",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD8",
+            data: requestData.data.map(
+              (item) => item.effectCheck[8].powerForcast
+            ),
+            backgroundColor: "#f3a4b5",
+            pointBackgroundColor: "#f3a4b5",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "SSD",
+            data: Array.from(
+              { length: requestData.data.length },
+              () => requestData.ssd.userPower
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "SSD",
+          },
+        ],
+      },
+      Time: {
+        labels: requestData.index.map((item) => `Query ${item + 1}`),
+        datasets: [
+          {
+            label: "Storage Engine",
+            data: requestData.data.map(
+              (item) => item.effectCheck[0].timeForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD1",
+            data: requestData.data.map(
+              (item) => item.effectCheck[1].timeForcast
+            ),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD2",
+            data: requestData.data.map(
+              (item) => item.effectCheck[2].timeForcast
+            ),
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD3",
+            data: requestData.data.map(
+              (item) => item.effectCheck[3].timeForcast
+            ),
+            backgroundColor: colors.theme["info"],
+            pointBackgroundColor: colors.theme["info"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD4",
+            data: requestData.data.map(
+              (item) => item.effectCheck[4].timeForcast
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD5",
+            data: requestData.data.map(
+              (item) => item.effectCheck[5].timeForcast
+            ),
+            backgroundColor: colors.theme["primary"],
+            pointBackgroundColor: colors.theme["primary"],
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD6",
+            data: requestData.data.map(
+              (item) => item.effectCheck[6].timeForcast
+            ),
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD7",
+            data: requestData.data.map(
+              (item) => item.effectCheck[7].timeForcast
+            ),
+            backgroundColor: "#8965e0",
+            pointBackgroundColor: "#8965e0",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "CSD8",
+            data: requestData.data.map(
+              (item) => item.effectCheck[8].timeForcast
+            ),
+            backgroundColor: "#f3a4b5",
+            pointBackgroundColor: "#f3a4b5",
+            maxBarThickness: 25,
+            stack: "CSD",
+          },
+          {
+            label: "SSD",
+            data: Array.from(
+              { length: requestData.data.length },
+              () => requestData.ssd.userTime
+            ),
+            backgroundColor: colors.theme["warning"],
+            pointBackgroundColor: colors.theme["warning"],
+            maxBarThickness: 25,
+            stack: "SSD",
+          },
+        ],
+      },
+    },
+  };
+  res.send(jsonData);
+});
 
 analysisApp.post("/pushdown", (req, res) => {
   const requestData = req.body; // 요청으로 받은 JSON 데이터
-  if (requestData.queryID) {
-    if (requestData.queryID < 10)
-      requestData.queryID = "TPC-H_0" + requestData.queryID;
-    else requestData.queryID = "TPC-H_" + requestData.queryID;
-  }
+  console.log(requestData);
 
-  const jsonData = {
-    query: requestData.query,
-    snippet: [
+  let jsonData = {
+    effectCheck: [
       {
-        "Snippet Type": "Scan",
-        "Projection Column": 5,
-        "Filter Clause": 5,
-        "Order by": 0,
-        "Group by": 0,
+        cpuForcast: Math.floor(Math.random() * 300),
+        netForcast: Math.floor(Math.random() * 300),
+        powerForcast: Math.floor(Math.random() * 300),
+        timeForcast: Math.floor(Math.random() * 300),
+        resultScore: Math.floor(Math.random() * 300),
       },
       {
-        "Snippet Type": "Scan",
-        "Projection Column": 3,
-        "Filter Clause": 3,
-        "Order by": 0,
-        "Group by": 0,
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
       },
       {
-        "Snippet Type": "Aggregation",
-        "Projection Column": 5,
-        "Filter Clause": 0,
-        "Order by": 0,
-        "Group by": 1,
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
+      },
+      {
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
+      },
+      {
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
+      },
+      {
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
+      },
+      {
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
+      },
+      {
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
+      },
+      {
+        cpuForcast: Math.floor(Math.random() * 10),
+        netForcast: Math.floor(Math.random() * 10),
+        powerForcast: Math.floor(Math.random() * 10),
+        timeForcast: Math.floor(Math.random() * 10),
+        resultScore: Math.floor(Math.random() * 10),
       },
     ],
-    SSDUsageForcast: 661,
-    CSDUsageForcast: 285,
-    ResourceConservationForcast: 232,
-    pushdownUsage: 286,
-    pushdownError: 0.28,
-    PushdownConservationEffect: 231,
-    EnergyUsageForcast1: 150,
-    EnergyUsageForcast2: 130,
-    conservationEffectForcast: 13.3,
-    efficientOption: "Set 2",
-    energyUsage: 130.24,
-    error: 0.184,
-    conservationEffect: 14,
   };
+  if ("environment" in requestData) {
+    console.log("예외발생");
+    jsonData = {
+      userCPU: 200,
+      userNet: 200,
+      userPower: 200,
+      userTime: 200,
+      effectCheck: [
+        {
+          cpuForcast: Math.floor(Math.random() * 300),
+          netForcast: Math.floor(Math.random() * 300),
+          powerForcast: Math.floor(Math.random() * 300),
+          timeForcast: Math.floor(Math.random() * 300),
+          resultScore: Math.floor(Math.random() * 300),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+          resultScore: Math.floor(Math.random() * 10),
+        },
+      ],
+    };
+  }
+  console.log("gogo");
   res.send(jsonData);
 
   //  const url = "http://10.0.4.86:40101";
