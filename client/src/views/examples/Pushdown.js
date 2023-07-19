@@ -161,7 +161,7 @@ const Pushdown = () => {
     if (Query.current.value) {
       setIsEffectCheck(true);
       setGenerate(Query.current.value);
-      fetch("http://10.0.5.123:40400/pushdown", {
+      fetch("http://10.0.5.123:40400/query", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
         headers: {
@@ -186,24 +186,10 @@ const Pushdown = () => {
     }
   };
 
-  //generate api
-  const generateAPI = (e) => {
-    setIsGenerateApi(true);
-  };
-
-  //pushdown
-  const handlePushdownClick = (e) => {
-    setIsPushdown(true);
-  };
-
   //toggle
   const toggleNavs = (e, index) => {
     e.preventDefault();
     setActiveNav(index);
-  };
-  const toggleNavs2 = (e, index) => {
-    e.preventDefault();
-    setActiveNav2(index);
   };
 
   //template
@@ -266,7 +252,7 @@ const Pushdown = () => {
           if (Query.current.value) {
             setIsEffectCheck(true);
             setGenerate(Query.current.value);
-            fetch("http://10.0.5.123:40400/pushdown", {
+            fetch("http://10.0.5.123:40400/query", {
               //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
               method: "POST",
               headers: {
@@ -465,7 +451,10 @@ const Pushdown = () => {
                 <CardTitle className="h2 py-1 pl-2 mb-0 bg-gradient-light text-darker text-left">
                   <Row className="pl-3">{currentIns}</Row>
                 </CardTitle>
-                <CardBody className="py-0 px-0 bg-darker overflow-hidden">
+                <CardBody
+                  className="py-0 px-0 bg-darker overflow-hidden"
+                  style={{ minHeight: "25vh" }}
+                >
                   <iframe src={host} width="100%" height="100%" title="wssh" />
                 </CardBody>
               </Card>
@@ -532,10 +521,7 @@ const Pushdown = () => {
                       color="info"
                       size="lg"
                       type="button"
-                      onClick={(e) => {
-                        Query.current.value = "";
-                        setValue("Select Query");
-                      }}
+                      onClick={handelNewQuery}
                     >
                       NEW Query
                     </Button>
@@ -601,7 +587,7 @@ const Pushdown = () => {
                 Generated API
               </CardTitle>
               <CardBody className="py-0 px-3 bg-darker mh-100 overflow-auto">
-                {isGenerateApi && (
+                {isEffectCheck && (
                   <span className="text-white">
                     GET/
                     <br />
@@ -796,181 +782,89 @@ const Pushdown = () => {
             </Card>
             <Card className="bg-white h-50">
               <CardTitle className="h1 py-1 pl-3 mb-0 bg-gradient-light text-darker">
-                <Row className="pl-3 align-items-center">
-                  Pushdown Effect Check
-                  <Nav className="ml-8" pills>
-                    <NavItem className="pr-0">
-                      <NavLink
-                        className={classnames("py-1", {
-                          active: activeNav2 === true,
-                        })}
-                        href="#pablo"
-                        onClick={(e) => toggleNavs2(e, true)}
-                      >
-                        <span className="d-none d-md-block">
-                          Pushdown Effect Check
-                        </span>
-                        <span className="d-md-none">M</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames("py-1", {
-                          active: activeNav2 === false,
-                        })}
-                        data-toggle="tab"
-                        href="#pablo"
-                        onClick={(e) => toggleNavs2(e, false)}
-                      >
-                        <span className="d-none d-md-block">Query Result</span>
-                        <span className="d-md-none">W</span>
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
-                  {activeNav2 && (
-                    <UncontrolledDropdown nav>
-                      <DropdownToggle className=" ml-3" split size="sm">
-                        {metric + " "}
-                      </DropdownToggle>
-                      <DropdownMenu className="dropdown-menu-arrow">
-                        <DropdownItem
-                          value={"Power"}
-                          onClick={handleMetricDropdown}
-                        >
-                          <i
-                            value={"Power"}
-                            onClick={handleMetricDropdown}
-                            className="ni ni-bold-right"
-                          />
-                          <span value={"Power"} onClick={handleMetricDropdown}>
-                            Power (W)
-                          </span>
-                        </DropdownItem>
-                        <DropdownItem
-                          value={"Network"}
-                          onClick={handleMetricDropdown}
-                        >
-                          <i
-                            value={"Network"}
-                            onClick={handleMetricDropdown}
-                            className="ni ni-bold-right"
-                          />
-                          <span
-                            value={"Network"}
-                            onClick={handleMetricDropdown}
-                          >
-                            Network
-                          </span>
-                        </DropdownItem>
-                        <DropdownItem
-                          value={"CPU"}
-                          onClick={handleMetricDropdown}
-                        >
-                          <i
-                            value={"CPU"}
-                            onClick={handleMetricDropdown}
-                            className="ni ni-bold-right"
-                          />
-                          <span value={"CPU"} onClick={handleMetricDropdown}>
-                            CPU
-                          </span>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledDropdown>
-                  )}
-                </Row>
+                <Row className="pl-3 align-items-center">Query Result</Row>
               </CardTitle>
               {isEffectCheck && (
                 <CardBody className="py-0 px-0">
-                  {activeNav2 ? (
-                    <div className="chart overflow-auto">
-                      {/* Chart wrapper */}
-                      <HorizontalBar
-                        data={chartData}
-                        options={pushdownchart.options}
-                      />
-                    </div>
-                  ) : (
-                    <Table
-                      className="align-items-center text-center bg-white "
-                      responsive
-                    >
-                      <thead className="thead-light">
-                        <tr>
-                          <th scope="col" className="text-sm">
-                            Num
-                          </th>
-                          <th scope="col" className="text-sm">
-                            Snippet Type
-                          </th>
-                          <th scope="col" className="text-sm">
-                            Projection Colume
-                          </th>
-                          <th scope="col" className="text-sm">
-                            Filter Clause
-                          </th>
-                          <th scope="col" className="text-sm">
-                            Order by
-                          </th>
-                          <th scope="col" className="text-sm">
-                            Group by
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">
-                            <h3>1</h3>
-                          </th>
-                          <td>Scan</td>
-                          <td>5</td>
-                          <td>5</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <h3>2</h3>
-                          </th>
-                          <td>Scan</td>
-                          <td>3</td>
-                          <td>3</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <h3>3</h3>
-                          </th>
-                          <td>Aggregation</td>
-                          <td>5</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>1</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <h3>4</h3>
-                          </th>
-                          <td>Inner Join</td>
-                          <td>6</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <h3>5</h3>
-                          </th>
-                          <td>Aggregation</td>
-                          <td>6</td>
-                          <td>0</td>
-                          <td>2</td>
-                          <td>0</td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  )}
+                  <Table
+                    className="align-items-center text-center bg-white "
+                    responsive
+                  >
+                    <thead className="thead-light">
+                      <tr>
+                        <th scope="col" className="text-sm">
+                          Num
+                        </th>
+                        <th scope="col" className="text-sm">
+                          Snippet Type
+                        </th>
+                        <th scope="col" className="text-sm">
+                          Projection Colume
+                        </th>
+                        <th scope="col" className="text-sm">
+                          Filter Clause
+                        </th>
+                        <th scope="col" className="text-sm">
+                          Order by
+                        </th>
+                        <th scope="col" className="text-sm">
+                          Group by
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">
+                          <h3>1</h3>
+                        </th>
+                        <td>Scan</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          <h3>2</h3>
+                        </th>
+                        <td>Scan</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          <h3>3</h3>
+                        </th>
+                        <td>Aggregation</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          <h3>4</h3>
+                        </th>
+                        <td>Inner Join</td>
+                        <td>6</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          <h3>5</h3>
+                        </th>
+                        <td>Aggregation</td>
+                        <td>6</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>0</td>
+                      </tr>
+                    </tbody>
+                  </Table>
                 </CardBody>
               )}
             </Card>
@@ -1177,30 +1071,6 @@ const Pushdown = () => {
                             </Row>
                           </Col>
                         </Row>
-                      </Form>
-                    </Col>
-                    <Col xl="6">
-                      <Form>
-                        <h3 className="mb-2">Generated Query</h3>
-                        <Input
-                          id="exampleFormControlTextarea1"
-                          innerRef={inputRef}
-                          placeholder="Write a large text here ..."
-                          rows="9"
-                          type="textarea"
-                          disabled
-                        />
-                        <div className="mt-4">
-                          <Button
-                            block
-                            color="primary"
-                            size="lg"
-                            type="button"
-                            onClick={generateAPI}
-                          >
-                            Generate API
-                          </Button>
-                        </div>
                       </Form>
                     </Col>
                   </Row>

@@ -334,11 +334,11 @@ let pushdowneffectcheckchart = {
           var yLabel = item.yLabel;
           var content = "";
 
-          if (data.datasets.length > 1 && item.yLabel > 0) {
+          if (data.datasets.length > 1) {
             content += label;
           }
 
-          if (data.datasets.length > 1 && item.yLabel > 0) {
+          if (data.datasets.length > 1) {
             content += " " + yLabel;
           }
           return content;
@@ -641,7 +641,6 @@ let energychart = {
           if (data.datasets.length > 1) {
             content += label;
           }
-
           content += " " + yLabel;
           return content;
         },

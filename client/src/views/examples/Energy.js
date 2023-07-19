@@ -1,4 +1,4 @@
-/*!
+/*!chart
 
 =========================================================
 * Argon Dashboard React - v1.2.2
@@ -50,6 +50,7 @@ import {
   Progress,
   PopoverBody,
   UncontrolledPopover,
+  Spinner,
 } from "reactstrap";
 
 import { chartOptions, parseOptions } from "variables/charts.js";
@@ -119,6 +120,7 @@ const Energy = () => {
       const dataToSend = isFirstRequest
         ? {
             environment: {
+              storage: userEnv[0],
               net: userEnv[1],
               dbms: userEnv[2],
               csdCount: userEnv[3],
@@ -160,8 +162,6 @@ const Energy = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          if ("userCPU" in data) console.log("Environment");
-          else console.log("Option");
           setData([...Data, data]);
         });
       setIsFirstRequest(false);
@@ -210,6 +210,7 @@ const Energy = () => {
   const [resultModal, setResultModal] = useState(false);
   const [snippetModal, setSnippetModal] = useState(false);
   const [pushdownModal, setPushdownModal] = useState(false);
+  const [weightModal, setWeightModal] = useState(false);
 
   const handleNet = (e) => {
     setNetSelected(e.target.value);
@@ -288,6 +289,7 @@ const Energy = () => {
   };
 
   //(Result)
+
   const toggle3 = (e) => {
     setResultModal(!resultModal);
   };
@@ -296,9 +298,15 @@ const Energy = () => {
   const toggle4 = (e) => {
     setSnippetModal(!snippetModal);
   };
+
   //(Pushdown)
   const toggle5 = (e) => {
     setPushdownModal(!pushdownModal);
+  };
+
+  //(Weight)
+  const toggle6 = (e) => {
+    setWeightModal(!weightModal);
   };
 
   //OptionSet Handling
@@ -330,6 +338,9 @@ const Energy = () => {
   const [checkedInputs, setCheckedInputs] = useState([]);
   const [QueryOption, setQueryOption] = useState([, , , , , , , 0]);
   const [selectedData, setSelectedData] = useState([]);
+  const [currentResult, setCurrentResult] = useState();
+  const [resultChart, setResultChart] = useState({});
+  const [resultMetric, setResultMetric] = useState("CPU");
 
   const changeHandler = (checked, id) => {
     if (checked) {
@@ -339,51 +350,143 @@ const Energy = () => {
     }
   };
 
-  //Result Chart
-  useDidMountEffect(() => {
-    const updateSelectedData = checkedInputs.map((index) => Data[index]);
-    setSelectedData(updateSelectedData);
-  }, [checkedInputs]);
-  useDidMountEffect(() => {
-    console.log(checkedInputs);
-    console.log(selectedData);
-    fetch("http://10.0.5.123:40400/charts", {
+  const handleResultMetric = (e) => {
+    setResultMetric(e.target.getAttribute("value"));
+  };
+
+  const handleResultOptions = (index, e) => {
+    setQueryOption(optionResult[index]);
+    Query.current.value = NormalizedQuery[index];
+    setCurrentResult(index);
+    const requestBody =
+      userEnv[0] === "CSD"
+        ? {
+            userSSD: Data[0].userSSD,
+            userCSD: Data[0].userCSD,
+            data: Data[index],
+            index: index,
+          }
+        : {
+            userSSD: Data[0].userSSD,
+            data: Data[index],
+            index: index,
+          };
+    fetch("http://10.0.5.123:40400/resultChart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ssd: {
-          userCPU: Data[0].userCPU,
-          userNet: Data[0].userNet,
-          userPower: Data[0].userPower,
-          userTime: Data[0].userTime,
-        },
-        data: selectedData,
-        index: checkedInputs,
-      }),
+      body: JSON.stringify(requestBody),
     })
       .then((response) => response.json())
       .then((data) => {
         // 응답 처리
-        console.log(data);
-        setBarChart(data.bar);
-        setLineChart(data.line);
+        setResultChart(data);
       })
       .catch((error) => {
         // 오류 처리
         console.error(error);
       });
-  }, [selectedData, checkedInputs]);
-
-  const handleResultOptions = (index, e) => {
-    setQueryOption(optionResult[index]);
-    Query.current.value = NormalizedQuery[index];
     toggle3();
   };
-  useEffect(() => {
-    console.log(checkedInputs.map((index) => optionResult[index]));
+
+  //Result Chart
+  const [CPU, setCPU] = useState();
+  const [Net, setNet] = useState();
+  const [Power, setPower] = useState();
+  const [Time, setTime] = useState();
+  const [weight, setWeight] = useState([]);
+
+  useDidMountEffect(() => {
+    setWeight([CPU, Net, Power, Time]);
+  }, [CPU, Net, Power, Time]);
+  useDidMountEffect(() => {
+    const updateSelectedData = checkedInputs.map((index) => Data[index]);
+    setSelectedData(updateSelectedData);
   }, [checkedInputs]);
+  useDidMountEffect(() => {
+    if (selectedData.length > 0) {
+      const requestBody =
+        userEnv[0] === "CSD"
+          ? {
+              userSSD: Data[0].userSSD,
+              userCSD: Data[0].userCSD,
+              data: selectedData,
+              index: checkedInputs,
+            }
+          : {
+              userSSD: Data[0].userSSD,
+              data: selectedData,
+              index: checkedInputs,
+            };
+      fetch("http://10.0.5.123:40400/charts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // 응답 처리
+          setBarChart(data.bar);
+          setLineChart(data.line);
+        })
+        .catch((error) => {
+          // 오류 처리
+          console.error(error);
+        });
+    }
+  }, [selectedData]);
+
+  const handleWeight = () => {
+    const updatedLineChart = {
+      ...lineChart,
+    };
+
+    for (const [key, value] of Object.entries(updatedLineChart)) {
+      if (value.labels.includes("Score")) {
+        // labels에 "Score"가 이미 존재하면 마지막 인덱스의 값을 교체합니다.
+        updatedLineChart[key] = {
+          ...value,
+          datasets: value.datasets.map((dataset) => ({
+            ...dataset,
+            data: [
+              ...dataset.data.slice(0, -1),
+              100 -
+                Math.round(
+                  dataset.data
+                    .slice(0, 4)
+                    .map((val, i) => val * weight[i])
+                    .reduce((total, val) => total + val, 0)
+                ),
+            ],
+          })),
+        };
+      } else {
+        // labels에 "Score"가 없으면 뒤에 추가합니다.
+        updatedLineChart[key] = {
+          ...value,
+          labels: [...value.labels, "Score"],
+          datasets: value.datasets.map((dataset) => ({
+            ...dataset,
+            data: [
+              ...dataset.data,
+              100 -
+                Math.round(
+                  dataset.data
+                    .map((val, i) => val * weight[i])
+                    .reduce((total, val) => total + val, 0)
+                ),
+            ],
+          })),
+        };
+      }
+    }
+    console.log(updatedLineChart);
+    setLineChart(updatedLineChart);
+    toggle6();
+  };
 
   //Template
   const [template, setShowTemplate] = useState(false);
@@ -1037,7 +1140,7 @@ const Energy = () => {
                 </Table>
                 <Modal centered isOpen={modifyModal} toggle={toggle2} size="lg">
                   <ModalHeader toggle={toggle2}>
-                    Set Simulator Option
+                    Show Simulator Option
                   </ModalHeader>
                   {set === -1 ? (
                     <ModalBody>
@@ -1402,11 +1505,11 @@ const Energy = () => {
                 </Row>
               </CardTitle>
               <CardBody className="py-0 px-0 align-items-end">
-                {isSimul && (
+                {checkedInputs.length > 0 && (
                   <div className="h-100">
                     <Row
                       style={{ height: "10%" }}
-                      className="align-items-center mt--3"
+                      className="align-items-center"
                     >
                       <Col xl="6">
                         <UncontrolledDropdown nav>
@@ -1513,68 +1616,117 @@ const Energy = () => {
                               </DropdownMenu>
                             </UncontrolledDropdown>
                           </Col>
-                          <Col xl="8">
-                            <Form className="text-sm row mt-4 pt-1 ">
-                              <FormGroup row className="col-3">
-                                <Label className="mt-1">CPU:</Label>
-                                <Col xl="8">
-                                  {" "}
-                                  <Input bsSize="sm" id="CPU" type="text" />
-                                </Col>
-                              </FormGroup>
-                              <FormGroup row className="col-3">
-                                <Label className="mt-1">Net:</Label>
-                                <Col xl="8">
-                                  {" "}
-                                  <Input bsSize="sm" id="NET" type="text" />
-                                </Col>
-                              </FormGroup>
-                              <FormGroup row className="col-3">
-                                <Label className="mt-1">Pow:</Label>
-                                <Col xl="8">
-                                  {" "}
-                                  <Input bsSize="sm" id="POWER" type="text" />
-                                </Col>
-                              </FormGroup>
-                              <FormGroup row className="col-3">
-                                <Label className="mt-1">Time:</Label>
-                                <Col xl="8">
-                                  {" "}
-                                  <Input bsSize="sm" id="TIME" type="text" />
-                                </Col>
-                              </FormGroup>
-                            </Form>
-                          </Col>
-                          <Col xl="2" className="text-left">
-                            <Button color="light" size="sm" className="text-sm">
-                              Calculate
+                          <Col xl="10" className="text-right">
+                            {" "}
+                            <Button
+                              color="info"
+                              size="sm"
+                              className="text-sm"
+                              onClick={toggle6}
+                            >
+                              Weights Setting
                             </Button>
                           </Col>
+                          <Modal
+                            centered
+                            isOpen={weightModal}
+                            toggle={toggle6}
+                            size="sm"
+                          >
+                            <ModalHeader toggle={toggle6}>
+                              Weight Setting
+                            </ModalHeader>
+                            <ModalBody>
+                              <Form className="justify-content-center">
+                                <FormGroup row className="align-items-center">
+                                  <Label className="col-3 ml-5 text-right">
+                                    CPU:
+                                  </Label>
+                                  <Input
+                                    className="col-3"
+                                    id="CPU"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setCPU(e.target.value / 100)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup row className="align-items-center">
+                                  <Label className="col-3 ml-5 text-right">
+                                    Net:
+                                  </Label>
+                                  <Input
+                                    className="col-3"
+                                    id="NET"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setNet(e.target.value / 100)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup row className="align-items-center">
+                                  <Label className="col-3 ml-5 text-right">
+                                    Pow:
+                                  </Label>
+                                  <Input
+                                    className="col-3"
+                                    id="POWER"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setPower(e.target.value / 100)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup row className="align-items-center">
+                                  <Label className="col-3 ml-5 text-right">
+                                    Time:
+                                  </Label>
+                                  <Input
+                                    className="col-3"
+                                    id="TIME"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setTime(e.target.value / 100)
+                                    }
+                                  />
+                                </FormGroup>
+                              </Form>
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button
+                                color="light"
+                                size="lg"
+                                block
+                                className="text-lg"
+                                onClick={handleWeight}
+                              >
+                                Calculate
+                              </Button>
+                            </ModalFooter>
+                          </Modal>
                         </Row>
                       </Col>
                     </Row>
-                    {checkedInputs.length > 0 && (
-                      <Row style={{ height: "90%" }} className="mt-3">
-                        <Col xl="6">
-                          <div className="chart h-100">
-                            {/* Chart wrapper */}
-                            <Bar
-                              data={barChart[metric]}
-                              options={pushdowneffectcheckchart.options}
-                            />
-                          </div>
-                        </Col>
-                        <Col xl="6">
-                          <div className="chart h-100">
-                            {/* Chart wrapper */}
-                            <Line
-                              data={lineChart[storage]}
-                              options={energychart.options}
-                            />
-                          </div>
-                        </Col>
-                      </Row>
-                    )}
+                    <Row style={{ height: "90%" }}>
+                      <Col xl="6">
+                        <div className="chart h-100">
+                          {/* Chart wrapper */}
+                          <Bar
+                            data={barChart[metric]}
+                            options={pushdowneffectcheckchart.options}
+                          />
+                        </div>
+                      </Col>
+                      <Col xl="6">
+                        <div className="chart h-100">
+                          {/* Chart wrapper */}
+                          <Line
+                            data={lineChart[storage]}
+                            options={energychart.options}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
                   </div>
                 )}
               </CardBody>
@@ -1661,10 +1813,46 @@ const Energy = () => {
                             </Col>
                           </Row>
                         </td>
-                        <td className="text-lg">0%</td>
-                        <td className="text-lg">0%</td>
-                        <td className="text-lg">0%</td>
-                        <td className="text-lg">0%</td>
+                        <td className="text-lg">
+                          {Data.length > index ? (
+                            Data[index].effectCheck.reduce(
+                              (total, item) => total + item.cpuForcast,
+                              0
+                            )
+                          ) : (
+                            <Spinner color="secondary">Loading...</Spinner>
+                          )}
+                        </td>
+                        <td className="text-lg">
+                          {Data.length > index ? (
+                            Data[index].effectCheck.reduce(
+                              (total, item) => total + item.netForcast,
+                              0
+                            )
+                          ) : (
+                            <Spinner color="secondary">Loading...</Spinner>
+                          )}
+                        </td>
+                        <td className="text-lg">
+                          {Data.length > index ? (
+                            Data[index].effectCheck.reduce(
+                              (total, item) => total + item.powerForcast,
+                              0
+                            )
+                          ) : (
+                            <Spinner color="secondary">Loading...</Spinner>
+                          )}
+                        </td>
+                        <td className="text-lg">
+                          {Data.length > index ? (
+                            Data[index].effectCheck.reduce(
+                              (total, item) => total + item.timeForcast,
+                              0
+                            )
+                          ) : (
+                            <Spinner color="secondary">Loading...</Spinner>
+                          )}
+                        </td>
                         <td className="text-lg">
                           <Col xl="3" className="text-right">
                             <Button
@@ -1718,11 +1906,70 @@ const Energy = () => {
                   <ModalBody>
                     <Row className="align-items-center">
                       <Col xl="6">
+                        <UncontrolledDropdown nav>
+                          <DropdownToggle className=" ml-3" split size="sm">
+                            {resultMetric + " "}
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow">
+                            <DropdownItem
+                              onClick={handleResultMetric}
+                              value="CPU"
+                            >
+                              <i
+                                onClick={handleResultMetric}
+                                value="CPU"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleResultMetric} value="CPU">
+                                CPU
+                              </span>
+                            </DropdownItem>
+                            <DropdownItem
+                              onClick={handleResultMetric}
+                              value="Net"
+                            >
+                              <i
+                                onClick={handleResultMetric}
+                                value="Net"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleResultMetric} value="Net">
+                                Net
+                              </span>
+                            </DropdownItem>
+                            <DropdownItem
+                              onClick={handleResultMetric}
+                              value="Power"
+                            >
+                              <i
+                                onClick={handleResultMetric}
+                                value="Power"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleResultMetric} value="Power">
+                                Power
+                              </span>
+                            </DropdownItem>
+                            <DropdownItem
+                              onClick={handleResultMetric}
+                              value="Time"
+                            >
+                              <i
+                                onClick={handleResultMetric}
+                                value="Time"
+                                className="ni ni-bold-right"
+                              />
+                              <span onClick={handleResultMetric} value="Time">
+                                Time
+                              </span>
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
                         <div className="chart">
                           {/* Chart wrapper */}
                           <Bar
-                            data={querychart.data}
-                            options={querychart.options}
+                            data={resultChart[resultMetric]}
+                            options={pushdowneffectcheckchart.options}
                           />
                         </div>
                       </Col>
@@ -1733,28 +1980,153 @@ const Energy = () => {
                               <th scope="col">Metric</th>
                               <th scope="col">SSD</th>
                               <th scope="col">CSD</th>
+                              <th scope="col">Simulating</th>
                             </tr>
                           </thead>
                           <tbody className="text-center">
                             <tr>
                               <th scope="row">CPU</th>
-                              <td className="font-weight-bold">0</td>
-                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userSSD.userCPU
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userCSD.reduce(
+                                    (total, item) => total + item.userCPU,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[currentResult].effectCheck.reduce(
+                                    (total, item) => total + item.cpuForcast,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
                             </tr>
                             <tr>
                               <th scope="row">Net</th>
-                              <td className="font-weight-bold">0</td>
-                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userSSD.userNet
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userCSD.reduce(
+                                    (total, item) => total + item.userNet,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[currentResult].effectCheck.reduce(
+                                    (total, item) => total + item.netForcast,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
                             </tr>
                             <tr>
                               <th scope="row">Power</th>
-                              <td className="font-weight-bold">0</td>
-                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userSSD.userPower
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userCSD.reduce(
+                                    (total, item) => total + item.userPower,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[currentResult].effectCheck.reduce(
+                                    (total, item) => total + item.powerForcast,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
                             </tr>
                             <tr>
                               <th scope="row">Time</th>
-                              <td className="font-weight-bold">0</td>
-                              <td className="font-weight-bold">0</td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userSSD.userTime
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[0].userCSD.reduce(
+                                    (total, item) => total + item.userTime,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
+                              <td className="font-weight-bold">
+                                {Data.length > currentResult ? (
+                                  Data[currentResult].effectCheck.reduce(
+                                    (total, item) => total + item.timeForcast,
+                                    0
+                                  )
+                                ) : (
+                                  <Spinner color="secondary">
+                                    Loading...
+                                  </Spinner>
+                                )}
+                              </td>
                             </tr>
                           </tbody>
                         </Table>
@@ -1837,7 +2209,7 @@ const Energy = () => {
                   toggle={toggle5}
                   size="xl"
                 >
-                  <ModalHeader toggle={toggle5}>Query Analysis</ModalHeader>
+                  <ModalHeader toggle={toggle5}>Pushdown Analysis</ModalHeader>
                   <ModalBody>
                     <Row>
                       <Col xl="8">

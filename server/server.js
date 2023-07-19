@@ -77,7 +77,6 @@ analysisApp.get("/login_data", (req, res) => {
 
 analysisApp.post("/charts", (req, res) => {
   const requestData = req.body;
-  console.log(requestData);
   var colors = {
     gray: {
       100: "#f6f9fc",
@@ -111,6 +110,16 @@ analysisApp.post("/charts", (req, res) => {
     "danger",
     "warning",
     "default",
+  ];
+  const csdColors = [
+    colors.theme["danger"],
+    colors.theme["success"],
+    colors.theme["info"],
+    colors.theme["warning"],
+    colors.theme["primary"],
+    "#ffd600",
+    "#8965e0",
+    "#f3a4b5",
   ];
 
   const jsonData = {
@@ -192,97 +201,38 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          {
-            label: "CSD1",
+          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
+            label: `CSD${index + 1}`,
             data: requestData.data.map(
-              (item) => item.effectCheck[1].cpuForcast
+              (item) => item.effectCheck[index + 1].cpuForcast
             ),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
             maxBarThickness: 25,
             stack: "CSD",
-          },
+          })),
           {
-            label: "CSD2",
-            data: requestData.data.map(
-              (item) => item.effectCheck[2].cpuForcast
-            ),
-            backgroundColor: colors.theme["success"],
-            pointBackgroundColor: colors.theme["success"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD3",
-            data: requestData.data.map(
-              (item) => item.effectCheck[3].cpuForcast
-            ),
-            backgroundColor: colors.theme["info"],
-            pointBackgroundColor: colors.theme["info"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD4",
-            data: requestData.data.map(
-              (item) => item.effectCheck[4].cpuForcast
-            ),
-            backgroundColor: colors.theme["warning"],
-            pointBackgroundColor: colors.theme["warning"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD5",
-            data: requestData.data.map(
-              (item) => item.effectCheck[5].cpuForcast
-            ),
-            backgroundColor: colors.theme["primary"],
-            pointBackgroundColor: colors.theme["primary"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD6",
-            data: requestData.data.map(
-              (item) => item.effectCheck[6].cpuForcast
-            ),
-            backgroundColor: "#ffd600",
-            pointBackgroundColor: "#ffd600",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD7",
-            data: requestData.data.map(
-              (item) => item.effectCheck[7].cpuForcast
-            ),
-            backgroundColor: "#8965e0",
-            pointBackgroundColor: "#8965e0",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD8",
-            data: requestData.data.map(
-              (item) => item.effectCheck[8].cpuForcast
-            ),
-            backgroundColor: "#f3a4b5",
-            pointBackgroundColor: "#f3a4b5",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "SSD",
+            label: "User SSD",
             data: Array.from(
               { length: requestData.data.length },
-              () => requestData.ssd.userCPU
+              () => requestData.userSSD.userCPU
             ),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
-            stack: "SSD",
+            stack: "UserSSD",
           },
+          ...requestData.userCSD.map((userCsd, index) => ({
+            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+            data: Array.from(
+              { length: requestData.data.length },
+              () => userCsd.userCPU
+            ),
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          })),
         ],
       },
       Net: {
@@ -298,97 +248,38 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          {
-            label: "CSD1",
+          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
+            label: `CSD${index + 1}`,
             data: requestData.data.map(
-              (item) => item.effectCheck[1].netForcast
+              (item) => item.effectCheck[index + 1].netForcast
             ),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
             maxBarThickness: 25,
             stack: "CSD",
-          },
+          })),
           {
-            label: "CSD2",
-            data: requestData.data.map(
-              (item) => item.effectCheck[2].netForcast
-            ),
-            backgroundColor: colors.theme["success"],
-            pointBackgroundColor: colors.theme["success"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD3",
-            data: requestData.data.map(
-              (item) => item.effectCheck[3].netForcast
-            ),
-            backgroundColor: colors.theme["info"],
-            pointBackgroundColor: colors.theme["info"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD4",
-            data: requestData.data.map(
-              (item) => item.effectCheck[4].netForcast
-            ),
-            backgroundColor: colors.theme["warning"],
-            pointBackgroundColor: colors.theme["warning"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD5",
-            data: requestData.data.map(
-              (item) => item.effectCheck[5].netForcast
-            ),
-            backgroundColor: colors.theme["primary"],
-            pointBackgroundColor: colors.theme["primary"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD6",
-            data: requestData.data.map(
-              (item) => item.effectCheck[6].netForcast
-            ),
-            backgroundColor: "#ffd600",
-            pointBackgroundColor: "#ffd600",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD7",
-            data: requestData.data.map(
-              (item) => item.effectCheck[7].netForcast
-            ),
-            backgroundColor: "#8965e0",
-            pointBackgroundColor: "#8965e0",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD8",
-            data: requestData.data.map(
-              (item) => item.effectCheck[8].netForcast
-            ),
-            backgroundColor: "#f3a4b5",
-            pointBackgroundColor: "#f3a4b5",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "SSD",
+            label: "UserSSD",
             data: Array.from(
               { length: requestData.data.length },
-              () => requestData.ssd.userNet
+              () => requestData.userSSD.userNet
             ),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
-            stack: "SSD",
+            stack: "UserSSD",
           },
+          ...requestData.userCSD.map((userCsd, index) => ({
+            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+            data: Array.from(
+              { length: requestData.data.length },
+              () => userCsd.userNet
+            ),
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          })),
         ],
       },
       Power: {
@@ -404,97 +295,38 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          {
-            label: "CSD1",
+          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
+            label: `CSD${index + 1}`,
             data: requestData.data.map(
-              (item) => item.effectCheck[1].powerForcast
+              (item) => item.effectCheck[index + 1].powerForcast
             ),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
             maxBarThickness: 25,
             stack: "CSD",
-          },
+          })),
           {
-            label: "CSD2",
-            data: requestData.data.map(
-              (item) => item.effectCheck[2].powerForcast
-            ),
-            backgroundColor: colors.theme["success"],
-            pointBackgroundColor: colors.theme["success"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD3",
-            data: requestData.data.map(
-              (item) => item.effectCheck[3].powerForcast
-            ),
-            backgroundColor: colors.theme["info"],
-            pointBackgroundColor: colors.theme["info"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD4",
-            data: requestData.data.map(
-              (item) => item.effectCheck[4].powerForcast
-            ),
-            backgroundColor: colors.theme["warning"],
-            pointBackgroundColor: colors.theme["warning"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD5",
-            data: requestData.data.map(
-              (item) => item.effectCheck[5].powerForcast
-            ),
-            backgroundColor: colors.theme["primary"],
-            pointBackgroundColor: colors.theme["primary"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD6",
-            data: requestData.data.map(
-              (item) => item.effectCheck[6].powerForcast
-            ),
-            backgroundColor: "#ffd600",
-            pointBackgroundColor: "#ffd600",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD7",
-            data: requestData.data.map(
-              (item) => item.effectCheck[7].powerForcast
-            ),
-            backgroundColor: "#8965e0",
-            pointBackgroundColor: "#8965e0",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD8",
-            data: requestData.data.map(
-              (item) => item.effectCheck[8].powerForcast
-            ),
-            backgroundColor: "#f3a4b5",
-            pointBackgroundColor: "#f3a4b5",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "SSD",
+            label: "UserSSD",
             data: Array.from(
               { length: requestData.data.length },
-              () => requestData.ssd.userPower
+              () => requestData.userSSD.userPower
             ),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
-            stack: "SSD",
+            stack: "UserSSD",
           },
+          ...requestData.userCSD.map((userCsd, index) => ({
+            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+            data: Array.from(
+              { length: requestData.data.length },
+              () => userCsd.userPower
+            ),
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          })),
         ],
       },
       Time: {
@@ -510,99 +342,251 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          {
-            label: "CSD1",
+          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
+            label: `CSD${index + 1}`,
             data: requestData.data.map(
-              (item) => item.effectCheck[1].timeForcast
+              (item) => item.effectCheck[index + 1].timeForcast
             ),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
             maxBarThickness: 25,
             stack: "CSD",
-          },
+          })),
           {
-            label: "CSD2",
-            data: requestData.data.map(
-              (item) => item.effectCheck[2].timeForcast
-            ),
-            backgroundColor: colors.theme["success"],
-            pointBackgroundColor: colors.theme["success"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD3",
-            data: requestData.data.map(
-              (item) => item.effectCheck[3].timeForcast
-            ),
-            backgroundColor: colors.theme["info"],
-            pointBackgroundColor: colors.theme["info"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD4",
-            data: requestData.data.map(
-              (item) => item.effectCheck[4].timeForcast
-            ),
-            backgroundColor: colors.theme["warning"],
-            pointBackgroundColor: colors.theme["warning"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD5",
-            data: requestData.data.map(
-              (item) => item.effectCheck[5].timeForcast
-            ),
-            backgroundColor: colors.theme["primary"],
-            pointBackgroundColor: colors.theme["primary"],
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD6",
-            data: requestData.data.map(
-              (item) => item.effectCheck[6].timeForcast
-            ),
-            backgroundColor: "#ffd600",
-            pointBackgroundColor: "#ffd600",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD7",
-            data: requestData.data.map(
-              (item) => item.effectCheck[7].timeForcast
-            ),
-            backgroundColor: "#8965e0",
-            pointBackgroundColor: "#8965e0",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "CSD8",
-            data: requestData.data.map(
-              (item) => item.effectCheck[8].timeForcast
-            ),
-            backgroundColor: "#f3a4b5",
-            pointBackgroundColor: "#f3a4b5",
-            maxBarThickness: 25,
-            stack: "CSD",
-          },
-          {
-            label: "SSD",
+            label: "UserSSD",
             data: Array.from(
               { length: requestData.data.length },
-              () => requestData.ssd.userTime
+              () => requestData.userSSD.userTime
             ),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
-            stack: "SSD",
+            stack: "UserSSD",
           },
+          ...requestData.userCSD.map((userCsd, index) => ({
+            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+            data: Array.from(
+              { length: requestData.data.length },
+              () => userCsd.userTime
+            ),
+            backgroundColor: csdColors[index],
+            pointBackgroundColor: csdColors[index],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          })),
         ],
       },
+    },
+  };
+  const maxTotal = [
+    Math.max(...jsonData.line.Total.datasets.map((item) => item.data[0])),
+    Math.max(...jsonData.line.Total.datasets.map((item) => item.data[1])),
+    Math.max(...jsonData.line.Total.datasets.map((item) => item.data[2])),
+    Math.max(...jsonData.line.Total.datasets.map((item) => item.data[3])),
+  ];
+  const maxSE = [
+    Math.max(...jsonData.line.SE.datasets.map((item) => item.data[0])),
+    Math.max(...jsonData.line.SE.datasets.map((item) => item.data[1])),
+    Math.max(...jsonData.line.SE.datasets.map((item) => item.data[2])),
+    Math.max(...jsonData.line.SE.datasets.map((item) => item.data[3])),
+  ];
+  const maxCSD = [
+    Math.max(...jsonData.line.CSD.datasets.map((item) => item.data[0])),
+    Math.max(...jsonData.line.CSD.datasets.map((item) => item.data[1])),
+    Math.max(...jsonData.line.CSD.datasets.map((item) => item.data[2])),
+    Math.max(...jsonData.line.CSD.datasets.map((item) => item.data[3])),
+  ];
+  jsonData.line.Total.datasets = jsonData.line.Total.datasets.map((dataset) => {
+    const modifiedValues = dataset.data.map((value, index) => {
+      return Math.round((value / maxTotal[index]) * 100);
+    });
+
+    return {
+      ...dataset,
+      data: modifiedValues,
+    };
+  });
+  jsonData.line.SE.datasets = jsonData.line.SE.datasets.map((dataset) => {
+    const modifiedValues = dataset.data.map((value, index) => {
+      return Math.round((value / maxSE[index]) * 100);
+    });
+
+    return {
+      ...dataset,
+      data: modifiedValues,
+    };
+  });
+  jsonData.line.CSD.datasets = jsonData.line.CSD.datasets.map((dataset) => {
+    const modifiedValues = dataset.data.map((value, index) => {
+      return Math.round((value / maxCSD[index]) * 100);
+    });
+
+    return {
+      ...dataset,
+      data: modifiedValues,
+    };
+  });
+  res.send(jsonData);
+});
+
+analysisApp.post("/resultChart", (req, res) => {
+  const requestData = req.body;
+  console.log(requestData);
+  var colors = {
+    gray: {
+      100: "#f6f9fc",
+      200: "#e9ecef",
+      300: "#dee2e6",
+      400: "#ced4da",
+      500: "#adb5bd",
+      600: "#8898aa",
+      700: "#525f7f",
+      800: "#32325d",
+      900: "#212529",
+    },
+    theme: {
+      gradient_primary: "linear-gradient(87deg, #5e72e4 0, #825ee4 100%)",
+      default: "#172b4d",
+      primary: "#5e72e4",
+      secondary: "#f4f5f7",
+      info: "#11cdef",
+      success: "#2dce89",
+      danger: "#f5365c",
+      warning: "#fb6340",
+    },
+    black: "#12263F",
+    white: "#FFFFFF",
+    transparent: "transparent",
+  };
+  const effectCheckColors = [
+    colors.theme["primary"],
+    colors.theme["danger"],
+    colors.theme["success"],
+    colors.theme["info"],
+    colors.theme["warning"],
+    colors.theme["primary"],
+    "#ffd600",
+    "#8965e0",
+    "#f3a4b5",
+    colors.theme["primary"],
+  ];
+
+  const jsonData = {
+    CPU: {
+      labels: ["CPU"],
+      datasets: [
+        ...requestData.data.effectCheck.map((effectCheck, index) => ({
+          label: index === 0 ? "Storage Engine" : `CSD${index}`,
+          data: [effectCheck.cpuForcast],
+          backgroundColor: effectCheckColors[index],
+          pointBackgroundColor: effectCheckColors[index],
+          maxBarThickness: 25,
+          stack: "CSD",
+        })),
+        {
+          label: "UserSSD",
+          data: [requestData.userSSD.userCPU],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "UserSSD",
+        },
+        ...requestData.userCSD.map((userCsd, index) => ({
+          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+          data: [userCsd.userCPU],
+          backgroundColor: effectCheckColors[index + 1],
+          pointBackgroundColor: effectCheckColors[index + 1],
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        })),
+      ],
+    },
+    Net: {
+      labels: ["Net"],
+      datasets: [
+        ...requestData.data.effectCheck.map((effectCheck, index) => ({
+          label: index === 0 ? "Storage Engine" : `CSD${index}`,
+          data: [effectCheck.netForcast],
+          backgroundColor: effectCheckColors[index],
+          pointBackgroundColor: effectCheckColors[index],
+          maxBarThickness: 25,
+          stack: "CSD",
+        })),
+        {
+          label: "UserSSD",
+          data: [requestData.userSSD.userNet],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "UserSSD",
+        },
+        ...requestData.userCSD.map((userCsd, index) => ({
+          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+          data: [userCsd.userNet],
+          backgroundColor: effectCheckColors[index + 1],
+          pointBackgroundColor: effectCheckColors[index + 1],
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        })),
+      ],
+    },
+    Power: {
+      labels: ["Power"],
+      datasets: [
+        ...requestData.data.effectCheck.map((effectCheck, index) => ({
+          label: index === 0 ? "Storage Engine" : `CSD${index}`,
+          data: [effectCheck.powerForcast],
+          backgroundColor: effectCheckColors[index],
+          pointBackgroundColor: effectCheckColors[index],
+          maxBarThickness: 25,
+          stack: "CSD",
+        })),
+        {
+          label: "UserSSD",
+          data: [requestData.userSSD.userPower],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "UserSSD",
+        },
+        ...requestData.userCSD.map((userCsd, index) => ({
+          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+          data: [userCsd.userPower],
+          backgroundColor: effectCheckColors[index + 1],
+          pointBackgroundColor: effectCheckColors[index + 1],
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        })),
+      ],
+    },
+    Time: {
+      labels: ["Time"],
+      datasets: [
+        ...requestData.data.effectCheck.map((effectCheck, index) => ({
+          label: index === 0 ? "Storage Engine" : `CSD${index}`,
+          data: [effectCheck.timeForcast],
+          backgroundColor: effectCheckColors[index],
+          pointBackgroundColor: effectCheckColors[index],
+          maxBarThickness: 25,
+          stack: "CSD",
+        })),
+        {
+          label: "UserSSD",
+          data: [requestData.userSSD.userTime],
+          backgroundColor: colors.theme["warning"],
+          pointBackgroundColor: colors.theme["warning"],
+          maxBarThickness: 25,
+          stack: "UserSSD",
+        },
+        ...requestData.userCSD.map((userCsd, index) => ({
+          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
+          data: [userCsd.userTime],
+          backgroundColor: effectCheckColors[index + 1],
+          pointBackgroundColor: effectCheckColors[index + 1],
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        })),
+      ],
     },
   };
   res.send(jsonData);
@@ -626,132 +610,241 @@ analysisApp.post("/pushdown", (req, res) => {
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
         netForcast: Math.floor(Math.random() * 10),
         powerForcast: Math.floor(Math.random() * 10),
         timeForcast: Math.floor(Math.random() * 10),
-        resultScore: Math.floor(Math.random() * 10),
       },
     ],
   };
   if ("environment" in requestData) {
     console.log("예외발생");
-    jsonData = {
-      userCPU: 200,
-      userNet: 200,
-      userPower: 200,
-      userTime: 200,
-      effectCheck: [
-        {
-          cpuForcast: Math.floor(Math.random() * 300),
-          netForcast: Math.floor(Math.random() * 300),
-          powerForcast: Math.floor(Math.random() * 300),
-          timeForcast: Math.floor(Math.random() * 300),
-          resultScore: Math.floor(Math.random() * 300),
+    if (requestData.environment.storage === "CSD") {
+      jsonData = {
+        userSSD: {
+          userCPU: Math.floor(Math.random() * 300),
+          userNet: Math.floor(Math.random() * 300),
+          userPower: Math.floor(Math.random() * 300),
+          userTime: Math.floor(Math.random() * 300),
         },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
+        userCSD: [
+          {
+            userCPU: Math.floor(Math.random() * 300),
+            userNet: Math.floor(Math.random() * 300),
+            userPower: Math.floor(Math.random() * 300),
+            userTime: Math.floor(Math.random() * 300),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+          {
+            userCPU: Math.floor(Math.random() * 10),
+            userNet: Math.floor(Math.random() * 10),
+            userPower: Math.floor(Math.random() * 10),
+            userTime: Math.floor(Math.random() * 10),
+          },
+        ],
+        effectCheck: [
+          {
+            cpuForcast: Math.floor(Math.random() * 300),
+            netForcast: Math.floor(Math.random() * 300),
+            powerForcast: Math.floor(Math.random() * 300),
+            timeForcast: Math.floor(Math.random() * 300),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+        ],
+      };
+    } else {
+      jsonData = {
+        userSSD: {
+          userCPU: Math.floor(Math.random() * 300),
+          userNet: Math.floor(Math.random() * 300),
+          userPower: Math.floor(Math.random() * 300),
+          userTime: Math.floor(Math.random() * 300),
         },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-        {
-          cpuForcast: Math.floor(Math.random() * 10),
-          netForcast: Math.floor(Math.random() * 10),
-          powerForcast: Math.floor(Math.random() * 10),
-          timeForcast: Math.floor(Math.random() * 10),
-          resultScore: Math.floor(Math.random() * 10),
-        },
-      ],
-    };
+        effectCheck: [
+          {
+            cpuForcast: Math.floor(Math.random() * 300),
+            netForcast: Math.floor(Math.random() * 300),
+            powerForcast: Math.floor(Math.random() * 300),
+            timeForcast: Math.floor(Math.random() * 300),
+            resultScore: Math.floor(Math.random() * 300),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+          {
+            cpuForcast: Math.floor(Math.random() * 10),
+            netForcast: Math.floor(Math.random() * 10),
+            powerForcast: Math.floor(Math.random() * 10),
+            timeForcast: Math.floor(Math.random() * 10),
+          },
+        ],
+      };
+    }
   }
   console.log("gogo");
   res.send(jsonData);
@@ -768,4 +861,53 @@ analysisApp.post("/pushdown", (req, res) => {
   //      console.error(error);
   //      // 오류 처리
   //    });
+});
+analysisApp.post("/query", (req, res) => {
+  const requestData = req.body; // 요청으로 받은 JSON 데이터
+  if (requestData.queryID) {
+    if (requestData.queryID < 10)
+      requestData.queryID = "TPC-H_0" + requestData.queryID;
+    else requestData.queryID = "TPC-H_" + requestData.queryID;
+  }
+
+  const jsonData = {
+    query: requestData.query,
+    snippet: [
+      {
+        "Snippet Type": "Scan",
+        "Projection Column": 5,
+        "Filter Clause": 5,
+        "Order by": 0,
+        "Group by": 0,
+      },
+      {
+        "Snippet Type": "Scan",
+        "Projection Column": 3,
+        "Filter Clause": 3,
+        "Order by": 0,
+        "Group by": 0,
+      },
+      {
+        "Snippet Type": "Aggregation",
+        "Projection Column": 5,
+        "Filter Clause": 0,
+        "Order by": 0,
+        "Group by": 1,
+      },
+    ],
+    SSDUsageForcast: 661,
+    CSDUsageForcast: 285,
+    ResourceConservationForcast: 232,
+    pushdownUsage: 286,
+    pushdownError: 0.28,
+    PushdownConservationEffect: 231,
+    EnergyUsageForcast1: 150,
+    EnergyUsageForcast2: 130,
+    conservationEffectForcast: 13.3,
+    efficientOption: "Set 2",
+    energyUsage: 130.24,
+    error: 0.184,
+    conservationEffect: 14,
+  };
+  res.send(jsonData);
 });
