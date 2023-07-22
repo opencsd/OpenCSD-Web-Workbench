@@ -88,8 +88,6 @@ const Energy = () => {
   }, []);
 
   //Query Input
-  const [isFirstRequest, setIsFirstRequest] = useState(true);
-
   const [value, setValue] = useState("Select Query");
   const [ind, setInd] = useState(0);
   const [valueErr, setValueErr] = useState(false);
@@ -111,60 +109,44 @@ const Energy = () => {
     if (!Query.current.value) setValueErr(true);
     else setValueErr(false);
     if (selectedOption && Query.current.value) {
-      setIsSimul(true);
       setNormalizedQuery([...NormalizedQuery, Query.current.value]);
       setOptionResult([
         ...optionResult,
         [...customSet[selectedOption].Set, selectedOption],
       ]);
-      const dataToSend = isFirstRequest
-        ? {
-            environment: {
-              storage: userEnv[0],
-              net: userEnv[1],
-              dbms: userEnv[2],
-              csdCount: userEnv[3],
-              csdKind: userEnv[4],
-              algorithm: userEnv[5],
-              index: userEnv[6],
-              blockSize: userEnv[7],
-            },
-            queryID: ind - 1,
-            options: {
-              net: customSet[selectedOption].Set[0],
-              dbms: customSet[selectedOption].Set[1],
-              csdCount: customSet[selectedOption].Set[2],
-              csdKind: customSet[selectedOption].Set[3],
-              algorithm: customSet[selectedOption].Set[4],
-              index: customSet[selectedOption].Set[5],
-              blockSize: customSet[selectedOption].Set[6],
-            },
-          }
-        : {
-            queryID: ind - 1,
-            options: {
-              net: customSet[selectedOption].Set[0],
-              dbms: customSet[selectedOption].Set[1],
-              csdCount: customSet[selectedOption].Set[2],
-              csdKind: customSet[selectedOption].Set[3],
-              algorithm: customSet[selectedOption].Set[4],
-              index: customSet[selectedOption].Set[5],
-              blockSize: customSet[selectedOption].Set[6],
-            },
-          };
       fetch("http://10.0.5.123:40400/pushdown", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify({
+          environment: {
+            storage: userEnv[0],
+            net: userEnv[1],
+            dbms: userEnv[2],
+            csdCount: userEnv[3],
+            csdKind: userEnv[4],
+            algorithm: userEnv[5],
+            index: userEnv[6],
+            blockSize: userEnv[7],
+          },
+          queryID: ind - 1,
+          options: {
+            net: customSet[selectedOption].Set[0],
+            dbms: customSet[selectedOption].Set[1],
+            csdCount: customSet[selectedOption].Set[2],
+            csdKind: customSet[selectedOption].Set[3],
+            algorithm: customSet[selectedOption].Set[4],
+            index: customSet[selectedOption].Set[5],
+            blockSize: customSet[selectedOption].Set[6],
+          },
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
           setData([...Data, data]);
         });
-      setIsFirstRequest(false);
     }
   };
 
@@ -358,19 +340,10 @@ const Energy = () => {
     setQueryOption(optionResult[index]);
     Query.current.value = NormalizedQuery[index];
     setCurrentResult(index);
-    const requestBody =
-      userEnv[0] === "CSD"
-        ? {
-            userSSD: Data[0].userSSD,
-            userCSD: Data[0].userCSD,
-            data: Data[index],
-            index: index,
-          }
-        : {
-            userSSD: Data[0].userSSD,
-            data: Data[index],
-            index: index,
-          };
+    const requestBody = {
+      data: Data[index],
+      index: index,
+    };
     fetch("http://10.0.5.123:40400/resultChart", {
       method: "POST",
       headers: {
@@ -406,25 +379,15 @@ const Energy = () => {
   }, [checkedInputs]);
   useDidMountEffect(() => {
     if (selectedData.length > 0) {
-      const requestBody =
-        userEnv[0] === "CSD"
-          ? {
-              userSSD: Data[0].userSSD,
-              userCSD: Data[0].userCSD,
-              data: selectedData,
-              index: checkedInputs,
-            }
-          : {
-              userSSD: Data[0].userSSD,
-              data: selectedData,
-              index: checkedInputs,
-            };
       fetch("http://10.0.5.123:40400/charts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          data: selectedData,
+          index: checkedInputs,
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -516,13 +479,13 @@ const Energy = () => {
   const [snippet, setSnippet] = useState([]);
 
   //Result
-  const [isSimul, setIsSimul] = useState(false);
-  const [CSDEnergyUsageForcast, setCSDEnergyUsageForcast] = useState();
-  const [conservationEffectForcast, setConservationEffectForcast] = useState();
-  const [efficientOption, setEfficientOption] = useState();
-  const [error, setError] = useState();
-  const [energyUsage, setEnergyUsage] = useState();
-  const [conservationEffect, setConservationEffect] = useState();
+  // const [isSimul, setIsSimul] = useState(false);
+  // const [CSDEnergyUsageForcast, setCSDEnergyUsageForcast] = useState();
+  // const [conservationEffectForcast, setConservationEffectForcast] = useState();
+  // const [efficientOption, setEfficientOption] = useState();
+  // const [error, setError] = useState();
+  // const [energyUsage, setEnergyUsage] = useState();
+  // const [conservationEffect, setConservationEffect] = useState();
 
   //Chart
   if (window.Chart) {
@@ -558,7 +521,7 @@ const Energy = () => {
   const [result, setResult] = useState(false);
 
   const [currentIns, setCurrentIns] = useState("Console Log");
-  const [clear, setClear] = useState(["", "", "", ""]);
+  const [clear, setClear] = useState(["clear", "", "", "", ""]);
 
   const [host, setHost] = useState(
     "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
@@ -574,16 +537,16 @@ const Energy = () => {
         setWorkbench(!workbench);
         setCurrentIns("Simulator");
         setTimeout(() => {
-          setIsSimul(true);
-          if (selectedOption.length !== 2) setOptionErr(true);
+          if (!selectedOption) setOptionErr(true);
           else setOptionErr(false);
           if (!Query.current.value) setValueErr(true);
           else setValueErr(false);
-          if (
-            value !== "Select Query" &&
-            selectedOption.length === 2 &&
-            Query.current.value
-          ) {
+          if (selectedOption && Query.current.value) {
+            setNormalizedQuery([...NormalizedQuery, Query.current.value]);
+            setOptionResult([
+              ...optionResult,
+              [...customSet[selectedOption].Set, selectedOption],
+            ]);
             fetch("http://10.0.5.123:40400/pushdown", {
               //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
               method: "POST",
@@ -591,19 +554,31 @@ const Energy = () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                queryID: ind,
-                query: Query.current.value
-                  .replace(/[\n\t]/g, " ")
-                  .replace(/\s{2,}/g, " "),
-                options: [
-                  customSet[selectedOption[0]],
-                  customSet[selectedOption[1]],
-                ],
+                environment: {
+                  storage: userEnv[0],
+                  net: userEnv[1],
+                  dbms: userEnv[2],
+                  csdCount: userEnv[3],
+                  csdKind: userEnv[4],
+                  algorithm: userEnv[5],
+                  index: userEnv[6],
+                  blockSize: userEnv[7],
+                },
+                queryID: ind - 1,
+                options: {
+                  net: customSet[selectedOption].Set[0],
+                  dbms: customSet[selectedOption].Set[1],
+                  csdCount: customSet[selectedOption].Set[2],
+                  csdKind: customSet[selectedOption].Set[3],
+                  algorithm: customSet[selectedOption].Set[4],
+                  index: customSet[selectedOption].Set[5],
+                  blockSize: customSet[selectedOption].Set[6],
+                },
               }),
             })
               .then((response) => response.json())
               .then((data) => {
-                setSnippet(data.snippet);
+                setData([...Data, data]);
               });
           }
           setDBConnector(!dbConnector);
@@ -663,7 +638,7 @@ const Energy = () => {
       {loginData[3] === "O" && (
         <Row className="header my-4 align-items-center justify-content-center">
           <Button
-            className="mx-2 btn-demo text-lg clear"
+            className={`mx-2 btn-demo text-lg ${clear[0]}`}
             color="warning"
             size="lg"
             type="button"
@@ -680,7 +655,7 @@ const Energy = () => {
           </Button>
           <i className="ni ni-bold-right"></i>
           <Button
-            className={`mx-2 bg-yellow text-white btn-demo  text-lg ${clear[0]}`}
+            className={`mx-2 bg-yellow text-white btn-demo  text-lg ${clear[1]}`}
             size="lg"
             type="button"
             value={"Simulator"}
@@ -696,7 +671,7 @@ const Energy = () => {
           </Button>
           <i className="ni ni-bold-right"></i>
           <Button
-            className={`mx-2 btn-demo  text-lg ${clear[1]}`}
+            className={`mx-2 btn-demo  text-lg ${clear[2]}`}
             color="primary"
             size="lg"
             type="button"
@@ -714,7 +689,7 @@ const Energy = () => {
           <i className="ni ni-bold-right"></i>
           <Col xl="2" className="text-center px-0">
             <Button
-              className={`mx-2 btn-demo text-lg mb-1 ${clear[2]}`}
+              className={`mx-2 btn-demo text-lg mb-1 ${clear[3]}`}
               color="danger"
               size="lg"
               type="button"
@@ -730,7 +705,7 @@ const Energy = () => {
               {"   "}Storage Engine Instance
             </Button>
             <Button
-              className={`mx-2 bg-purple text-white btn-demo  text-lg ${clear[2]}`}
+              className={`mx-2 bg-purple text-white btn-demo  text-lg ${clear[3]}`}
               size="lg"
               type="button"
               value={"CSD Pushdown Work"}

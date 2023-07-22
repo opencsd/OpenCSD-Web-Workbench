@@ -226,12 +226,11 @@ const Pushdown = () => {
   const [simulator, setSimulator] = useState(true);
   const [dbConnector, setDBConnector] = useState(false);
   const [SE, setSE] = useState(false);
-  const [fileSys, setFileSys] = useState(false);
   const [CSDPushdown, setCSDPushdown] = useState(false);
   const [result, setResult] = useState(false);
 
   const [currentIns, setCurrentIns] = useState("");
-  const [clear, setClear] = useState(["", "", "", ""]);
+  const [clear, setClear] = useState(["clear", "", "", "", ""]);
 
   const [host, setHost] = useState(
     "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
@@ -276,7 +275,7 @@ const Pushdown = () => {
               });
           }
           setDBConnector(!dbConnector);
-          clear[0] = "clear";
+          clear[1] = "clear";
           setClear(clear);
         }, delay);
         break;
@@ -287,7 +286,7 @@ const Pushdown = () => {
           "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear;"
         );
         setTimeout(() => {
-          clear[1] = "clear";
+          clear[2] = "clear";
           setSE(!SE);
           setCSDPushdown(!CSDPushdown);
         }, delay);
@@ -299,7 +298,7 @@ const Pushdown = () => {
           "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
         );
         setTimeout(() => {
-          clear[2] = "clear";
+          clear[3] = "clear";
           setResult(!result);
         }, delay);
         break;
@@ -310,7 +309,7 @@ const Pushdown = () => {
           "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
         );
         setTimeout(() => {
-          clear[2] = "clear";
+          clear[4] = "clear";
           setResult(!result);
         }, delay);
         break;
@@ -322,7 +321,6 @@ const Pushdown = () => {
         setSimulator(true);
         setDBConnector(true);
         setSE(true);
-        setFileSys(true);
         setCSDPushdown(true);
         break;
     }
@@ -333,7 +331,7 @@ const Pushdown = () => {
       {loginData[3] === "O" && (
         <Row className="header my-4 align-items-center justify-content-center">
           <Button
-            className="mx-2 btn-demo text-lg clear"
+            className={`mx-2 btn-demo text-lg ${clear[0]}`}
             color="warning"
             size="lg"
             type="button"
@@ -350,7 +348,7 @@ const Pushdown = () => {
           </Button>
           <i className="ni ni-bold-right"></i>
           <Button
-            className={`mx-2 bg-yellow text-white btn-demo  text-lg ${clear[0]}`}
+            className={`mx-2 bg-yellow text-white btn-demo  text-lg ${clear[1]}`}
             size="lg"
             type="button"
             value={"Simulator"}
@@ -366,7 +364,7 @@ const Pushdown = () => {
           </Button>
           <i className="ni ni-bold-right"></i>
           <Button
-            className={`mx-2 btn-demo  text-lg ${clear[1]}`}
+            className={`mx-2 btn-demo  text-lg ${clear[2]}`}
             color="primary"
             size="lg"
             type="button"
@@ -384,7 +382,7 @@ const Pushdown = () => {
           <i className="ni ni-bold-right"></i>
           <Col xl="2" className="text-center px-0">
             <Button
-              className={`mx-2 btn-demo text-lg mb-1 ${clear[2]}`}
+              className={`mx-2 btn-demo text-lg mb-1 ${clear[3]}`}
               color="danger"
               size="lg"
               type="button"
@@ -400,7 +398,7 @@ const Pushdown = () => {
               {"   "}Storage Engine Instance
             </Button>
             <Button
-              className={`mx-2 bg-purple text-white btn-demo  text-lg ${clear[2]}`}
+              className={`mx-2 bg-purple text-white btn-demo  text-lg ${clear[3]}`}
               size="lg"
               type="button"
               value={"CSD Pushdown Work"}

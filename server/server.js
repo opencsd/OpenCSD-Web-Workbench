@@ -77,6 +77,7 @@ analysisApp.get("/login_data", (req, res) => {
 
 analysisApp.post("/charts", (req, res) => {
   const requestData = req.body;
+  console.log(requestData.data);
   var colors = {
     gray: {
       100: "#f6f9fc",
@@ -213,23 +214,27 @@ analysisApp.post("/charts", (req, res) => {
           })),
           {
             label: "User SSD",
-            data: Array.from(
-              { length: requestData.data.length },
-              () => requestData.userSSD.userCPU
-            ),
+            data: requestData.data.map((item) => item.userSSD.userCPU),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
             stack: "UserSSD",
           },
-          ...requestData.userCSD.map((userCsd, index) => ({
-            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-            data: Array.from(
-              { length: requestData.data.length },
-              () => userCsd.userCPU
+          {
+            label: "User Storage Engine",
+            data: requestData.data.map((item) => item.userCSD[0].userCPU),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          },
+          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
+            label: `User CSD${index + 1}`,
+            data: requestData.data.map(
+              (item) => item.userCSD[index + 1].userCPU
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: csdColors[index + 1],
+            pointBackgroundColor: csdColors[index + 1],
             maxBarThickness: 25,
             stack: "UserCSD",
           })),
@@ -259,24 +264,28 @@ analysisApp.post("/charts", (req, res) => {
             stack: "CSD",
           })),
           {
-            label: "UserSSD",
-            data: Array.from(
-              { length: requestData.data.length },
-              () => requestData.userSSD.userNet
-            ),
+            label: "User SSD",
+            data: requestData.data.map((item) => item.userSSD.userNet),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
             stack: "UserSSD",
           },
-          ...requestData.userCSD.map((userCsd, index) => ({
-            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-            data: Array.from(
-              { length: requestData.data.length },
-              () => userCsd.userNet
+          {
+            label: "User Storage Engine",
+            data: requestData.data.map((item) => item.userCSD[0].userNet),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          },
+          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
+            label: `User CSD${index + 1}`,
+            data: requestData.data.map(
+              (item) => item.userCSD[index + 1].userNet
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: csdColors[index + 1],
+            pointBackgroundColor: csdColors[index + 1],
             maxBarThickness: 25,
             stack: "UserCSD",
           })),
@@ -306,24 +315,28 @@ analysisApp.post("/charts", (req, res) => {
             stack: "CSD",
           })),
           {
-            label: "UserSSD",
-            data: Array.from(
-              { length: requestData.data.length },
-              () => requestData.userSSD.userPower
-            ),
+            label: "User SSD",
+            data: requestData.data.map((item) => item.userSSD.userPower),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
             stack: "UserSSD",
           },
-          ...requestData.userCSD.map((userCsd, index) => ({
-            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-            data: Array.from(
-              { length: requestData.data.length },
-              () => userCsd.userPower
+          {
+            label: "User Storage Engine",
+            data: requestData.data.map((item) => item.userCSD[0].userPower),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          },
+          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
+            label: `User CSD${index + 1}`,
+            data: requestData.data.map(
+              (item) => item.userCSD[index + 1].userPower
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: csdColors[index + 1],
+            pointBackgroundColor: csdColors[index + 1],
             maxBarThickness: 25,
             stack: "UserCSD",
           })),
@@ -353,24 +366,28 @@ analysisApp.post("/charts", (req, res) => {
             stack: "CSD",
           })),
           {
-            label: "UserSSD",
-            data: Array.from(
-              { length: requestData.data.length },
-              () => requestData.userSSD.userTime
-            ),
+            label: "User SSD",
+            data: requestData.data.map((item) => item.userSSD.userTime),
             backgroundColor: colors.theme["warning"],
             pointBackgroundColor: colors.theme["warning"],
             maxBarThickness: 25,
             stack: "UserSSD",
           },
-          ...requestData.userCSD.map((userCsd, index) => ({
-            label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-            data: Array.from(
-              { length: requestData.data.length },
-              () => userCsd.userTime
+          {
+            label: "User Storage Engine",
+            data: requestData.data.map((item) => item.userCSD[0].userTime),
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
+            maxBarThickness: 25,
+            stack: "UserCSD",
+          },
+          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
+            label: `User CSD${index + 1}`,
+            data: requestData.data.map(
+              (item) => item.userCSD[index + 1].userTime
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: csdColors[index + 1],
+            pointBackgroundColor: csdColors[index + 1],
             maxBarThickness: 25,
             stack: "UserCSD",
           })),
@@ -485,13 +502,13 @@ analysisApp.post("/resultChart", (req, res) => {
         })),
         {
           label: "UserSSD",
-          data: [requestData.userSSD.userCPU],
+          data: [requestData.data.userSSD.userCPU],
           backgroundColor: colors.theme["warning"],
           pointBackgroundColor: colors.theme["warning"],
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.userCSD.map((userCsd, index) => ({
+        ...requestData.data.userCSD.map((userCsd, index) => ({
           label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
           data: [userCsd.userCPU],
           backgroundColor: effectCheckColors[index + 1],
@@ -514,13 +531,13 @@ analysisApp.post("/resultChart", (req, res) => {
         })),
         {
           label: "UserSSD",
-          data: [requestData.userSSD.userNet],
+          data: [requestData.data.userSSD.userNet],
           backgroundColor: colors.theme["warning"],
           pointBackgroundColor: colors.theme["warning"],
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.userCSD.map((userCsd, index) => ({
+        ...requestData.data.userCSD.map((userCsd, index) => ({
           label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
           data: [userCsd.userNet],
           backgroundColor: effectCheckColors[index + 1],
@@ -543,13 +560,13 @@ analysisApp.post("/resultChart", (req, res) => {
         })),
         {
           label: "UserSSD",
-          data: [requestData.userSSD.userPower],
+          data: [requestData.data.userSSD.userPower],
           backgroundColor: colors.theme["warning"],
           pointBackgroundColor: colors.theme["warning"],
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.userCSD.map((userCsd, index) => ({
+        ...requestData.data.userCSD.map((userCsd, index) => ({
           label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
           data: [userCsd.userPower],
           backgroundColor: effectCheckColors[index + 1],
@@ -572,13 +589,13 @@ analysisApp.post("/resultChart", (req, res) => {
         })),
         {
           label: "UserSSD",
-          data: [requestData.userSSD.userTime],
+          data: [requestData.data.userSSD.userTime],
           backgroundColor: colors.theme["warning"],
           pointBackgroundColor: colors.theme["warning"],
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.userCSD.map((userCsd, index) => ({
+        ...requestData.data.userCSD.map((userCsd, index) => ({
           label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
           data: [userCsd.userTime],
           backgroundColor: effectCheckColors[index + 1],
@@ -597,13 +614,74 @@ analysisApp.post("/pushdown", (req, res) => {
   console.log(requestData);
 
   let jsonData = {
+    userSSD: {
+      userCPU: Math.floor(Math.random() * 300),
+      userNet: Math.floor(Math.random() * 300),
+      userPower: Math.floor(Math.random() * 300),
+      userTime: Math.floor(Math.random() * 300),
+    },
+    userCSD: [
+      {
+        userCPU: Math.floor(Math.random() * 300),
+        userNet: Math.floor(Math.random() * 300),
+        userPower: Math.floor(Math.random() * 300),
+        userTime: Math.floor(Math.random() * 300),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+      {
+        userCPU: Math.floor(Math.random() * 10),
+        userNet: Math.floor(Math.random() * 10),
+        userPower: Math.floor(Math.random() * 10),
+        userTime: Math.floor(Math.random() * 10),
+      },
+    ],
     effectCheck: [
       {
         cpuForcast: Math.floor(Math.random() * 300),
         netForcast: Math.floor(Math.random() * 300),
         powerForcast: Math.floor(Math.random() * 300),
         timeForcast: Math.floor(Math.random() * 300),
-        resultScore: Math.floor(Math.random() * 300),
       },
       {
         cpuForcast: Math.floor(Math.random() * 10),
@@ -655,196 +733,72 @@ analysisApp.post("/pushdown", (req, res) => {
       },
     ],
   };
-  if ("environment" in requestData) {
-    console.log("예외발생");
-    if (requestData.environment.storage === "CSD") {
-      jsonData = {
-        userSSD: {
-          userCPU: Math.floor(Math.random() * 300),
-          userNet: Math.floor(Math.random() * 300),
-          userPower: Math.floor(Math.random() * 300),
-          userTime: Math.floor(Math.random() * 300),
+  if (requestData.environment.storage !== "CSD") {
+    jsonData = {
+      userSSD: {
+        userCPU: Math.floor(Math.random() * 300),
+        userNet: Math.floor(Math.random() * 300),
+        userPower: Math.floor(Math.random() * 300),
+        userTime: Math.floor(Math.random() * 300),
+      },
+      effectCheck: [
+        {
+          cpuForcast: Math.floor(Math.random() * 300),
+          netForcast: Math.floor(Math.random() * 300),
+          powerForcast: Math.floor(Math.random() * 300),
+          timeForcast: Math.floor(Math.random() * 300),
+          resultScore: Math.floor(Math.random() * 300),
         },
-        userCSD: [
-          {
-            userCPU: Math.floor(Math.random() * 300),
-            userNet: Math.floor(Math.random() * 300),
-            userPower: Math.floor(Math.random() * 300),
-            userTime: Math.floor(Math.random() * 300),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-          {
-            userCPU: Math.floor(Math.random() * 10),
-            userNet: Math.floor(Math.random() * 10),
-            userPower: Math.floor(Math.random() * 10),
-            userTime: Math.floor(Math.random() * 10),
-          },
-        ],
-        effectCheck: [
-          {
-            cpuForcast: Math.floor(Math.random() * 300),
-            netForcast: Math.floor(Math.random() * 300),
-            powerForcast: Math.floor(Math.random() * 300),
-            timeForcast: Math.floor(Math.random() * 300),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-        ],
-      };
-    } else {
-      jsonData = {
-        userSSD: {
-          userCPU: Math.floor(Math.random() * 300),
-          userNet: Math.floor(Math.random() * 300),
-          userPower: Math.floor(Math.random() * 300),
-          userTime: Math.floor(Math.random() * 300),
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
         },
-        effectCheck: [
-          {
-            cpuForcast: Math.floor(Math.random() * 300),
-            netForcast: Math.floor(Math.random() * 300),
-            powerForcast: Math.floor(Math.random() * 300),
-            timeForcast: Math.floor(Math.random() * 300),
-            resultScore: Math.floor(Math.random() * 300),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-          {
-            cpuForcast: Math.floor(Math.random() * 10),
-            netForcast: Math.floor(Math.random() * 10),
-            powerForcast: Math.floor(Math.random() * 10),
-            timeForcast: Math.floor(Math.random() * 10),
-          },
-        ],
-      };
-    }
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+        {
+          cpuForcast: Math.floor(Math.random() * 10),
+          netForcast: Math.floor(Math.random() * 10),
+          powerForcast: Math.floor(Math.random() * 10),
+          timeForcast: Math.floor(Math.random() * 10),
+        },
+      ],
+    };
   }
   console.log("gogo");
   res.send(jsonData);
