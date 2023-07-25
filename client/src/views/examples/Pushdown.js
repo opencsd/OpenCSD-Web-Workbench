@@ -19,10 +19,6 @@
 import axios from "axios";
 import Chart from "chart.js";
 import { useState } from "react";
-// react plugin used to create charts
-import { HorizontalBar, Pie } from "react-chartjs-2";
-import classnames from "classnames";
-
 import React, { useRef, useEffect } from "react";
 
 import {
