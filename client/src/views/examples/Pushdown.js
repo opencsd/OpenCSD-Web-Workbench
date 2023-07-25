@@ -69,7 +69,7 @@ const Pushdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://10.0.5.123:40400/login_data");
+        const response = await axios.get("http://localhost:40400/login_data");
         setLoginData([
           response.data.DBMS,
           response.data.Host,
@@ -161,7 +161,7 @@ const Pushdown = () => {
     if (Query.current.value) {
       setIsEffectCheck(true);
       setGenerate(Query.current.value);
-      fetch("http://10.0.5.123:40400/query", {
+      fetch("http://localhost:40400/query", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
         headers: {
@@ -234,7 +234,7 @@ const Pushdown = () => {
   const [clear, setClear] = useState(["clear", "", "", "", ""]);
 
   const [host, setHost] = useState(
-    "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
+    "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear"
   );
 
   const handleDemo = (e) => {
@@ -252,7 +252,7 @@ const Pushdown = () => {
           if (Query.current.value) {
             setIsEffectCheck(true);
             setGenerate(Query.current.value);
-            fetch("http://10.0.5.123:40400/query", {
+            fetch("http://localhost:40400/query", {
               //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
               method: "POST",
               headers: {
@@ -285,7 +285,7 @@ const Pushdown = () => {
         setSimulator(!simulator);
         setCurrentIns("DB Connect Instance");
         setHost(
-          "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear;"
+          "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear;"
         );
         if (!Query.current.value) setValueErr(true);
         else setValueErr(false);
@@ -293,7 +293,7 @@ const Pushdown = () => {
           if (Query.current.value) {
             setIsEffectCheck(true);
             setGenerate(Query.current.value);
-            fetch("http://10.0.5.123:40400/query", {
+            fetch("http://localhost:40400/query", {
               //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
               method: "POST",
               headers: {
@@ -325,7 +325,7 @@ const Pushdown = () => {
         setDBConnector(!dbConnector);
         setCurrentIns("Storage Engine Instance & CSD Pushdown Work");
         setHost(
-          "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
+          "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear"
         );
         setTimeout(() => {
           clear[3] = "clear";
@@ -336,7 +336,7 @@ const Pushdown = () => {
         setDBConnector(!dbConnector);
         setCurrentIns("Storage Engine Instance & CSD Pushdown Work");
         setHost(
-          "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
+          "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear"
         );
         setTimeout(() => {
           clear[4] = "clear";

@@ -72,7 +72,7 @@ const Energy = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://10.0.5.123:40400/login_data");
+        const response = await axios.get("http://localhost:40400/login_data");
         setLoginData([
           response.data.DBMS,
           response.data.Host,
@@ -114,7 +114,7 @@ const Energy = () => {
         ...optionResult,
         [...customSet[selectedOption].Set, selectedOption],
       ]);
-      fetch("http://10.0.5.123:40400/pushdown", {
+      fetch("http://localhost:40400/pushdown", {
         //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
         method: "POST",
         headers: {
@@ -344,7 +344,7 @@ const Energy = () => {
       data: Data[index],
       index: index,
     };
-    fetch("http://10.0.5.123:40400/resultChart", {
+    fetch("http://localhost:40400/resultChart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -379,7 +379,7 @@ const Energy = () => {
   }, [checkedInputs]);
   useDidMountEffect(() => {
     if (selectedData.length > 0) {
-      fetch("http://10.0.5.123:40400/charts", {
+      fetch("http://localhost:40400/charts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -546,7 +546,7 @@ const Energy = () => {
   const [clear, setClear] = useState(["clear", "", "", "", ""]);
 
   const [host, setHost] = useState(
-    "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
+    "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear"
   );
 
   const handleDemo = (e) => {
@@ -569,7 +569,7 @@ const Energy = () => {
               ...optionResult,
               [...customSet[selectedOption].Set, selectedOption],
             ]);
-            fetch("http://10.0.5.123:40400/pushdown", {
+            fetch("http://localhost:40400/pushdown", {
               //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
               method: "POST",
               headers: {
@@ -612,7 +612,7 @@ const Energy = () => {
         setSimulator(!simulator);
         setCurrentIns("DB Connect Instance");
         setHost(
-          "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear;"
+          "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear;"
         );
         setTimeout(() => {
           clear[1] = "clear";
@@ -624,7 +624,7 @@ const Energy = () => {
         setDBConnector(!dbConnector);
         setCurrentIns("Storage Engine Instance & CSD Pushdown Work");
         setHost(
-          "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
+          "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear"
         );
         setTimeout(() => {
           clear[2] = "clear";
@@ -635,7 +635,7 @@ const Energy = () => {
         setDBConnector(!dbConnector);
         setCurrentIns("Storage Engine Instance & CSD Pushdown Work");
         setHost(
-          "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear"
+          "http://localhost:8888/?hostname=localhost&username=root&password=d25zZ3VyMiE=&command=clear"
         );
         setTimeout(() => {
           clear[2] = "clear";

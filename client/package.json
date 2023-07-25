@@ -40,7 +40,6 @@
     "nodemon": "^2.0.22",
     "nouislider": "15.2.0",
     "os-browserify": "^0.3.0",
-    "proxy": "http://localhost:5000",
     "react": "18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-chartjs-2": "2.11.1",

@@ -61,7 +61,7 @@ const Workbench = (props) => {
     try {
       // 로그인 정보를 서버로 전송
       const response = await axios.post(
-        "http://10.0.5.123:40400/admin/workbench",
+        "http://localhost:40400/admin/workbench",
         {
           dbms: dbms,
           host: host,
@@ -84,7 +84,7 @@ const Workbench = (props) => {
     try {
       // 로그인 정보를 서버로 전송
       const response = await axios.post(
-        "http://10.0.5.123:40400/admin/workbench",
+        "http://localhost:40400/admin/workbench",
         {
           dbms: dbms,
           host: host,
