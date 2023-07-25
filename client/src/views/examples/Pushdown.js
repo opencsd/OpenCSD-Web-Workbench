@@ -168,6 +168,7 @@ const Pushdown = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          TPCH: ind - 1,
           query: Query.current.value
             .replace(/[\n\t]/g, " ")
             .replace(/\s{2,}/g, " "),
@@ -224,7 +225,7 @@ const Pushdown = () => {
   //For Demo
   const [workbench, setWorkbench] = useState(true);
   const [simulator, setSimulator] = useState(true);
-  const [dbConnector, setDBConnector] = useState(false);
+  const [dbConnector, setDBConnector] = useState(true);
   const [SE, setSE] = useState(false);
   const [CSDPushdown, setCSDPushdown] = useState(false);
   const [result, setResult] = useState(false);
@@ -280,12 +281,41 @@ const Pushdown = () => {
         }, delay);
         break;
       case "DB Connect Instance":
+        setWorkbench(!workbench);
         setSimulator(!simulator);
         setCurrentIns("DB Connect Instance");
         setHost(
           "http://10.0.5.123:8888/?hostname=10.0.5.123&username=root&password=d25zZ3VyMiE=&command=clear;"
         );
+        if (!Query.current.value) setValueErr(true);
+        else setValueErr(false);
         setTimeout(() => {
+          if (Query.current.value) {
+            setIsEffectCheck(true);
+            setGenerate(Query.current.value);
+            fetch("http://10.0.5.123:40400/query", {
+              //회원가입시 입력한 값들이 서버로 전송될 수 있는 주소
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: Query.current.value
+                  .replace(/[\n\t]/g, " ")
+                  .replace(/\s{2,}/g, " "),
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                setSnippet(data.snippet);
+                setSSDUsageForcast(data.SSDUsageForcast);
+                setCSDUsageForcast(data.CSDUsageForcast);
+                setConservationEffectForcast(data.ResourceConservationForcast);
+                setError(data.pushdownError);
+                setEnergyUsage(data.pushdownUsage);
+                setConservationEffect(data.PushdownConservationEffect);
+              });
+          }
           clear[2] = "clear";
           setSE(!SE);
           setCSDPushdown(!CSDPushdown);
@@ -329,7 +359,7 @@ const Pushdown = () => {
   return (
     <>
       {loginData[3] === "O" && (
-        <Row className="header my-4 align-items-center justify-content-center">
+        <Row className="header my-4 mb-9 pb-9 align-items-center justify-content-center">
           <Button
             className={`mx-2 btn-demo text-lg ${clear[0]}`}
             color="warning"
@@ -347,7 +377,7 @@ const Pushdown = () => {
             {"   "}Workbench
           </Button>
           <i className="ni ni-bold-right"></i>
-          <Button
+          {/* <Button
             className={`mx-2 bg-yellow text-white btn-demo  text-lg ${clear[1]}`}
             size="lg"
             type="button"
@@ -362,7 +392,7 @@ const Pushdown = () => {
             />
             {"   "}Simulator
           </Button>
-          <i className="ni ni-bold-right"></i>
+          <i className="ni ni-bold-right"></i> */}
           <Button
             className={`mx-2 btn-demo  text-lg ${clear[2]}`}
             color="primary"
@@ -596,7 +626,7 @@ const Pushdown = () => {
                     {"{"}
                     <br />
                     <span className="text-green">
-                      queryID:"TPC-H_01",
+                      TPCH:"TPC-H_01",
                       <br />
                       query:{generate}
                       <br />
@@ -615,36 +645,7 @@ const Pushdown = () => {
               style={{ maxHeight: "40vh", minHeight: "35vh" }}
             >
               <CardTitle className="h2 py-1 pl-3 mb-0 bg-light text-darker">
-                <Row className=" h2 pl-3 align-items-center">
-                  Option
-                  <Nav className="ml-5" pills>
-                    <NavItem className="pr-0">
-                      <NavLink
-                        className={classnames("py-1", {
-                          active: activeNav === true,
-                        })}
-                        href="#pablo"
-                        onClick={(e) => toggleNavs(e, true)}
-                      >
-                        <span className="d-none d-md-block">Option</span>
-                        <span className="d-md-none">M</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames("py-1", {
-                          active: activeNav === false,
-                        })}
-                        data-toggle="tab"
-                        href="#pablo"
-                        onClick={(e) => toggleNavs(e, false)}
-                      >
-                        <span className="d-none d-md-block">Environment</span>
-                        <span className="d-md-none">W</span>
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
-                </Row>
+                <Row className=" h2 pl-3 align-items-center">DB Schema</Row>
               </CardTitle>
               <CardBody className="py-0 px-0 h-100">
                 <Table
@@ -652,7 +653,7 @@ const Pushdown = () => {
                   responsive
                   bordered
                 >
-                  {activeNav ? (
+                  {/* {activeNav ? (
                     <tbody>
                       <tr>
                         <th scope="row">
@@ -714,7 +715,7 @@ const Pushdown = () => {
                         </td>
                       </tr>
                     </tbody>
-                  )}
+                  )} */}
                 </Table>
               </CardBody>
             </Card>
@@ -778,88 +779,113 @@ const Pushdown = () => {
                 </Table>
               </CardBody>
             </Card>
-            <Card className="bg-white h-50">
+            <Card className="bg-white h-50" style={{ maxHeight: "20vh" }}>
               <CardTitle className="h1 py-1 pl-3 mb-0 bg-gradient-light text-darker">
                 <Row className="pl-3 align-items-center">Query Result</Row>
               </CardTitle>
               {isEffectCheck && (
-                <CardBody className="py-0 px-0">
+                <CardBody className="py-0 px-0 overflow-auto">
                   <Table
                     className="align-items-center text-center bg-white "
                     responsive
+                    bordered
                   >
                     <thead className="thead-light">
                       <tr>
                         <th scope="col" className="text-sm">
-                          Num
+                          l_orderkey
                         </th>
                         <th scope="col" className="text-sm">
-                          Snippet Type
+                          revenue
                         </th>
                         <th scope="col" className="text-sm">
-                          Projection Colume
+                          o_orderdate
                         </th>
                         <th scope="col" className="text-sm">
-                          Filter Clause
-                        </th>
-                        <th scope="col" className="text-sm">
-                          Order by
-                        </th>
-                        <th scope="col" className="text-sm">
-                          Group by
+                          o_shippriority
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <th scope="row">
-                          <h3>1</h3>
-                        </th>
-                        <td>Scan</td>
-                        <td>5</td>
-                        <td>5</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td className="text-sm font-weight-bold">387717</td>
+                        <td className="text-sm font-weight-bold">
+                          283118.2242
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-02-14</td>
+                        <td className="text-sm font-weight-bold">0</td>
                       </tr>
                       <tr>
-                        <th scope="row">
-                          <h3>2</h3>
-                        </th>
-                        <td>Scan</td>
-                        <td>3</td>
-                        <td>3</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td className="text-sm font-weight-bold">312035</td>
+                        <td className="text-sm font-weight-bold">
+                          247209.8679
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-01-24</td>
+                        <td className="text-sm font-weight-bold">0</td>
                       </tr>
                       <tr>
-                        <th scope="row">
-                          <h3>3</h3>
-                        </th>
-                        <td>Aggregation</td>
-                        <td>5</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>1</td>
+                        <td className="text-sm font-weight-bold">343813</td>
+                        <td className="text-sm font-weight-bold">
+                          221681.6797
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-02-17</td>
+                        <td className="text-sm font-weight-bold">0</td>
                       </tr>
                       <tr>
-                        <th scope="row">
-                          <h3>4</h3>
-                        </th>
-                        <td>Inner Join</td>
-                        <td>6</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td className="text-sm font-weight-bold">167744</td>
+                        <td className="text-sm font-weight-bold">
+                          196591.9427
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-01-14</td>
+                        <td className="text-sm font-weight-bold">0</td>
                       </tr>
                       <tr>
-                        <th scope="row">
-                          <h3>5</h3>
-                        </th>
-                        <td>Aggregation</td>
-                        <td>6</td>
-                        <td>0</td>
-                        <td>2</td>
-                        <td>0</td>
+                        <td className="text-sm font-weight-bold">532864</td>
+                        <td className="text-sm font-weight-bold">
+                          194866.8135
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-02-19</td>
+                        <td className="text-sm font-weight-bold">0</td>
+                      </tr>
+                      <tr>
+                        <td className="text-sm font-weight-bold">552257</td>
+                        <td className="text-sm font-weight-bold">
+                          194864.8760
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-03-07</td>
+                        <td className="text-sm font-weight-bold">0</td>
+                      </tr>
+                      <tr>
+                        <td className="text-sm font-weight-bold">114150</td>
+                        <td className="text-sm font-weight-bold">
+                          194228.3846
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-02-14</td>
+                        <td className="text-sm font-weight-bold">0</td>
+                      </tr>
+                      <tr>
+                        <td className="text-sm font-weight-bold">2214051</td>
+                        <td className="text-sm font-weight-bold">
+                          186013.4456
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-02-17</td>
+                        <td className="text-sm font-weight-bold">0</td>
+                      </tr>
+                      <tr>
+                        <td className="text-sm font-weight-bold">462180</td>
+                        <td className="text-sm font-weight-bold">
+                          182184.4756
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-01-08</td>
+                        <td className="text-sm font-weight-bold">0</td>
+                      </tr>
+                      <tr>
+                        <td className="text-sm font-weight-bold">242049</td>
+                        <td className="text-sm font-weight-bold">
+                          180820.6469
+                        </td>
+                        <td className="text-sm font-weight-bold">1995-03-04</td>
+                        <td className="text-sm font-weight-bold">0</td>
                       </tr>
                     </tbody>
                   </Table>
@@ -873,89 +899,45 @@ const Pushdown = () => {
               style={{ maxHeight: "40vh" }}
             >
               <CardTitle className="h1 py-1 mb-0 bg-gradient-light text-darker text-center">
-                Effect Result
+                Metric
               </CardTitle>
               <CardBody className="py-0 px-0">
-                {isEffectCheck && (
+                {false && (
                   <Table striped responsive>
                     <tbody className="text-center">
-                      <tr>
+                      <tr className="w-100">
                         <td className="font-weight-bold">
-                          <h3>SSD Resource Usage Forcast</h3>
+                          <h3>Pushdown Resource Usage</h3>
                         </td>
                       </tr>
-                      <tr>
+                      <tr className="w-100">
                         <td>
-                          <h4>{SSDUsageForcast + " W"}</h4>
+                          <h4>{energyUsage + " W"}</h4>
                         </td>
                       </tr>
-                      <tr>
+                      <tr className="w-100">
                         <td className="font-weight-bold">
-                          <h3>CSD Resource Usage Forcast</h3>
+                          <h3>Prediction Error</h3>
                         </td>
                       </tr>
-                      <tr>
+                      <tr className="w-100">
                         <td>
-                          <h4>{CSDUsageForcast + " W"}</h4>
+                          <h4>{error + " %"}</h4>
                         </td>
                       </tr>
-                      <tr>
+                      <tr className="w-100">
                         <td className="font-weight-bold">
-                          <h3>Conservation Effect Forcast</h3>
+                          <h3>Conservation Effect</h3>
                         </td>
                       </tr>
-                      <tr>
+                      <tr className="w-100">
                         <td>
-                          <h4>{HostConservationEffectForcast + " %"}</h4>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="font-weight-bold">
-                          <h3>Pushdown T/F</h3>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <h4 className="text-danger">Pushdown</h4>
+                          <h4 className="text-danger">
+                            {HostConservationEffect + " %"}
+                          </h4>
                         </td>
                       </tr>
                     </tbody>
-                    {isPushdown && (
-                      <tbody className="text-center">
-                        <tr className="w-100">
-                          <td className="font-weight-bold">
-                            <h3>Pushdown Resource Usage</h3>
-                          </td>
-                        </tr>
-                        <tr className="w-100">
-                          <td>
-                            <h4>{energyUsage + " W"}</h4>
-                          </td>
-                        </tr>
-                        <tr className="w-100">
-                          <td className="font-weight-bold">
-                            <h3>Prediction Error</h3>
-                          </td>
-                        </tr>
-                        <tr className="w-100">
-                          <td>
-                            <h4>{error + " %"}</h4>
-                          </td>
-                        </tr>
-                        <tr className="w-100">
-                          <td className="font-weight-bold">
-                            <h3>Conservation Effect</h3>
-                          </td>
-                        </tr>
-                        <tr className="w-100">
-                          <td>
-                            <h4 className="text-danger">
-                              {HostConservationEffect + " %"}
-                            </h4>
-                          </td>
-                        </tr>
-                      </tbody>
-                    )}
                   </Table>
                 )}
               </CardBody>

@@ -202,16 +202,18 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
-            label: `CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.effectCheck[index + 1].cpuForcast
+          {
+            label: "CSD",
+            data: requestData.data.map((item) =>
+              item.effectCheck
+                .slice(1)
+                .reduce((total, i) => total + i.cpuForcast, 0)
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
             maxBarThickness: 25,
             stack: "CSD",
-          })),
+          },
           {
             label: "User SSD",
             data: requestData.data.map((item) => item.userSSD.userCPU),
@@ -223,21 +225,21 @@ analysisApp.post("/charts", (req, res) => {
           {
             label: "User Storage Engine",
             data: requestData.data.map((item) => item.userCSD[0].userCPU),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
             maxBarThickness: 25,
             stack: "UserCSD",
           },
-          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
-            label: `User CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.userCSD[index + 1].userCPU
+          {
+            label: "User CSD",
+            data: requestData.data.map((item) =>
+              item.userCSD.slice(1).reduce((total, i) => total + i.userCPU, 0)
             ),
-            backgroundColor: csdColors[index + 1],
-            pointBackgroundColor: csdColors[index + 1],
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
             maxBarThickness: 25,
             stack: "UserCSD",
-          })),
+          },
         ],
       },
       Net: {
@@ -253,16 +255,18 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
-            label: `CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.effectCheck[index + 1].netForcast
+          {
+            label: "CSD",
+            data: requestData.data.map((item) =>
+              item.effectCheck
+                .slice(1)
+                .reduce((total, i) => total + i.netForcast, 0)
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
             maxBarThickness: 25,
             stack: "CSD",
-          })),
+          },
           {
             label: "User SSD",
             data: requestData.data.map((item) => item.userSSD.userNet),
@@ -274,21 +278,21 @@ analysisApp.post("/charts", (req, res) => {
           {
             label: "User Storage Engine",
             data: requestData.data.map((item) => item.userCSD[0].userNet),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
             maxBarThickness: 25,
             stack: "UserCSD",
           },
-          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
-            label: `User CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.userCSD[index + 1].userNet
+          {
+            label: "User CSD",
+            data: requestData.data.map((item) =>
+              item.userCSD.slice(1).reduce((total, i) => total + i.userNet, 0)
             ),
-            backgroundColor: csdColors[index + 1],
-            pointBackgroundColor: csdColors[index + 1],
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
             maxBarThickness: 25,
             stack: "UserCSD",
-          })),
+          },
         ],
       },
       Power: {
@@ -304,16 +308,18 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
-            label: `CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.effectCheck[index + 1].powerForcast
+          {
+            label: "CSD",
+            data: requestData.data.map((item) =>
+              item.effectCheck
+                .slice(1)
+                .reduce((total, i) => total + i.powerForcast, 0)
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
             maxBarThickness: 25,
             stack: "CSD",
-          })),
+          },
           {
             label: "User SSD",
             data: requestData.data.map((item) => item.userSSD.userPower),
@@ -325,21 +331,21 @@ analysisApp.post("/charts", (req, res) => {
           {
             label: "User Storage Engine",
             data: requestData.data.map((item) => item.userCSD[0].userPower),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
             maxBarThickness: 25,
             stack: "UserCSD",
           },
-          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
-            label: `User CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.userCSD[index + 1].userPower
+          {
+            label: "User CSD",
+            data: requestData.data.map((item) =>
+              item.userCSD.slice(1).reduce((total, i) => total + i.userPower, 0)
             ),
-            backgroundColor: csdColors[index + 1],
-            pointBackgroundColor: csdColors[index + 1],
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
             maxBarThickness: 25,
             stack: "UserCSD",
-          })),
+          },
         ],
       },
       Time: {
@@ -355,16 +361,18 @@ analysisApp.post("/charts", (req, res) => {
             maxBarThickness: 25,
             stack: "CSD",
           },
-          ...requestData.data[0].effectCheck.slice(1).map((_, index) => ({
-            label: `CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.effectCheck[index + 1].timeForcast
+          {
+            label: "CSD",
+            data: requestData.data.map((item) =>
+              item.effectCheck
+                .slice(1)
+                .reduce((total, i) => total + i.timeForcast, 0)
             ),
-            backgroundColor: csdColors[index],
-            pointBackgroundColor: csdColors[index],
+            backgroundColor: colors.theme["danger"],
+            pointBackgroundColor: colors.theme["danger"],
             maxBarThickness: 25,
             stack: "CSD",
-          })),
+          },
           {
             label: "User SSD",
             data: requestData.data.map((item) => item.userSSD.userTime),
@@ -376,21 +384,21 @@ analysisApp.post("/charts", (req, res) => {
           {
             label: "User Storage Engine",
             data: requestData.data.map((item) => item.userCSD[0].userTime),
-            backgroundColor: colors.theme["danger"],
-            pointBackgroundColor: colors.theme["danger"],
+            backgroundColor: colors.theme["success"],
+            pointBackgroundColor: colors.theme["success"],
             maxBarThickness: 25,
             stack: "UserCSD",
           },
-          ...requestData.data[0].userCSD.slice(1).map((_, index) => ({
-            label: `User CSD${index + 1}`,
-            data: requestData.data.map(
-              (item) => item.userCSD[index + 1].userTime
+          {
+            label: "User CSD",
+            data: requestData.data.map((item) =>
+              item.userCSD.slice(1).reduce((total, i) => total + i.userTime, 0)
             ),
-            backgroundColor: csdColors[index + 1],
-            pointBackgroundColor: csdColors[index + 1],
+            backgroundColor: "#ffd600",
+            pointBackgroundColor: "#ffd600",
             maxBarThickness: 25,
             stack: "UserCSD",
-          })),
+          },
         ],
       },
     },
@@ -492,14 +500,26 @@ analysisApp.post("/resultChart", (req, res) => {
     CPU: {
       labels: ["CPU"],
       datasets: [
-        ...requestData.data.effectCheck.map((effectCheck, index) => ({
-          label: index === 0 ? "Storage Engine" : `CSD${index}`,
-          data: [effectCheck.cpuForcast],
-          backgroundColor: effectCheckColors[index],
-          pointBackgroundColor: effectCheckColors[index],
+        {
+          label: "Storage Engine",
+          data: [requestData.data.effectCheck[0].cpuForcast],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
           maxBarThickness: 25,
           stack: "CSD",
-        })),
+        },
+        {
+          label: "CSD",
+          data: [
+            requestData.data.effectCheck
+              .slice(1)
+              .reduce((total, i) => total + i.cpuForcast, 0),
+          ],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "CSD",
+        },
         {
           label: "UserSSD",
           data: [requestData.data.userSSD.userCPU],
@@ -508,27 +528,51 @@ analysisApp.post("/resultChart", (req, res) => {
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.data.userCSD.map((userCsd, index) => ({
-          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-          data: [userCsd.userCPU],
-          backgroundColor: effectCheckColors[index + 1],
-          pointBackgroundColor: effectCheckColors[index + 1],
+        {
+          label: "User Storage Engine",
+          data: [requestData.data.userCSD[0].userCPU],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
           maxBarThickness: 25,
           stack: "UserCSD",
-        })),
+        },
+        {
+          label: "User CSD",
+          data: [
+            requestData.data.userCSD
+              .slice(1)
+              .reduce((total, i) => total + i.userCPU, 0),
+          ],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        },
       ],
     },
     Net: {
       labels: ["Net"],
       datasets: [
-        ...requestData.data.effectCheck.map((effectCheck, index) => ({
-          label: index === 0 ? "Storage Engine" : `CSD${index}`,
-          data: [effectCheck.netForcast],
-          backgroundColor: effectCheckColors[index],
-          pointBackgroundColor: effectCheckColors[index],
+        {
+          label: "Storage Engine",
+          data: [requestData.data.effectCheck[0].netForcast],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
           maxBarThickness: 25,
           stack: "CSD",
-        })),
+        },
+        {
+          label: "CSD",
+          data: [
+            requestData.data.effectCheck
+              .slice(1)
+              .reduce((total, i) => total + i.netForcast, 0),
+          ],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "CSD",
+        },
         {
           label: "UserSSD",
           data: [requestData.data.userSSD.userNet],
@@ -537,27 +581,51 @@ analysisApp.post("/resultChart", (req, res) => {
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.data.userCSD.map((userCsd, index) => ({
-          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-          data: [userCsd.userNet],
-          backgroundColor: effectCheckColors[index + 1],
-          pointBackgroundColor: effectCheckColors[index + 1],
+        {
+          label: "User Storage Engine",
+          data: [requestData.data.userCSD[0].userNet],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
           maxBarThickness: 25,
           stack: "UserCSD",
-        })),
+        },
+        {
+          label: "User CSD",
+          data: [
+            requestData.data.userCSD
+              .slice(1)
+              .reduce((total, i) => total + i.userNet, 0),
+          ],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        },
       ],
     },
     Power: {
       labels: ["Power"],
       datasets: [
-        ...requestData.data.effectCheck.map((effectCheck, index) => ({
-          label: index === 0 ? "Storage Engine" : `CSD${index}`,
-          data: [effectCheck.powerForcast],
-          backgroundColor: effectCheckColors[index],
-          pointBackgroundColor: effectCheckColors[index],
+        {
+          label: "Storage Engine",
+          data: [requestData.data.effectCheck[0].powerForcast],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
           maxBarThickness: 25,
           stack: "CSD",
-        })),
+        },
+        {
+          label: "CSD",
+          data: [
+            requestData.data.effectCheck
+              .slice(1)
+              .reduce((total, i) => total + i.powerForcast, 0),
+          ],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "CSD",
+        },
         {
           label: "UserSSD",
           data: [requestData.data.userSSD.userPower],
@@ -566,27 +634,51 @@ analysisApp.post("/resultChart", (req, res) => {
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.data.userCSD.map((userCsd, index) => ({
-          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-          data: [userCsd.userPower],
-          backgroundColor: effectCheckColors[index + 1],
-          pointBackgroundColor: effectCheckColors[index + 1],
+        {
+          label: "User Storage Engine",
+          data: [requestData.data.userCSD[0].userPower],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
           maxBarThickness: 25,
           stack: "UserCSD",
-        })),
+        },
+        {
+          label: "User CSD",
+          data: [
+            requestData.data.userCSD
+              .slice(1)
+              .reduce((total, i) => total + i.userPower, 0),
+          ],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        },
       ],
     },
     Time: {
       labels: ["Time"],
       datasets: [
-        ...requestData.data.effectCheck.map((effectCheck, index) => ({
-          label: index === 0 ? "Storage Engine" : `CSD${index}`,
-          data: [effectCheck.timeForcast],
-          backgroundColor: effectCheckColors[index],
-          pointBackgroundColor: effectCheckColors[index],
+        {
+          label: "Storage Engine",
+          data: [requestData.data.effectCheck[0].timeForcast],
+          backgroundColor: colors.theme["primary"],
+          pointBackgroundColor: colors.theme["primary"],
           maxBarThickness: 25,
           stack: "CSD",
-        })),
+        },
+        {
+          label: "CSD",
+          data: [
+            requestData.data.effectCheck
+              .slice(1)
+              .reduce((total, i) => total + i.timeForcast, 0),
+          ],
+          backgroundColor: colors.theme["danger"],
+          pointBackgroundColor: colors.theme["danger"],
+          maxBarThickness: 25,
+          stack: "CSD",
+        },
         {
           label: "UserSSD",
           data: [requestData.data.userSSD.userTime],
@@ -595,14 +687,26 @@ analysisApp.post("/resultChart", (req, res) => {
           maxBarThickness: 25,
           stack: "UserSSD",
         },
-        ...requestData.data.userCSD.map((userCsd, index) => ({
-          label: index === 0 ? "User Storage Engine" : `User CSD${index}`,
-          data: [userCsd.userTime],
-          backgroundColor: effectCheckColors[index + 1],
-          pointBackgroundColor: effectCheckColors[index + 1],
+        {
+          label: "User Storage Engine",
+          data: [requestData.data.userCSD[0].userTime],
+          backgroundColor: colors.theme["success"],
+          pointBackgroundColor: colors.theme["success"],
           maxBarThickness: 25,
           stack: "UserCSD",
-        })),
+        },
+        {
+          label: "User CSD",
+          data: [
+            requestData.data.userCSD
+              .slice(1)
+              .reduce((total, i) => total + i.userTime, 0),
+          ],
+          backgroundColor: "#ffd600",
+          pointBackgroundColor: "#ffd600",
+          maxBarThickness: 25,
+          stack: "UserCSD",
+        },
       ],
     },
   };
@@ -818,10 +922,9 @@ analysisApp.post("/pushdown", (req, res) => {
 });
 analysisApp.post("/query", (req, res) => {
   const requestData = req.body; // 요청으로 받은 JSON 데이터
-  if (requestData.queryID) {
-    if (requestData.queryID < 10)
-      requestData.queryID = "TPC-H_0" + requestData.queryID;
-    else requestData.queryID = "TPC-H_" + requestData.queryID;
+  if (requestData.TPCH) {
+    if (requestData.TPCH < 10) requestData.TPCH = "TPC-H_0" + requestData.TPCH;
+    else requestData.TPCH = "TPC-H_" + requestData.TPCH;
   }
 
   const jsonData = {

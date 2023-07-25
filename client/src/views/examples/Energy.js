@@ -131,7 +131,7 @@ const Energy = () => {
             index: userEnv[6],
             blockSize: userEnv[7],
           },
-          queryID: ind - 1,
+          TPCH: ind - 1,
           options: {
             net: customSet[selectedOption].Set[0],
             dbms: customSet[selectedOption].Set[1],
@@ -476,7 +476,29 @@ const Energy = () => {
   };
 
   //Snippet Info
-  const [snippet, setSnippet] = useState([]);
+  const [snippet, setSnippet] = useState([
+    {
+      "Snippet Type": "Scan",
+      "Projection Column": 5,
+      "Filter Clause": 5,
+      "Order by": 0,
+      "Group by": 0,
+    },
+    {
+      "Snippet Type": "Scan",
+      "Projection Column": 3,
+      "Filter Clause": 3,
+      "Order by": 0,
+      "Group by": 0,
+    },
+    {
+      "Snippet Type": "Aggregation",
+      "Projection Column": 5,
+      "Filter Clause": 0,
+      "Order by": 0,
+      "Group by": 1,
+    },
+  ]);
 
   //Result
   // const [isSimul, setIsSimul] = useState(false);
@@ -564,7 +586,7 @@ const Energy = () => {
                   index: userEnv[6],
                   blockSize: userEnv[7],
                 },
-                queryID: ind - 1,
+                TPCH: ind - 1,
                 options: {
                   net: customSet[selectedOption].Set[0],
                   dbms: customSet[selectedOption].Set[1],
@@ -636,7 +658,7 @@ const Energy = () => {
   return (
     <>
       {loginData[3] === "O" && (
-        <Row className="header my-4 align-items-center justify-content-center">
+        <Row className="header ml-7 my-4 mb-9 pb-8 align-items-center justify-content-center">
           <Button
             className={`mx-2 btn-demo text-lg ${clear[0]}`}
             color="warning"
@@ -669,7 +691,7 @@ const Energy = () => {
             />
             {"   "}Simulator
           </Button>
-          <i className="ni ni-bold-right"></i>
+          {/* <i className="ni ni-bold-right"></i>
           <Button
             className={`mx-2 btn-demo  text-lg ${clear[2]}`}
             color="primary"
@@ -736,7 +758,7 @@ const Energy = () => {
               alt="..."
             />
             {"   "}Workbench
-          </Button>
+          </Button> */}
           <div>
             <span className="text-lg font-weight-bolder text-darker">
               For Demo
@@ -827,10 +849,10 @@ const Energy = () => {
                           <Row>
                             <Col md="6">
                               <FormGroup row>
-                                <Label for="Network" sm="3" className="h3">
-                                  Net :
+                                <Label for="Network" sm="4" className="h3">
+                                  Network :
                                 </Label>
-                                <Col sm="9">
+                                <Col sm="8">
                                   <Input
                                     id="Network"
                                     placeholder="Network"
@@ -1135,7 +1157,7 @@ const Energy = () => {
                           </tr>
                           <tr>
                             <th scope="row">
-                              <h3>Net</h3>
+                              <h3>Network</h3>
                             </th>
                             <td>
                               <h4>{userEnv[1]} Mbps</h4>
@@ -1202,10 +1224,10 @@ const Energy = () => {
                         <Row>
                           <Col md="6">
                             <FormGroup row>
-                              <Label for="Network" sm="3" className="h3">
-                                Net :
+                              <Label for="Network" sm="4" className="h3">
+                                Network :
                               </Label>
-                              <Col sm="9">
+                              <Col sm="8">
                                 <Input
                                   id="Network"
                                   placeholder="Network"
@@ -1226,7 +1248,6 @@ const Energy = () => {
                                   id="DBMS"
                                   placeholder="DBMS"
                                   type="text"
-                                  disabled
                                   onChange={handleDBMS}
                                   defaultValue={DBMSSelected}
                                 />
@@ -1244,7 +1265,6 @@ const Energy = () => {
                                 <Input
                                   id="CSD Count"
                                   type="number"
-                                  disabled
                                   onChange={handleCSDCount}
                                   defaultValue={CSDNumSelected}
                                 />
@@ -1365,7 +1385,6 @@ const Energy = () => {
                                   id="BlockSize"
                                   placeholder="Block Size"
                                   type="text"
-                                  disabled
                                   onChange={handleBlockSize}
                                   defaultValue={BlockSizeSelected}
                                 />
@@ -1628,7 +1647,7 @@ const Energy = () => {
                                 </FormGroup>
                                 <FormGroup row className="align-items-center">
                                   <Label className="col-3 ml-5 text-right">
-                                    Net:
+                                    Network:
                                   </Label>
                                   <Input
                                     className="col-3"
@@ -1641,7 +1660,7 @@ const Energy = () => {
                                 </FormGroup>
                                 <FormGroup row className="align-items-center">
                                   <Label className="col-3 ml-5 text-right">
-                                    Pow:
+                                    Power:
                                   </Label>
                                   <Input
                                     className="col-3"
@@ -1909,7 +1928,7 @@ const Energy = () => {
                                 className="ni ni-bold-right"
                               />
                               <span onClick={handleResultMetric} value="Net">
-                                Net
+                                Network
                               </span>
                             </DropdownItem>
                             <DropdownItem
@@ -1996,7 +2015,7 @@ const Energy = () => {
                               </td>
                             </tr>
                             <tr>
-                              <th scope="row">Net</th>
+                              <th scope="row">Network</th>
                               <td className="font-weight-bold">
                                 {Data.length > currentResult ? (
                                   Data[0].userSSD.userNet
@@ -2105,6 +2124,214 @@ const Energy = () => {
                             </tr>
                           </tbody>
                         </Table>
+                        {Data.length > currentResult ? (
+                          <Table striped responsive>
+                            <thead className="text-center thead-light">
+                              <tr>
+                                <th scope="col">User/Simulator</th>
+                                <th scope="col">Storage Engine</th>
+                                <th scope="col">CSD 1</th>
+                                <th scope="col">CSD 2</th>
+                                <th scope="col">CSD 3</th>
+                                <th scope="col">CSD 4</th>
+                                <th scope="col">CSD 5</th>
+                                <th scope="col">CSD 6</th>
+                                <th scope="col">CSD 7</th>
+                                <th scope="col">CSD 8</th>
+                              </tr>
+                            </thead>
+                            {resultMetric === "CPU" && (
+                              <tbody className="text-center">
+                                <tr>
+                                  <th scope="row">Simulator</th>
+                                  <td className="font-weight-bold">
+                                    {
+                                      Data[currentResult].effectCheck[0]
+                                        .cpuForcast
+                                    }
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length:
+                                        Data[currentResult].effectCheck.length -
+                                        1,
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].effectCheck[index]
+                                          .cpuForcast
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                                <tr>
+                                  <th scope="row">User</th>
+                                  <td className="font-weight-bold">
+                                    {Data[currentResult].userCSD[0].userCPU}
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length: userEnv[3],
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].userCSD[index]
+                                          .userCPU
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                              </tbody>
+                            )}
+                            {resultMetric === "Net" && (
+                              <tbody className="text-center">
+                                <tr>
+                                  <th scope="row">Simulator</th>
+                                  <td className="font-weight-bold">
+                                    {
+                                      Data[currentResult].effectCheck[0]
+                                        .netForcast
+                                    }
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length:
+                                        Data[currentResult].effectCheck.length -
+                                        1,
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].effectCheck[index]
+                                          .netForcast
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                                <tr>
+                                  <th scope="row">User</th>
+                                  <td className="font-weight-bold">
+                                    {Data[currentResult].userCSD[0].userNet}
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length: userEnv[3],
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].userCSD[index]
+                                          .userNet
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                              </tbody>
+                            )}
+                            {resultMetric === "Power" && (
+                              <tbody className="text-center">
+                                <tr>
+                                  <th scope="row">Simulator</th>
+                                  <td className="font-weight-bold">
+                                    {
+                                      Data[currentResult].effectCheck[0]
+                                        .powerForcast
+                                    }
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length:
+                                        Data[currentResult].effectCheck.length -
+                                        1,
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].effectCheck[index]
+                                          .powerForcast
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                                <tr>
+                                  <th scope="row">User</th>
+                                  <td className="font-weight-bold">
+                                    {Data[currentResult].userCSD[0].userPower}
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length: userEnv[3],
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].userCSD[index]
+                                          .userPower
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                              </tbody>
+                            )}
+                            {resultMetric === "Time" && (
+                              <tbody className="text-center">
+                                <tr>
+                                  <th scope="row">Simulator</th>
+                                  <td className="font-weight-bold">
+                                    {
+                                      Data[currentResult].effectCheck[0]
+                                        .timeForcast
+                                    }
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length:
+                                        Data[currentResult].effectCheck.length -
+                                        1,
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].effectCheck[index]
+                                          .timeForcast
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                                <tr>
+                                  <th scope="row">User</th>
+                                  <td className="font-weight-bold">
+                                    {Data[currentResult].userCSD[0].userTime}
+                                  </td>
+                                  {Array.from(
+                                    {
+                                      length: userEnv[3],
+                                    },
+                                    (_, i) => i + 1
+                                  ).map((index) => (
+                                    <td className="font-weight-bold">
+                                      {
+                                        Data[currentResult].userCSD[index]
+                                          .userTime
+                                      }
+                                    </td>
+                                  ))}
+                                </tr>
+                              </tbody>
+                            )}
+                          </Table>
+                        ) : (
+                          <Spinner>Loading...</Spinner>
+                        )}
                       </Col>
                     </Row>
                   </ModalBody>
