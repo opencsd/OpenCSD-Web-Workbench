@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta19
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>
+    Dashboard - Tabler - Premium and Open Source dashboard template with
+    responsive and high quality UI.
+  </title>
+  <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
+  <meta name="msapplication-TileColor" content="" />
+  <meta name="theme-color" content="" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+  <meta name="description"
+    content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!" />
+  <meta name="canonical" content="https://preview.tabler.io/" />
+  <meta name="twitter:image:src" content="https://preview.tabler.io/static/og.png" />
+  <meta name="twitter:site" content="@tabler_ui" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title"
+    content="Tabler: Premium and Open Source dashboard template with responsive and high quality UI." />
+  <meta name="twitter:description"
+    content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!" />
+  <meta property="og:image" content="https://preview.tabler.io/static/og.png" />
+  <meta property="og:image:width" content="1280" />
+  <meta property="og:image:height" content="640" />
+  <meta property="og:site_name" content="Tabler" />
+  <meta property="og:type" content="object" />
+  <meta property="og:title"
+    content="Tabler: Premium and Open Source dashboard template with responsive and high quality UI." />
+  <meta property="og:url" content="https://preview.tabler.io/static/og.png" />
+  <meta property="og:description"
+    content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!" />
+  <!-- CSS files -->
+  <link href="../static/css/tabler.min.css" rel="stylesheet" />
+  <link href="../static/css/tabler-flags.min.css" rel="stylesheet" />
+  <link href="../static/css/tabler-payments.min.css" rel="stylesheet" />
+  <link href="../static/css/tabler-vendors.min.css" rel="stylesheet" />
+  <link href="../static/css/demo.min.css" rel="stylesheet" />
+  <link href="../static/css/sql.css" rel="stylesheet" />
+  <script>
+    import { SidebarLayout } from "@druids/ui/layout/SidebarLayout";
+    import { Flex } from "@druids/ui/layout/Flex";
+    import { Text } from "@druids/ui/typography/Text";
+    import { Title } from "@druids/ui/typography/Title";
+    import { Spacing } from "@druids/ui/layout/Spacing";
+  </script>
+  <style>
+    @import url("https://rsms.me/inter/inter.css");
+
+    :root {
+      --tblr-font-sans-serif: "Inter Var", -apple-system, BlinkMacSystemFont,
+        San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+    }
+
+    body {
+      font-feature-settings: "cv03", "cv04", "cv11";
+    }
+  </style>
+</head>
+
+<body>
+  <script src="../static/js/demo-theme.min.js"></script>
+  <script src="../static/js/dashboard-chart.js"></script>
+  <div class="page">
+    <!-- Navbar -->
+    <header class="navbar navbar-expand-md d-print-none">
+      <div class="container-xl">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+          aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+          <a href=".">
+            <img src="../static/logo.svg" width="135" height="40" class="navbar-brand-image" />
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row order-md-last">
+          <div class="d-none d-md-flex">
+            <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
+              data-bs-toggle="tooltip" data-bs-placement="bottom">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+              </svg>
+            </a>
+            <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode"
+              data-bs-toggle="tooltip" data-bs-placement="bottom">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <header class="navbar-expand-md">
+      <div class="collapse navbar-collapse" id="navbar-menu">
+        <div class="navbar">
+          <div class="container-xl">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="./DB_Monitoring.html">
+                  <span
+                    class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-device-desktop-analytics" width="24" height="24"
+                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M3 4m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"></path>
+                      <path d="M7 20h10"></path>
+                      <path d="M9 16v4"></path>
+                      <path d="M15 16v4"></path>
+                      <path d="M9 12v-4"></path>
+                      <path d="M12 12v-1"></path>
+                      <path d="M15 12v-2"></path>
+                      <path d="M12 12v-1"></path>
+                    </svg>
+                  </span>
+                  <span class="nav-link-title"> DB Monitoring </span>
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="./Query.html">
+                  <span
+                    class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google-big-query"
+                      width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path
+                        d="M17.73 19.875a2.225 2.225 0 0 1 -1.948 1.125h-7.283a2.222 2.222 0 0 1 -1.947 -1.158l-4.272 -6.75a2.269 2.269 0 0 1 0 -2.184l4.272 -6.75a2.225 2.225 0 0 1 1.946 -1.158h7.285c.809 0 1.554 .443 1.947 1.158l3.98 6.75a2.33 2.33 0 0 1 0 2.25l-3.98 6.75v-.033z" />
+                      <path d="M11.5 11.5m-3.5 0a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0" />
+                      <path d="M14 14l2 2" />
+                    </svg>
+                  </span>
+                  <span class="nav-link-title"> Query </span>
+                </a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="./Simulate.html">
+                  <span
+                    class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cardboards" width="44"
+                      height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path
+                        d="M3 8v8.5a2.5 2.5 0 0 0 2.5 2.5h1.06a3 3 0 0 0 2.34 -1.13l1.54 -1.92a2 2 0 0 1 3.12 0l1.54 1.92a3 3 0 0 0 2.34 1.13h1.06a2.5 2.5 0 0 0 2.5 -2.5v-8.5a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2z" />
+                      <path d="M8 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                      <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                    </svg>
+                  </span>
+                  <span class="nav-link-title"> Simulate </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <!-- Page header -->
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <div class="row g-2 align-items-center">
+            <div class="col">
+              <!-- Page pre-title -->
+              <div class="page-pretitle">Overview</div>
+              <h2 class="page-title">Simulate</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Page body -->
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            <div class="col-sm-6 col-lg-2">
+              <div class="col-12">
+                <h3 class="card-title border-bottom border-dark mb-1">
+                  Option Set List
+                </h3>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-vcenter text-nowrap datatable text-xl-center">
+                        <thead>
+                          <td></td>
+                          <td>
+                            Option<br />
+                            Name
+                          </td>
+                        </thead>
+                        <tbody class="text-center">
+                          <tr>
+                            <th scope="row" class="w-25">
+                              <input type="radio" class="form-check-input" name="form-salary" value="1" checked />
+                            </th>
+                            <td class="bg-danger-subtle">
+                              Non<br />Pushdown<br />Option
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">
+                              <input type="radio" class="form-check-input" name="form-salary" value="2" checked />
+                            </th>
+                            <td class="bg-primary-subtle">
+                              Pushdown<br />
+                              Option
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">
+                              <input type="radio" class="form-check-input" name="form-salary" value="3" checked />
+                            </th>
+                            <td class="bg-light">
+                              New<br />
+                              Option 1
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">
+                              <input type="radio" class="form-check-input" name="form-salary" value="4" checked />
+                            </th>
+                            <td class="bg-light">
+                              New<br />
+                              Option 2
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-10">
+              <div class="row row-deck row-cards">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-body row justify-content-center">
+                      <div class="col-lg-7 row">
+                        <h3 class="card-title col-6">Query Input</h3>
+                        <div class="col-6 text-end">
+                          <span class="d-none d-sm-inline">
+                            <a href="#" class="btn"> template </a>
+                          </span>
+                          <span class="d-none d-sm-inline">
+                            <a href="#" class="btn bg-azure"> New Query </a>
+                          </span>
+                        </div>
+                        <textarea class="form-control form-control-xl" value="" rows="13"></textarea>
+                      </div>
+                      <div class="col-lg-5">
+                        <div class="row">
+                          <h3 class="card-title col-4">Option View</h3>
+                          <div class="col-8 text-end">
+                            <span class="d-none d-sm-inline">
+                              <a href="#" class="btn bg-success-subtle">
+                                New Option
+                              </a>
+                            </span>
+                            <span class="d-none d-sm-inline">
+                              <a href="#" class="btn bg-primary-subtle">
+                                Simulate
+                              </a>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table table-vcenter text-nowrap datatable">
+                            <thead class="text-center">
+                              <th>Option Name</th>
+                              <th>Pushdown Option</th>
+                            </thead>
+                            <tbody class="text-center">
+                              <tr>
+                                <th scope="row">DBMS</th>
+                                <td class="bg-light">MySQL</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">CSD Kind</th>
+                                <td class="bg-light">NGD</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">CSD Count</th>
+                                <td class="bg-light">8</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Block Size</th>
+                                <td class="bg-light">4096</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Algorithm</th>
+                                <td class="bg-light">CSD Metric Score</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="card">
+                    <div class="card-body row">
+                      <h3 class="card-title col-8">Selected Query Result</h3>
+                      <div class="dropdown col-3">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Host</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Host</a>
+                          <a class="dropdown-item" href="#">Storage</a>
+                          <a class="dropdown-item" href="#">Total</a>
+                        </div>
+                      </div>
+                      <div id="chart-demo-bar1" class="chart-lg"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-7">
+                  <div class="card">
+                    <div class="card-body row">
+                      <h3 class="card-title col-6">Simulate Query Result</h3>
+                      <div class="dropdown col-3 text-end">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Total</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Total</a>
+                          <a class="dropdown-item" href="#">CPU</a>
+                          <a class="dropdown-item" href="#">Power</a>
+                          <a class="dropdown-item" href="#">Network</a>
+                        </div>
+                      </div>
+                      <div class="dropdown col-3">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">View</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">10</a>
+                          <a class="dropdown-item" href="#">20</a>
+                          <a class="dropdown-item" href="#">30</a>
+                          <a class="dropdown-item" href="#">40</a>
+                          <a class="dropdown-item" href="#">50</a>
+                        </div>
+                      </div>
+                      <div id="chart-demo-bar" class="chart-lg"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body row">
+                      <h3 class="card-title">Query Log</h3>
+                      <div class="table-responsive overflow-hidden">
+                        <table class="table card-table table-vcenter text-nowrap datatable">
+                          <thead>
+                            <tr>
+                              <th>NORMALIZED QUERY</th>
+                              <th>CPU</th>
+                              <th>Network</th>
+                              <th>Power</th>
+                              <th>Time</th>
+                              <th>Score</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <font class="syn">SELECT</font>&nbsp;
+                                <font class="oper">*</font>&nbsp;
+                                <font class="syn">FROM</font>&nbsp;
+                                <font class="text">Sessions</font>&nbsp;
+                                <font class="syn">WHERE</font>&nbsp;
+                                <font class="text">User_id</font>&nbsp;
+                                <font class="oper">=</font>&nbsp;
+                                <font class="text">?</font>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <font class="syn">SELECT</font>&nbsp;
+                                <font class="oper">*</font>&nbsp;
+                                <font class="syn">FROM</font>&nbsp;
+                                <font class="text">Sessions</font>&nbsp;
+                                <font class="syn">WHERE</font>&nbsp;
+                                <font class="text">Token</font>&nbsp;
+                                <font class="oper">=</font>&nbsp;
+                                <font class="text">?</font>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <font class="syn">SELECT</font>&nbsp;
+                                <font class="oper">*</font>&nbsp;
+                                <font class="syn">FROM</font>&nbsp;
+                                <font class="text">Sessions</font>&nbsp;
+                                <font class="syn">WHERE</font>&nbsp;
+                                <font class="text">Expires_at</font>&nbsp;
+                                <font class="oper">,-</font>&nbsp;
+                                <font class="text">?</font>&nbsp;
+                                <font class="oper">AND</font>&nbsp;
+                                <font class="text">User_id</font>&nbsp;
+                                <font class="oper">=</font>&nbsp;
+                                <font class="text">?</font>&nbsp;
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <font class="syn">DELETE</font>&nbsp;
+                                <font class="syn">FROM</font>&nbsp;
+                                <font class="text">Sessions</font>&nbsp;
+                                <font class="syn">WHERE</font>&nbsp;
+                                <font class="text">Id</font>&nbsp;
+                                <font class="oper">=</font>&nbsp;
+                                <font class="text">?</font>&nbsp;
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <font class="syn">SELECT</font>&nbsp;
+                                <font class="text">s</font>
+                                <font class="oper">.</font>
+                                <font class="text">Id</font>
+                                <font class="oper">,</font>&nbsp;
+                                <font class="text">s</font>
+                                <font class="oper">.</font>
+                                <font class="text">Created_at</font>
+                                <font class="oper">,</font>&nbsp;
+                                <font class="text">s</font>
+                                <font class="oper">.</font>
+                                <font class="text">Expires_at</font>
+                                <font class="oper">,</font>&nbsp;
+                                <font class="text">s</font>
+                                <font class="oper">.</font>
+                                <font class="text">Token</font>
+                                <font class="oper">,</font>&nbsp;
+                                <font class="text">s</font>
+                                <font class="oper">.</font>
+                                <font class="text">User_id</font>&nbsp;
+                                <font class="syn">FROM</font>&nbsp;
+                                <font class="text">Sessions</font>&nbsp;
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                DELETE FROM UserTeams WHERE User_id = ? AND
+                                Team_id = ?
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>BEGIN</td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="text-end">
+                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="card-footer d-flex align-items-center">
+                        <p class="m-0 text-secondary">
+                          Showing <span>1</span> to <span>8</span> of
+                          <span>16</span> entries
+                        </p>
+                        <ul class="pagination m-0 ms-auto">
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M15 6l-6 6l6 6" />
+                              </svg>
+                              prev
+                            </a>
+                          </li>
+                          <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">4</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">5</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">
+                              next
+                              <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M9 6l6 6l-6 6" />
+                              </svg>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer footer-transparent d-print-none">
+        <div class="container-xl">
+          <div class="row text-center align-items-center flex-row-reverse">
+            <div class="col-lg-auto ms-lg-auto">
+              <ul class="list-inline list-inline-dots mb-0">
+                <li class="list-inline-item">
+                  <a href="https://tabler.io/docs" target="_blank" class="link-secondary"
+                    rel="noopener">Documentation</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="./license.html" class="link-secondary">License</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary"
+                    rel="noopener">Source code</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24"
+                      height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                    </svg>
+                    Sponsor
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+              <ul class="list-inline list-inline-dots mb-0">
+                <li class="list-inline-item">
+                  Copyright &copy; 2023
+                  <a href="." class="link-secondary">Tabler</a>. All rights
+                  reserved.
+                </li>
+                <li class="list-inline-item">
+                  <a href="./changelog.html" class="link-secondary" rel="noopener">
+                    v1.0.0-beta19
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">New report</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" name="example-text-input" placeholder="Your report name" />
+          </div>
+          <label class="form-label">Report type</label>
+          <div class="form-selectgroup-boxes row mb-3">
+            <div class="col-lg-6">
+              <label class="form-selectgroup-item">
+                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked />
+                <span class="form-selectgroup-label d-flex align-items-center p-3">
+                  <span class="me-3">
+                    <span class="form-selectgroup-check"></span>
+                  </span>
+                  <span class="form-selectgroup-label-content">
+                    <span class="form-selectgroup-title strong mb-1">Simple</span>
+                    <span class="d-block text-secondary">Provide only basic data needed for the report</span>
+                  </span>
+                </span>
+              </label>
+            </div>
+            <div class="col-lg-6">
+              <label class="form-selectgroup-item">
+                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" />
+                <span class="form-selectgroup-label d-flex align-items-center p-3">
+                  <span class="me-3">
+                    <span class="form-selectgroup-check"></span>
+                  </span>
+                  <span class="form-selectgroup-label-content">
+                    <span class="form-selectgroup-title strong mb-1">Advanced</span>
+                    <span class="d-block text-secondary">Insert charts and additional advanced analyses to be
+                      inserted in the report</span>
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="mb-3">
+                <label class="form-label">Report url</label>
+                <div class="input-group input-group-flat">
+                  <span class="input-group-text">
+                    https://tabler.io/reports/
+                  </span>
+                  <input type="text" class="form-control ps-0" value="report-01" autocomplete="off" />
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="mb-3">
+                <label class="form-label">Visibility</label>
+                <select class="form-select">
+                  <option value="1" selected>Private</option>
+                  <option value="2">Public</option>
+                  <option value="3">Hidden</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="mb-3">
+                <label class="form-label">Client name</label>
+                <input type="text" class="form-control" />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="mb-3">
+                <label class="form-label">Reporting period</label>
+                <input type="date" class="form-control" />
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div>
+                <label class="form-label">Additional information</label>
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+            Cancel
+          </a>
+          <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+              stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 5l0 14" />
+              <path d="M5 12l14 0" />
+            </svg>
+            Create new report
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Libs JS -->
+  <script src="../dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
+  <script src="../dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
+  <script src="../dist/libs/jsvectormap/dist/maps/world.js" defer></script>
+  <script src="../dist/libs/jsvectormap/dist/maps/world-merc.js" defer></script>
+  <!-- Tabler Core -->
+  <script src="../static/js/tabler.min.js" defer></script>
+  <script src="../static/js/demo.min.js" defer></script>
+</body>
+
+</html>
