@@ -1297,6 +1297,769 @@ cpu_usg_info = [
         ]
     }
 ]
+
+memory_usg_info = [
+    {
+        'timestamp': '14:50:00',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:10',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:20',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:30',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:40',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:50',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:00',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:10',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:20',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:30',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:40',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:50',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:00',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:10',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:20',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:30',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:40',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:50',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:53:00',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:53:10',
+        'storage_memory_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 
+            }
+        ]
+    }
+]
 [
     {
         'timestamp': '14:50:00',
