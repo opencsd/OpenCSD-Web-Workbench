@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import datetime, json
 
@@ -538,825 +541,3050 @@ scan_filter_info = [
 cpu_usg_info = [
     {
         'timestamp': '14:50:00',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 30,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 40
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 55
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 43
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 50
+            }
         ]
     },
     {
         'timestamp': '14:50:10',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 40,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 27
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 29
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 25
+            }
         ]
     },
     {
         'timestamp': '14:50:20',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 38,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 45
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 41
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 46
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 49
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 51
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 42
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 45
+            }
         ]
     },
     {
         'timestamp': '14:50:30',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 20,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 15
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 20
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 21
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 21
+            }
         ]
     },
     {
         'timestamp': '14:50:40',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 36,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 29
+            }
         ]
     },
     {
         'timestamp': '14:50:50',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 41,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 40
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 55
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 43
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 50
+            }
         ]
     },
     {
         'timestamp': '14:51:00',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 22,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 27
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 29
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 25
+            }
         ]
     },
     {
         'timestamp': '14:51:10',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 46,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 45
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 41
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 46
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 49
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 51
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 42
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 45
+            }
         ]
     },
     {
         'timestamp': '14:51:20',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 25,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 15
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 20
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 21
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 21
+            }
         ]
     },
     {
         'timestamp': '14:51:30',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 34,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 29
+            }
         ]
     },
     {
         'timestamp': '14:51:40',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 37,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 40
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 55
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 43
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 50
+            }
         ]
     },
     {
         'timestamp': '14:51:50',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 46,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 27
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 29
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 25
+            }
         ]
     },
     {
         'timestamp': '14:52:00',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 38,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 45
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 41
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 46
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 49
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 51
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 42
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 45
+            }
         ]
     },
     {
         'timestamp': '14:52:10',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 29,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 15
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 20
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 21
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 21
+            }
         ]
     },
     {
         'timestamp': '14:52:20',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 20,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 29
+            }
         ]
     },
     {
         'timestamp': '14:52:30',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 31,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 40
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 55
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 43
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 50
+            }
         ]
     },
     {
         'timestamp': '14:52:40',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 45,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 27
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 29
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 25
+            }
         ]
     },
     {
         'timestamp': '14:52:50',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 37,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 45
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 41
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 46
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 49
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 51
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 39
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 42
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 45
+            }
         ]
     },
     {
         'timestamp': '14:53:00',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 25,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 15
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 20
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 19
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 21
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 22
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 25
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 21
+            }
         ]
     },
     {
         'timestamp': '14:53:10',
-        'storage_cpu_usage': ,
+        'storage_cpu_usage': 37,
         'csd_info': [
             {
-                'csd_name': 'csd1'
-                'csd_cpu_usage': 
+                'csd_name': 'csd1',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd2'
-                'csd_cpu_usage': 
+                'csd_name': 'csd2',
+                'csd_cpu_usage': 35
             },
             {
-                'csd_name': 'csd3'
-                'csd_cpu_usage': 
+                'csd_name': 'csd3',
+                'csd_cpu_usage': 34
             },
             {
-                'csd_name': 'csd4'
-                'csd_cpu_usage': 
+                'csd_name': 'csd4',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd5'
-                'csd_cpu_usage': 
+                'csd_name': 'csd5',
+                'csd_cpu_usage': 36
             },
             {
-                'csd_name': 'csd6'
-                'csd_cpu_usage': 
+                'csd_name': 'csd6',
+                'csd_cpu_usage': 37
             },
             {
-                'csd_name': 'csd7'
-                'csd_cpu_usage': 
+                'csd_name': 'csd7',
+                'csd_cpu_usage': 31
             },
             {
-                'csd_name': 'csd8'
-                'csd_cpu_usage': 
-            },
+                'csd_name': 'csd8',
+                'csd_cpu_usage': 29
+            }
         ]
     }
 ]
-[
+
+memory_usg_info = [
     {
         'timestamp': '14:50:00',
+        'storage_memory_usage': 450,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 550
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 490
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 560
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 530
+            }
+        ]
     },
     {
         'timestamp': '14:50:10',
+        'storage_memory_usage': 380,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 480
+            }
+        ]
     },
     {
         'timestamp': '14:50:20',
+        'storage_memory_usage': 420,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 310
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 330
+            }
+        ]
     },
     {
         'timestamp': '14:50:30',
+        'storage_memory_usage': 350,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 450
+            }
+        ]
     },
     {
         'timestamp': '14:50:40',
+        'storage_memory_usage': 520,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 340
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 300
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 270
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 200
+            }
+        ]
     },
     {
         'timestamp': '14:50:50',
+        'storage_memory_usage': 200,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 550
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 490
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 560
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 530
+            }
+        ]
     },
     {
         'timestamp': '14:51:00',
+        'storage_memory_usage': 310,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 480
+            }
+        ]
     },
     {
         'timestamp': '14:51:10',
+        'storage_memory_usage': 480,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 310
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 330
+            }
+        ]
     },
     {
         'timestamp': '14:51:20',
+        'storage_memory_usage': 400,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 450
+            }
+        ]
     },
     {
         'timestamp': '14:51:30',
+        'storage_memory_usage': 460,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 340
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 300
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 270
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 200
+            }
+        ]
     },
     {
         'timestamp': '14:51:40',
+        'storage_memory_usage': 570,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 550
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 490
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 560
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 530
+            }
+        ]
     },
     {
         'timestamp': '14:51:50',
+        'storage_memory_usage': 500,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 480
+            }
+        ]
     },
     {
         'timestamp': '14:52:00',
+        'storage_memory_usage': 370,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 310
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 330
+            }
+        ]
     },
     {
         'timestamp': '14:52:10',
+        'storage_memory_usage': 480,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 450
+            }
+        ]
     },
     {
         'timestamp': '14:52:20',
+        'storage_memory_usage': 420,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 340
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 300
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 270
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 200
+            }
+        ]
     },
     {
         'timestamp': '14:52:30',
+        'storage_memory_usage': 510,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 550
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 490
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 560
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 520
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 530
+            }
+        ]
     },
     {
         'timestamp': '14:52:40',
+        'storage_memory_usage': 550,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 510
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 480
+            }
+        ]
     },
     {
         'timestamp': '14:52:50',
+        'storage_memory_usage': 170,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 310
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 380
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 350
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 330
+            }
+        ]
     },
     {
         'timestamp': '14:53:00',
+        'storage_memory_usage': 280,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 420
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 450
+            }
+        ]
     },
     {
         'timestamp': '14:53:10',
+        'storage_memory_usage': 450,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_memory_usage': 460
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_memory_usage': 480
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_memory_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_memory_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_memory_usage': 340
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_memory_usage': 300
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_memory_usage': 270
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_memory_usage': 200
+            }
+        ]
+    }
+]
+network_usage_info = [
+    {
+        'timestamp': '14:50:00',
+        'storage_network_usage': 510,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 320
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 340
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 380
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:10',
+        'storage_network_usage': 450,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 250
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 440
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:20',
+        'storage_network_usage': 380,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 330
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 380
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 460
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:30',
+        'storage_network_usage': 340,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:40',
+        'storage_network_usage': 330,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:50',
+        'storage_network_usage': 370,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 320
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 340
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 380
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:00',
+        'storage_network_usage': 410,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 250
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 440
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:10',
+        'storage_network_usage': 450,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 330
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 380
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 460
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:20',
+        'storage_network_usage': 320,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:30',
+        'storage_network_usage': 280,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:40',
+        'storage_network_usage': 250,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 320
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 340
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 380
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:50',
+        'storage_network_usage': 300,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 250
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 440
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:00',
+        'storage_network_usage': 330,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 330
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 380
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 460
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:10',
+        'storage_network_usage': 310,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:20',
+        'storage_network_usage': 360,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:30',
+        'storage_network_usage': 340,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 370
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 320
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 340
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 380
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:40',
+        'storage_network_usage': 420,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 250
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 460
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 570
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 440
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:50',
+        'storage_network_usage': 390,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 330
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 520
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 380
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 450
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 470
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 460
+            }
+        ]
+    },
+    {
+        'timestamp': '14:53:00',
+        'storage_network_usage': 370,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    },
+    {
+        'timestamp': '14:53:10',
+        'storage_network_usage': 380,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_network_usage': 360
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_network_usage': 500
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_network_usage': 430
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_network_usage': 410
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_network_usage': 420
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_network_usage': 400
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_network_usage': 410
+            }
+        ]
+    }
+]
+
+power_usg_info = [
+    {
+        'timestamp': '14:50:00',
+        'storage_power_usage': 750,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 180
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 210
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 175
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 150
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 160
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 190
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 220
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 170
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:10',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:20',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:30',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:40',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:50:50',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:00',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:10',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:20',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:30',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:40',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:51:50',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:00',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:10',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:20',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:30',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:40','storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:52:50',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:53:00',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
+    },
+    {
+        'timestamp': '14:53:10',
+        'storage_power_usage': ,
+        'csd_info': [
+            {
+                'csd_name': 'csd1',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd2',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd3',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd4',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd5',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd6',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd7',
+                'csd_power_usage': 
+            },
+            {
+                'csd_name': 'csd8',
+                'csd_power_usage': 
+            }
+        ]
     }
 ]
 
@@ -1412,39 +3640,43 @@ def db_info():
     return render_template('DB_Monitoring.html', dashboard_summary=dashboard_summary)
 
 # DB Monitoring Graph 정보
-@app.route('monitoring/ddl', methods=['GET'])
+@app.route('/monitoring/ddl', methods=['GET'])
 def ddl():
-    return
+    return render_template('DB_Monitoring.html', ddl_info=ddl_info)
 
-@app.route('monitoring/disk_rw', methods=['GET'])
+@app.route('/monitoring/disk_rw', methods=['GET'])
 def disk_rw():
-    return
+    return render_template('DB_Monitoring.html', disk_rw_info=disk_rw_info)
 
-@app.route('monitoring/chache_hit', methods=['GET'])
+@app.route('/monitoring/chache_hit', methods=['GET'])
 def chache_hit():
-    return
+    return render_template('DB_Monitoring.html', chache_hit_info=chache_hit_info)
 
-@app.route('monitoring/chache_usg', methods=['GET'])
+@app.route('/monitoring/chache_usg', methods=['GET'])
 def chache_usg():
-    return
+    return render_template('DB_Monitoring.html', chache_usage_info=chache_usage_info)
 
-@app.route('monitoring/scan_filter', methods=['GET'])
+@app.route('/monitoring/scan_filter', methods=['GET'])
 def scan_filter():
-    return
+    return render_template('DB_Monitoring.html', scan_filter_info=scan_filter_info)
 
-@app.route('monitoring/cpu', methods=['GET'])
+@app.route('/monitoring/cpu', methods=['GET'])
 def cpu_usg():
-    return
+    return render_template('DB_Monitoring.html', cpu_usg_info=cpu_usg_info)
 
-@app.route('monitoring/memory', methods=['GET'])
+@app.route('/monitoring/memory', methods=['GET'])
 def memory_usg():
-    return
+    return render_template('DB_Monitoring.html', memory_usg_info=memory_usg_info)
 
-@app.route('monitoring/power', methods=['GET'])
+@app.route('/monitoring/network', methods=['GET'])
+def network_usg():
+    return render_template('DB_Monitoring.html', network_usage_info=network_usage_info)
+
+@app.route('/monitoring/power', methods=['GET'])
 def power_usg():
     return
 
-@app.route('monitoring/disk', methods=['GET'])
+@app.route('/monitoring/disk', methods=['GET'])
 def disk_usg():
     return
 
