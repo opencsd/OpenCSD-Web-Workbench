@@ -2867,722 +2867,723 @@ power_usg_info = [
     },
     {
         'timestamp': '14:50:10',
-        'storage_power_usage': ,
+        'storage_power_usage': 800,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 145
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:50:20',
-        'storage_power_usage': ,
+        'storage_power_usage': 780,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             }
         ]
     },
     {
         'timestamp': '14:50:30',
-        'storage_power_usage': ,
+        'storage_power_usage': 850,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 215
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:50:40',
-        'storage_power_usage': ,
+        'storage_power_usage': 810,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     },
     {
         'timestamp': '14:50:50',
-        'storage_power_usage': ,
+        'storage_power_usage': 820,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 160
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     },
     {
         'timestamp': '14:51:00',
-        'storage_power_usage': ,
+        'storage_power_usage': 880,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 145
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:51:10',
-        'storage_power_usage': ,
+        'storage_power_usage': 850,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             }
         ]
     },
     {
         'timestamp': '14:51:20',
-        'storage_power_usage': ,
+        'storage_power_usage': 800,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 215
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:51:30',
-        'storage_power_usage': ,
+        'storage_power_usage': 780,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     },
     {
         'timestamp': '14:51:40',
-        'storage_power_usage': ,
+        'storage_power_usage': 790,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 160
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     },
     {
         'timestamp': '14:51:50',
-        'storage_power_usage': ,
+        'storage_power_usage': 820,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 145
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:52:00',
-        'storage_power_usage': ,
+        'storage_power_usage': 750,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             }
         ]
     },
     {
         'timestamp': '14:52:10',
-        'storage_power_usage': ,
+        'storage_power_usage': 790,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 215
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:52:20',
-        'storage_power_usage': ,
+        'storage_power_usage': 810,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     },
     {
         'timestamp': '14:52:30',
-        'storage_power_usage': ,
+        'storage_power_usage': 780,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 160
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     },
     {
-        'timestamp': '14:52:40','storage_power_usage': ,
+        'timestamp': '14:52:40',
+        'storage_power_usage': 800,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 150
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 145
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:52:50',
-        'storage_power_usage': ,
+        'storage_power_usage': 850,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             }
         ]
     },
     {
         'timestamp': '14:53:00',
-        'storage_power_usage': ,
+        'storage_power_usage': 860,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 210
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 215
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 180
             }
         ]
     },
     {
         'timestamp': '14:53:10',
-        'storage_power_usage': ,
+        'storage_power_usage': 840,
         'csd_info': [
             {
                 'csd_name': 'csd1',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd2',
-                'csd_power_usage': 
+                'csd_power_usage': 220
             },
             {
                 'csd_name': 'csd3',
-                'csd_power_usage': 
+                'csd_power_usage': 185
             },
             {
                 'csd_name': 'csd4',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd5',
-                'csd_power_usage': 
+                'csd_power_usage': 175
             },
             {
                 'csd_name': 'csd6',
-                'csd_power_usage': 
+                'csd_power_usage': 200
             },
             {
                 'csd_name': 'csd7',
-                'csd_power_usage': 
+                'csd_power_usage': 190
             },
             {
                 'csd_name': 'csd8',
-                'csd_power_usage': 
+                'csd_power_usage': 170
             }
         ]
     }
