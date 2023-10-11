@@ -15,8 +15,10 @@ users = {
     'db_pw': 'dbms09!'
 }
 
+####################################################################################
+#                               DB Monitoring 화면                                 #
+####################################################################################
 
-# DB Monitoring 화면 데이터
 dashboard_summary = {
     'db_name': 'tpc-h',
     'dbms_type': 'mysql',
@@ -3589,6 +3591,10 @@ power_usg_info = [
     }
 ]
 
+####################################################################################
+#                                 Query 수행 화면                                  #
+####################################################################################
+
 query_list = {
     1: 'select l_returnflag, l_linestatus, sum(l_quantity) as sum_qty, sum(l_extendedprice) as sum_base_price, sum(l_extendedprice * (1 - l_discount)) as sum_disc_price;',
     2: 'select s_acctbal, s_name, n_name, p_partkey, p_mfgr, s_address, s_phone, s_comment from PART, SUPPLIER, PARTSUPP, NATION, REGION where p_partkey = ps_partkey;',
@@ -3675,20 +3681,11 @@ def network_usg():
 
 @app.route('/monitoring/power', methods=['GET'])
 def power_usg():
-    return
-
-@app.route('/monitoring/disk', methods=['GET'])
-def disk_usg():
-    return
+    return render_template('DB_Monitoring.html', power_usg_info=power_usg_info)
 
 
-
-
-
-
-
-
-
+###############################################
+#                Query 수행 화면              #
 @app.route('/query') # Query Pushdown 화면으로 전환
 def query():
     return redirect(url_for('/query/environment'))
