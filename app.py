@@ -3596,10 +3596,18 @@ power_usg_info = [
 ####################################################################################
 
 query_list = {
-    1: 'select l_returnflag, l_linestatus, sum(l_quantity) as sum_qty, sum(l_extendedprice) as sum_base_price, sum(l_extendedprice * (1 - l_discount)) as sum_disc_price;',
-    2: 'select s_acctbal, s_name, n_name, p_partkey, p_mfgr, s_address, s_phone, s_comment from PART, SUPPLIER, PARTSUPP, NATION, REGION where p_partkey = ps_partkey;',
-    3: 'select l_orderkey, sum(l_extendedprice * (1 - l_discount)) as revenue, o_orderdate, o_shippriority from CUSTOMER, ORDERS, LINEITEM where c_custkey = o_custkey;',
-    4: 'select n_name, sum(l_extendedprice * (1 - l_discount)) as revenue from CUSTOMER, ORDERS, LINEITEM, SUPPLIER, NATION, REGION where c_custkey = o_custkey;'
+    'querys': [
+        'select l_returnflag, l_linestatus, sum(l_quantity) as sum_qty, sum(l_extendedprice) as sum_base_price, sum(l_extendedprice * (1 - l_discount)) as sum_disc_price;',
+        'select s_acctbal, s_name, n_name, p_partkey, p_mfgr, s_address, s_phone, s_comment from PART, SUPPLIER, PARTSUPP, NATION, REGION where p_partkey = ps_partkey;',
+        'select l_orderkey, sum(l_extendedprice * (1 - l_discount)) as revenue, o_orderdate, o_shippriority from CUSTOMER, ORDERS, LINEITEM where c_custkey = o_custkey;',
+        'select o_orderpriority, count(*) as order_count from ORDERS where o_orderdate >= date and exists (select * from LINEITEM where l_orderkey = o_orderkey and l_commitdate < l_receiptdate) group by o_orderpriority order by o_orderpriority;',
+        'select n_name, sum(l_extendedprice * (1 - l_discount)) as revenue from CUSTOMER, ORDERS, LINEITEM, SUPPLIER, NATION, REGION where c_custkey = o_custkey;',
+        'select supp_nation, cust_nation, l_year, sum(volume) as revenue from ( select n1.n_name as supp_nation, n2.n_name as cust_nation, extract(year from l_shipdate) as l_year, l_extendedprice * (1 - l_discount) as volume from SUPPLIER, LINEITEM, ORDERS where s_suppkey = l_suppkey group by supp_nation, l_year order by l_year;',
+        'select o_year, sum(case when nation = INDIA then volume else 0 end) / sum(volume) as mkt_share from (select extract(year from o_orderdate) as o_year,	l_extendedprice * (1 - l_discount) as volume, n2.n_name as nation from PART, SUPPLIER, LINEITEM, ORDERS, CUSTOME;',
+        'select nation, o_year, sum(amount) as sum_profit from (select n_name as nation, extract(year from o_orderdate) as o_year, l_extendedprice * (1 - l_discount) - ps_supplycost * l_quantity as amount from PART, SUPPLIER, LINEITEM, PARTSUPP, ORDERS, NATION where s_suppkey = l_suppkey and ps_suppkey = l_suppkey and ps_partkey = l_partkey and p_partkey = l_partkey and o_orderkey = l_orderkey and s_nationkey = n_nationkey) as profit group by nation, o_year order by nation, o_year desc;',
+        'select p_brand, p_type, p_size, count(distinct ps_suppkey) as supplier_cnt from PARTSUPP, PART where p_partkey = ps_partkey and p_size in (48, 19, 12, 4, 41, 7, 21, 39) and ps_suppkey not in (select s_suppkey from SUPPLIER where s_comment like %Customer%Complaints%) group by p_brand, p_type, p_size order by supplier_cnt desc, p_brand, p_type, p_size;',
+        'select sum(l_extendedprice) / 7.0 as avg_yearly from LINEITEM, PART where p_partkey = l_partkey and p_brand = Brand44 and p_container = WRAP PKG and l_quantity < (select 0.2 * avg(l_quantity) from LINEITEM where l_partkey = p_partkey);'
+    ]
 }
 query_result = {
     'Query Result': 'promo_revenue | 16.6781923715',
@@ -3647,6 +3655,47 @@ db_schema = {
 }
 
 
+####################################################################################
+#                                   Simulator 화면                                 #
+####################################################################################
+option_info = {
+    "dbms": "MySQL",
+    "storage_type": "CSD",
+    "csd_count": 8,
+    "csd_kind": "NGD",
+    "block_count": 15,
+    "algorithm": "CSD Metric Score",
+    "using_index": "No"
+}
+option_info_ssd = {
+    "dbms": "MySQL",
+    "storage_type": "SSD"
+}
+
+# simulator log는 query 수행 데이터와 동일
+
+simulation_result = {
+    "cpu": {
+        "ssd": 55,
+        "csd": 30
+    },
+    "power": {
+        "ssd": 750,
+        "csd": 330
+    },
+    "network": {
+        "ssd": 450,
+        "csd": 80
+    },
+    "filter_scan": {
+        "ssd": 0,
+        "csd": 50
+    },
+    "time": {
+        "ssd": 20,
+        "csd": 20
+    }
+}
 
 ###################################
 #               함수              #
