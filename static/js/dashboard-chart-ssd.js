@@ -1,10 +1,14 @@
+//Database info
 var i;
+
+//Database Monitoring
 var DB_timestamp_total = ['14:50', '15:20', '15:50', '16:20', '16:50', '17:20', '17:50', '18:20', '18:50', '19:20', '19:50', '20:20', '20:50', '21:20', '21:50', '22:20', '22:50', '23:20', '23:50', '24:20', '24:50']
 var select_count_total = [20, 19, 8, 18, 12, 12, 13, 5, 22, 16, 12, 16, 11, 25, 16, 17, 16, 20, 26, 15]
 var insert_count_total = [15, 10, 15, 12, 15, 17, 16, 15, 17, 10, 8, 22, 22, 10, 12, 5, 19, 13, 15, 19]
 var delete_count_total = [17, 11, 12, 13, 10, 19, 2, 9, 11, 12, 2, 5, 16, 12, 13, 16, 12, 18, 17, 4]
 var update_count_total = [10, 8, 2, 9, 5, 22, 9, 19, 13, 7, 5, 16, 19, 13, 19, 6, 16, 4, 9, 8]
 
+//Host Monitoring
 var Host_timestamp_total = ['13:50', '14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00', '15:10', '15:20', '15:30', '15:40', '15:50', '16:00', '16:10', '16:20', '16:30', '16:40', '16:50', '17:00', '17:10']
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -225,28 +229,28 @@ document.addEventListener('DOMContentLoaded', function () {
       dataLabels: {
         enabled: false
       },
-      color: 'rgba(214, 212, 109, 1)'
+      color: 'rgba(135,206,250,1)'
     }, {
       name: 'Insert',
       data: insert_count_total,
       dataLabels: {
         enabled: false
       },
-      color: 'rgb(244, 223, 182, 1)'
+      color: 'rgba(255, 165, 0, 0.5)'
     }, {
       name: 'Update',
       data: update_count_total,
       dataLabels: {
         enabled: false
       },
-      color: 'rgb(222, 143, 95, 1)'
+      color: 'rgba(0, 128, 0, 0.5)'
     }, {
       name: 'Delete',
       data: delete_count_total,
       dataLabels: {
         enabled: false
       },
-      color:'rgba(154, 68, 68, 1)'
+      color:'rgba(255, 0, 0, 0.6)'
     }]
   });
 
