@@ -213,9 +213,12 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     tooltip: {
       headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+      pointFormat: '{series.name}: {point.y}<br/>DDL Total: {point.stackTotal}'
     },
     plotOptions: {
+      line : {
+        linewidth: 0
+      },
       column: {
         stacking: 'normal',
         dataLabels: {
@@ -228,25 +231,29 @@ document.addEventListener('DOMContentLoaded', function () {
       data: select_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color: 'rgba(214, 212, 109, 0.7)'
     }, {
       name: 'Insert',
       data: insert_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color: 'rgb(244, 223, 182)'
     }, {
       name: 'Update',
       data: update_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color: 'rgb(222, 143, 95)'
     }, {
       name: 'Delete',
       data: delete_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color:'rgba(154, 68, 68)'
     }]
   });
 
@@ -273,6 +280,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
     plotOptions: {
+      line : {
+        linewidth: 0
+      },
       area: {
         marker: {
           enabled: false,

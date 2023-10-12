@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     tooltip: {
       headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+      pointFormat: '{series.name}: {point.y}<br/>DDL Total: {point.stackTotal}'
     },
     plotOptions: {
       column: {
@@ -224,25 +224,29 @@ document.addEventListener('DOMContentLoaded', function () {
       data: select_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color: 'rgba(214, 212, 109, 0.7)'
     }, {
       name: 'Insert',
       data: insert_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color: 'rgb(244, 223, 182)'
     }, {
       name: 'Update',
       data: update_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color: 'rgb(222, 143, 95)'
     }, {
       name: 'Delete',
       data: delete_count_total,
       dataLabels: {
         enabled: false
-      }
+      },
+      color:'rgba(154, 68, 68)'
     }]
   });
 
@@ -275,13 +279,13 @@ document.addEventListener('DOMContentLoaded', function () {
       area: {
         marker: {
           enabled: false,
-          symbol: 'circle',
-          radius: 2,
-          states: {
-            hover: {
-              enabled: true
-            }
-          }
+          // symbol: 'circle',
+          // radius: 2,
+          // states: {
+          //   hover: {
+          //     enabled: true
+          //   }
+          // }
         },
       }
     },
@@ -289,7 +293,8 @@ document.addEventListener('DOMContentLoaded', function () {
       {
         name: "MySQL CPU Usage",
         data: [38, 41, 43, 33, 56, 51, 39, 34, 31, 42, 54, 47, 36, 45, 57, 52, 30, 46, 44, 58],
-        fillColor: 'rgba(173, 216, 230, 0.5)'
+        fillColor: 'rgba(244, 223, 182,0.5)',
+        linewidth: 0
       }
     ],
   });
