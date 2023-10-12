@@ -91,7 +91,6 @@ def power_usg():
 def disk_usg():
     return
 
-
 @app.route('/query') # Query Pushdown 화면으로 전환
 def query():
     return render_template('query.html')
