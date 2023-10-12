@@ -3602,17 +3602,54 @@ query_list = {
     4: 'select n_name, sum(l_extendedprice * (1 - l_discount)) as revenue from CUSTOMER, ORDERS, LINEITEM, SUPPLIER, NATION, REGION where c_custkey = o_custkey;'
 }
 query_result = {
-    'DBMS': 'Mysql',
-    'Algorithm': 'CSD Metric Score',
-    'Index': 'Use',
-    'Block Size': '4096',
     'Query Result': 'promo_revenue | 16.6781923715',
     'CPU': '30 (%)',
     'Power': '330 (W)',
     'Network': '80 (MB)',
     'Query Time': '20 (sec)',
-    'Filter/Scan': '0.83 (%)'
+    'Scanned_row': 600000,
+    'Filtered_row': 300000,
+    'Filter/Scan': '50 (%)',
+    'Snippet_count': 4
 }
+environment_info = {
+    'db_name': 'TPC-H',
+    'dbms': 'MySQL',
+    'storage_type': 'CSD',
+    'csd_count': 8,
+    'csd_type': 'NGD',
+    'dbms_size': 5,
+    'block_count': 15,
+    'algorithm': 'CSD Metric Score'
+}
+query_metric_csd = {
+    'cpu': 30,
+    'power': 330,
+    'network': 80,
+    'time': 20
+}
+query_metric_ssd = {
+    'cpu': 55,
+    'power': 750,
+    'network': 450,
+    'time': 20
+}
+db_schema = {
+    'schema': [
+        'lineitem',
+        'o_orderkey  int(11) not_null',
+        'o_custkey int(11) not_null',
+        'o_orderstatus char(1) not_null',
+        'o_totalprice  decimal(15,2) not_null',
+        'customer',
+        'nation'
+    ]
+}
+
+
+
+###################################
+#               함수              #
 
 @app.route('/')
 def index():
@@ -3637,51 +3674,55 @@ def login():
     # conn.commit()
     # conn.close()
 
-    return redirect(url_for('/monitoring/environment')) # DB Summary 정보 가져오는 함수 호출
+    return redirect(url_for('/monitoring')) # DB Summary 정보 가져오는 함수 호출
 
 # DB Monitoring
-@app.route('/monitoring/environment', methods=['GET'])
-def db_info():
-    # DB로부터 DB 환경정보 가져옴
+@app.route('/monitoring')
+def monitoring():
+    return render_template('DB_Monitoring.html',dashboard_summary=dashboard_summary, ddl_info=ddl_info, cpu_usg_info=cpu_usg_info)
 
-    return render_template('DB_Monitoring.html', dashboard_summary=dashboard_summary)
+# @app.route('/monitoring/environment', methods=['GET'])
+# def db_info():
+#     # DB로부터 DB 환경정보 가져옴
 
-# DB Monitoring Graph 정보
-@app.route('/monitoring/ddl', methods=['GET'])
-def ddl():
-    return render_template('DB_Monitoring.html', ddl_info=ddl_info)
+#     return render_template('DB_Monitoring.html', dashboard_summary=dashboard_summary)
 
-@app.route('/monitoring/disk_rw', methods=['GET'])
-def disk_rw():
-    return render_template('DB_Monitoring.html', disk_rw_info=disk_rw_info)
+# # DB Monitoring Graph 정보
+# @app.route('/monitoring/ddl', methods=['GET'])
+# def ddl():
+#     return render_template('DB_Monitoring.html', ddl_info=ddl_info)
 
-@app.route('/monitoring/chache_hit', methods=['GET'])
-def chache_hit():
-    return render_template('DB_Monitoring.html', chache_hit_info=chache_hit_info)
+# @app.route('/monitoring/disk_rw', methods=['GET'])
+# def disk_rw():
+#     return render_template('DB_Monitoring.html', disk_rw_info=disk_rw_info)
 
-@app.route('/monitoring/chache_usg', methods=['GET'])
-def chache_usg():
-    return render_template('DB_Monitoring.html', chache_usage_info=chache_usage_info)
+# @app.route('/monitoring/chache_hit', methods=['GET'])
+# def chache_hit():
+#     return render_template('DB_Monitoring.html', chache_hit_info=chache_hit_info)
 
-@app.route('/monitoring/scan_filter', methods=['GET'])
-def scan_filter():
-    return render_template('DB_Monitoring.html', scan_filter_info=scan_filter_info)
+# @app.route('/monitoring/chache_usg', methods=['GET'])
+# def chache_usg():
+#     return render_template('DB_Monitoring.html', chache_usage_info=chache_usage_info)
 
-@app.route('/monitoring/cpu', methods=['GET'])
-def cpu_usg():
-    return render_template('DB_Monitoring.html', cpu_usg_info=cpu_usg_info)
+# @app.route('/monitoring/scan_filter', methods=['GET'])
+# def scan_filter():
+#     return render_template('DB_Monitoring.html', scan_filter_info=scan_filter_info)
 
-@app.route('/monitoring/memory', methods=['GET'])
-def memory_usg():
-    return render_template('DB_Monitoring.html', memory_usg_info=memory_usg_info)
+# @app.route('/monitoring/cpu', methods=['GET'])
+# def cpu_usg():
+#     return render_template('DB_Monitoring.html', cpu_usg_info=cpu_usg_info)
 
-@app.route('/monitoring/network', methods=['GET'])
-def network_usg():
-    return render_template('DB_Monitoring.html', network_usage_info=network_usage_info)
+# @app.route('/monitoring/memory', methods=['GET'])
+# def memory_usg():
+#     return render_template('DB_Monitoring.html', memory_usg_info=memory_usg_info)
 
-@app.route('/monitoring/power', methods=['GET'])
-def power_usg():
-    return render_template('DB_Monitoring.html', power_usg_info=power_usg_info)
+# @app.route('/monitoring/network', methods=['GET'])
+# def network_usg():
+#     return render_template('DB_Monitoring.html', network_usage_info=network_usage_info)
+
+# @app.route('/monitoring/power', methods=['GET'])
+# def power_usg():
+#     return render_template('DB_Monitoring.html', power_usg_info=power_usg_info)
 
 
 ###############################################
@@ -3690,11 +3731,15 @@ def power_usg():
 def query():
     return redirect(url_for('/query/environment'))
 
-# Query Pyshdown
 @app.route('/query/environment')
 def query_info():
     # DB로부터 쿼리 수행 DB 환경정보 가져옴
-    return
+    return render_template('Query.html', environment_info=environment_info, query_list=query_list, db_schema=db_schema)
+
+@app.route('/query/run')
+def query_run():
+    # 쿼리 수행 후 결과값 및 메트릭 값
+    return render_template('Query.html', query_result=query_result, query_metric_csd=query_metric_csd, query_metric_ssd=query_metric_ssd)
 
 
 if __name__ == '__main__':
