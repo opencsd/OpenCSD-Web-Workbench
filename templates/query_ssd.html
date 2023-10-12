@@ -259,7 +259,95 @@
                         </table>
                       </div>
                       <div class="card card-body mt-2 h-100" id="dbSchemaContainer" style="display: none;"> 
-                        db schema
+                        <details>
+                          <summary>customer</summary>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_custkey</strong> / int(11) / NOT NULL
+                              <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ebc334" class="bi bi-key-fill" viewBox="0 0 16 16">
+                                <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                              </svg> -->
+                            </p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_name</strong> / varchar(25) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_address</strong> / varchar(40) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_nationkey</strong> / int(11) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_phone</strong> / char(15) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_acctbal</strong> / decimal(15,2) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_mktsegment</strong> / char(10) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_comment</strong> / varchar(117) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>lineitem</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_orderkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_partkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_suppkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_linenumber</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_quantity</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_extendedprice</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_discount</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_tax</strong> / char(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_returnflag</strong> / char(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_linestatus</strong> /char(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_shipDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_commitDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_receiptDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_shipnstruct</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_shipmode</strong> / char(10) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_comment</strong> / varchar(44) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>nation</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_nationkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_name</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_regionkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_comment</strong> / varchar(152) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>orders</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_custkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderstatus</strong> / cjar(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_totalprice</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderpriority</strong> / char(15) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_clerk</strong> / char(15) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_shippriority</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_comment</strong> / varchar(79) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>part</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_partkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_name</strong> / varchar(55) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_mfgr</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_brand</strong> / char(10) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_type</strong> / varchar(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_size</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_container</strong> / char(10) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_retailprice</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_comment</strong> / varchar(23) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>partsupp</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_partkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_suppkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_availqty</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_supplycost</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_comment</strong> / varchar(199) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>region</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>r_regionkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>r_name</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>r_comment</strong> / varchar(152) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>supplier</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_suppkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_name</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_address</strong> / varchar(40) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_nationkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_phone</strong> / char(15) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_acctbal</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_comment</strong> / varchar(101) / NOT NULL</p>
+                        </details>
                       </div>
                     </div>
                   </div>
