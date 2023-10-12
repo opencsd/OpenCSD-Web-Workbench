@@ -54,6 +54,9 @@
   <link href="../static/css/tabler-vendors.min.css" rel="stylesheet" />
   <link href="../static/css/demo.min.css" rel="stylesheet" />
   <link href="../static/css/sql.css" rel="stylesheet" />
+
+  <link href="../static/css/Query.css" rel="stylesheet" />
+
   <script>
     import { SidebarLayout } from "@druids/ui/layout/SidebarLayout";
     import { Flex } from "@druids/ui/layout/Flex";
@@ -120,7 +123,7 @@
           <div class="container-xl">
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
-                <a class="nav-link" href="./DB_Monitoring.html">
+                <a class="nav-link" href="/monitoring">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +145,7 @@
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="./Query.html">
+                <a class="nav-link" href="/query">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google-big-query"
@@ -159,7 +162,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="./Simulate.html">
+                <a class="nav-link" href="/simulate">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cardboards" width="44"
@@ -198,221 +201,29 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
-            <div class="col-lg-12">
+            <div class="col-7">
               <div class="card">
                 <div class="card-body row justify-content-center">
-                  <div class="col-lg-7">
+                  <div class="col-lg-12">
                     <h3 class="card-title">Query Input</h3>
-                    <textarea class="form-control form-control-xl" value="" rows="15"></textarea>
+                    <textarea id="queryTextarea" class="form-control form-control-xl" value="" rows="15"></textarea>
+                    <button id="pushdownButton" class="pushbtn btn btn-azure mt-3">Pushdown</button>
                   </div>
-                  <div class="col-lg-5">
-                    <div class="row">
-                      <h3 class="card-title col-3">Query Log</h3>
-                      <div class="col-9 text-end">
-                        <a href="#">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database-plus"
-                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                            fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
-                            <path d="M4 6v6c0 1.657 3.582 3 8 3c1.075 0 2.1 -.08 3.037 -.224"></path>
-                            <path d="M20 12v-6"></path>
-                            <path d="M4 12v6c0 1.657 3.582 3 8 3c.166 0 .331 -.002 .495 -.006"></path>
-                            <path d="M16 19h6"></path>
-                            <path d="M19 16v6"></path>
-                          </svg>
-                        </a>
-                        <a href="#" class="text-success">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database-import"
-                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                            fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
-                            <path d="M4 6v6c0 1.657 3.582 3 8 3c.856 0 1.68 -.05 2.454 -.144m5.546 -2.856v-6"></path>
-                            <path d="M4 12v6c0 1.657 3.582 3 8 3c.171 0 .341 -.002 .51 -.006"></path>
-                            <path d="M19 22v-6"></path>
-                            <path d="M22 19l-3 -3l-3 3"></path>
-                          </svg>
-                        </a>
-
-                        <a href="#" class="text-danger"><svg xmlns="http://www.w3.org/2000/svg"
-                            class="icon icon-tabler icon-tabler-database-x" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
-                            <path d="M4 6v6c0 1.657 3.582 3 8 3c.537 0 1.062 -.02 1.57 -.058"></path>
-                            <path d="M20 13.5v-7.5"></path>
-                            <path d="M4 12v6c0 1.657 3.582 3 8 3c.384 0 .762 -.01 1.132 -.03"></path>
-                            <path d="M22 22l-5 -5"></path>
-                            <path d="M17 22l5 -5"></path>
-                          </svg>
-                        </a>
-                      </div>
-                    </div>
-                    <div class="table-responsive">
-                      <table class="table table-vcenter text-nowrap datatable">
-                        <tbody>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              SELECT * FROM Sessions WHERE User_id = ?
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              SELECT * FROM Sessions WHERE Token = ?
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              SELECT * FROM Sessions WHERE Expires_at ? AND
-                              User_id = ?
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              DELETE FROM Sessions WHERE Id = ?
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              SELECT s . Id , s . Created_at , s . Expires_at
-                              , s . Token , s . User_id FROM Sessions
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              SELECT * FROM Sessions WHERE User_id = ?
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">
-                              <input type="checkbox" class="form-check-input" name="form-type[]" value="3" />
-                            </th>
-                            <td class="bg-light">
-                              SELECT * FROM Sessions WHERE Token = ?
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <button class="btn btn-azure w-25 mt-3">Pushdown</button>
                 </div>
               </div>
             </div>
             <div class="col-5">
               <div class="card">
-                <div class="card-body row">
-                  <h3 class="card-title">Environment Info</h3>
-                  <div class="table-responsive">
-                    <table class="table table-vcenter text-nowrap datatable">
-                      <tbody class="text-center">
-                        <tr>
-                          <th scope="row">DBMS</th>
-                          <td class="bg-light">MySQL</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Algorithm</th>
-                          <td class="bg-light">CSD Metric Score</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Index</th>
-                          <td class="bg-light">Use</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Block Size</th>
-                          <td class="bg-light">4096</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                <div class="card-body">
+                  <div class="button-container">
+                    <button id="environmentInfoButton" class="toggle-button active">Environment Info</button>
+                    <button id="dbSchemaButton" class="toggle-button">DB Schema</button>
                   </div>
+                <textarea class="form-control" value="" rows="16"></textarea>
                 </div>
               </div>
             </div>
-            <div class="col-7">
-              <div class="card">
-                <div class="card-body row">
-                  <h3 class="card-title">Query Snippet</h3>
-                  <div class="table-responsive">
-                    <table class="table table-vcenter text-nowrap datatable">
-                      <thead class="text-center">
-                        <tr>
-                          <th>Work ID</th>
-                          <th>Type</th>
-                          <th>Projection</th>
-                          <th>Filter</th>
-                          <th>Order by</th>
-                          <th>Group by</th>
-                          <th>Limit</th>
-                          <th>Having</th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td>0</td>
-                          <td>CSD Scan</td>
-                          <td>2</td>
-                          <td>2</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>CSD Scan</td>
-                          <td>0</td>
-                          <td>2</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Inner Join</td>
-                          <td>2</td>
-                          <td>1</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>Aggregation</td>
-                          <td>1</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                          <td>0</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             <div class="col-7">
               <div class="card">
                 <div class="card-body row">
@@ -429,24 +240,24 @@
                     <table class="table table-vcenter text-nowrap datatable">
                       <tbody class="text-center">
                         <tr>
-                          <th scope="row" class="w-25">CPU</th>
-                          <td class="bg-light">30</td>
+                          <th scope="row" class="w-25">Scanned Row</th>
+                          <td class="bg-light">30 (line)</td>
                         </tr>
                         <tr>
-                          <th scope="row" class="w-25">Power</th>
-                          <td class="bg-light">330</td>
+                          <th scope="row" class="w-25">Filtered Row</th>
+                          <td class="bg-light">330 (line)</td>
                         </tr>
                         <tr>
-                          <th scope="row" class="w-25">Network</th>
-                          <td class="bg-light">80</td>
+                          <th scope="row" class="w-25">Filter Ratio</th>
+                          <td class="bg-light">80 (%)</td>
                         </tr>
                         <tr>
-                          <th scope="row" class="w-25">Query Time</th>
-                          <td class="bg-light">20</td>
+                          <th scope="row" class="w-25">Execution Time</th>
+                          <td class="bg-light">20 (sec)</td>
                         </tr>
                         <tr>
-                          <th scope="row" class="w-25">Filter/Scan</th>
-                          <td class="bg-light">0.83</td>
+                          <th scope="row" class="w-25">Snippet Count</th>
+                          <td class="bg-light">4</td>
                         </tr>
                       </tbody>
                     </table>
@@ -454,6 +265,78 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body row">
+            <div class="col-lg-12">
+              <div class="row">
+                <h3 class="card-title col-3">Query Log</h3>
+                <div class="col-9 text-end">
+                  <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database-plus"
+                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                      <path d="M4 6v6c0 1.657 3.582 3 8 3c1.075 0 2.1 -.08 3.037 -.224"></path>
+                      <path d="M20 12v-6"></path>
+                      <path d="M4 12v6c0 1.657 3.582 3 8 3c.166 0 .331 -.002 .495 -.006"></path>
+                      <path d="M16 19h6"></path>
+                      <path d="M19 16v6"></path>
+                    </svg>
+                  </a>
+                  <a href="#" class="text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-database-import"
+                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                      <path d="M4 6v6c0 1.657 3.582 3 8 3c.856 0 1.68 -.05 2.454 -.144m5.546 -2.856v-6"></path>
+                      <path d="M4 12v6c0 1.657 3.582 3 8 3c.171 0 .341 -.002 .51 -.006"></path>
+                      <path d="M19 22v-6"></path>
+                      <path d="M22 19l-3 -3l-3 3"></path>
+                    </svg>
+                  </a>
+
+                  <a href="#" class="text-danger"><svg xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-database-x" width="24" height="24" viewBox="0 0 24 24"
+                      stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                      <path d="M4 6v6c0 1.657 3.582 3 8 3c.537 0 1.062 -.02 1.57 -.058"></path>
+                      <path d="M20 13.5v-7.5"></path>
+                      <path d="M4 12v6c0 1.657 3.582 3 8 3c.384 0 .762 -.01 1.132 -.03"></path>
+                      <path d="M22 22l-5 -5"></path>
+                      <path d="M17 22l5 -5"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-vcenter text-nowrap datatable">
+
+                  <thead>
+                    <tr style="text-align: center;">
+                      <th></th>
+                      <th style="width: 60%;"></th>
+                      <th style="width: 10%;">Scanned Row</th>
+                      <th style="width: 10%;">Filtered Row</th>
+                      <th style="width: 10%;">Filter Ratio</th>
+                      <th style="width: 10%;">Exesution Time</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="queryLogTableBody">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
           </div>
         </div>
       </div>
@@ -622,6 +505,8 @@
   <!-- Tabler Core -->
   <script src="../static/js/tabler.min.js" defer></script>
   <script src="../static/js/demo.min.js" defer></script>
+  <script src="../static/js/Querycontroller.js" defer></script>
+
 </body>
 
 </html>
