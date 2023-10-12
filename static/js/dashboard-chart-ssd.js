@@ -212,13 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
       // shadow: false
     },
     tooltip: {
-      // headerFormat: '<b>{point.x}</b><br/>',
-      // pointFormat: '{series.name}: {point.y}<br/>DDL Total: {point.stackTotal}',
+      headerFormat: '<b>{point.x}</b><br/>',
+      pointFormat: '{series.name}: {point.y}<br/>DDL Total: {point.stackTotal}'
     },
     plotOptions: {
-      line : {
-        linewidth: 0
-      },
       column: {
         stacking: 'normal',
         dataLabels: {
@@ -260,10 +257,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 //Host Metric Monitoring(area)
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const chart = Highcharts.chart('main_host_monitoring', {
     chart: {
-        type: 'area'
+      type: 'area'
     },
     title: {
       text: null
@@ -272,61 +269,39 @@ document.addEventListener('DOMContentLoaded', function() {
       text: null
     },
     xAxis: {
-      title: {
-        text: null
+      title : {
+        text : null
       },
       categories: Host_timestamp_total
     },
     yAxis: {
-        title: {
-            useHTML: true,
-            text: null
-        }
-    },
-    tooltip: {
-        shared: true,
-        headerFormat: '<span style="font-size:12px"><b>{point.key}</b></span><br>'
+      title: {
+        text: null
+      }
     },
     plotOptions: {
-        line: {
-          lineWidth: 0
+      area: {
+        marker: {
+          enabled: false,
+          // symbol: 'circle',
+          // radius: 2,
+          // states: {
+          //   hover: {
+          //     enabled: true
+          //   }
+          // }
         },
-        area: {
-            stacking: 'normal',
-            lineColor: '#666666',
-            lineWidth: 1,
-            marker: {
-                enabled: false,
-                lineWidth: 1,
-                lineColor: '#666666'
-            }
-        }
+      }
     },
     series: [
       {
-        name: "Interface Container CPU Usage",
+        name: "MySQL CPU Usage",
         data: [38, 41, 43, 33, 56, 51, 39, 34, 31, 42, 54, 47, 36, 45, 57, 52, 30, 46, 44, 58],
-        fillColor: 'rgba(135,206,250,0.7)', 
+        // fillColor: 'rgba(244, 223, 182,0.5)',
+        // fillColor: '#87CEFA',
+        fillColor: 'rgba(135,206,250,0.7)',
         lineWidth: 0
-      }, 
-      {
-        name: "Monitoring Container CPU Usage",
-        data: [35, 34, 42, 31, 54, 48, 37, 41, 40, 57, 32, 55, 44, 58, 33, 46, 53, 51, 39, 49],
-        fillColor: "rgba(70, 130, 180, 0.7)", 
-        lineWidth: 0
-      }, 
-      {
-        name: "Offloading Container CPU Usage",
-        data: [47, 46, 52, 33, 30, 37, 53, 44, 40, 49, 42, 43, 59, 51, 35, 31, 50, 39, 48, 54],
-        fillColor:  "rgba(100, 149, 237, 0.7)", 
-        lineWidth: 0
-      }, 
-      {
-        name: "Merging Container CPU Usage",
-        data: [43, 57, 54, 45, 49, 42, 36, 38, 34, 39, 47, 41, 56, 50, 37, 32, 55, 58, 44, 59],
-        fillColor: "rgba(173, 216, 230, 0.7)", 
-        lineWidth: 0
-      }]
+      }
+    ],
+  });
 });
-
-})
