@@ -225,28 +225,28 @@ document.addEventListener('DOMContentLoaded', function () {
       dataLabels: {
         enabled: false
       },
-      color: 'rgba(214, 212, 109, 0.7)'
+      color: 'rgba(214, 212, 109, 1)'
     }, {
       name: 'Insert',
       data: insert_count_total,
       dataLabels: {
         enabled: false
       },
-      color: 'rgb(244, 223, 182)'
+      color: 'rgb(244, 223, 182, 1)'
     }, {
       name: 'Update',
       data: update_count_total,
       dataLabels: {
         enabled: false
       },
-      color: 'rgb(222, 143, 95)'
+      color: 'rgb(222, 143, 95, 1)'
     }, {
       name: 'Delete',
       data: delete_count_total,
       dataLabels: {
         enabled: false
       },
-      color:'rgba(154, 68, 68)'
+      color:'rgba(154, 68, 68, 1)'
     }]
   });
 
@@ -293,8 +293,10 @@ document.addEventListener('DOMContentLoaded', function () {
       {
         name: "MySQL CPU Usage",
         data: [38, 41, 43, 33, 56, 51, 39, 34, 31, 42, 54, 47, 36, 45, 57, 52, 30, 46, 44, 58],
-        fillColor: 'rgba(244, 223, 182,0.5)',
-        linewidth: 0
+        // fillColor: 'rgba(244, 223, 182,0.5)',
+        // fillColor: '#87CEFA',
+        fillColor: 'rgba(135,206,250,0.7)',
+        lineWidth: 0
       }
     ],
   });

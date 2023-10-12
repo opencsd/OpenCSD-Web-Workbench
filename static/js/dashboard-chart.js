@@ -212,8 +212,8 @@ document.addEventListener('DOMContentLoaded', function () {
       // shadow: false
     },
     tooltip: {
-      headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>DDL Total: {point.stackTotal}'
+      // headerFormat: '<b>{point.x}</b><br/>',
+      // pointFormat: '{series.name}: {point.y}<br/>DDL Total: {point.stackTotal}',
     },
     plotOptions: {
       line : {
@@ -232,38 +232,37 @@ document.addEventListener('DOMContentLoaded', function () {
       dataLabels: {
         enabled: false
       },
-      color: 'rgba(214, 212, 109, 0.7)'
+      color: 'rgba(214, 212, 109, 1)'
     }, {
       name: 'Insert',
       data: insert_count_total,
       dataLabels: {
         enabled: false
       },
-      color: 'rgb(244, 223, 182)'
+      color: 'rgb(244, 223, 182, 1)'
     }, {
       name: 'Update',
       data: update_count_total,
       dataLabels: {
         enabled: false
       },
-      color: 'rgb(222, 143, 95)'
+      color: 'rgb(222, 143, 95, 1)'
     }, {
       name: 'Delete',
       data: delete_count_total,
       dataLabels: {
         enabled: false
       },
-      color:'rgba(154, 68, 68)'
+      color:'rgba(154, 68, 68, 1)'
     }]
   });
 
 });
 
-//Host Metric Monitoring(area)
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   const chart = Highcharts.chart('main_host_monitoring', {
     chart: {
-      type: 'area'
+        type: 'area'
     },
     title: {
       text: null
@@ -272,51 +271,128 @@ document.addEventListener('DOMContentLoaded', function () {
       text: null
     },
     xAxis: {
-      categories: ['13:50', '14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00', '15:10', '15:20', '15:30', '15:40', '15:50', '16:00', '16:10', '16:20', '16:30', '16:40', '16:50', '17:00', '17:10']
-    },
-    yAxis: {
       title: {
         text: null
-      }
+      },
+      categories: Host_timestamp_total
+    },
+    yAxis: {
+        title: {
+            useHTML: true,
+            text: null
+        }
+    },
+    tooltip: {
+        shared: true,
+        headerFormat: '<span style="font-size:12px"><b>{point.key}</b></span><br>'
     },
     plotOptions: {
-      line : {
-        linewidth: 0
-      },
-      area: {
-        marker: {
-          enabled: false,
-          symbol: 'circle',
-          radius: 2,
-          states: {
-            hover: {
-              enabled: true
-            }
-          }
+        line: {
+          lineWidth: 0
         },
-      }
+        area: {
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+                enabled: false,
+                lineWidth: 1,
+                lineColor: '#666666'
+            }
+        }
     },
     series: [
       {
         name: "Interface Container CPU Usage",
         data: [38, 41, 43, 33, 56, 51, 39, 34, 31, 42, 54, 47, 36, 45, 57, 52, 30, 46, 44, 58],
-        fillColor: 'rgba(255, 192, 203, 0.5)' // 첫 번째 Area의 투명 파란색
-      },
+        fillColor: 'rgba(135,206,250,0.7)', 
+        lineWidth: 0
+      }, 
       {
         name: "Monitoring Container CPU Usage",
         data: [35, 34, 42, 31, 54, 48, 37, 41, 40, 57, 32, 55, 44, 58, 33, 46, 53, 51, 39, 49],
-        fillColor: 'rgba(173, 216, 230, 0.5)' // 첫 번째 Area의 투명 파란색
-      },
+        fillColor: "rgba(70, 130, 180, 0.7)", 
+        lineWidth: 0
+      }, 
       {
         name: "Offloading Container CPU Usage",
         data: [47, 46, 52, 33, 30, 37, 53, 44, 40, 49, 42, 43, 59, 51, 35, 31, 50, 39, 48, 54],
-        fillColor: 'rgba(152, 251, 152, 0.5)' // 첫 번째 Area의 투명 파란색
-      },
+        fillColor:  "rgba(100, 149, 237, 0.7)", 
+        lineWidth: 0
+      }, 
       {
         name: "Merging Container CPU Usage",
         data: [43, 57, 54, 45, 49, 42, 36, 38, 34, 39, 47, 41, 56, 50, 37, 32, 55, 58, 44, 59],
-        fillColor: 'rgba(255, 228, 196, 0.5)' // 첫 번째 Area의 투명 파란색
-      }
-    ],
-  });
+        fillColor: "rgba(173, 216, 230, 0.7)", 
+        lineWidth: 0
+      }]
 });
+
+})
+
+
+//Host Metric Monitoring(area)
+// document.addEventListener('DOMContentLoaded', function () {
+//   const chart = Highcharts.chart('main_host_monitoring', {
+//     chart: {
+//       type: 'area'
+//     },
+//     title: {
+//       text: null
+//     },
+//     subtitle: {
+//       text: null
+//     },
+//     xAxis: {
+//       categories: ['13:50', '14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00', '15:10', '15:20', '15:30', '15:40', '15:50', '16:00', '16:10', '16:20', '16:30', '16:40', '16:50', '17:00', '17:10']
+//     },
+//     yAxis: {
+//       title: {
+//         text: null
+//       }
+//     },
+//     plotOptions: {
+//       line : {
+//         linewidth: 0
+//       },
+//       area: {
+//         marker: {
+//           enabled: false,
+//           symbol: 'circle',
+//           radius: 2,
+//           states: {
+//             hover: {
+//               enabled: true
+//             }
+//           }
+//         },
+//       }
+//     },
+//     series: [
+//       {
+//         name: "Interface Container CPU Usage",
+//         data: [38, 41, 43, 33, 56, 51, 39, 34, 31, 42, 54, 47, 36, 45, 57, 52, 30, 46, 44, 58],
+//         fillColor: 'rgba(135,206,250,0.7)', 
+//         lineWidth: 0
+//       },
+//       {
+//         name: "Monitoring Container CPU Usage",
+//         data: [35, 34, 42, 31, 54, 48, 37, 41, 40, 57, 32, 55, 44, 58, 33, 46, 53, 51, 39, 49],
+//         fillColor: "rgba(70, 130, 180, 0.7)", 
+//         lineWidth: 0
+//       },
+//       {
+//         name: "Offloading Container CPU Usage",
+//         data: [47, 46, 52, 33, 30, 37, 53, 44, 40, 49, 42, 43, 59, 51, 35, 31, 50, 39, 48, 54],
+//         fillColor:  "rgba(100, 149, 237, 0.7)", 
+//         lineWidth: 0
+//       },
+//       {
+//         name: "Merging Container CPU Usage",
+//         data: [43, 57, 54, 45, 49, 42, 36, 38, 34, 39, 47, 41, 56, 50, 37, 32, 55, 58, 44, 59],
+//         fillColor: "rgba(173, 216, 230, 0.7)", 
+//         lineWidth: 0
+//       }
+//     ],
+//   });
+// });
