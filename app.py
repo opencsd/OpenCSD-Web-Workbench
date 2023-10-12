@@ -3738,56 +3738,10 @@ def db_info():
     # DB로부터 DB 환경정보 가져옴
     return render_template('db_monitoring.html', dashboard_summary=dashboard_summary)
 
-# @app.route('/monitoring')
-# def monitoring():
-#     return render_template('DB_Monitoring.html',dashboard_summary=dashboard_summary, ddl_info=ddl_info, cpu_usg_info=cpu_usg_info)
-
-# @app.route('/monitoring/environment', methods=['GET'])
-# def db_info():
-#     # DB로부터 DB 환경정보 가져옴
-
-#     return render_template('DB_Monitoring.html', dashboard_summary=dashboard_summary)
-
-# # DB Monitoring Graph 정보
-# @app.route('/monitoring/ddl', methods=['GET'])
-# def ddl():
-#     return render_template('DB_Monitoring.html', ddl_info=ddl_info)
-
-# @app.route('/monitoring/disk_rw', methods=['GET'])
-# def disk_rw():
-#     return render_template('DB_Monitoring.html', disk_rw_info=disk_rw_info)
-
-# @app.route('/monitoring/chache_hit', methods=['GET'])
-# def chache_hit():
-#     return render_template('DB_Monitoring.html', chache_hit_info=chache_hit_info)
-
-# @app.route('/monitoring/chache_usg', methods=['GET'])
-# def chache_usg():
-#     return render_template('DB_Monitoring.html', chache_usage_info=chache_usage_info)
-
-# @app.route('/monitoring/scan_filter', methods=['GET'])
-# def scan_filter():
-#     return render_template('DB_Monitoring.html', scan_filter_info=scan_filter_info)
-
-# @app.route('/monitoring/cpu', methods=['GET'])
-# def cpu_usg():
-#     return render_template('DB_Monitoring.html', cpu_usg_info=cpu_usg_info)
-
-# @app.route('/monitoring/memory', methods=['GET'])
-# def memory_usg():
-#     return render_template('DB_Monitoring.html', memory_usg_info=memory_usg_info)
-
-# @app.route('/monitoring/network', methods=['GET'])
-# def network_usg():
-#     return render_template('DB_Monitoring.html', network_usage_info=network_usage_info)
-
-# @app.route('/monitoring/power', methods=['GET'])
-# def power_usg():
-#     return render_template('DB_Monitoring.html', power_usg_info=power_usg_info)
-
 
 ###############################################
 #                Query 수행 화면              #
+
 @app.route('/query') # Query Pushdown 화면으로 전환
 def query():
     return render_template('query.html')
@@ -3800,19 +3754,6 @@ def query_ssd():
 def simulate():
     return render_template('simulate.html')
 
-# @app.route('/query') # Query Pushdown 화면으로 전환
-# def query():
-#     return redirect(url_for('/query/environment'))
-
-# @app.route('/query/environment')
-# def query_info():
-#     # DB로부터 쿼리 수행 DB 환경정보 가져옴
-#     return render_template('Query.html', environment_info=environment_info, query_list=query_list, db_schema=db_schema)
-
-# @app.route('/query/run')
-# def query_run():
-#     # 쿼리 수행 후 결과값 및 메트릭 값
-#     return render_template('Query.html', query_result=query_result, query_metric_csd=query_metric_csd, query_metric_ssd=query_metric_ssd)
 
 
 if __name__ == '__main__':
