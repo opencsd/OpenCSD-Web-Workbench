@@ -1,5 +1,5 @@
-const environmentInfoTab = document.getElementById("environmentInfoTab");
-const dbSchemaTab = document.getElementById("dbSchemaTab");
+const environmentInfoTab = document.querySelector("#environmentInfoTab.ssd_btn");
+const dbSchemaTab = document.querySelector("#dbSchemaTab.ssd_btn");
 
 const environmentInfoContainer = document.getElementById("environmentInfoContainer");
 const dbSchemaContainer = document.getElementById("dbSchemaContainer");
