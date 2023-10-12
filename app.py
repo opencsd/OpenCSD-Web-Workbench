@@ -1,20 +1,27 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask_cors import CORS
 import datetime, json
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder= 'templates')
 app.secret_key = 'dbms09!'
+CORS(app)
 
-users = {
-    'user_id': 'user',
-    'host_ip': '10.0.4.87',
-    'host_port': '8080',
-    'db_id': 'root',
-    'db_pw': 'dbms09!'
+dashboard_summary = {
+    'db_name': 'tpc-h',
+    'dbms_type': 'mysql',
+    'data_storage_type': 'row',
+    'storage_type': 'csd',
+    'csd_count': 8,
+    'csd_kind': 'ngd',
+    'dbms_size': '64',
+    'block_size': '4096',
+    'scheduling_algorithm': 'csd metric score',
+    'db_account_name': 'keti',
+    'user_id': 'keti',
+    'db_host_ip': '10.0.4.80:40001'
 }
-
 ####################################################################################
 #                               DB Monitoring 화면                                 #
 ####################################################################################
@@ -3705,30 +3712,35 @@ def index():
     return render_template('index.html')
 
 # Connect, Demo 버튼 눌렀을 때 동작
-@app.route('/login', methods=['POST'])  
+@app.route('/connect', methods=['GET', 'POST'])
 def login():
-    request_data = request.get_json()
+    if request.method == 'POST':
+        # return redirect(url_for('monitoring')) #why?
+        data = request.json
+        workbench_user_id = data['workbench_user_id']
+        if workbench_user_id == "keti_opencsd":
+            return render_template('db_monitoring.html')
+        elif workbench_user_id == "keti_mysql":
+            return render_template('db_monitoring_ssd.html')
+    return render_template('index.html') 
 
-    # 연결 시 사용자 정보 및 DB 정보 받아옴
-    user_id = request_data.get('user_id')
-    host_ip = request_data.get('host_ip')
-    host_port = request_data.get('host_port')
-    db_id = request_data.get('db_id')
-    db_pw = request_data.get('db_pw')
+@app.route('/monitoring_ssd')  
+def monitoring_ssd():
+    return render_template('db_monitoring_ssd.html', dashboard_summary=dashboard_summary)
 
-    # 받아온 정보 DB 저장
-    # conn = sqlite3.connect('user_db.sqlite')
-    # cursor = conn.cursor()
-    # cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
-    # conn.commit()
-    # conn.close()
-
-    return redirect(url_for('/monitoring')) # DB Summary 정보 가져오는 함수 호출
+@app.route('/monitoring')  
+def monitoring():
+    return render_template('db_monitoring.html', dashboard_summary=dashboard_summary)
 
 # DB Monitoring
-@app.route('/monitoring')
-def monitoring():
-    return render_template('DB_Monitoring.html',dashboard_summary=dashboard_summary, ddl_info=ddl_info, cpu_usg_info=cpu_usg_info)
+@app.route('/monitoring/environment', methods=['GET'])
+def db_info():
+    # DB로부터 DB 환경정보 가져옴
+    return render_template('db_monitoring.html', dashboard_summary=dashboard_summary)
+
+# @app.route('/monitoring')
+# def monitoring():
+#     return render_template('DB_Monitoring.html',dashboard_summary=dashboard_summary, ddl_info=ddl_info, cpu_usg_info=cpu_usg_info)
 
 # @app.route('/monitoring/environment', methods=['GET'])
 # def db_info():
@@ -3778,17 +3790,29 @@ def monitoring():
 #                Query 수행 화면              #
 @app.route('/query') # Query Pushdown 화면으로 전환
 def query():
-    return redirect(url_for('/query/environment'))
+    return render_template('query.html')
 
-@app.route('/query/environment')
-def query_info():
-    # DB로부터 쿼리 수행 DB 환경정보 가져옴
-    return render_template('Query.html', environment_info=environment_info, query_list=query_list, db_schema=db_schema)
+@app.route('/query_ssd') # Query Pushdown 화면으로 전환
+def query_ssd():
+    return render_template('query_ssd.html')
 
-@app.route('/query/run')
-def query_run():
-    # 쿼리 수행 후 결과값 및 메트릭 값
-    return render_template('Query.html', query_result=query_result, query_metric_csd=query_metric_csd, query_metric_ssd=query_metric_ssd)
+@app.route('/simulate') # Query Pushdown 화면으로 전환
+def simulate():
+    return render_template('simulate.html')
+
+# @app.route('/query') # Query Pushdown 화면으로 전환
+# def query():
+#     return redirect(url_for('/query/environment'))
+
+# @app.route('/query/environment')
+# def query_info():
+#     # DB로부터 쿼리 수행 DB 환경정보 가져옴
+#     return render_template('Query.html', environment_info=environment_info, query_list=query_list, db_schema=db_schema)
+
+# @app.route('/query/run')
+# def query_run():
+#     # 쿼리 수행 후 결과값 및 메트릭 값
+#     return render_template('Query.html', query_result=query_result, query_metric_csd=query_metric_csd, query_metric_ssd=query_metric_ssd)
 
 
 if __name__ == '__main__':
