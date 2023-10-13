@@ -211,14 +211,17 @@
                         <div class="col-6 text-end">
                           <span class="d-none d-sm-inline">
 
-                            <button id="pushdownButton" class="btn">template</button>
+                            <button class="btn" style="padding: 5px 15px;">template</button>
 
                           </span>
                           <span class="d-none d-sm-inline">
-                            <a href="#" class="btn bg-azure"> New Query </a>
+                            <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                           </span>
                         </div>
                         <textarea id="queryTextarea" class="form-control form-control-xl" value="" rows="13"></textarea>
+                        <div class="d-flex justify-content-center">
+                          <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -278,7 +281,7 @@
                 </div>
 
 
-                <div class="col-12">
+                <div class="col-12" style="margin-bottom: 15px;">
                   <div class="card">
                     <div class="card-body row">
                       <h3 class="card-title">Query Log</h3>
@@ -297,393 +300,6 @@
                           </thead>
 
                           <tbody id="queryLogTableBody">
-                          </tbody>
-
-                          <tbody>
-                            <tr>
-                              <td>
-                                <font class="syn">SELECT</font>&nbsp;
-                                <font class="oper">*</font>&nbsp;
-                                <font class="syn">FROM</font>&nbsp;
-                                <font class="text">Sessions</font>&nbsp;
-                                <font class="syn">WHERE</font>&nbsp;
-                                <font class="text">User_id</font>&nbsp;
-                                <font class="oper">=</font>&nbsp;
-                                <font class="text">?</font>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="text-end">
-                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                  </svg>
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <font class="syn">SELECT</font>&nbsp;
-                                <font class="oper">*</font>&nbsp;
-                                <font class="syn">FROM</font>&nbsp;
-                                <font class="text">Sessions</font>&nbsp;
-                                <font class="syn">WHERE</font>&nbsp;
-                                <font class="text">Token</font>&nbsp;
-                                <font class="oper">=</font>&nbsp;
-                                <font class="text">?</font>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="text-end">
-                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                  </svg>
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <font class="syn">SELECT</font>&nbsp;
-                                <font class="oper">*</font>&nbsp;
-                                <font class="syn">FROM</font>&nbsp;
-                                <font class="text">Sessions</font>&nbsp;
-                                <font class="syn">WHERE</font>&nbsp;
-                                <font class="text">Expires_at</font>&nbsp;
-                                <font class="oper">,-</font>&nbsp;
-                                <font class="text">?</font>&nbsp;
-                                <font class="oper">AND</font>&nbsp;
-                                <font class="text">User_id</font>&nbsp;
-                                <font class="oper">=</font>&nbsp;
-                                <font class="text">?</font>&nbsp;
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="text-end">
-                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                  </svg>
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <font class="syn">DELETE</font>&nbsp;
-                                <font class="syn">FROM</font>&nbsp;
-                                <font class="text">Sessions</font>&nbsp;
-                                <font class="syn">WHERE</font>&nbsp;
-                                <font class="text">Id</font>&nbsp;
-                                <font class="oper">=</font>&nbsp;
-                                <font class="text">?</font>&nbsp;
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="text-end">
-                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                  </svg>
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                DELETE FROM UserTeams WHERE User_id = ? AND
-                                Team_id = ?
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="text-end">
-                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                  </svg>
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>BEGIN</td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div class="progress">
-                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                                    aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                                    <span class="visually-hidden">38% Complete</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="text-end">
-                                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                                  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                                  data-bs-content="Right popover"><svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                                  </svg>
-                                </a>
-                              </td>
-                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -739,50 +355,141 @@
                 </div>
 
 
-                <div class="col-5">
-                  <div class="card">
-                    <div class="card-body row">
-                      <h3 class="card-title col-8">Selected Query Result</h3>
-                      <div class="dropdown col-3">
-                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Host</a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Host</a>
-                          <a class="dropdown-item" href="#">Storage</a>
-                          <a class="dropdown-item" href="#">Total</a>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body row">
+                        <div class="col-lg-12">
+                          <div class="row">
+                            <h3 class="card-title col-10" style="margin-bottom: 5px; padding-top: 5px;">Selected Validation Query Metric Info</h3>
+                            <div class="dropdown col-2">
+                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">Total</a>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Total</a>
+                                <a class="dropdown-item" href="#">CPU</a>
+                                <a class="dropdown-item" href="#">Power</a>
+                                <a class="dropdown-item" href="#">Network</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-12" style="display: flex;">
+
+                            <div class="col-6" style="padding-right: 5px;">
+                              <div class="card" style="padding: 0 15px 10px 0;">
+                                <div class="row" style="padding-top: 5px;">
+                                  <h3 class="card-title col-9" style="margin: 5px 15px 15px;">Result Compare</h3>
+                                  
+                                  <div id="chart-demo-bar1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
+                                  <div id="chart-demo-bar2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
+                                </div>
+                              </div>
+                            </div>
+      
+                            <div class="col-6" style="padding-left: 5px;">
+                              <div class="card" style="padding: 0 15px 10px 0;">
+                                <div class="row" style="padding-top: 5px;">
+                                  <h3 class="card-title col-7" style="margin: 5px 15px 15px;">Browser market share</h3>
+                                  
+                                  <div id="chart-demo-bar3" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
+                                  <div id="chart-demo-bar4" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
+
+                                </div>
+
+                              </div>
+                            </div>   
+                            </div>   
+                            <div class="col-12" style="margin-top: 5px;">
+                              <div style="padding: 0 15px 10px 0;">
+                                <div class="row" style="padding-top: 5px;">
+                                  <h3 class="card-title col-7" style="margin: 5px 15px 15px;">Selected Validation Query Option Info</h3>
+                                  
+<style>
+
+.simul_table {
+  border-collapse: collapse;
+  width: 500px;
+  margin: 1rem auto;
+  border: 1px solid #ddd;
+  background-color: white;
+  display: flex;
+}
+
+.simul_tr {
+  height: 100%;
+  width: 100%;
+}
+
+.simul_tbody
+{display:flex}
+
+.simul_th, .simul_td {
+  display: flex;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.simul_th {
+  background-color: #f2f2f2;
+  width: 190%;
+}
+.simul_td {
+  padding-left: 15px;
+}
+</style>
+
+
+                                  <div class="col-12">
+                                    <table class="simul_table" style="width: 100%;">
+                                      <thead style="width: 20%;">
+                                        <tr class="simul_tr">
+                                          <th class="simul_th">Selected ID</th>
+                                          <th class="simul_th">Option Name</th>
+                                          <th class="simul_th">DBMS</th>
+                                          <th class="simul_th">Storage Type</th>
+                                          <th class="simul_th">CSD Count</th>
+                                          <th class="simul_th">CSD Kind</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody class="simul_tbody" style="width: 100%;">
+                                        <tr class="simul_tr">
+                                          <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
+                                        </tr>
+                                        <tr class="simul_tr">
+                                          <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
+                                        </tr>
+                                        <tr class="simul_tr">
+                                          <td class="simul_td">-</td>
+                                          <td class="simul_td">-</td>
+                                          <td class="simul_td">-</td>
+                                          <td class="simul_td">-</td>
+                                          <td class="simul_td">-</td>
+                                          <td class="simul_td">-</td>
+                                        </tr>
+                                      </tbody>
+                                  </table>
+                                </div>
+
+                                </div>
+
+                              </div>            
+                          </div>
                         </div>
                       </div>
-                      <div id="chart-demo-bar1" class="chart-lg"></div>
                     </div>
                   </div>
-                </div>
-                <div class="col-7">
-                  <div class="card">
-                    <div class="card-body row">
-                      <h3 class="card-title col-6">Simulate Query Result</h3>
-                      <div class="dropdown col-3 text-end">
-                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Total</a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Total</a>
-                          <a class="dropdown-item" href="#">CPU</a>
-                          <a class="dropdown-item" href="#">Power</a>
-                          <a class="dropdown-item" href="#">Network</a>
-                        </div>
-                      </div>
-                      <div class="dropdown col-3">
-                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">View</a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">10</a>
-                          <a class="dropdown-item" href="#">20</a>
-                          <a class="dropdown-item" href="#">30</a>
-                          <a class="dropdown-item" href="#">40</a>
-                          <a class="dropdown-item" href="#">50</a>
-                        </div>
-                      </div>
-                      <div id="chart-demo-bar" class="chart-lg"></div>
-                    </div>
-                  </div>
-                </div>
-                
+                </div>                
               </div>
             </div>
           </div>
