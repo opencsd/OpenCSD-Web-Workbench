@@ -11,49 +11,54 @@ document.addEventListener("DOMContentLoaded", function () {
             queryHistory.push(shortenedQuery);
 
             const newRow = document.createElement("tr");
+
             const checkboxCell = document.createElement("td");
             const newCell = document.createElement("td");
-            const Scannedgraph = document.createElement("td");
-            const Filteredgraph = document.createElement("td");
-            const Filtergraph = document.createElement("td");
-            const Exesutiongraph = document.createElement("td");
+            const progressBarCells = [];
+            const dummyButtonCell = document.createElement("td");
 
+            for (let i = 0; i < 5; i++) {
+                const progressBarCell = document.createElement("td");
+                progressBarCell.innerHTML = `
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
+                            aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                            <span class="visually-hidden">38% Complete</span>
+                        </div>
+                    </div>
+                `;
+                progressBarCells.push(progressBarCell);
+            }
 
+            const dummyButton = document.createElement("td");
+            dummyButton.innerHTML = `
+                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
+                    data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
+                    data-bs-content="Right popover">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical"
+                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                    </svg>
+                </a>
+            `;
 
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.className = "form-check-input";
-            checkbox.name = "form-type[]";
-            checkbox.value = "2";
-            checkboxCell.appendChild(checkbox);
-
-            newCell.textContent = `${queryHistory.length}. ${shortenedQuery}`;
-
+            checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="2">`;
+            newCell.textContent = `${shortenedQuery}`;
             newCell.style.backgroundColor = "#fcfdfe";
-
-            const graphBar1 = document.createElement("div");
-            const graphBar2 = document.createElement("div");
-            const graphBar3 = document.createElement("div");
-            const graphBar4 = document.createElement("div");
-
-            graphBar1.className = "bar-graph";
-            graphBar2.className = "bar-graph";
-            graphBar3.className = "bar-graph";
-            graphBar4.className = "bar-graph";
-
-            Scannedgraph.appendChild(graphBar1);
-            Filteredgraph.appendChild(graphBar2);
-            Filtergraph.appendChild(graphBar3);
-            Exesutiongraph.appendChild(graphBar4);
-
 
             newRow.appendChild(checkboxCell);
             newRow.appendChild(newCell);
-            newRow.appendChild(Scannedgraph);
-            newRow.appendChild(Filteredgraph);
-            newRow.appendChild(Filtergraph);
-            newRow.appendChild(Exesutiongraph);
 
+            for (let i = 0; i < 5; i++) {
+                newRow.appendChild(progressBarCells[i]);
+            }
+
+            newRow.appendChild(dummyButtonCell);
+            dummyButtonCell.appendChild(dummyButton);
 
             queryLogTableBody.appendChild(newRow);
         } else {
@@ -63,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("queryTextarea").value = "";
     });
 });
+
 
 
 function queryToggle() {
