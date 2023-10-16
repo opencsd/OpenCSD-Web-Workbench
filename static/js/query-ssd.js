@@ -201,14 +201,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const scannedtable1 = document.querySelector('td.qtable_1');
         const scannedtable2 = document.querySelector('td.qtable_2');
         const scannedtable3 = document.querySelector('td.qtable_3');
-        const scannedtable4 = document.querySelector('td.qtable_4');
-        const scannedtable5 = document.querySelector('td.qtable_5');
 
-        scannedtable1.textContent = "30 (line)";
-        scannedtable2.textContent = "330 (line)";
-        scannedtable3.textContent = "80 (%)";
-        scannedtable4.textContent = "20 (sec)";
-        scannedtable5.textContent = "4";
+        scannedtable1.textContent = "300 (line)";
+        scannedtable2.textContent = "20 (sec)";
+        scannedtable3.textContent = "4";
 
         var query = document.getElementById("queryTextarea").value;
         var result = "+-------------------------------------+\n" +
