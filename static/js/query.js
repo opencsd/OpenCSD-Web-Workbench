@@ -193,37 +193,52 @@ document.addEventListener("DOMContentLoaded", function () {
         }).render();
 });
 
+const loadingIcon = document.getElementById('loadingIcon');
+const resultContainer = document.getElementById("resultContainer");
+const metricContainer = document.getElementById("metricContainer");
+
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("pushdownButton").addEventListener("click", function () {
+        loadingIcon.style.display = "block";
+        resultContainer.style.display = "none";
+        metricContainer.style.display = "none";  
 
-        const scannedtable1 = document.querySelector('td.qtable_1');
-        const scannedtable2 = document.querySelector('td.qtable_2');
-        const scannedtable3 = document.querySelector('td.qtable_3');
-        const scannedtable4 = document.querySelector('td.qtable_4');
-        const scannedtable5 = document.querySelector('td.qtable_5');
+        setTimeout(() => {
+            loadingIcon.style.display = "none";
+            resultContainer.style.display = "block";
+            metricContainer.style.display = "block";
 
-        scannedtable1.textContent = "30 (line)";
-        scannedtable2.textContent = "330 (line)";
-        scannedtable3.textContent = "80 (%)";
-        scannedtable4.textContent = "20 (sec)";
-        scannedtable5.textContent = "4";
+            const scannedtable1 = document.querySelector('td.qtable_1');
+            const scannedtable2 = document.querySelector('td.qtable_2');
+            const scannedtable3 = document.querySelector('td.qtable_3');
+            const scannedtable4 = document.querySelector('td.qtable_4');
+            const scannedtable5 = document.querySelector('td.qtable_5');
 
-        var query = document.getElementById("queryTextarea").value;
-        var result = "+-------------------------------------+\n" +
-            "|ps_partkey        |value             |\n" +
-            "+-------------------------------------+\n" +
-            "|4877              |18980009.120000   |\n" +
-            "|198585            |16694701.690000   |\n" +
-            "|78280             |15889749.480000   |\n" +
-            "|89702             |15676712.640000   |\n" +
-            "|15055             |15452319.200000   |\n" +
-            "+-------------------------------------+";
-        document.getElementById("queryResult").value = result;
+            scannedtable1.textContent = "30 (line)";
+            scannedtable2.textContent = "330 (line)";
+            scannedtable3.textContent = "80 (%)";
+            scannedtable4.textContent = "20 (sec)";
+            scannedtable5.textContent = "4";
+
+            var result = "+-----------------------------------+\n" +
+                "|ps_partkey      |value                        |\n" +
+                "+-----------------------------------+\n" +
+                "|4877                |18980009.120000   |\n" +
+                "|198585            |16694701.690000   |\n" +
+                "|78280              |15889749.480000   |\n" +
+                "|89702              |15676712.640000   |\n" +
+                "|15055              |15452319.200000   |\n" +
+                "+-----------------------------------+";
+            document.getElementById("queryResult").value = result;
+            }, 2000); 
+        
     });
 });
 
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
+const queryTextArea = document.getElementById("queryTextarea");
+const dropdownToggle = document.getElementById("dropdownToggle");
 
 queryNumbers.forEach((number) => {
     const dropdownItem = document.createElement("a");
@@ -232,13 +247,9 @@ queryNumbers.forEach((number) => {
     dropdownItem.textContent = `Q${number}`;
     dropdownMenu.appendChild(dropdownItem);
 
-    const dropdownToggle = document.getElementById("dropdownToggle");
-const dropdownItems = document.querySelectorAll(".dropdown-item");
-
-    dropdownItems.forEach((dropdownItem) => {
     dropdownItem.addEventListener("click", function (event) {
         event.preventDefault(); 
-                dropdownToggle.textContent = dropdownItem.textContent;
-    }); 
-    });
+            dropdownToggle.textContent = dropdownItem.textContent;
+            queryTextArea.value = "SELECT\n\t ps_partkey,Sum(ps_supplycost * ps_availqty) AS value\n FROM\n\t   partsupp, supplier,nation\n WHERE\n\t  ps_suppkey = s_suppkey AND\n\t s_nationkey = n_nationkey AND\n\t n_name = 'MOZAMBIQUE'\n GROUP  BY\n\t ps_partkey\n HAVING\n\t Sum(ps_supplycost * ps_availqty) > (\n\tSELECT\n\t\t Sum(ps_supplycost * ps_availqty) * 0.0001000000\n\t FROM\n\t\t   partsupp, supplier, nation\n\t  WHERE\n\t\t  ps_suppkey = s_suppkey AND\n\t\t s_nationkey = n_nationkey AND\n\t\t n_name = 'MOZAMBIQUE'\n\t)\n ORDER  BY value DESC; ";
+}); 
 });
