@@ -175,7 +175,7 @@
                       <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     </svg>
                   </span>
-                  <span class="nav-link-title"> Simulate </span>
+                  <span class="nav-link-title"> validation </span>
                 </a>
               </li>
             </ul>
@@ -209,8 +209,8 @@
                     <h3 class="card-title col-5">Query Input</h3>
                     <div class="col-7 text-end">
                       <div class="d-none d-sm-inline">
-                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
-                        <div class="dropdown-menu">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;" id="dropdownToggle">tpc-h</a>
+                        <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
                           <a class="dropdown-item" href="#">tpc-h</a>
                         </div>
                       </div>
@@ -234,15 +234,16 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-6">
+                      <div class="col-4">
                         <button class="btn btn-link p-0" id="envSetting">
                           <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-gear-fill" viewBox="0 0 16 16">
                             <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
                           </svg>
                         </button>
                       </div>
-                      <div class="col-6">
-                        <ul class="nav nav-pills nav-fill gap-2 small bg-white rounded-5 shadow-sm" id="queryTab" role="tablist" style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+                      <div class="col-8" style=" display: flex; flex-direction: row-reverse;">
+                        <ul class="nav nav-pills nav-fill gap-2 small bg-white rounded-5 shadow-sm" id="queryTab" role="tablist" 
+                        style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white); max-width: 230px;">
                           <li class="nav-item" role="presentation">
                             <button class="nav-link active rounded-5" id="environmentInfoTab" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Environment Info</button>
                           </li>
@@ -409,23 +410,23 @@
                       <tbody class="text-center">
                         <tr>
                           <th scope="row" class="w-25">Scanned Row</th>
-                          <td class="bg-light">30 (line)</td>
+                          <td class="bg-light qtable_1">-</td>
                         </tr>
                         <tr>
                           <th scope="row" class="w-25">Filtered Row</th>
-                          <td class="bg-light">330 (line)</td>
+                          <td class="bg-light qtable_2">-</td>
                         </tr>
                         <tr>
                           <th scope="row" class="w-25">Filter Ratio</th>
-                          <td class="bg-light">80 (%)</td>
+                          <td class="bg-light qtable_3">-</td>
                         </tr>
                         <tr>
                           <th scope="row" class="w-25">Execution Time</th>
-                          <td class="bg-light">20 (sec)</td>
+                          <td class="bg-light qtable_4">-</td>
                         </tr>
                         <tr>
                           <th scope="row" class="w-25">Snippet Count</th>
-                          <td class="bg-light">4</td>
+                          <td class="bg-light qtable_5">-</td>
                         </tr>
                       </tbody>
                     </table>

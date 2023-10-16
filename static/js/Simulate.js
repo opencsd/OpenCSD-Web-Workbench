@@ -636,3 +636,49 @@ runButton.addEventListener("click", function () {
         }, 500);
     }
 });
+
+const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
+const dropdownMenu = document.querySelector(".dropdown-menu");
+
+queryNumbers.forEach((number) => {
+    const dropdownItem = document.createElement("a");
+    dropdownItem.className = "dropdown-item";
+    dropdownItem.href = "#";
+    dropdownItem.textContent = `Q${number}`;
+    dropdownMenu.appendChild(dropdownItem);
+});
+
+
+const opt_dropdownMenu = document.querySelector(".opt_menu");
+const opt_dropdownToggle = document.querySelector(".opt_toggle");
+
+const dbmsInfo = document.getElementById("dbmsInfo");
+const csdkindInfo = document.getElementById("csdkindInfo");
+const csdcountInfo = document.getElementById("csdcountInfo");
+const blockInfo = document.getElementById("blockInfo");
+const algorithmInfo = document.getElementById("algorithmInfo");
+
+
+opt_dropdownMenu.addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("opt_item")) {
+        const opt_selectedOption = e.target.textContent;
+        opt_dropdownToggle.textContent = opt_selectedOption;
+
+        if (opt_selectedOption === "Pushdown Option Set") {
+            dbmsInfo.textContent = "-"; 
+            csdkindInfo.textContent = "-";
+            csdcountInfo.textContent = "8";
+            blockInfo.textContent = "4096";
+            algorithmInfo.textContent = "CSD Metric Score";
+
+        } else if (opt_selectedOption === "Non Pushdown Option Set") {
+            dbmsInfo.textContent = "non option set";
+            csdkindInfo.textContent = "-";
+            csdcountInfo.textContent = "-";
+            blockInfo.textContent = "-";
+            algorithmInfo.textContent = "-";
+        } else{
+
+        }
+    }
+});

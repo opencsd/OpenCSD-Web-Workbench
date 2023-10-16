@@ -194,14 +194,53 @@ document.addEventListener("DOMContentLoaded", function () {
         }).render();
 });
 
+
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("pushdownButton").addEventListener("click", function () {
+
+        const scannedtable1 = document.querySelector('td.qtable_1');
+        const scannedtable2 = document.querySelector('td.qtable_2');
+        const scannedtable3 = document.querySelector('td.qtable_3');
+        const scannedtable4 = document.querySelector('td.qtable_4');
+        const scannedtable5 = document.querySelector('td.qtable_5');
+
+        scannedtable1.textContent = "30 (line)";
+        scannedtable2.textContent = "330 (line)";
+        scannedtable3.textContent = "80 (%)";
+        scannedtable4.textContent = "20 (sec)";
+        scannedtable5.textContent = "4";
+
         var query = document.getElementById("queryTextarea").value;
-        var result = "+---------------+\n" +
-            "|    promo_revenue   |\n" +
-            "+---------------+\n" +
-            "|   16.6781923715   |\n" +
-            "+---------------+";
+        var result = "+-------------------------------------+\n" +
+            "|ps_partkey        |value             |\n" +
+            "+-------------------------------------+\n" +
+            "|4877              |18980009.120000   |\n" +
+            "|198585            |16694701.690000   |\n" +
+            "|78280             |15889749.480000   |\n" +
+            "|89702             |15676712.640000   |\n" +
+            "|15055             |15452319.200000   |\n" +
+            "+-------------------------------------+";
         document.getElementById("queryResult").value = result;
+    });
+});
+
+const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
+const dropdownMenu = document.querySelector(".dropdown-menu");
+
+queryNumbers.forEach((number) => {
+    const dropdownItem = document.createElement("a");
+    dropdownItem.className = "dropdown-item";
+    dropdownItem.href = "#";
+    dropdownItem.textContent = `Q${number}`;
+    dropdownMenu.appendChild(dropdownItem);
+
+    const dropdownToggle = document.getElementById("dropdownToggle");
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+    dropdownItems.forEach((dropdownItem) => {
+    dropdownItem.addEventListener("click", function (event) {
+        event.preventDefault(); 
+                dropdownToggle.textContent = dropdownItem.textContent;
+    }); 
     });
 });

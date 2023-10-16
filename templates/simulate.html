@@ -175,7 +175,7 @@
                       <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     </svg>
                   </span>
-                  <span class="nav-link-title"> Simulate </span>
+                  <span class="nav-link-title"> validation </span>
                 </a>
               </li>
             </ul>
@@ -192,7 +192,7 @@
             <div class="col">
               <!-- Page pre-title -->
               <div class="page-pretitle">Overview</div>
-              <h2 class="page-title">Simulate</h2>
+              <h2 class="page-title">validation</h2>
             </div>
           </div>
         </div>
@@ -209,10 +209,15 @@
                       <div class="col-lg-12 row">
                         <h3 class="card-title col-6">Query Input</h3>
                         <div class="col-6 text-end">
+                          <div class="d-none d-sm-inline">
+                            <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
+                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
+                              <a class="dropdown-item" href="#">tpc-h</a>
+                            </div>
+                          </div>
+    
                           <span class="d-none d-sm-inline">
-
                             <button class="btn" style="padding: 5px 15px;">template</button>
-
                           </span>
                           <span class="d-none d-sm-inline">
                             <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
@@ -232,15 +237,18 @@
                   <div class="card">
                     <div class="card-body row">
                       <div class="col-lg-12">
-                
-                        <div class="row">
-                          <h3 class="card-title col-4">Option Set</h3>
-                        </div>
-                        <div class="dropdown" style="width: auto;">
-                          <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Pushdown Option Set</a>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Pushdown Option Set</a>
-                            <a class="dropdown-item" href="#">Non Pushdown Option Set</a>
+                        
+                        <div class="col-12" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                          <div class="row col-4">
+                            <h3 class="card-title" style="margin-top: 5px;">Option Set</h3>
+                          </div>
+                          <div class="dropdown col-8" style="width: auto;">
+                            <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Pushdown Option Set</a>
+                            <div class="dropdown-menu opt_menu">
+                              <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
+                              <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
+                              <a class="dropdown-item opt_item" href="#">New Option+</a>
+                            </div>
                           </div>
                         </div>
 
@@ -253,23 +261,23 @@
                             <tbody class="text-center">
                               <tr>
                                 <th scope="row">DBMS</th>
-                                <td class="bg-light">MySQL</td>
+                                <td class="bg-light" id="dbmsInfo">-</td>
                               </tr>
                               <tr>
                                 <th scope="row">CSD Kind</th>
-                                <td class="bg-light">NGD</td>
+                                <td class="bg-light" id="csdkindInfo">-</td>
                               </tr>
                               <tr>
                                 <th scope="row">CSD Count</th>
-                                <td class="bg-light">8</td>
+                                <td class="bg-light" id="csdcountInfo">8</td>
                               </tr>
                               <tr>
                                 <th scope="row">Block Size</th>
-                                <td class="bg-light">4096</td>
+                                <td class="bg-light" id="blockInfo">4096</td>
                               </tr>
                               <tr>
                                 <th scope="row">Algorithm</th>
-                                <td class="bg-light">CSD Metric Score</td>
+                                <td class="bg-light" id="algorithmInfo">CSD Metric Score</td>
                               </tr>
                             </tbody>
                           </table>
@@ -305,8 +313,8 @@
                       </div>
                       <div class="card-footer d-flex align-items-center">
                         <p class="m-0 text-secondary">
-                          Showing <span>1</span> to <span>8</span> of
-                          <span>16</span> entries
+                          <!-- Showing <span>1</span> to <span>8</span> of
+                          <span>16</span> entries -->
                         </p>
                         <ul class="pagination m-0 ms-auto">
                           <li class="page-item disabled">
@@ -329,12 +337,6 @@
                           </li>
                           <li class="page-item">
                             <a class="page-link" href="#">3</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">4</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">5</a>
                           </li>
                           <li class="page-item">
                             <a class="page-link" href="#">
