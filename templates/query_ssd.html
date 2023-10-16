@@ -175,7 +175,7 @@
                       <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     </svg>
                   </span>
-                  <span class="nav-link-title"> Simulate </span>
+                  <span class="nav-link-title"> validation </span>
                 </a>
               </li>
             </ul>
@@ -200,15 +200,32 @@
       <!-- Page body -->
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards">
-            <div class="col-7">
-              <div class="card">
-                <div class="card-body row justify-content-center">
-                  <h3 class="card-title">Query Input</h3>
-                    <textarea id="queryTextarea" class="form-control form-control-xl" value="" rows="12" style="resize:none;"></textarea>
-                    <div class="d-flex justify-content-center">
-                      <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto">Run</button>
+          <div class="row">
+            <div class="col-7" style="margin-bottom: 15px;">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body row justify-content-center">
+                    <h3 class="card-title col-5">Query Input</h3>
+                    <div class="col-7 text-end">
+                      <div class="d-none d-sm-inline">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;" id="dropdownToggle">tpc-h</a>
+                        <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
+                          <a class="dropdown-item" href="#">tpc-h</a>
+                        </div>
+                      </div>
+
+                      <span class="d-none d-sm-inline">
+                        <button class="btn" style="padding: 5px 15px;">template</button>
+                      </span>
+                      <span class="d-none d-sm-inline">
+                        <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
+                      </span>
                     </div>
+                    <textarea id="queryTextarea" class="form-control form-control-xl" value="" rows="7" style="resize:none;"></textarea>
+                    <div class="d-flex justify-content-center">
+                      <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -354,44 +371,79 @@
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="col-7">
-              <div class="card">
-                <div class="card-body row">
-                  <h3 class="card-title">Query Result</h3>
-                  <textarea class="form-control form-control-xl" value="" rows="10"></textarea>
+            <div class="row">
+              <div class="col-7" style="margin-bottom: 15px;">
+                <div class="card">
+                  <div class="card-body row" style="padding-bottom: 1.5rem;">
+                    <div class="col-lg-12">
+                      <h3 class="card-title">Query Result</h3>
+                      <textarea id="queryResult" class="form-control form-control-xl" value="" rows="10"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="card">
+                  <div class="card-body row">
+                    <h3 class="card-title">Query Metric</h3>
+                    <div class="table-responsive">
+                      <table class="table table-vcenter text-nowrap datatable">
+                        <tbody class="text-center">
+                          <tr>
+                            <th scope="row" class="w-25">Scanned Row</th>
+                            <td class="bg-light qtable_1">-</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">Filtered Row</th>
+                            <td class="bg-light qtable_2">-</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">Filter Ratio</th>
+                            <td class="bg-light qtable_3">-</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">Execution Time</th>
+                            <td class="bg-light qtable_4">-</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" class="w-25">Snippet Count</th>
+                            <td class="bg-light qtable_5">-</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col-5">
-              <div class="card">
-                <div class="card-body row">
-                  <h3 class="card-title">Query Metric</h3>
-                  <div class="table-responsive">
-                    <table class="table table-vcenter text-nowrap datatable">
-                      <tbody class="text-center">
-                        <tr>
-                          <th scope="row" class="w-25">Scanned Row</th>
-                          <td class="bg-light">30 (line)</td>
-                        </tr>
-                        <tr>
-                          <th scope="row" class="w-25">Filtered Row</th>
-                          <td class="bg-light">330 (line)</td>
-                        </tr>
-                        <tr>
-                          <th scope="row" class="w-25">Filter Ratio</th>
-                          <td class="bg-light">80 (%)</td>
-                        </tr>
-                        <tr>
-                          <th scope="row" class="w-25">Execution Time</th>
-                          <td class="bg-light">20 (sec)</td>
-                        </tr>
-                        <tr>
-                          <th scope="row" class="w-25">Snippet Count</th>
-                          <td class="bg-light">4</td>
-                        </tr>
-                      </tbody>
-                    </table>
+
+
+            <div class="row">
+              <div class="col-12" style="margin-bottom: 15px;">
+                <div class="card">
+                  <div class="card-body row">
+                    <div class="col-lg-12">
+                      <div class="row">
+                        <h3 class="card-title col-3">Metric</h3>
+                      </div>
+                      <div class="col-lg-12" style="display: flex;">
+                        <div class="col-6" style="padding-right: 5px;">
+                          <div class="card" style="padding: 0 15px 10px 0;">
+                            <div style="margin: 5px 15px 15px;">Cache</div>
+                            <div id="query_cache1"></div>
+                          </div>
+                        </div>
+  
+                        <div class="col-6" style="padding-left: 5px;">
+                          <div class="card" style="padding: 0 15px 10px 0;">
+                            <div style="margin: 5px 15px 15px;">Cache</div>
+                            <div id="query_cache2"></div>
+                          </div>
+                        </div>                    
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
