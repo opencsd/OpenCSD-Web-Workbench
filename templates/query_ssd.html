@@ -55,15 +55,15 @@
   <link href="../static/css/demo.min.css" rel="stylesheet" />
   <link href="../static/css/sql.css" rel="stylesheet" />
 
-  <link href="../static/css/Query.css" rel="stylesheet" />
-
+  <!-- <link href="../static/css/Query.css" rel="stylesheet" /> -->
+<!-- 
   <script>
     import { SidebarLayout } from "@druids/ui/layout/SidebarLayout";
     import { Flex } from "@druids/ui/layout/Flex";
     import { Text } from "@druids/ui/typography/Text";
     import { Title } from "@druids/ui/typography/Title";
     import { Spacing } from "@druids/ui/layout/Spacing";
-  </script>
+  </script> -->
   <style>
     @import url("https://rsms.me/inter/inter.css");
 
@@ -79,8 +79,6 @@
 </head>
 
 <body>
-  <script src="../static/js/demo-theme.min.js"></script>
-  <script src="../static/js/dashboard-chart.js"></script>
   <div class="page">
     <!-- Navbar -->
     <header class="navbar navbar-expand-md d-print-none">
@@ -175,7 +173,7 @@
                       <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     </svg>
                   </span>
-                  <span class="nav-link-title"> validation </span>
+                  <span class="nav-link-title"> Validator </span>
                 </a>
               </li>
             </ul>
@@ -203,14 +201,14 @@
           <div class="row">
             <div class="col-7" style="margin-bottom: 15px;">
               <div class="col-lg-12">
-                <div class="card">
+                <div class="card" style="height: 420px;">
                   <div class="card-body row justify-content-center">
                     <h3 class="card-title col-5">Query Input</h3>
                     <div class="col-7 text-end">
                       <div class="d-none d-sm-inline">
                         <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;" id="dropdownToggle">tpc-h</a>
                         <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
-                          <a class="dropdown-item" href="#">tpc-h</a>
+                          <a class="dropdown-item" href="#">none</a>
                         </div>
                       </div>
 
@@ -221,7 +219,7 @@
                         <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
-                    <textarea id="queryTextarea" class="form-control form-control-xl" value="" rows="7" style="resize:none;"></textarea>
+                      <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
                     <div class="d-flex justify-content-center">
                       <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                     </div>
@@ -231,7 +229,7 @@
             </div>
             <div class="col-5">
               <div class="col-lg-12">
-                <div class="card">
+                <div class="card" style="height: 420px;">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-6">
@@ -253,8 +251,8 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="h-100 card card-body mt-2 overflow-auto" id="environmentInfoContainer"> 
-                        <table class="table table-vcenter text-nowrap datatable overflow-auto">
+                      <div class="card card-body mt-2" id="environmentInfoContainer" style="max-height: 350px; overflow: auto;"> 
+                        <table class="table table-vcenter text-nowrap datatable">
                           <tbody class="text-center">
                             <tr>
                               <th scope="row" class="w-26">DB Name</th>
@@ -275,7 +273,7 @@
                           </tbody>
                         </table>
                       </div>
-                      <div class="card card-body mt-2 h-100" id="dbSchemaContainer" style="display: none;"> 
+                      <div class="card card-body mt-2" id="dbSchemaContainer" style="height: 350px; overflow: auto; display: none;"> 
                         <details>
                           <summary>customer</summary>
                             <p style="margin:2px;margin-left:20px;"><strong>c_custkey</strong> / int(11) / NOT NULL
@@ -396,20 +394,12 @@
                             <td class="bg-light qtable_1">-</td>
                           </tr>
                           <tr>
-                            <th scope="row" class="w-25">Filtered Row</th>
+                            <th scope="row" class="w-25">Execution Time</th>
                             <td class="bg-light qtable_2">-</td>
                           </tr>
                           <tr>
-                            <th scope="row" class="w-25">Filter Ratio</th>
-                            <td class="bg-light qtable_3">-</td>
-                          </tr>
-                          <tr>
-                            <th scope="row" class="w-25">Execution Time</th>
-                            <td class="bg-light qtable_4">-</td>
-                          </tr>
-                          <tr>
                             <th scope="row" class="w-25">Snippet Count</th>
-                            <td class="bg-light qtable_5">-</td>
+                            <td class="bg-light qtable_3">-</td>
                           </tr>
                         </tbody>
                       </table>
@@ -431,14 +421,14 @@
                       <div class="col-lg-12" style="display: flex;">
                         <div class="col-6" style="padding-right: 5px;">
                           <div class="card" style="padding: 0 15px 10px 0;">
-                            <div style="margin: 5px 15px 15px;">Cache</div>
+                            <div style="margin: 5px 15px 15px;">Host Server CPU</div>
                             <div id="query_cache1"></div>
                           </div>
                         </div>
   
                         <div class="col-6" style="padding-left: 5px;">
                           <div class="card" style="padding: 0 15px 10px 0;">
-                            <div style="margin: 5px 15px 15px;">Cache</div>
+                            <div style="margin: 5px 15px 15px;">Host Server Power</div>
                             <div id="query_cache2"></div>
                           </div>
                         </div>                    
@@ -505,8 +495,6 @@
                       <th></th>
                       <th style="width: 60%;"></th>
                       <th style="width: 10%;">Scanned Row</th>
-                      <th style="width: 10%;">Filtered Row</th>
-                      <th style="width: 10%;">Filter Ratio</th>
                       <th style="width: 10%;">Exesution Time</th>
                     </tr>
                   </thead>
@@ -514,6 +502,41 @@
                   <tbody id="queryLogTableBody">
                   </tbody>
                 </table>
+              </div>
+              <div class="card-footer d-flex align-items-center">
+                <p class="m-0 text-secondary">
+                  <!-- Showing <span>1</span> to <span>8</span> of
+                  <span>16</span> entries -->
+                </p>
+                <ul class="pagination m-0 ms-auto">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                      <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M15 6l-6 6l6 6" />
+                      </svg>
+                      prev
+                    </a>
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      next
+                      <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M9 6l6 6l-6 6" />
+                      </svg>
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -681,16 +704,19 @@
     </div>
   </div>
   <!-- Libs JS -->
-  <script src="../dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/maps/world.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/maps/world-merc.js" defer></script>
+  <script src="../static/libs/apexcharts/dist/apexcharts.min.js" defer></script>
+  <script src="../static/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
+  <script src="../static/libs/jsvectormap/dist/maps/world.js" defer></script>
+  <script src="../static/libs/jsvectormap/dist/maps/world-merc.js" defer></script>
   <!-- Tabler Core -->
   <script src="../static/js/tabler.min.js" defer></script>
   <script src="../static/js/demo.min.js" defer></script>
   <script src="../static/js/Querycontroller.js" defer></script>
 
   <script src="../static/js/query-ssd.js" defer></script>
+
+  <!-- <script src="../static/js/demo-theme.min.js"></script>
+  <script src="../static/js/dashboard-chart.js"></script> -->
 
 </body>
 
