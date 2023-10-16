@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const queryLogTableBody = document.getElementById("queryLogTableBody");
 
         if (queryText) {
-            const shortenedQuery = queryText.length > 50 ? queryText.slice(0, 50) + "..." : queryText;
+            const shortenedQuery = queryText.length > 90 ? queryText.slice(0, 90) + "..." : queryText;
             queryHistory.push(shortenedQuery);
 
             const newRow = document.createElement("tr");
@@ -50,42 +50,24 @@ document.addEventListener("DOMContentLoaded", function () {
             newCell.textContent = `${shortenedQuery}`;
             newCell.style.backgroundColor = "#fcfdfe";
 
-            newRow.appendChild(checkboxCell);
-            newRow.appendChild(newCell);
+            setTimeout(() => {
+                newRow.appendChild(checkboxCell);
+                newRow.appendChild(newCell);
 
-            for (let i = 0; i < 5; i++) {
-                newRow.appendChild(progressBarCells[i]);
-            }
+                for (let i = 0; i < 5; i++) {
+                    newRow.appendChild(progressBarCells[i]);
+                }
 
-            newRow.appendChild(dummyButtonCell);
-            dummyButtonCell.appendChild(dummyButton);
+                newRow.appendChild(dummyButtonCell);
+                dummyButtonCell.appendChild(dummyButton);
 
-            queryLogTableBody.appendChild(newRow);
+                queryLogTableBody.appendChild(newRow);
+            }, 2000); 
+            
         } else {
             queryLogTableBody.textContent = "No query available.";
         }
 
-        document.getElementById("queryTextarea").value = "";
+        // document.getElementById("queryTextarea").value = "";
     });
 });
-
-
-
-function queryToggle() {
-    const environmentInfoButton = document.getElementById("environmentInfoButton");
-    const dbSchemaButton = document.getElementById("dbSchemaButton");
-
-    environmentInfoButton.addEventListener("click", function () {
-        environmentInfoButton.classList.add("active");
-        dbSchemaButton.classList.remove("active");
-
-    });
-
-    dbSchemaButton.addEventListener("click", function () {
-        dbSchemaButton.classList.add("active");
-        environmentInfoButton.classList.remove("active");
-
-    });
-}
-
-document.addEventListener("DOMContentLoaded", queryToggle);

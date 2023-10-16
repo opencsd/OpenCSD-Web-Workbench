@@ -1,3 +1,5 @@
+let temp_id = 1;
+
 document.addEventListener("DOMContentLoaded", function () {
     const queryHistory = [];
 
@@ -7,27 +9,108 @@ document.addEventListener("DOMContentLoaded", function () {
         const queryLogTableBody = document.getElementById("queryLogTableBody");
 
         if (queryText) {
-            const shortenedQuery = queryText.length > 50 ? queryText.slice(0, 50) + "..." : queryText;
+            const shortenedQuery = queryText.length > 80 ? queryText.slice(0, 80) + "..." : queryText;
             queryHistory.push(shortenedQuery);
 
             const newRow = document.createElement("tr");
 
-            const newCell = document.createElement("td");
+            const queryIDCell = document.createElement("td");
+            const queryCell = document.createElement("td");
             const progressBarCells = [];
             const dummyButtonCell = document.createElement("td");
 
-            for (let i = 0; i < 5; i++) {
-                const progressBarCell = document.createElement("td");
-                progressBarCell.innerHTML = `
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                            aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                            <span class="visually-hidden">38% Complete</span>
+            if(temp_id == 1){
+                for (let i = 0; i < 4; i++) {
+                    const progressBarCell = document.createElement("td");
+                    let width;
+                    let value;
+                    let max;
+                    let label;
+
+                    if(i==0){
+                        value = 2112;
+                        max = 6000;
+                    }else if(i==1){
+                        value = 800;
+                        max = 4000;
+                    }else if(i==2){
+                        value = 96;
+                        max = 200;
+                    }else{
+                        value = 13;
+                        max = 100;
+                    }
+
+                    label = value;
+                    width = (value / max) * 100;
+                    progressBarCell.innerHTML = `
+                        <div class="progress">
+                            <div class="progress-bar" style="width: ${width}%" role="progressbar" aria-valuenow="${value}"
+                                aria-valuemin="0" aria-valuemax="${max}" aria-label="${label}% Complete">
+                                
+                            </div>
                         </div>
-                    </div>
-                `;
-                progressBarCells.push(progressBarCell);
+                        <div style="text-align:center">
+                            <h6 style="margin-top:5px; margin-bottom:0px;">${value}</h6>
+                        </div>
+                    `;
+                    progressBarCells.push(progressBarCell);
+                }
+            }else{
+                for (let i = 0; i < 4; i++) {
+                    const progressBarCell = document.createElement("td");
+                    let width;
+                    let value;
+                    let max;
+                    let label;
+
+                    if(i==0){
+                        value = 5963;
+                        max = 6000;
+                    }else if(i==1){
+                        value = 3367;
+                        max = 4000;
+                    }else if(i==2){
+                        value = 194;
+                        max = 200;
+                    }else{
+                        value = 59;
+                        max = 100;
+                    }
+                    
+                    label = value;
+                    width = (value / max) * 100;
+                    progressBarCell.innerHTML = `
+                        <div class="progress">
+                            <div class="progress-bar" style="width: ${width}%" role="progressbar" aria-valuenow="${value}"
+                                aria-valuemin="0" aria-valuemax="${max}" aria-label="${label}% Complete">
+                                
+                            </div>
+                        </div>
+                        <div style="text-align:center">
+                            <h6 style="margin-top:5px; margin-bottom:0px;">${value}</h6>
+                        </div>
+                    `;
+                    progressBarCells.push(progressBarCell);
+                }
             }
+
+            // for (let i = 0; i < 4; i++) {
+            //     const progressBarCell = document.createElement("td");
+            //     widthPercentage += 10;
+            //     progressBarCell.innerHTML = `
+            //         <div class="progress">
+            //             <div class="progress-bar" style="width: 38}%" role="progressbar" aria-valuenow="38"
+            //                 aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
+                            
+            //             </div>
+            //         </div>
+            //         <div style="text-align:center">
+            //             <h6 style="margin-top:5px; margin-bottom:0px;">5963</h6>
+            //         </div>
+            //     `;
+            //     progressBarCells.push(progressBarCell);
+            // }
 
             const dummyButton = document.createElement("td");
             dummyButton.innerHTML = `
@@ -44,13 +127,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     </svg>
                 </a>
             `;
+            
+            queryIDCell.textContent = temp_id;
+            temp_id++;
+            
+            queryIDCell.style.textAlign = "center";
+            newRow.appendChild(queryIDCell);
 
-            newCell.textContent = `${shortenedQuery}`;
-            newCell.style.backgroundColor = "#fcfdfe";
+            queryCell.textContent = `${shortenedQuery}`;
+            queryCell.style.backgroundColor = "#fcfdfe";
+            newRow.appendChild(queryCell);
 
-            newRow.appendChild(newCell);
-
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 4; i++) {
                 newRow.appendChild(progressBarCells[i]);
             }
 
@@ -62,173 +150,8 @@ document.addEventListener("DOMContentLoaded", function () {
             queryLogTableBody.textContent = "No query available.";
         }
 
-        document.getElementById("queryTextarea").value = "";
+        // document.getElementById("queryTextarea").value = "";
     });
-});
-
-
-
-var i;
-document.addEventListener("DOMContentLoaded", function () {
-    for (i = 0; i < 12; i++) {
-        new ApexCharts(document.getElementById("chart-summary" + i), {
-            chart: {
-                type: "bar",
-                fontFamily: "inherit",
-                height: 200,
-                parentHeightOffset: 0,
-                toolbar: {
-                    show: false,
-                },
-                animations: {
-                    enabled: false,
-                },
-            },
-            fill: {
-                opacity: 1,
-            },
-            stroke: {
-                width: 2,
-                lineCap: "round",
-                curve: "smooth",
-            },
-            series: [{
-                    name: "SELECT  *  FROM  Sessions  WHERE  User_id  =  ? ",
-                    data: [
-                        13281, 8521, 15038, 9983, 15417, 8888, 7052, 14270, 5214, 9587,
-                        5950, 16852, 17836, 12217, 17406, 12262, 9147, 14961, 18292, 15230,
-                        13435, 10649, 5140, 13680, 4508, 13271, 13413, 5543, 18727, 18238,
-                        18175, 6246, 5864, 17847, 9170, 6445, 12945, 8142, 8980, 10422,
-                        15535, 11569, 10114, 17621, 16138, 13046, 6652, 9906, 14100, 16495,
-                        6749,
-                    ],
-                },
-                {
-                    name: "SELECT  *  FROM  Sessions  WHERE  Token  =  ?",
-                    data: [
-                        3680, 1862, 3070, 2252, 5348, 3091, 3000, 3984, 5176, 5325, 2420,
-                        5474, 3098, 1893, 3748, 2879, 4197, 5186, 4213, 4334, 2807, 1594,
-                        4863, 2030, 3752, 4856, 5341, 3954, 3461, 3097, 3404, 4949, 2283,
-                        3227, 3630, 2360, 3477, 4675, 1901, 2252, 3347, 2954, 5029, 2079,
-                        2830, 3292, 4578, 3401, 4104, 3749, 4457, 3734,
-                    ],
-                },
-                {
-                    name: "SELECT  *  FROM  Sessions  WHERE  Expires_at  <  ?  AND  User_id  =  ? ",
-                    data: [
-                        722, 1866, 961, 1108, 1110, 561, 1753, 1815, 1985, 776, 859, 547,
-                        1488, 766, 702, 621, 1599, 1372, 1620, 963, 759, 764, 739, 789,
-                        1696, 1454, 1842, 734, 551, 1689, 1924, 1875, 908, 1675, 1541, 1953,
-                        534, 502, 1524, 1867, 719, 1472, 1608, 1025, 889, 1150, 654, 1695,
-                        1662, 1285, 1787,
-                    ],
-                },
-            ],
-            tooltip: {
-                theme: "dark",
-            },
-            grid: {
-                padding: {
-                    top: -20,
-                    right: 0,
-                    left: -4,
-                    bottom: -4,
-                },
-                strokeDashArray: 4,
-                xaxis: {
-                    lines: {
-                        show: true,
-                    },
-                },
-            },
-            xaxis: {
-                labels: {
-                    padding: 0,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                type: "datetime",
-            },
-            yaxis: {
-                labels: {
-                    padding: 4,
-                },
-            },
-            labels: [
-                "2020-06-20",
-                "2020-06-21",
-                "2020-06-22",
-                "2020-06-23",
-                "2020-06-24",
-                "2020-06-25",
-                "2020-06-26",
-                "2020-06-27",
-                "2020-06-28",
-                "2020-06-29",
-                "2020-06-30",
-                "2020-07-01",
-                "2020-07-02",
-                "2020-07-03",
-                "2020-07-04",
-                "2020-07-05",
-                "2020-07-06",
-                "2020-07-07",
-                "2020-07-08",
-                "2020-07-09",
-                "2020-07-10",
-                "2020-07-11",
-                "2020-07-12",
-                "2020-07-13",
-                "2020-07-14",
-                "2020-07-15",
-                "2020-07-16",
-                "2020-07-17",
-                "2020-07-18",
-                "2020-07-19",
-                "2020-07-20",
-                "2020-07-21",
-                "2020-07-22",
-                "2020-07-23",
-                "2020-07-24",
-                "2020-07-25",
-                "2020-07-26",
-                "2020-07-27",
-                "2020-07-28",
-                "2020-07-29",
-                "2020-07-30",
-                "2020-07-31",
-                "2020-08-01",
-                "2020-08-02",
-                "2020-08-03",
-                "2020-08-04",
-                "2020-08-05",
-                "2020-08-06",
-                "2020-08-07",
-                "2020-08-08",
-                "2020-08-09",
-            ],
-            colors: [
-                tabler.getColor("facebook"),
-                tabler.getColor("twitter"),
-                tabler.getColor("dribbble"),
-            ],
-            legend: {
-                show: false,
-                position: "bottom",
-                offsetY: 12,
-                markers: {
-                    width: 10,
-                    height: 10,
-                    radius: 100,
-                },
-                itemMargin: {
-                    horizontal: 8,
-                    vertical: 8,
-                },
-            },
-        }).render();
-    }
 });
 
 document.addEventListener("DOMContentLoaded", function () {  
@@ -259,12 +182,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     colors: ["#fff"]
                 }
             },
-                        fill: {
+            fill: {
                 opacity: 1,
             },
             series: [{
-                    name: "1",
-                    data: [100, 100, 100, 100, 100],
+                    name: "ID 1",
+                    data: [100, 100, 100, 100],
                     color: "#78b86fff" 
                 }
             ],
@@ -284,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 axisBorder: {
                     show: false,
                 },
-                categories: ["20:05", "23:05", "02:05", "05:05", "08:05"],
+                categories: ["CPU", "Power", "Network", "Time"],
             },
             yaxis: {
                 labels: {
@@ -342,15 +265,15 @@ document.addEventListener("DOMContentLoaded", function () {
         opacity: 1,
     },
     series: [{
-        name: "1",
-        data: [100, 100, 100, 100, 100],
+        name: "ID 1",
+        data: [35, 23, 49, 22],
         color: "#78b86fff" 
     },
     {
-            name: "2",
-            data: [20, 60, 40, 50, 70],
-            color: "#e6c333ff" 
-        },
+        name: "ID 2",
+        data: [100, 100, 100, 100],
+        color: "#e6c333ff" 
+    },
     ],
     grid: {
         padding: {
@@ -368,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
         axisBorder: {
             show: false,
         },
-        categories: ["20:05", "23:05", "02:05", "05:05", "08:05"],
+        categories: ["CPU", "Power", "Network", "Time"],
     },
     yaxis: {
         labels: {
@@ -424,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 opacity: 1,
             },
             series: [{
-                data: [3400],
+                data: [2112],
             }, ],
             tooltip: {
                 theme: "dark",
@@ -451,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 axisBorder: {
                     show: false,
                 },
-                categories: ["ID1"],
+                categories: ["ID 1"],
 
             },
             yaxis: {
@@ -495,7 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 animations: {
                     enabled: false,
                 },
-                stacked: true,
+                stacked: false,
             },
             plotOptions: {
                 bar: {
@@ -504,9 +427,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             }, 
             series: [{
-                data: [3400, 2704],
-            }],
-            colors: ['#78b86fff', '#546E7A'],
+                name: "ID 1",
+                data: [5963],
+                color: "#78b86fff" 
+            },
+            {
+                name: "ID 2",
+                data: [2112],
+                color: "#e6c333ff" 
+            },
+            ],
             dataLabels: {
                 enabled: true,
             },
@@ -517,13 +447,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 padding: {
                     top: -20,
                     right: 0,
-                    left: -4,
+                    left: 0,
                     bottom: -4,
                 },
                 strokeDashArray: 4,
             },
             xaxis: {
                 labels: {
+                    margin : 5,
                     padding: 0,
                     formatter: function (val) {
                         return val;
@@ -535,11 +466,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 axisBorder: {
                     show: false,
                 },
-                categories: ["ID1", "ID2"],
+                categories: ["ID 1", "ID 2"],
             },
             yaxis: {
                 labels: {
-                    padding: 4,
+                    padding: 0,
                 },
             },
             legend: {
@@ -559,11 +490,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }).render();
 });
 
-
-
-
-
-
 let chart1Visible = false;
 let chart2Visible = false;
 let chart3Visible = false;
@@ -581,19 +507,23 @@ let chart2 = null;
 
 runButton.addEventListener("click", function () {
     
-    const selectedIDCell = document.querySelector(".data1:nth-child(1)");
-    const optionNameCell = document.querySelector(".data1:nth-child(2)");
-    const dbmsCell = document.querySelector(".data1:nth-child(3)");
-    const storageTypeCell = document.querySelector(".data1:nth-child(4)");
-    const csdCountCell = document.querySelector(".data1:nth-child(5)");
-    const csdKindCell = document.querySelector(".data1:nth-child(6)");
+    const selectedIDCell1 = document.querySelector(".data1:nth-child(1)");
+    const optionNameCell1 = document.querySelector(".data1:nth-child(2)");
+    const dbmsCell1 = document.querySelector(".data1:nth-child(3)");
+    const storateTypeCell1 = document.querySelector(".data1:nth-child(4)");
+    const csdKindCell1 = document.querySelector(".data1:nth-child(5)");
+    const csdCountCell1 = document.querySelector(".data1:nth-child(6)");
+    const blockCountCell1 = document.querySelector(".data1:nth-child(7)");
+    const algorithmCell1 = document.querySelector(".data1:nth-child(8)");
 
     const selectedIDCell2 = document.querySelector(".data2:nth-child(1)");
     const optionNameCell2 = document.querySelector(".data2:nth-child(2)");
     const dbmsCell2 = document.querySelector(".data2:nth-child(3)");
-    const storageTypeCell2 = document.querySelector(".data2:nth-child(4)");
-    const csdCountCell2 = document.querySelector(".data2:nth-child(5)");
-    const csdKindCell2 = document.querySelector(".data2:nth-child(6)");
+    const storateTypeCell2 = document.querySelector(".data2:nth-child(4)");
+    const csdKindCell2 = document.querySelector(".data2:nth-child(5)");
+    const csdCountCell2 = document.querySelector(".data2:nth-child(6)");
+    const blockCountCell2 = document.querySelector(".data2:nth-child(7)");
+    const algorithmCell2 = document.querySelector(".data2:nth-child(8)");
 
 
     if (!chart1Visible && !chart3Visible) {
@@ -605,13 +535,15 @@ runButton.addEventListener("click", function () {
         chart2Div.style.display = "none";        
         chart4Div.style.display = "none";
 
-        selectedIDCell.textContent = "1";
-        selectedIDCell.style.backgroundColor = "#78b86fff";
-        optionNameCell.textContent = "Non Pushdown Option Set";
-        dbmsCell.textContent = "MySQL";
-        storageTypeCell.textContent = "SSD";
-        csdCountCell.textContent = "-";
-        csdKindCell.textContent = "-";
+        selectedIDCell1.textContent = "1";
+        selectedIDCell1.style.backgroundColor = "#78b86fff";
+        optionNameCell1.textContent = "Pushdown Option"
+        dbmsCell1.textContent = "MySQL"; 
+        storateTypeCell1.textContent = "CSD";
+        csdKindCell1.textContent = "NGD";
+        csdCountCell1.textContent = "8";
+        blockCountCell1.textContent = "15";
+        algorithmCell1.textContent = "CSD Metric Score";
 
     } else {
         chart1Visible = false;
@@ -624,11 +556,13 @@ runButton.addEventListener("click", function () {
 
         selectedIDCell2.textContent = "2";
         selectedIDCell2.style.backgroundColor = "#e6c333ff";
-        optionNameCell2.textContent = "Pushdown Option Set";
-        dbmsCell2.textContent = "MySQL";
-        storageTypeCell2.textContent = "CSD";
-        csdCountCell2.textContent = "8";
-        csdKindCell2.textContent = "NGD";
+        optionNameCell2.textContent = "Non Pushdown Option"
+        dbmsCell2.textContent = "MySQL"; 
+        storateTypeCell2.textContent = "SSD";
+        csdKindCell2.textContent = "-";
+        csdCountCell2.textContent = "-";
+        blockCountCell2.textContent = "-";
+        algorithmCell2.textContent = "-";
 
         setTimeout(function () {
             chart1Div.style.display = "none";
@@ -639,6 +573,8 @@ runButton.addEventListener("click", function () {
 
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
+const queryTextArea = document.getElementById("queryTextarea");
+const dropdownToggle = document.getElementById("dropdownToggle");
 
 queryNumbers.forEach((number) => {
     const dropdownItem = document.createElement("a");
@@ -646,6 +582,12 @@ queryNumbers.forEach((number) => {
     dropdownItem.href = "#";
     dropdownItem.textContent = `Q${number}`;
     dropdownMenu.appendChild(dropdownItem);
+
+    dropdownItem.addEventListener("click", function (event) {
+        event.preventDefault(); 
+            dropdownToggle.textContent = dropdownItem.textContent;
+            queryTextArea.value = "SELECT\n\t ps_partkey,Sum(ps_supplycost * ps_availqty) AS value\n FROM\n\t   partsupp, supplier,nation\n WHERE\n\t  ps_suppkey = s_suppkey AND\n\t s_nationkey = n_nationkey AND\n\t n_name = 'MOZAMBIQUE'\n GROUP  BY\n\t ps_partkey\n HAVING\n\t Sum(ps_supplycost * ps_availqty) > (\n\tSELECT\n\t\t Sum(ps_supplycost * ps_availqty) * 0.0001000000\n\t FROM\n\t\t   partsupp, supplier, nation\n\t  WHERE\n\t\t  ps_suppkey = s_suppkey AND\n\t\t s_nationkey = n_nationkey AND\n\t\t n_name = 'MOZAMBIQUE'\n\t)\n ORDER  BY value DESC; ";
+}); 
 });
 
 
@@ -653,11 +595,11 @@ const opt_dropdownMenu = document.querySelector(".opt_menu");
 const opt_dropdownToggle = document.querySelector(".opt_toggle");
 
 const dbmsInfo = document.getElementById("dbmsInfo");
+const storageTypeInfo = document.getElementById("storageTypeInfo");
 const csdkindInfo = document.getElementById("csdkindInfo");
-const csdcountInfo = document.getElementById("csdcountInfo");
-const blockInfo = document.getElementById("blockInfo");
+const csdCountInfo = document.getElementById("csdCountInfo");
+const blockCountInfo = document.getElementById("blockCountInfo");
 const algorithmInfo = document.getElementById("algorithmInfo");
-
 
 opt_dropdownMenu.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("opt_item")) {
@@ -665,17 +607,19 @@ opt_dropdownMenu.addEventListener("click", function (e) {
         opt_dropdownToggle.textContent = opt_selectedOption;
 
         if (opt_selectedOption === "Pushdown Option Set") {
-            dbmsInfo.textContent = "-"; 
-            csdkindInfo.textContent = "-";
-            csdcountInfo.textContent = "8";
-            blockInfo.textContent = "4096";
+            dbmsInfo.textContent = "MySQL"; 
+            storageTypeInfo.textContent = "CSD";
+            csdkindInfo.textContent = "NGD";
+            csdCountInfo.textContent = "8";
+            blockCountInfo.textContent = "15";
             algorithmInfo.textContent = "CSD Metric Score";
 
         } else if (opt_selectedOption === "Non Pushdown Option Set") {
-            dbmsInfo.textContent = "non option set";
+            dbmsInfo.textContent = "MySQL"; 
+            storageTypeInfo.textContent = "SSD";
             csdkindInfo.textContent = "-";
-            csdcountInfo.textContent = "-";
-            blockInfo.textContent = "-";
+            csdCountInfo.textContent = "-";
+            blockCountInfo.textContent = "-";
             algorithmInfo.textContent = "-";
         } else{
 

@@ -17,7 +17,6 @@
     Dashboard - Tabler - Premium and Open Source dashboard template with
     responsive and high quality UI.
   </title>
-  <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
   <meta name="msapplication-TileColor" content="" />
   <meta name="theme-color" content="" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -55,15 +54,13 @@
   <link href="../static/css/demo.min.css" rel="stylesheet" />
   <link href="../static/css/sql.css" rel="stylesheet" />
 
-  <link href="../static/css/Simulate.css" rel="stylesheet" />
-
-  <script>
+  <!-- <script>
     import { SidebarLayout } from "@druids/ui/layout/SidebarLayout";
     import { Flex } from "@druids/ui/layout/Flex";
     import { Text } from "@druids/ui/typography/Text";
     import { Title } from "@druids/ui/typography/Title";
     import { Spacing } from "@druids/ui/layout/Spacing";
-  </script>
+  </script> -->
   <style>
     @import url("https://rsms.me/inter/inter.css");
 
@@ -175,7 +172,7 @@
                       <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     </svg>
                   </span>
-                  <span class="nav-link-title"> validation </span>
+                  <span class="nav-link-title"> Validator </span>
                 </a>
               </li>
             </ul>
@@ -192,7 +189,7 @@
             <div class="col">
               <!-- Page pre-title -->
               <div class="page-pretitle">Overview</div>
-              <h2 class="page-title">validation</h2>
+              <h2 class="page-title">Validator</h2>
             </div>
           </div>
         </div>
@@ -210,9 +207,9 @@
                         <h3 class="card-title col-6">Query Input</h3>
                         <div class="col-6 text-end">
                           <div class="d-none d-sm-inline">
-                            <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
+                            <a href="#" id="dropdownToggle" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
                             <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
-                              <a class="dropdown-item" href="#">tpc-h</a>
+                              <a class="dropdown-item" href="#">none</a>
                             </div>
                           </div>
     
@@ -223,7 +220,7 @@
                             <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                           </span>
                         </div>
-                        <textarea id="queryTextarea" class="form-control form-control-xl" value="" rows="13" style="resize:none;"></textarea>
+                        <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
                         <div class="d-flex justify-content-center">
                           <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                         </div>
@@ -243,7 +240,7 @@
                             <h3 class="card-title" style="margin-top: 5px;">Option Set</h3>
                           </div>
                           <div class="dropdown col-8" style="width: auto;">
-                            <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Pushdown Option Set</a>
+                            <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Select Valitation Option</a>
                             <div class="dropdown-menu opt_menu">
                               <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
                               <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
@@ -264,20 +261,24 @@
                                 <td class="bg-light" id="dbmsInfo">-</td>
                               </tr>
                               <tr>
+                                <th scope="row">Storage Type</th>
+                                <td class="bg-light" id="storageTypeInfo">-</td>
+                              </tr>
+                              <tr>
                                 <th scope="row">CSD Kind</th>
                                 <td class="bg-light" id="csdkindInfo">-</td>
                               </tr>
                               <tr>
                                 <th scope="row">CSD Count</th>
-                                <td class="bg-light" id="csdcountInfo">8</td>
+                                <td class="bg-light" id="csdCountInfo">-</td>
                               </tr>
                               <tr>
-                                <th scope="row">Block Size</th>
-                                <td class="bg-light" id="blockInfo">4096</td>
+                                <th scope="row">Block Count</th>
+                                <td class="bg-light" id="blockCountInfo">-</td>
                               </tr>
                               <tr>
                                 <th scope="row">Algorithm</th>
-                                <td class="bg-light" id="algorithmInfo">CSD Metric Score</td>
+                                <td class="bg-light" id="algorithmInfo">-</td>
                               </tr>
                             </tbody>
                           </table>
@@ -296,13 +297,13 @@
                       <div class="table-responsive overflow-hidden">
                         <table class="table card-table table-vcenter text-nowrap datatable">
                           <thead>
-                            <tr>
-                              <th style="width: 50%;">NORMALIZED QUERY</th>
-                              <th style="width: 10%;">CPU</th>
-                              <th style="width: 10%;">Network</th>
-                              <th style="width: 10%;">Power</th>
-                              <th style="width: 10%;">Time</th>
-                              <th style="width: 10%;">Score</th>
+                            <tr style="text-align: center;">
+                              <th style="width: 2%;">QUERY ID</th>
+                              <th style="width: 48%;">QUERY</th>
+                              <th style="width: 10%;">CPU(tick)</th>
+                              <th style="width: 10%;">Power(W)</th>
+                              <th style="width: 10%;">Network(MB)</th>
+                              <th style="width: 10%;">Time(Sec)</th>
                               <th></th>
                             </tr>
                           </thead>
@@ -333,12 +334,6 @@
                             <a class="page-link" href="#">1</a>
                           </li>
                           <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                          </li>
-                          <li class="page-item">
                             <a class="page-link" href="#">
                               next
                               <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
@@ -365,9 +360,8 @@
                           <div class="row">
                             <h3 class="card-title col-10" style="margin-bottom: 5px; padding-top: 5px;">Selected Validation Query Metric Info</h3>
                             <div class="dropdown col-2">
-                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">Total</a>
+                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
                               <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Total</a>
                                 <a class="dropdown-item" href="#">CPU</a>
                                 <a class="dropdown-item" href="#">Power</a>
                                 <a class="dropdown-item" href="#">Network</a>
@@ -379,7 +373,7 @@
                             <div class="col-6" style="padding-right: 5px;">
                               <div class="card" style="padding: 0 15px 10px 0;">
                                 <div class="row" style="padding-top: 5px;">
-                                  <h3 class="card-title col-9" style="margin: 5px 15px 15px;">Result Compare</h3>
+                                  <h3 class="card-title col-9" style="margin: 5px 15px 15px;">Metric Compare</h3>
                                   
                                   <div id="chart-demo-bar1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
                                   <div id="chart-demo-bar2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
@@ -390,7 +384,7 @@
                             <div class="col-6" style="padding-left: 5px;">
                               <div class="card" style="padding: 0 15px 10px 0;">
                                 <div class="row" style="padding-top: 5px;">
-                                  <h3 class="card-title col-7" style="margin: 5px 15px 15px;">Browser market share</h3>
+                                  <h3 class="card-title col-7" style="margin: 5px 15px 15px;">CPU Detail</h3>
                                   
                                   <div id="chart-demo-bar3" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
                                   <div id="chart-demo-bar4" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
@@ -414,30 +408,35 @@
   border: 1px solid #ddd;
   background-color: white;
   display: flex;
+  text-align: center;
 }
 
 .simul_tr {
   height: 100%;
   width: 100%;
+  text-align: center;
 }
 
-.simul_tbody
-{display:flex}
+.simul_tbody{
+  display:flex;
+  text-align: center;
+}
 
 .simul_th, .simul_td {
   display: flex;
   padding: 8px;
   text-align: center;
   border-bottom: 1px solid #ddd;
-  text-align: center;
 }
 
 .simul_th {
   background-color: #f2f2f2;
   width: 190%;
+  text-align: center;
 }
 .simul_td {
   padding-left: 15px;
+  text-align: center;
 }
 </style>
 
@@ -450,8 +449,10 @@
                                           <th class="simul_th">Option Name</th>
                                           <th class="simul_th">DBMS</th>
                                           <th class="simul_th">Storage Type</th>
-                                          <th class="simul_th">CSD Count</th>
                                           <th class="simul_th">CSD Kind</th>
+                                          <th class="simul_th">CSD Count</th>
+                                          <th class="simul_th">Block Count</th>
+                                          <th class="simul_th">Algorithm</th>
                                         </tr>
                                       </thead>
                                       <tbody class="simul_tbody" style="width: 100%;">
@@ -462,6 +463,8 @@
                                           <td class="simul_td data1">-</td>
                                           <td class="simul_td data1">-</td>
                                           <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
+                                          <td class="simul_td data1">-</td>
                                         </tr>
                                         <tr class="simul_tr">
                                           <td class="simul_td data2">-</td>
@@ -470,14 +473,18 @@
                                           <td class="simul_td data2">-</td>
                                           <td class="simul_td data2">-</td>
                                           <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
+                                          <td class="simul_td data2">-</td>
                                         </tr>
                                         <tr class="simul_tr">
-                                          <td class="simul_td">-</td>
-                                          <td class="simul_td">-</td>
-                                          <td class="simul_td">-</td>
-                                          <td class="simul_td">-</td>
-                                          <td class="simul_td">-</td>
-                                          <td class="simul_td">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
+                                          <td class="simul_td data3">-</td>
                                         </tr>
                                       </tbody>
                                   </table>
@@ -655,10 +662,10 @@
     </div>
   </div>
   <!-- Libs JS -->
-  <script src="../dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/maps/world.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/maps/world-merc.js" defer></script>
+  <script src="../static/libs/apexcharts/dist/apexcharts.min.js" defer></script>
+  <script src="../static/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
+  <script src="../static/libs/jsvectormap/dist/maps/world.js" defer></script>
+  <script src="../static/libs/jsvectormap/dist/maps/world-merc.js" defer></script>
   <!-- Tabler Core -->
   <script src="../static/js/tabler.min.js" defer></script>
   <script src="../static/js/demo.min.js" defer></script>
