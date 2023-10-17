@@ -1,3 +1,5 @@
+let temp_id = 1;
+
 document.addEventListener("DOMContentLoaded", function () {
     const queryHistory = [];
 
@@ -7,24 +9,53 @@ document.addEventListener("DOMContentLoaded", function () {
         const queryLogTableBody = document.getElementById("queryLogTableBody");
 
         if (queryText) {
-            const shortenedQuery = queryText.length > 90 ? queryText.slice(0, 90) + "..." : queryText;
+            const shortenedQuery = queryText.length > 40 ? queryText.slice(0, 40) + "..." : queryText;
             queryHistory.push(shortenedQuery);
 
             const newRow = document.createElement("tr");
             const checkboxCell = document.createElement("td");
+            checkboxCell.style.width = "5%";
             const queryIDCell = document.createElement("td");
+            queryIDCell.style.width = "1%";
             const queryCell = document.createElement("td");
+            queryCell.style.width = "30%";
             const progressBarCells = [];
             const dummyButtonCell = document.createElement("td");
+            dummyButtonCell.style.width = "5%";
 
             for (let i = 0; i < 4; i++) {
                 const progressBarCell = document.createElement("td");
+                progressBarCell.style.width = "12%";
+                let width;
+                let value;
+                let max;
+                let label;
+
+                if(i==0){
+                    value = 2112;
+                    max = 6000;
+                }else if(i==1){
+                    value = 800;
+                    max = 4000;
+                }else if(i==2){
+                    value = 96;
+                    max = 200;
+                }else{
+                    value = 13;
+                    max = 100;
+                }
+
+                label = value;
+                width = (value / max) * 100;
                 progressBarCell.innerHTML = `
                     <div class="progress">
-                        <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38"
-                            aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                            <span class="visually-hidden">38% Complete</span>
+                        <div class="progress-bar" style="width: ${width}%" role="progressbar" aria-valuenow="${value}"
+                            aria-valuemin="0" aria-valuemax="${max}" aria-label="${label}% Complete">
+                            
                         </div>
+                    </div>
+                    <div style="text-align:center">
+                        <h6 style="margin-top:5px; margin-bottom:0px;">${value}</h6>
                     </div>
                 `;
                 progressBarCells.push(progressBarCell);
@@ -32,18 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const dummyButton = document.createElement("td");
             dummyButton.innerHTML = `
-                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                    data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                    data-bs-content="Right popover">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical"
-                        width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                <button class="btn btn-link p-0 ssd_btn" id="queryLogDetail">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                     </svg>
-                </a>
+                </button>
             `;
 
             checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="1">`;

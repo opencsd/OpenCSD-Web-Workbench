@@ -1,3 +1,5 @@
+let intervalId;
+
 const environmentInfoTab = document.getElementById("environmentInfoTab");
 const dbSchemaTab = document.getElementById("dbSchemaTab");
 
@@ -5,7 +7,7 @@ const environmentInfoContainer = document.getElementById("environmentInfoContain
 const dbSchemaContainer = document.getElementById("dbSchemaContainer");
 const envSetting = document.getElementById("envSetting");
 
-environmentInfoTab.addEventListener("click", function () {
+environmentInfoTab.addEventListener("click", function() {
     environmentInfoTab.classList.add("active");
     dbSchemaTab.classList.remove("active");
 
@@ -14,7 +16,7 @@ environmentInfoTab.addEventListener("click", function () {
     envSetting.style.display = "block";
 });
 
-dbSchemaTab.addEventListener("click", function () {
+dbSchemaTab.addEventListener("click", function() {
     environmentInfoTab.classList.remove("active");
     dbSchemaTab.classList.add("active");
 
@@ -23,188 +25,217 @@ dbSchemaTab.addEventListener("click", function () {
     envSetting.style.display = "none";
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    window.ApexCharts &&
-        new ApexCharts(document.getElementById("query_cache1"), {
-            chart: {
-                type: "area",
-                fontFamily: "inherit",
-                height: 240,
-                parentHeightOffset: 0,
-                toolbar: {
-                    show: false,
-                },
-                animations: {
-                    enabled: false,
-                },
-                stacked: false,
-            },
-            plotOptions: {
-                bar: {
-                    barHeight: "50%",
-                    horizontal: false,
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            fill: {
-                opacity: 1,
-            },
-            series: [{
-                    name: "Strange sunglasses",
-                    data: [11, 13, 10, 12, 11, 15, 19, 12, 11, 15, 17, 12],
-                }
-            ],
-            colors: ["#77c13d"],
-            tooltip: {
-                theme: "dark",
-            },
-            grid: {
-                padding: {
-                    top: -20,
-                    right: 0,
-                    left: 20,
-                    bottom: -4,
-                },
-                strokeDashArray: 4,
-            },
-            xaxis: {
-                labels: {
-                    padding: 0,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                axisBorder: {
-                    show: false,
-                },
-                categories: [
-                    "15:00",
-                    "",
-                    "15:10",
-                    "",
-                    "15:20",
-                    "",
-                    "15:30",
-                    "",
-                    "15:40",
-                    "",
-                    "15:50",
-                    "",
-                ],
-            },
-            yaxis: {
-                tickAmount: 6,
-                min: 0,
-                max: 30
-            },
-            legend: {
-                show: false
-            },
-            stroke: {
-                curve: 'straight' 
-            },
-        }).render();
+const metricViewBtn = document.getElementById('metricViewBtn');
+const metricViewPlayIcon = document.getElementById('metricViewPlayIcon');
+const metricViewPauseIcon = document.getElementById('metricViewPauseIcon');
+let isMetricViewBtnClicked = true;
+
+metricViewBtn.addEventListener('click', () => {    
+    if (isMetricViewBtnClicked) {
+        metricViewPlayIcon.style.display = 'inline';
+        metricViewPauseIcon.style.display = 'none';
+        clearInterval(intervalId);
+    } else {
+        metricViewPlayIcon.style.display = 'none';
+        metricViewPauseIcon.style.display = 'inline';
+        startInterval();
+    }
+    isMetricViewBtnClicked = !isMetricViewBtnClicked;
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    window.ApexCharts &&
-        new ApexCharts(document.getElementById("query_cache2"), {
-            chart: {
-                type: "area",
-                fontFamily: "inherit",
-                height: 240,
-                parentHeightOffset: 0,
-                toolbar: {
-                    show: false,
-                },
-                animations: {
-                    enabled: false,
-                },
-                stacked: false,
+function updateChart(){
+    const hostServerCPUChart = new ApexCharts(document.getElementById("query_cache1"), {
+        chart: {
+            type: "area",
+            fontFamily: "inherit",
+            height: 240,
+            parentHeightOffset: 0,
+            toolbar: {
+                show: false,
             },
-            plotOptions: {
-                bar: {
-                    barHeight: "50%",
-                    horizontal: false,
-                },
-            },
-            dataLabels: {
+            animations: {
                 enabled: false,
             },
-            fill: {
-                opacity: 1,
+            stacked: false,
+        },
+        plotOptions: {
+            bar: {
+                barHeight: "50%",
+                horizontal: false,
             },
-            series: [{
-                    name: "Strange sunglasses",
-                    data: [11, 13, 10, 12, 11, 15, 10, 12, 17, 11, 15, 12],
-                }
-            ],
-            colors: ["#77c13d"],
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        fill: {
+            opacity: 1,
+        },
+        series: [{
+                name: "Strange sunglasses",
+                data: [11, 13, 10, 12, 11, 15, 19, 12, 11, 15, 17, 12],
+            }
+        ],
+        colors: ["#77c13d"],
+        tooltip: {
+            theme: "dark",
+        },
+        grid: {
+            padding: {
+                top: -20,
+                right: 0,
+                left: 20,
+                bottom: -4,
+            },
+            strokeDashArray: 4,
+        },
+        xaxis: {
+            labels: {
+                padding: 0,
+            },
             tooltip: {
-                theme: "dark",
+                enabled: false,
             },
-            grid: {
-                padding: {
-                    top: -20,
-                    right: 0,
-                    left: 20,
-                    bottom: -4,
-                },
-                strokeDashArray: 4,
+            axisBorder: {
+                show: false,
             },
-            xaxis: {
-                labels: {
-                    padding: 0,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                axisBorder: {
-                    show: false,
-                },
-                categories: [
-                    "15:00",
-                    "",
-                    "15:10",
-                    "",
-                    "15:20",
-                    "",
-                    "15:30",
-                    "",
-                    "15:40",
-                    "",
-                    "15:50",
-                    "",
-                ],
+            categories: [
+                "15:00",
+                "",
+                "15:10",
+                "",
+                "15:20",
+                "",
+                "15:30",
+                "",
+                "15:40",
+                "",
+                "15:50",
+                "",
+            ],
+        },
+        yaxis: {
+            tickAmount: 6,
+            min: 0,
+            max: 30
+        },
+        legend: {
+            show: false
+        },
+        stroke: {
+            curve: 'straight' 
+        },
+    });
+
+    const hostServerPowerChart = new ApexCharts(document.getElementById("query_cache2"), {
+        chart: {
+            type: "area",
+            fontFamily: "inherit",
+            height: 240,
+            parentHeightOffset: 0,
+            toolbar: {
+                show: false,
             },
-            yaxis: {
-                tickAmount: 6,
-                min: 0,
-                max: 30
+            animations: {
+                enabled: false,
             },
-            legend: {
-                show: false
+            stacked: false,
+        },
+        plotOptions: {
+            bar: {
+                barHeight: "50%",
+                horizontal: false,
             },
-            stroke: {
-                curve: 'straight' 
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        fill: {
+            opacity: 1,
+        },
+        series: [{
+                name: "Strange sunglasses",
+                data: [11, 13, 10, 12, 11, 15, 10, 12, 17, 11, 15, 12],
+            }
+        ],
+        colors: ["#77c13d"],
+        tooltip: {
+            theme: "dark",
+        },
+        grid: {
+            padding: {
+                top: -20,
+                right: 0,
+                left: 20,
+                bottom: -4,
             },
-        }).render();
+            strokeDashArray: 4,
+        },
+        xaxis: {
+            labels: {
+                padding: 0,
+            },
+            tooltip: {
+                enabled: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+            categories: [
+                "15:00",
+                "",
+                "15:10",
+                "",
+                "15:20",
+                "",
+                "15:30",
+                "",
+                "15:40",
+                "",
+                "15:50",
+                "",
+            ],
+        },
+        yaxis: {
+            tickAmount: 6,
+            min: 0,
+            max: 30
+        },
+        legend: {
+            show: false
+        },
+        stroke: {
+            curve: 'straight' 
+        },
+    });
+
+    hostServerCPUChart.render();
+    hostServerPowerChart.render();
+}
+
+function startInterval(){
+    intervalId = setInterval(updateChart,1000);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    startInterval();
 });
 
-const loadingIcon = document.getElementById('loadingIcon');
 const resultContainer = document.getElementById("resultContainer");
 const metricContainer = document.getElementById("metricContainer");
+const spinnerContainer = document.querySelectorAll(".spinnerContainer");
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("pushdownButton").addEventListener("click", function () {
-        loadingIcon.style.display = "block";
+        spinnerContainer.forEach((icon) => {
+            icon.style.display = "flex";
+        });
         resultContainer.style.display = "none";
         metricContainer.style.display = "none";  
 
         setTimeout(() => {
-            loadingIcon.style.display = "none";
+            spinnerContainer.forEach((icon) => {
+                icon.style.display = "none";
+            });
             resultContainer.style.display = "block";
             metricContainer.style.display = "block";
 
@@ -230,7 +261,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 "|15055              |15452319.200000   |\n" +
                 "+-----------------------------------+";
             document.getElementById("queryResult").value = result;
-            }, 2000); 
+
+            metricViewPlayIcon.style.display = 'inline';
+            metricViewPauseIcon.style.display = 'none';
+            isMetricViewBtnClicked = true;
+            clearInterval(intervalId);
+        }, 2000); 
         
     });
 });

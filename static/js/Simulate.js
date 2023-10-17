@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
             
-
             const dummyButton = document.createElement("td");
             dummyButton.innerHTML = `
                 <button class="btn btn-link p-0 ssd_btn" id="queryLogDetail">
