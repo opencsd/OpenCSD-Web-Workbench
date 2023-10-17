@@ -9,19 +9,24 @@ document.addEventListener("DOMContentLoaded", function () {
         const queryLogTableBody = document.getElementById("queryLogTableBody");
 
         if (queryText) {
-            const shortenedQuery = queryText.length > 80 ? queryText.slice(0, 80) + "..." : queryText;
+            const shortenedQuery = queryText.length > 40 ? queryText.slice(0, 40) + "..." : queryText;
             queryHistory.push(shortenedQuery);
 
             const newRow = document.createElement("tr");
-
+            const checkboxCell = document.createElement("td");
+            checkboxCell.style.width = "5%";
             const queryIDCell = document.createElement("td");
+            queryIDCell.style.width = "1%";
             const queryCell = document.createElement("td");
+            queryCell.style.width = "30%";
             const progressBarCells = [];
             const dummyButtonCell = document.createElement("td");
+            dummyButtonCell.style.width = "5%";
 
             if(temp_id == 1){
                 for (let i = 0; i < 4; i++) {
                     const progressBarCell = document.createElement("td");
+                    progressBarCell.style.width = "12%";
                     let width;
                     let value;
                     let max;
@@ -59,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }else{
                 for (let i = 0; i < 4; i++) {
                     const progressBarCell = document.createElement("td");
+                    progressBarCell.style.width = "12%";
                     let width;
                     let value;
                     let max;
@@ -94,43 +100,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     progressBarCells.push(progressBarCell);
                 }
             }
-
-            // for (let i = 0; i < 4; i++) {
-            //     const progressBarCell = document.createElement("td");
-            //     widthPercentage += 10;
-            //     progressBarCell.innerHTML = `
-            //         <div class="progress">
-            //             <div class="progress-bar" style="width: 38}%" role="progressbar" aria-valuenow="38"
-            //                 aria-valuemin="0" aria-valuemax="100" aria-label="38% Complete">
-                            
-            //             </div>
-            //         </div>
-            //         <div style="text-align:center">
-            //             <h6 style="margin-top:5px; margin-bottom:0px;">5963</h6>
-            //         </div>
-            //     `;
-            //     progressBarCells.push(progressBarCell);
-            // }
+            
 
             const dummyButton = document.createElement("td");
             dummyButton.innerHTML = `
-                <a href="#" class="btn btn-icon bg-transparent" aria-label="Button"
-                    data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
-                    data-bs-content="Right popover">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical"
-                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-                        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                <button class="btn btn-link p-0 ssd_btn" id="queryLogDetail">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                     </svg>
-                </a>
+                </button>
             `;
             
+            checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="2">`;
+            newRow.appendChild(checkboxCell);
+
             queryIDCell.textContent = temp_id;
             temp_id++;
-            
             queryIDCell.style.textAlign = "center";
             newRow.appendChild(queryIDCell);
 
@@ -317,7 +302,6 @@ document.addEventListener("DOMContentLoaded", function () {
 }).render();
 });
 
-
 document.addEventListener("DOMContentLoaded", function () {
     window.ApexCharts &&
         new ApexCharts(document.getElementById("chart-demo-bar3"), {
@@ -428,12 +412,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 
             series: [{
                 name: "ID 1",
-                data: [5963],
+                data: [2112],
                 color: "#78b86fff" 
             },
             {
                 name: "ID 2",
-                data: [2112],
+                data: [5963],
                 color: "#e6c333ff" 
             },
             ],
