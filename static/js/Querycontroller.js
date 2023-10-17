@@ -11,13 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
             queryHistory.push(shortenedQuery);
 
             const newRow = document.createElement("tr");
-
             const checkboxCell = document.createElement("td");
-            const newCell = document.createElement("td");
+            const queryIDCell = document.createElement("td");
+            const queryCell = document.createElement("td");
             const progressBarCells = [];
             const dummyButtonCell = document.createElement("td");
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 4; i++) {
                 const progressBarCell = document.createElement("td");
                 progressBarCell.innerHTML = `
                     <div class="progress">
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right"
                     data-bs-content="Right popover">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical"
-                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                        width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                         fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
@@ -46,21 +46,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 </a>
             `;
 
-            checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="2">`;
-            newCell.textContent = `${shortenedQuery}`;
-            newCell.style.backgroundColor = "#fcfdfe";
+            checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="1">`;
+            newRow.appendChild(checkboxCell);
+
+            queryIDCell.textContent = temp_id;
+            temp_id++;
+            queryIDCell.style.textAlign = "center";
+            newRow.appendChild(queryIDCell);
+
+            queryCell.textContent = `${shortenedQuery}`;
+            queryCell.style.backgroundColor = "#fcfdfe";
+            newRow.appendChild(queryCell);
+
+            for (let i = 0; i < 4; i++) {
+                newRow.appendChild(progressBarCells[i]);
+            }
+
+            newRow.appendChild(dummyButtonCell);
+            dummyButtonCell.appendChild(dummyButton);
 
             setTimeout(() => {
-                newRow.appendChild(checkboxCell);
-                newRow.appendChild(newCell);
-
-                for (let i = 0; i < 5; i++) {
-                    newRow.appendChild(progressBarCells[i]);
-                }
-
-                newRow.appendChild(dummyButtonCell);
-                dummyButtonCell.appendChild(dummyButton);
-
                 queryLogTableBody.appendChild(newRow);
             }, 2000); 
             

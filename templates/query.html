@@ -200,13 +200,14 @@
       <!-- Page body -->
       <div class="page-body">
         <div class="container-xl">
+          
           <div class="row">
             <div class="col-7" style="margin-bottom: 15px;">
               <div class="col-lg-12">
                 <div class="card" style="height: 420px;">
                   <div class="card-body row justify-content-center">
                     <h3 class="card-title col-5">Query Input</h3>
-                    <div class="col-7 text-end">
+                    <div class="text-end col-7">
                       <div class="d-none d-sm-inline">
                         <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;" id="dropdownToggle">tpc-h</a>
                         <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
@@ -220,7 +221,7 @@
                         <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
-                      <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
+                    <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
                     <div class="d-flex justify-content-center">
                       <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                     </div>
@@ -396,7 +397,7 @@
                   <div class="col-lg-12">
                     <h3 class="card-title">Query Result</h3>
                     <div id="resultContainer">
-                      <textarea id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
+                      <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                     </div>
                     <div id="loadingIcon" class="spinner-border text-secondary" role="status" style="display: none;"></div>
                   </div>
@@ -519,12 +520,14 @@
                       <table class="table table-vcenter text-nowrap datatable">
                         <thead>
                           <tr style="text-align: center;">
-                            <th></th>
-                            <th style="width: 60%;">Query</th>
-                            <th style="width: 10%;">Scanned Row</th>
-                            <th style="width: 10%;">Filtered Row</th>
-                            <th style="width: 10%;">Filter Ratio</th>
-                            <th style="width: 10%;">Execution Time</th>
+                            <th style="width: 1%;"></th>
+                            <th style="width: 2%;">QUERY ID</th>
+                            <th style="width: 48%;">Query</th>
+                            <th style="width: 12%;">Scanned Row</th>
+                            <th style="width: 12%;">Filtered Row</th>
+                            <th style="width: 12%;">Filter Ratio</th>
+                            <th style="width: 12%;">Execution Time</th>
+                            <th style="width: 1%;"></th>
                           </tr>
                         </thead>
                         <tbody id="queryLogTableBody">

@@ -197,313 +197,264 @@
       <!-- Page body -->
       <div class="page-body">
         <div class="container-xl">
-          <div class="row row-deck row-cards">
-            <div class="col-lg-12">
-              <div class="row row-deck row-cards">
-                <div class="col-lg-7">
-                  <div class="card">
-                    <div class="card-body row justify-content-center">
-                      <div class="col-lg-12 row">
-                        <h3 class="card-title col-6">Query Input</h3>
-                        <div class="col-6 text-end">
-                          <div class="d-none d-sm-inline">
-                            <a href="#" id="dropdownToggle" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
-                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
-                              <a class="dropdown-item" href="#">none</a>
-                            </div>
-                          </div>
-    
-                          <span class="d-none d-sm-inline">
-                            <button class="btn" style="padding: 5px 15px;">template</button>
-                          </span>
-                          <span class="d-none d-sm-inline">
-                            <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
-                          </span>
-                        </div>
-                        <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
-                        <div class="d-flex justify-content-center">
-                          <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+
+          <div class="row">
+            <div class="col-7" style="margin-bottom: 15px;">
+              <div class="col-lg-12">
+                <div class="card" style="height: 420px;"> <!--style="height: 420px;" -->
+                  <div class="card-body row justify-content-center">
+                    <h3 class="card-title col-5">Query Input</h3>
+                    <div class="text-end col-7">
+                      <div class="d-none d-sm-inline">
+                        <a href="#" id="dropdownToggle" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
+                        <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
+                          <a class="dropdown-item" href="#">none</a>
                         </div>
                       </div>
+                      <span class="d-none d-sm-inline">
+                        <button class="btn" style="padding: 5px 15px;">template</button>
+                      </span>
+                      <span class="d-none d-sm-inline">
+                        <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
+                      </span>
+                    </div>
+                    <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
+                    <div class="d-flex justify-content-center">
+                      <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                     </div>
                   </div>
                 </div>
-
-
-                <div class="col-lg-5">
-                  <div class="card">
-                    <div class="card-body row">
-                      <div class="col-lg-12">
-                        
-                        <div class="col-12" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                          <div class="row col-4">
-                            <h3 class="card-title" style="margin-top: 5px;">Option Set</h3>
-                          </div>
-                          <div class="dropdown col-8" style="width: auto;">
-                            <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Select Valitation Option</a>
-                            <div class="dropdown-menu opt_menu">
-                              <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
-                              <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
-                              <a class="dropdown-item opt_item" href="#">New Option+</a>
-                            </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="col-lg-12">
+                <div class="card" style="height: 420px;">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-4">
+                        <h3 class="card-title" style="margin-top: 5px;">Option Set</h3>
+                      </div>
+                      <div class="col-8" style=" display: flex; flex-direction: row-reverse;">
+                        <div class="dropdown" style="width: auto;">
+                          <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Select Valitation Option</a>
+                          <div class="dropdown-menu opt_menu">
+                            <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
+                            <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
+                            <a class="dropdown-item opt_item" href="#">New Option+</a>
                           </div>
                         </div>
-
-                        <div class="table-responsive">
-                          <table class="table table-vcenter text-nowrap datatable">
-                            <thead class="text-center">
-                              <th>Option Name</th>
-                              <th>Pushdown Option</th>
-                            </thead>
-                            <tbody class="text-center">
-                              <tr>
-                                <th scope="row">DBMS</th>
-                                <td class="bg-light" id="dbmsInfo">-</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">Storage Type</th>
-                                <td class="bg-light" id="storageTypeInfo">-</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">CSD Kind</th>
-                                <td class="bg-light" id="csdkindInfo">-</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">CSD Count</th>
-                                <td class="bg-light" id="csdCountInfo">-</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">Block Count</th>
-                                <td class="bg-light" id="blockCountInfo">-</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">Algorithm</th>
-                                <td class="bg-light" id="algorithmInfo">-</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        
                       </div>
                     </div>
-                  </div>
-                </div>
-
-
-                <div class="col-12" style="margin-bottom: 15px;">
-                  <div class="card">
-                    <div class="card-body row">
-                      <h3 class="card-title">Query Log</h3>
-                      <div class="table-responsive overflow-hidden">
-                        <table class="table card-table table-vcenter text-nowrap datatable">
-                          <thead>
-                            <tr style="text-align: center;">
-                              <th style="width: 2%;">QUERY ID</th>
-                              <th style="width: 48%;">QUERY</th>
-                              <th style="width: 10%;">CPU(tick)</th>
-                              <th style="width: 10%;">Power(W)</th>
-                              <th style="width: 10%;">Network(MB)</th>
-                              <th style="width: 10%;">Time(Sec)</th>
-                              <th></th>
-                            </tr>
+                    <div class="row">
+                      <div class="card card-body mt-2" style="max-height: 335px;">
+                        <table class="table table-vcenter text-nowrap datatable">
+                          <thead class="text-center">
+                            <th>Option Name</th>
+                            <th>Pushdown Option</th>
                           </thead>
-
-                          <tbody id="queryLogTableBody">
+                          <tbody class="text-center">
+                            <tr>
+                              <th scope="row">DBMS</th>
+                              <td class="bg-light" id="dbmsInfo">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Storage Type</th>
+                              <td class="bg-light" id="storageTypeInfo">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">CSD Kind</th>
+                              <td class="bg-light" id="csdkindInfo">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">CSD Count</th>
+                              <td class="bg-light" id="csdCountInfo">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Block Count</th>
+                              <td class="bg-light" id="blockCountInfo">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Algorithm</th>
+                              <td class="bg-light" id="algorithmInfo">-</td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
-                      <div class="card-footer d-flex align-items-center">
-                        <p class="m-0 text-secondary">
-                          <!-- Showing <span>1</span> to <span>8</span> of
-                          <span>16</span> entries -->
-                        </p>
-                        <ul class="pagination m-0 ms-auto">
-                          <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                              <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M15 6l-6 6l6 6" />
-                              </svg>
-                              prev
-                            </a>
-                          </li>
-                          <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">
-                              next
-                              <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M9 6l6 6l-6 6" />
-                              </svg>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="col-12" style="margin-bottom: 15px;">
+              <div class="card">
+                <div class="card-body row">
+                  <div class="col-lg-12">
+                    <div class="row">
+                      <h3 class="card-title">Query Log</h3>
+                      <div class="col-9 text-end">
+                        <!-- add -->
+                      </div>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table table-vcenter text-nowrap datatable" style="width: 100%;">
+                        <thead>
+                          <tr style="text-align: center;">
+                            <th style="width: 5%;"></th>
+                            <th style="width: 1%;">ID</th>
+                            <th style="width: 30%;">QUERY</th>
+                            <th style="width: 12%;">CPU(tick)</th>
+                            <th style="width: 12%;">Power(W)</th>
+                            <th style="width: 12%;">Network(MB)</th>
+                            <th style="width: 12%;">Time(Sec)</th>
+                            <th style="width: 5%;"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="queryLogTableBody">
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                      <p class="m-0 text-secondary">
+                        <!-- Showing <span>1</span> to <span>8</span> of
+                        <span>16</span> entries -->
+                      </p>
+                      <ul class="pagination m-0 ms-auto">
+                        <li class="page-item disabled">
+                          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                              stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M15 6l-6 6l6 6" />
+                            </svg>
+                            prev
+                          </a>
+                        </li>
+                        <li class="page-item active">
+                          <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link" href="#">
+                            next
+                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                              stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M9 6l6 6l-6 6" />
+                            </svg>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body row">
-                        <div class="col-lg-12">
-                          <div class="row">
-                            <h3 class="card-title col-10" style="margin-bottom: 5px; padding-top: 5px;">Selected Validation Query Metric Info</h3>
-                            <div class="dropdown col-2">
-                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
-                              <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">CPU</a>
-                                <a class="dropdown-item" href="#">Power</a>
-                                <a class="dropdown-item" href="#">Network</a>
-                              </div>
-                            </div>
+          <div class="row">
+            <div class="col-12" style="margin-bottom: 15px;">
+              <div class="card">
+                <div class="card-body row">
+                  <div class="col-lg-12">
+                    <div class="row">
+                      <h3 class="card-title col-10">Selected Validation Query Metric Info</h3>
+                      <div class="dropdown col-2">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">CPU</a>
+                          <a class="dropdown-item" href="#">Power</a>
+                          <a class="dropdown-item" href="#">Network</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="display: flex;">
+                      <div class="col-6" style="padding-right: 5px;">
+                        <div class="card" style="padding: 0 15px 10px 0;">
+                          <div class="row" style="padding-top: 5px;">
+                            <h3 class="card-title col-9" style="margin: 5px 15px 15px;">Metric Compare</h3>
+                            <div id="chart-demo-bar1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
+                            <div id="chart-demo-bar2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
                           </div>
-                          <div class="col-lg-12" style="display: flex;">
-
-                            <div class="col-6" style="padding-right: 5px;">
-                              <div class="card" style="padding: 0 15px 10px 0;">
-                                <div class="row" style="padding-top: 5px;">
-                                  <h3 class="card-title col-9" style="margin: 5px 15px 15px;">Metric Compare</h3>
-                                  
-                                  <div id="chart-demo-bar1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
-                                  <div id="chart-demo-bar2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
-                                </div>
-                              </div>
-                            </div>
-      
-                            <div class="col-6" style="padding-left: 5px;">
-                              <div class="card" style="padding: 0 15px 10px 0;">
-                                <div class="row" style="padding-top: 5px;">
-                                  <h3 class="card-title col-7" style="margin: 5px 15px 15px;">CPU Detail</h3>
-                                  
-                                  <div id="chart-demo-bar3" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-                                  <div id="chart-demo-bar4" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-
-                                </div>
-
-                              </div>
-                            </div>   
-                            </div>   
-                            <div class="col-12" style="margin-top: 5px;">
-                              <div style="padding: 0 15px 10px 0;">
-                                <div class="row" style="padding-top: 5px;">
-                                  <h3 class="card-title col-7" style="margin: 5px 15px 15px;">Selected Validation Query Option Info</h3>
-                                  
-<style>
-
-.simul_table {
-  border-collapse: collapse;
-  width: 500px;
-  margin: 1rem auto;
-  border: 1px solid #ddd;
-  background-color: white;
-  display: flex;
-  text-align: center;
-}
-
-.simul_tr {
-  height: 100%;
-  width: 100%;
-  text-align: center;
-}
-
-.simul_tbody{
-  display:flex;
-  text-align: center;
-}
-
-.simul_th, .simul_td {
-  display: flex;
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-}
-
-.simul_th {
-  background-color: #f2f2f2;
-  width: 190%;
-  text-align: center;
-}
-.simul_td {
-  padding-left: 15px;
-  text-align: center;
-}
-</style>
-
-
-                                  <div class="col-12">
-                                    <table class="simul_table" style="width: 100%;">
-                                      <thead style="width: 20%;">
-                                        <tr class="simul_tr">
-                                          <th class="simul_th">Selected ID</th>
-                                          <th class="simul_th">Option Name</th>
-                                          <th class="simul_th">DBMS</th>
-                                          <th class="simul_th">Storage Type</th>
-                                          <th class="simul_th">CSD Kind</th>
-                                          <th class="simul_th">CSD Count</th>
-                                          <th class="simul_th">Block Count</th>
-                                          <th class="simul_th">Algorithm</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody class="simul_tbody" style="width: 100%;">
-                                        <tr class="simul_tr">
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                          <td class="simul_td data1">-</td>
-                                        </tr>
-                                        <tr class="simul_tr">
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                          <td class="simul_td data2">-</td>
-                                        </tr>
-                                        <tr class="simul_tr">
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                          <td class="simul_td data3">-</td>
-                                        </tr>
-                                      </tbody>
-                                  </table>
-                                </div>
-
-                                </div>
-
-                              </div>            
+                        </div>
+                      </div>
+                      <div class="col-6" style="padding-left: 5px;">
+                        <div class="card" style="padding: 0 15px 10px 0;">
+                          <div class="row" style="padding-top: 5px;">
+                            <h3 class="card-title col-7" style="margin: 5px 15px 15px;">CPU Detail</h3>
+                            <div id="chart-demo-bar3" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
+                            <div id="chart-demo-bar4" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div class="row" style="display: flex;">
+                      <h4 class="col-10" style="margin-top: 15px; margin-bottom: 0px; padding-left: 10px;">Selected Validation Query Option Info</h4>
+                      <div class="col-12">
+                        <table class="simul_table" style="width: 100%;">
+                          <thead class="simul_thead">
+                            <tr class="simul_tr">
+                              <th class="simul_th">Selected ID</th>
+                              <th class="simul_th">Option Name</th>
+                              <th class="simul_th">DBMS</th>
+                              <th class="simul_th">Storage Type</th>
+                              <th class="simul_th">CSD Kind</th>
+                              <th class="simul_th">CSD Count</th>
+                              <th class="simul_th">Block Count</th>
+                              <th class="simul_th">Algorithm</th>
+                            </tr>
+                          </thead>
+                          <tbody class="simul_tbody">
+                            <tr class="simul_tr">
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                              <td class="simul_td data1">-</td>
+                            </tr>
+                            <tr class="simul_tr">
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                              <td class="simul_td data2">-</td>
+                            </tr>
+                            <tr class="simul_tr">
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                              <td class="simul_td data3">-</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
-                </div>                
+                </div>
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
+      <!-- Page body End -->
+
       <footer class="footer footer-transparent d-print-none">
         <div class="container-xl">
           <div class="row text-center align-items-center flex-row-reverse">
@@ -671,6 +622,53 @@
   <script src="../static/js/demo.min.js" defer></script>
 
   <script src="../static/js/Simulate.js" defer></script>
+
+  <style>
+    .simul_table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem auto;
+      border: 1px solid #ddd;
+      background-color: white;
+      display: flex;
+      text-align: center;
+    }
+    
+    .simul_tr {
+      height: 100%;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .simul_tbody{
+      display:flex;
+      text-align: center;
+      width: 80%;
+    }
+
+    .simul_thead{
+      display:flex;
+      text-align: center;
+      width: 20%;
+    }
+    
+    .simul_th, .simul_td {
+      display: flex;
+      padding: 8px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .simul_th {
+      background-color: #f2f2f2;
+      text-align: center;
+    }
+    
+    .simul_td {
+      padding-left: 15px;
+      text-align: center;
+    }
+    </style>
 
 </body>
 
