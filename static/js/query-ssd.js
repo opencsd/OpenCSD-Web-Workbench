@@ -173,12 +173,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const scannedtable1 = document.querySelector('td.qtable_1');
             const scannedtable2 = document.querySelector('td.qtable_2');
-            const scannedtable3 = document.querySelector('td.qtable_3');
 
-            scannedtable1.textContent = "300 (line)";
-            scannedtable2.textContent = "20 (sec)";
-            scannedtable3.textContent = "4";
-
+            scannedtable1.textContent = "101255 (line)";
+            scannedtable2.textContent = "62.39 (sec)";
             var result = "+-----------------------------------+\n" +
                 "|ps_partkey      |value                        |\n" +
                 "+-----------------------------------+\n" +
