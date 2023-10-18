@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const scannedtable4 = document.querySelector('td.qtable_4');
             const scannedtable5 = document.querySelector('td.qtable_5');
 
-            scannedtable1.textContent = "101250 (line)";
+            scannedtable1.textContent = "101255 (line)";
             scannedtable2.textContent = "330 (line)";
             scannedtable3.textContent = "80 (%)";
             scannedtable4.textContent = "14.28 (sec)";
