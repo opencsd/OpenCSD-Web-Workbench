@@ -1,4 +1,90 @@
 let intervalId;
+var hostServerCPUChart;
+var hostServerPowerChart;
+
+document.addEventListener("DOMContentLoaded", function () {
+    var hostServerCPUChartData = [1.13,1.2,1.13,1,1.13,1.13,1.13,1.13,1.13,1.13];//초기 값 저장
+    var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74,];
+
+    var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+    var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+
+    hostServerCPUChart = new ApexCharts(document.getElementById("query_cache1"), hostServerCPUChartDataOption);
+    hostServerPowerChart = new ApexCharts(document.getElementById("query_cache2"), hostServerPowerChartDataOption);
+
+    hostServerCPUChart.render();
+    hostServerPowerChart.render();
+
+    ApexCharts.exec("hostServerCPUChart", "updateOptions", {
+        series: [{
+            name: "cpu",
+            data: hostServerCPUChartData
+            }
+        ],
+        xaxis: {
+            categories: hostServerCPUChartCategories
+        }
+    });
+
+    ApexCharts.exec("hostServerPowerChart", "updateOptions", {
+        series: [{
+            name: "power",
+            data: hostServerPowerChartData
+        }
+        ],
+        xaxis: {
+        categories: hostServerPowerChartCategories
+        }
+    });
+
+    startInterval();
+});
+
+function updateChart(){
+    var hostServerCPUChartData = hostServerCPUChart.w.globals.series[0];//업데이트 값 저장
+    var hostServerPowerChartData = hostServerPowerChart.w.globals.series[0];
+
+    hostServerCPUChartData.push(Math.floor(Math.random() * 30));
+    hostServerCPUChartData.shift();
+
+    hostServerPowerChartData.push(Math.floor(Math.random() * 30));
+    hostServerPowerChartData.shift();
+
+    var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+    var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+
+    hostServerCPUChartCategories.push(Math.floor(Math.random() * 30));
+    hostServerCPUChartCategories.shift();
+
+    hostServerPowerChartCategories.push(Math.floor(Math.random() * 30));
+    hostServerPowerChartCategories.shift();
+
+    ApexCharts.exec("hostServerCPUChart", "updateOptions", {
+        series: [{
+            name: "cpu",
+            data: hostServerCPUChartData
+            }
+        ],
+        xaxis: {
+            categories: hostServerCPUChartCategories
+        }
+    });
+
+    ApexCharts.exec("hostServerPowerChart", "updateOptions", {
+        series: [{
+            name: "power",
+            data: hostServerPowerChartData
+        }
+        ],
+        xaxis: {
+        categories: hostServerPowerChartCategories
+        }
+    });
+}
+
+function startInterval(){
+    intervalId = setInterval(updateChart,5000);
+}
 
 const environmentInfoTab = document.getElementById("environmentInfoTab");
 const dbSchemaTab = document.getElementById("dbSchemaTab");
@@ -41,183 +127,6 @@ metricViewBtn.addEventListener('click', () => {
         startInterval();
     }
     isMetricViewBtnClicked = !isMetricViewBtnClicked;
-});
-
-function updateChart(){
-    const hostServerCPUChart = new ApexCharts(document.getElementById("query_cache1"), {
-        chart: {
-            type: "area",
-            fontFamily: "inherit",
-            height: 240,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false,
-            },
-            animations: {
-                enabled: false,
-            },
-            stacked: false,
-        },
-        plotOptions: {
-            bar: {
-                barHeight: "50%",
-                horizontal: false,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        fill: {
-            opacity: 1,
-        },
-        series: [{
-                name: "Strange sunglasses",
-                data: [11, 13, 10, 12, 11, 15, 19, 12, 11, 15, 17, 12],
-            }
-        ],
-        colors: ["#77c13d"],
-        tooltip: {
-            theme: "dark",
-        },
-        grid: {
-            padding: {
-                top: -20,
-                right: 0,
-                left: 20,
-                bottom: -4,
-            },
-            strokeDashArray: 4,
-        },
-        xaxis: {
-            labels: {
-                padding: 0,
-            },
-            tooltip: {
-                enabled: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-            categories: [
-                "15:00",
-                "",
-                "15:10",
-                "",
-                "15:20",
-                "",
-                "15:30",
-                "",
-                "15:40",
-                "",
-                "15:50",
-                "",
-            ],
-        },
-        yaxis: {
-            tickAmount: 6,
-            min: 0,
-            max: 30
-        },
-        legend: {
-            show: false
-        },
-        stroke: {
-            curve: 'straight' 
-        },
-    });
-
-    const hostServerPowerChart = new ApexCharts(document.getElementById("query_cache2"), {
-        chart: {
-            type: "area",
-            fontFamily: "inherit",
-            height: 240,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false,
-            },
-            animations: {
-                enabled: false,
-            },
-            stacked: false,
-        },
-        plotOptions: {
-            bar: {
-                barHeight: "50%",
-                horizontal: false,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        fill: {
-            opacity: 1,
-        },
-        series: [{
-                name: "Strange sunglasses",
-                data: [11, 13, 10, 12, 11, 15, 10, 12, 17, 11, 15, 12],
-            }
-        ],
-        colors: ["#77c13d"],
-        tooltip: {
-            theme: "dark",
-        },
-        grid: {
-            padding: {
-                top: -20,
-                right: 0,
-                left: 20,
-                bottom: -4,
-            },
-            strokeDashArray: 4,
-        },
-        xaxis: {
-            labels: {
-                padding: 0,
-            },
-            tooltip: {
-                enabled: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-            categories: [
-                "15:00",
-                "",
-                "15:10",
-                "",
-                "15:20",
-                "",
-                "15:30",
-                "",
-                "15:40",
-                "",
-                "15:50",
-                "",
-            ],
-        },
-        yaxis: {
-            tickAmount: 6,
-            min: 0,
-            max: 30
-        },
-        legend: {
-            show: false
-        },
-        stroke: {
-            curve: 'straight' 
-        },
-    });
-
-    hostServerCPUChart.render();
-    hostServerPowerChart.render();
-}
-
-function startInterval(){
-    intervalId = setInterval(updateChart,1000);
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    startInterval();
 });
 
 const resultContainer = document.getElementById("resultContainer");
@@ -264,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             metricViewPlayIcon.style.display = 'inline';
             metricViewPauseIcon.style.display = 'none';
-            isMetricViewBtnClicked = true;
+            isMetricViewBtnClicked = false;
             clearInterval(intervalId);
         }, 2000); 
         
