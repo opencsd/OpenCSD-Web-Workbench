@@ -1,9 +1,14 @@
 let intervalId;
 var hostServerCPUChart, hostServerPowerChart;
-var hostServerCPUChartData = [1.13,1.2,1.13,1,1.13,1.13,1.13,1.13,1.13,1.13];//초기값 임시 저장
-var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74,];
-var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
-var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+var hostServerCPUChartData = [1,1,1,1,1,1,1,1,1,1];//초기값 임시 저장
+var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74];
+var hostServerCPUChartCategories = ['16:58:03', '16:58:06', '16:58:09', '16:58:12', '16:58:15', '16:58:18', '16:58:21', '16:58:24', '16:58:27', '16:58:30'];
+var hostServerPowerChartCategories = ['16:58:03', '16:58:06', '16:58:09', '16:58:12', '16:58:15', '16:58:18', '16:58:21', '16:58:24', '16:58:27', '16:58:30'];
+
+var tempCPUUpdate = [1,3.1,3.2,3.1,3.1,3.1,3.1,3.1,3.3,3.1,3.2,3.1,3.1,3.2,3.1,3.2,3.2,3.2,3.2,3.2];
+var tempPowerUpdate = [74,103,103,106,107,104,104,104,106,106,106,106,106,106,106,106,106,106,106,106];
+var clicked = false;
+let tempNum = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
     //임시로 값 저장
@@ -32,18 +37,22 @@ function getLatestChartData(){
     hostServerCPUChartCategories = hostServerCPUChart.w.globals.categoryLabels;
     hostServerPowerChartCategories = hostServerPowerChart.w.globals.categoryLabels;
 
-    hostServerCPUChartData.push(Math.floor(Math.random() * 30));
+    hostServerCPUChartData.push(tempCPUUpdate[tempNum]);
     hostServerCPUChartData.shift();
 
-    hostServerPowerChartData.push(Math.floor(Math.random() * 30));
+    hostServerPowerChartData.push(tempPowerUpdate[tempNum]);
     hostServerPowerChartData.shift();
+
+    if(clicked){
+        tempNum++;
+    }
 
     lastTime = hostServerCPUChartCategories[9];
     timeParts = lastTime.split(':');
     hours = parseInt(timeParts[0], 10);
     minutes = parseInt(timeParts[1], 10);
     seconds = parseInt(timeParts[2], 10);
-    seconds += 5;
+    seconds += 3;
     if (seconds >= 60) {
         seconds -= 60;
         minutes++;
@@ -63,7 +72,7 @@ function getLatestChartData(){
     hours = parseInt(timeParts[0], 10);
     minutes = parseInt(timeParts[1], 10);
     seconds = parseInt(timeParts[2], 10);
-    seconds += 5;
+    seconds += 3;
     if (seconds >= 60) {
         seconds -= 60;
         minutes++;
@@ -79,7 +88,15 @@ function getLatestChartData(){
     hostServerPowerChartCategories.shift();
 }
 
-function updateChart(){
+function getQueryChartData(){
+    //쿼리가 돌때의 시간에 해당하는 차트값만 가져오는 로직
+    hostServerCPUChartData = [3.1,3.1,3.2,3.1,3.1,3.1,3.1,3.1,3.3,3.1,3.2,3.1,3.1,3.2,3.1,3.2,3.2,3.2,3.2,3.2];
+    hostServerPowerChartData = [74,103,103,106,107,104,104,104,106,106,106,106,106,106,106,106,106,106,106,106];
+    hostServerCPUChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57','16:59:00','16:59:03','16:59:06','16:59:09','16:59:12','16:59:15','16:59:18','16:59:21','16:59:24','16:59:27','16:59:30','16:59:33','16:59:36','16:59:39','16:59:42','16:59:45'];
+    hostServerPowerChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57','16:59:00','16:59:03','16:59:06','16:59:09','16:59:12','16:59:15','16:59:18','16:59:21','16:59:24','16:59:27','16:59:30','16:59:33','16:59:36','16:59:39','16:59:42','16:59:45'];
+}
+
+function updateLatestChart(){
     getLatestChartData();
     
     ApexCharts.exec("hostServerCPUChart", "updateOptions", {
@@ -105,8 +122,34 @@ function updateChart(){
     });
 }
 
+function updateQueryChart(){
+   getQueryChartData();
+
+    ApexCharts.exec("hostServerCPUChart", "updateOptions", {
+        series: [{
+            name: "cpu",
+            data: hostServerCPUChartData
+            }
+        ],
+        xaxis: {
+            categories: hostServerCPUChartCategories
+        }
+    });
+
+    ApexCharts.exec("hostServerPowerChart", "updateOptions", {
+        series: [{
+            name: "power",
+            data: hostServerPowerChartData
+        }
+        ],
+        xaxis: {
+        categories: hostServerPowerChartCategories
+        }
+    });
+}
+
 function startInterval(){
-    intervalId = setInterval(updateChart,1000);
+    intervalId = setInterval(updateLatestChart,3000);
 }
 
 const environmentInfoTab = document.querySelector("#environmentInfoTab.ssd_btn");
@@ -164,6 +207,8 @@ document.addEventListener("DOMContentLoaded", function () {
         resultContainer.style.display = "none";
         metricContainer.style.display = "none";  
 
+        clicked = true;
+
         setTimeout(() => {
             spinnerContainer.forEach((icon) => {
                 icon.style.display = "none";
@@ -191,7 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
             metricViewPauseIcon.style.display = 'none';
             isMetricViewBtnClicked = false;
             clearInterval(intervalId);
-        }, 20000); 
+            updateQueryChart();
+        }, 60000); 
     });
 });
 

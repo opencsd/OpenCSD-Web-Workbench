@@ -1,9 +1,14 @@
 let intervalId;
 var hostServerCPUChart, hostServerPowerChart;
-var hostServerCPUChartData = [1.13,1.2,1.13,1,1.13,1.13,1.13,1.13,1.13,1.13];//초기값 임시 저장
-var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74,];
-var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
-var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+var hostServerCPUChartData = [1,1,1,1,1,1,1,1,1,1];//초기값 임시 저장
+var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74];
+var hostServerCPUChartCategories = ['16:58:03', '16:58:06', '16:58:09', '16:58:12', '16:58:15', '16:58:18', '16:58:21', '16:58:24', '16:58:27', '16:58:30'];
+var hostServerPowerChartCategories = ['16:58:03', '16:58:06', '16:58:09', '16:58:12', '16:58:15', '16:58:18', '16:58:21', '16:58:24', '16:58:27', '16:58:30'];
+
+var tempCPUUpdate = [1,3.5,6.2,6.3,4.5];
+var tempPowerUpdate = [74,100,115,120,115];
+var clicked = false;
+let tempNum = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
     //임시로 값 저장
@@ -32,18 +37,22 @@ function getLatestChartData(){
     hostServerCPUChartCategories = hostServerCPUChart.w.globals.categoryLabels;
     hostServerPowerChartCategories = hostServerPowerChart.w.globals.categoryLabels;
 
-    hostServerCPUChartData.push(Math.floor(Math.random() * 30));
+    hostServerCPUChartData.push(tempCPUUpdate[tempNum]);
     hostServerCPUChartData.shift();
 
-    hostServerPowerChartData.push(Math.floor(Math.random() * 30));
+    hostServerPowerChartData.push(tempPowerUpdate[tempNum]);
     hostServerPowerChartData.shift();
+
+    if(clicked){
+        tempNum++;
+    }
 
     lastTime = hostServerCPUChartCategories[9];
     timeParts = lastTime.split(':');
     hours = parseInt(timeParts[0], 10);
     minutes = parseInt(timeParts[1], 10);
     seconds = parseInt(timeParts[2], 10);
-    seconds += 5;
+    seconds += 3;
     if (seconds >= 60) {
         seconds -= 60;
         minutes++;
@@ -63,7 +72,7 @@ function getLatestChartData(){
     hours = parseInt(timeParts[0], 10);
     minutes = parseInt(timeParts[1], 10);
     seconds = parseInt(timeParts[2], 10);
-    seconds += 5;
+    seconds += 3;
     if (seconds >= 60) {
         seconds -= 60;
         minutes++;
@@ -79,7 +88,15 @@ function getLatestChartData(){
     hostServerPowerChartCategories.shift();
 }
 
-function updateChart(){
+function getQueryChartData(){
+    //쿼리가 돌때의 시간에 해당하는 차트값만 가져오는 로직
+    hostServerCPUChartData = [1,3.5,6.2,6.3,4.5];
+    hostServerPowerChartData = [74,100,115,120,115];
+    hostServerCPUChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
+    hostServerPowerChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
+}
+
+function updateLatestChart(){
     getLatestChartData();
     
     ApexCharts.exec("hostServerCPUChart", "updateOptions", {
@@ -105,8 +122,34 @@ function updateChart(){
     });
 }
 
+function updateQueryChart(){
+   getQueryChartData();
+
+    ApexCharts.exec("hostServerCPUChart", "updateOptions", {
+        series: [{
+            name: "cpu",
+            data: hostServerCPUChartData
+            }
+        ],
+        xaxis: {
+            categories: hostServerCPUChartCategories
+        }
+    });
+
+    ApexCharts.exec("hostServerPowerChart", "updateOptions", {
+        series: [{
+            name: "power",
+            data: hostServerPowerChartData
+        }
+        ],
+        xaxis: {
+        categories: hostServerPowerChartCategories
+        }
+    });
+}
+
 function startInterval(){
-    intervalId = setInterval(updateChart,1000);
+    intervalId = setInterval(updateLatestChart,3000);
 }
 
 const environmentInfoTab = document.getElementById("environmentInfoTab");
@@ -164,6 +207,8 @@ document.addEventListener("DOMContentLoaded", function () {
         resultContainer.style.display = "none";
         metricContainer.style.display = "none";  
 
+        clicked = true;
+
         setTimeout(() => {
             spinnerContainer.forEach((icon) => {
                 icon.style.display = "none";
@@ -178,8 +223,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const scannedtable5 = document.querySelector('td.qtable_5');
 
             scannedtable1.textContent = "101255 (line)";
-            scannedtable2.textContent = "330 (line)";
-            scannedtable3.textContent = "80 (%)";
+            scannedtable2.textContent = "101254 (line)";
+            scannedtable3.textContent = "1 (%)";
             scannedtable4.textContent = "14.28 (sec)";
             scannedtable5.textContent = "8";
 
@@ -198,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
             metricViewPauseIcon.style.display = 'none';
             isMetricViewBtnClicked = false;
             clearInterval(intervalId);
+            updateQueryChart();
         }, 14000); 
         
     });
