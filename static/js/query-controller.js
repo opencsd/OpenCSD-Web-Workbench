@@ -1,10 +1,6 @@
 let temp_id = 1;
 const queryHistory = [];
 
-document.addEventListener("DOMContentLoaded", function () {
-    
-});
-
 document.getElementById("pushdownButton").addEventListener("click", function () {
     const queryText = document.getElementById("queryTextarea").value.trim();
 
@@ -93,7 +89,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
         setTimeout(() => {
             queryLogTableBody.appendChild(newRow);
-        }, 2000); 
+        }, 14000); 
         
     } else {
         queryLogTableBody.textContent = "No query available.";
