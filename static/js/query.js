@@ -44,19 +44,53 @@ function updateChart(){
     var hostServerCPUChartData = hostServerCPUChart.w.globals.series[0];//업데이트 값 저장
     var hostServerPowerChartData = hostServerPowerChart.w.globals.series[0];
 
+    var hostServerCPUChartCategories = hostServerCPUChart.w.globals.categoryLabels;
+    var hostServerPowerChartCategories = hostServerPowerChart.w.globals.categoryLabels;
+
     hostServerCPUChartData.push(Math.floor(Math.random() * 30));
     hostServerCPUChartData.shift();
 
     hostServerPowerChartData.push(Math.floor(Math.random() * 30));
     hostServerPowerChartData.shift();
 
-    var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
-    var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
-
-    hostServerCPUChartCategories.push(Math.floor(Math.random() * 30));
+    var lastTime = hostServerCPUChartCategories[9];
+    var timeParts = lastTime.split(':');
+    var hours = parseInt(timeParts[0], 10);
+    var minutes = parseInt(timeParts[1], 10);
+    var seconds = parseInt(timeParts[2], 10);
+    seconds += 5;
+    if (seconds >= 60) {
+        seconds -= 60;
+        minutes++;
+        if (minutes >= 60) {
+            minutes -= 60;
+            hours++;
+        }
+    }
+    var updatedTime = hours.toString().padStart(2, '0') + ':' +
+                    minutes.toString().padStart(2, '0') + ':' +
+                    seconds.toString().padStart(2, '0');
+    hostServerCPUChartCategories.push(updatedTime);
     hostServerCPUChartCategories.shift();
 
-    hostServerPowerChartCategories.push(Math.floor(Math.random() * 30));
+    lastTime = hostServerPowerChartCategories[9];
+    timeParts = lastTime.split(':');
+    hours = parseInt(timeParts[0], 10);
+    minutes = parseInt(timeParts[1], 10);
+    seconds = parseInt(timeParts[2], 10);
+    seconds += 5;
+    if (seconds >= 60) {
+        seconds -= 60;
+        minutes++;
+        if (minutes >= 60) {
+            minutes -= 60;
+            hours++;
+        }
+    }
+    updatedTime = hours.toString().padStart(2, '0') + ':' +
+                    minutes.toString().padStart(2, '0') + ':' +
+                    seconds.toString().padStart(2, '0');
+    hostServerPowerChartCategories.push(updatedTime);
     hostServerPowerChartCategories.shift();
 
     ApexCharts.exec("hostServerCPUChart", "updateOptions", {
