@@ -1,13 +1,19 @@
 let intervalId;
-var hostServerCPUChart;
-var hostServerPowerChart;
+var hostServerCPUChart, hostServerPowerChart;
+var hostServerCPUChartData = [1.13,1.2,1.13,1,1.13,1.13,1.13,1.13,1.13,1.13];//초기값 임시 저장
+var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74,];
+var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
 
 document.addEventListener("DOMContentLoaded", function () {
-    var hostServerCPUChartData = [1.13,1.2,1.13,1,1.13,1.13,1.13,1.13,1.13,1.13];//초기 값 저장
-    var hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74,];
+    //임시로 값 저장
+    hostServerCPUChartDataOption.series[0].data = hostServerCPUChartData;
+    hostServerPowerChartDataOption.series[0].data = hostServerPowerChartData;
 
-    var hostServerCPUChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
-    var hostServerPowerChartCategories = ['16:58:00', '16:58:10', '16:58:20', '16:58:30', '16:58:40', '16:58:50', '16:59:00', '16:59:10', '16:59:20', '16:59:30'];
+    hostServerCPUChartDataOption.xaxis.categories = hostServerCPUChartCategories;
+    hostServerPowerChartDataOption.xaxis.categories = hostServerPowerChartCategories;
+
+    // getLatestChartData();//값 가져오는 코드
 
     hostServerCPUChart = new ApexCharts(document.getElementById("query_cache1"), hostServerCPUChartDataOption);
     hostServerPowerChart = new ApexCharts(document.getElementById("query_cache2"), hostServerPowerChartDataOption);
@@ -15,37 +21,16 @@ document.addEventListener("DOMContentLoaded", function () {
     hostServerCPUChart.render();
     hostServerPowerChart.render();
 
-    ApexCharts.exec("hostServerCPUChart", "updateOptions", {
-        series: [{
-            name: "cpu",
-            data: hostServerCPUChartData
-            }
-        ],
-        xaxis: {
-            categories: hostServerCPUChartCategories
-        }
-    });
-
-    ApexCharts.exec("hostServerPowerChart", "updateOptions", {
-        series: [{
-            name: "power",
-            data: hostServerPowerChartData
-        }
-        ],
-        xaxis: {
-        categories: hostServerPowerChartCategories
-        }
-    });
-
     startInterval();
 });
 
-function updateChart(){
-    var hostServerCPUChartData = hostServerCPUChart.w.globals.series[0];//업데이트 값 저장
-    var hostServerPowerChartData = hostServerPowerChart.w.globals.series[0];
+function getLatestChartData(){
+    //차트 값을 업데이트 하는 코드
+    hostServerCPUChartData = hostServerCPUChart.w.globals.series[0];
+    hostServerPowerChartData = hostServerPowerChart.w.globals.series[0];
 
-    var hostServerCPUChartCategories = hostServerCPUChart.w.globals.categoryLabels;
-    var hostServerPowerChartCategories = hostServerPowerChart.w.globals.categoryLabels;
+    hostServerCPUChartCategories = hostServerCPUChart.w.globals.categoryLabels;
+    hostServerPowerChartCategories = hostServerPowerChart.w.globals.categoryLabels;
 
     hostServerCPUChartData.push(Math.floor(Math.random() * 30));
     hostServerCPUChartData.shift();
@@ -53,11 +38,11 @@ function updateChart(){
     hostServerPowerChartData.push(Math.floor(Math.random() * 30));
     hostServerPowerChartData.shift();
 
-    var lastTime = hostServerCPUChartCategories[9];
-    var timeParts = lastTime.split(':');
-    var hours = parseInt(timeParts[0], 10);
-    var minutes = parseInt(timeParts[1], 10);
-    var seconds = parseInt(timeParts[2], 10);
+    lastTime = hostServerCPUChartCategories[9];
+    timeParts = lastTime.split(':');
+    hours = parseInt(timeParts[0], 10);
+    minutes = parseInt(timeParts[1], 10);
+    seconds = parseInt(timeParts[2], 10);
     seconds += 5;
     if (seconds >= 60) {
         seconds -= 60;
@@ -67,7 +52,7 @@ function updateChart(){
             hours++;
         }
     }
-    var updatedTime = hours.toString().padStart(2, '0') + ':' +
+    updatedTime = hours.toString().padStart(2, '0') + ':' +
                     minutes.toString().padStart(2, '0') + ':' +
                     seconds.toString().padStart(2, '0');
     hostServerCPUChartCategories.push(updatedTime);
@@ -92,7 +77,11 @@ function updateChart(){
                     seconds.toString().padStart(2, '0');
     hostServerPowerChartCategories.push(updatedTime);
     hostServerPowerChartCategories.shift();
+}
 
+function updateChart(){
+    getLatestChartData();
+    
     ApexCharts.exec("hostServerCPUChart", "updateOptions", {
         series: [{
             name: "cpu",
@@ -117,7 +106,7 @@ function updateChart(){
 }
 
 function startInterval(){
-    intervalId = setInterval(updateChart,5000);
+    intervalId = setInterval(updateChart,1000);
 }
 
 const environmentInfoTab = document.getElementById("environmentInfoTab");
@@ -188,11 +177,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const scannedtable4 = document.querySelector('td.qtable_4');
             const scannedtable5 = document.querySelector('td.qtable_5');
 
-            scannedtable1.textContent = "30 (line)";
+            scannedtable1.textContent = "101250 (line)";
             scannedtable2.textContent = "330 (line)";
             scannedtable3.textContent = "80 (%)";
-            scannedtable4.textContent = "20 (sec)";
-            scannedtable5.textContent = "4";
+            scannedtable4.textContent = "14.28 (sec)";
+            scannedtable5.textContent = "8";
 
             var result = "+-----------------------------------+\n" +
                 "|ps_partkey      |value                        |\n" +
@@ -209,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
             metricViewPauseIcon.style.display = 'none';
             isMetricViewBtnClicked = false;
             clearInterval(intervalId);
-        }, 2000); 
+        }, 14000); 
         
     });
 });
