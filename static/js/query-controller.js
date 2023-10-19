@@ -142,8 +142,6 @@ function modalContentsLoad(b){
             var csdLog = document.getElementById("tab2");
             CSDButton.innerText = "CSD " + i;
             csdLog.innerHTML = totalCSDLog[i-1];
-            // console.log(totalCSDLog[i-1]);
-            // console.log(csdLog);
         });
     };
     //Container 1~4
@@ -155,8 +153,6 @@ function modalContentsLoad(b){
             var containerLog = document.getElementById("tab1");
             containerButton.innerText = arr[i] + " Container";
             containerLog.innerHTML = totalContainerLog[i];
-            // console.log(totalContainerLog[i]);
-            // console.log(containerLog);
         });
     };
 }
@@ -178,11 +174,6 @@ $("#modal #close").click(function () {
         containerLog.innerHTML = "";
 
         $("#modal").modal("hide");
-        // var modalDiv = $('#modal');
-        // modalDiv.modal({
-        //     backdrop: false,
-        //     show: false
-        // });
     });
 });
 // 2. 모달 드래그 
@@ -199,15 +190,11 @@ $('a[data-toggle="tab"]').click(function (e) {
         if (targetTab === '#tab1') {
             $("#containerButton").show();
             $("#CSDButton").hide();
-            // $('.nav-tabs a:first').tab('show');
-            // $('.nav-tabs a:last').tab('hide');
 
         } 
         // 탭 2로 전환 시 내용 업데이트
         else if (targetTab === '#tab2') {
             $("#containerButton").hide();
             $("#CSDButton").show();
-            // $('.nav-tabs a:first').tab('hide');
-            // $('.nav-tabs a:last').tab('show');
         }
 });
