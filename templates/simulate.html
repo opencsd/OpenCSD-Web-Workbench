@@ -311,6 +311,7 @@
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>
                             <th style="width: 1%;">ID</th>
+                            <th style="width: 5%;">MODE</th>
                             <th style="width: 30%;">QUERY</th>
                             <th style="width: 12%;">CPU(tick)</th>
                             <th style="width: 12%;">Power(W)</th>
@@ -321,8 +322,8 @@
                         </thead>
                         <tbody id="queryLogTableBody">
                           <div class="modal fade" id="modal" tabindex="-1" roll="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp" ng-controller="myCtrl">
-                            <div class="modal-dialog modal-xl" role="document">
-                                <div class="modal-content" style="width: 100%; height: 80vh; margin:0; padding:0;">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content" style="width: 100%; height: 70vh; margin:0; padding:0;">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Query Log</h5>    
                                         <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -337,7 +338,7 @@
                                         <!-- 모달 내용 -->
                                         <div class="tab-content" id="myTabContent" style="height: 90%;">
                                           <!-- 첫번째 탭 -->
-                                          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab" style="overflow:scroll; background-color:black; width:100%; height:100%; max-height:100vh; color:white;"></div>
+                                          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab" style="overflow:scroll; background-color:black; width:100%; height:100%; color:white;"></div>
                                         </div>
                                     </div>
     
@@ -396,11 +397,11 @@
                     <div class="row">
                       <h3 class="card-title col-10">Selected Validation Query Metric Info</h3>
                       <div class="dropdown col-2">
-                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
+                        <a href="#" id="validationMetricDropdownBtn" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">CPU</a>
-                          <a class="dropdown-item" href="#">Power</a>
-                          <a class="dropdown-item" href="#">Network</a>
+                          <a class="dropdown-item" id="validationCPUChartBtn">CPU</a>
+                          <a class="dropdown-item" id="validationPowerChartBtn">Power</a>
+                          <a class="dropdown-item" id="validationNetworkChartBtn">Network</a>
                         </div>
                       </div>
                     </div>
@@ -409,17 +410,25 @@
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div class="row" style="padding-top: 5px;">
                             <div style="margin: 5px 15px 15px;">Metric Compare</div>
-                            <div id="chart-demo-bar1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
-                            <div id="chart-demo-bar2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
+                            <div id="validationCompareChart1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
+                            <div id="validationCompareChart2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
                           </div>
                         </div>
                       </div>
                       <div class="col-6" style="padding-left: 5px;">
                         <div class="card" style="padding: 0 15px 10px 0;">
-                          <div class="row" style="padding-top: 5px;">
+                          <div class="row" id="validationCPUChartContainer" style="padding-top: 5px;">
                             <div style="margin: 5px 15px 15px;">CPU Detail</div>
-                            <div id="chart-demo-bar3" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-                            <div id="chart-demo-bar4" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
+                            <div id="validationCPUChart1" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
+                            <div id="validationCPUChart2" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
+                          </div>
+                          <div class="row" id="validationPowerChartContainer" style="padding-top: 5px; display: none;">
+                            <div style="margin: 5px 15px 15px;">Power Detail</div>
+                            <div id="validationPowerChart" class="chart-lg"  style="padding: 0 20px;"></div>
+                          </div>
+                          <div class="row" id="validationNetworkChartContainer" style="padding-top: 5px; display: none;">
+                            <div style="margin: 5px 15px 15px;">Network Detail</div>
+                            <div id="validationNetworkChart" class="chart-lg"  style="padding: 0 20px;"></div>
                           </div>
                         </div>
                       </div>
@@ -461,7 +470,7 @@
                               <td class="simul_td data2">-</td>
                               <td class="simul_td data2">-</td>
                             </tr>
-                            <tr class="simul_tr">
+                            <!-- <tr class="simul_tr">
                               <td class="simul_td data3">-</td>
                               <td class="simul_td data3">-</td>
                               <td class="simul_td data3">-</td>
@@ -470,7 +479,7 @@
                               <td class="simul_td data3">-</td>
                               <td class="simul_td data3">-</td>
                               <td class="simul_td data3">-</td>
-                            </tr>
+                            </tr> -->
                           </tbody>
                         </table>
                       </div>
@@ -652,6 +661,7 @@
   <script src="../static/js/tabler.min.js" defer></script>
   <script src="../static/js/demo.min.js" defer></script>
 
+  <script src="../static/js/chart-options.js" defer></script>
   <script src="../static/js/Simulate.js" defer></script>
   <script src="../static/js/temp-log.js" defer></script>
 
