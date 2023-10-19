@@ -15,6 +15,8 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         checkboxCell.style.width = "5%";
         const queryIDCell = document.createElement("td");
         queryIDCell.style.width = "1%";
+        const modeIconCell = document.createElement("td");
+        modeIconCell.style.width = "5%";
         const queryCell = document.createElement("td");
         queryCell.style.width = "30%";
         const progressBarCells = [];
@@ -22,6 +24,10 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         dummyButtonCell.style.width = "5%";
 
         if(temp_id == 1){
+            modeIconCell.innerHTML = `
+                <div><img src="../static/free-icon-letter-c.png" width="20" height="20"/></div>
+            `;
+
             for (let i = 0; i < 4; i++) {
                 const progressBarCell = document.createElement("td");
                 progressBarCell.style.width = "12%";
@@ -60,6 +66,10 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                 progressBarCells.push(progressBarCell);
             }
         }else{
+            modeIconCell.innerHTML = `
+                <div><img src="../static/free-icon-letter-s.png" width="20" height="20"/></div>
+            `;
+
             for (let i = 0; i < 4; i++) {
                 const progressBarCell = document.createElement("td");
                 progressBarCell.style.width = "12%";
@@ -99,15 +109,6 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             }
         }
         
-        const dummyButton = document.createElement("td");
-        dummyButton.innerHTML = `
-            <button class="btn btn-link p-0 ssd_btn queryLogDetailClass">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                </svg>
-            </button>
-        `;
-        
         checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="2">`;
         newRow.appendChild(checkboxCell);
 
@@ -115,6 +116,9 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         temp_id++;
         queryIDCell.style.textAlign = "center";
         newRow.appendChild(queryIDCell);
+
+        modeIconCell.style.textAlign = "center";
+        newRow.appendChild(modeIconCell);
 
         queryCell.textContent = `${shortenedQuery}`;
         queryCell.style.backgroundColor = "#fcfdfe";
@@ -124,13 +128,20 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             newRow.appendChild(progressBarCells[i]);
         }
 
+        dummyButtonCell.innerHTML = `
+            <button class="btn btn-link p-0 ssd_btn queryLogDetailClass">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
+            </button>
+        `;
+        
         newRow.appendChild(dummyButtonCell);
-        dummyButtonCell.appendChild(dummyButton);
 
         queryLogTableBody.appendChild(newRow);
 
         //쿼리 로그 클릭 이벤트 발생 시 모달 로드
-        dummyButton.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButton.id)});
+        dummyButtonCell.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButtonCell.id)});
     } else {
         queryLogTableBody.textContent = "No query available.";
     }
@@ -177,337 +188,18 @@ $(function () {
 
 document.addEventListener("DOMContentLoaded", function () {  
     window.ApexCharts &&
-        new ApexCharts(document.getElementById("chart-demo-bar1"), {
-                chart: {
-                type: "bar",
-                fontFamily: "inherit",
-                height: 240,
-                parentHeightOffset: 0,
-                toolbar: {
-                    show: false,
-                },
-                animations: {
-                    enabled: false,
-                },
-                stacked: false,
-            },
-            plotOptions: {
-                bar: {
-                    barHeight: "50%",
-                    horizontal: false,
-                },
-            },
-            dataLabels: {
-                enabled: true,
-                style: {
-                    colors: ["#fff"]
-                }
-            },
-            fill: {
-                opacity: 1,
-            },
-            series: [{
-                    name: "ID 1",
-                    data: [100, 100, 100, 100],
-                    color: "#78b86fff" 
-                }
-            ],
-            grid: {
-                padding: {
-                    top: -20,
-                    right: 0,
-                    left: -4,
-                    bottom: -4,
-                },
-                strokeDashArray: 4,
-            },
-            xaxis: {
-                tooltip: {
-                    enabled: false,
-                },
-                axisBorder: {
-                    show: false,
-                },
-                categories: ["CPU", "Power", "Network", "Time"],
-            },
-            yaxis: {
-                labels: {
-                    padding: 4,
-                },
-                tickAmount: 5,
-                max: 100
-            },
-            legend: {
-                show: true,
-                position: "bottom",
-                offsetY: 12,
-                markers: {
-                    width: 10,
-                    height: 10,
-                    radius: 100,
-                },
-                itemMargin: {
-                    horizontal: 8,
-                    vertical: 8,
-                },
-            },
-        }).render();
-});
-
-document.addEventListener("DOMContentLoaded", function () {  
+        new ApexCharts(document.getElementById("validationCompareChart1"), validationCompareChart1Option).render();
     window.ApexCharts &&
-        new ApexCharts(document.getElementById("chart-demo-bar2"), {
-        chart: {
-        type: "bar",
-        fontFamily: "inherit",
-        height: 240,
-        parentHeightOffset: 0,
-        toolbar: {
-            show: false,
-        },
-        animations: {
-            enabled: false,
-        },
-        stacked: false,
-    },
-    plotOptions: {
-        bar: {
-            barHeight: "50%",
-            horizontal: false,
-        },
-    },
-    dataLabels: {
-        enabled: true,
-        style: {
-            colors: ["#fff"]
-        }
-    },
-                fill: {
-        opacity: 1,
-    },
-    series: [{
-        name: "ID 1",
-        data: [35, 23, 49, 22],
-        color: "#78b86fff" 
-    },
-    {
-        name: "ID 2",
-        data: [100, 100, 100, 100],
-        color: "#e6c333ff" 
-    },
-    ],
-    grid: {
-        padding: {
-            top: -20,
-            right: 0,
-            left: -4,
-            bottom: -4,
-        },
-        strokeDashArray: 4,
-    },
-    xaxis: {
-        tooltip: {
-            enabled: false,
-        },
-        axisBorder: {
-            show: false,
-        },
-        categories: ["CPU", "Power", "Network", "Time"],
-    },
-    yaxis: {
-        labels: {
-            padding: 4,
-        },
-        tickAmount: 5,
-        max: 100
-    },
-    legend: {
-        show: true,
-        position: "bottom",
-        offsetY: 12,
-        markers: {
-            width: 10,
-            height: 10,
-            radius: 100,
-        },
-        itemMargin: {
-            horizontal: 8,
-            vertical: 8,
-        },
-    },
-}).render();
-});
-
-document.addEventListener("DOMContentLoaded", function () {
+        new ApexCharts(document.getElementById("validationCompareChart2"), validationCompareChart2Option).render();
     window.ApexCharts &&
-        new ApexCharts(document.getElementById("chart-demo-bar3"), {
-            chart: {
-                type: "bar",
-                fontFamily: "inherit",
-                height: 240,
-                parentHeightOffset: 0,
-                toolbar: {
-                    show: false,
-                },
-                animations: {
-                    enabled: false,
-                },
-                stacked: true,
-            },
-            plotOptions: {
-                bar: {
-                    barHeight: "50%",
-                    horizontal: true,
-                },
-            },
-            dataLabels: {
-                enabled: true,
-            },
-            fill: {
-                opacity: 1,
-            },
-            series: [{
-                data: [2112],
-            }, ],
-            tooltip: {
-                theme: "dark",
-            },
-            grid: {
-                padding: {
-                    top: -20,
-                    right: 0,
-                    left: -4,
-                    bottom: -4,
-                },
-                strokeDashArray: 4,
-            },
-            xaxis: {
-                labels: {
-                    padding: 0,
-                    formatter: function (val) {
-                        return val;
-                    },
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                axisBorder: {
-                    show: false,
-                },
-                categories: ["ID 1"],
-
-            },
-            yaxis: {
-                labels: {
-                    padding: 10,
-                },
-                max: 4000
-            },
-            fill: {
-                type:'color' ,
-                colors: "#78b86fff"
-            },
-            legend: {
-                show: true,
-                position: "bottom",
-                offsetY: 12,
-                markers: {
-                    width: 10,
-                    height: 10,
-                    radius: 100,
-                },
-                itemMargin: {
-                    horizontal: 8,
-                    vertical: 8,
-                },
-            },
-        }).render();
-});
-
-document.addEventListener("DOMContentLoaded", function () {
+        new ApexCharts(document.getElementById("validationCPUChart1"), validationCPUChart1Option).render();
     window.ApexCharts &&
-        new ApexCharts(document.getElementById("chart-demo-bar4"), {
-            chart: {
-                type: "bar",
-                fontFamily: "inherit",
-                height: 240,
-                parentHeightOffset: 0,
-                toolbar: {
-                    show: false,
-                },
-                animations: {
-                    enabled: false,
-                },
-                stacked: false,
-            },
-            plotOptions: {
-                bar: {
-                    barHeight: "50%",
-                    horizontal: true,
-                },
-            }, 
-            series: [{
-                name: "ID 1",
-                data: [2112],
-                color: "#78b86fff" 
-            },
-            {
-                name: "ID 2",
-                data: [5963],
-                color: "#e6c333ff" 
-            },
-            ],
-            dataLabels: {
-                enabled: true,
-            },
-            tooltip: {
-                theme: "dark",
-            },
-            grid: {
-                padding: {
-                    top: -20,
-                    right: 0,
-                    left: 0,
-                    bottom: -4,
-                },
-                strokeDashArray: 4,
-            },
-            xaxis: {
-                labels: {
-                    margin : 5,
-                    padding: 0,
-                    formatter: function (val) {
-                        return val;
-                    },
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                axisBorder: {
-                    show: false,
-                },
-                categories: ["ID 1", "ID 2"],
-            },
-            yaxis: {
-                labels: {
-                    padding: 0,
-                },
-            },
-            legend: {
-                show: true,
-                position: "bottom",
-                offsetY: 12,
-                markers: {
-                    width: 10,
-                    height: 10,
-                    radius: 100,
-                },
-                itemMargin: {
-                    horizontal: 8,
-                    vertical: 8,
-                },
-            },
-        }).render();
+        new ApexCharts(document.getElementById("validationCPUChart2"), validationCPUChart2Option).render();
+    window.ApexCharts &&
+        new ApexCharts(document.getElementById("validationPowerChart"), validationPowerChartOption).render();
+    window.ApexCharts &&
+        new ApexCharts(document.getElementById("validationNetworkChart"), validationNetworkChartOption).render();
+
 });
 
 let chart1Visible = false;
@@ -515,10 +207,10 @@ let chart2Visible = false;
 let chart3Visible = false;
 let chart4Visible = false;
 
-const chart1Div = document.getElementById("chart-demo-bar1");
-const chart2Div = document.getElementById("chart-demo-bar2");
-const chart3Div = document.getElementById("chart-demo-bar3");
-const chart4Div = document.getElementById("chart-demo-bar4");
+const chart1Div = document.getElementById("validationCompareChart1");
+const chart2Div = document.getElementById("validationCompareChart2");
+const chart3Div = document.getElementById("validationCPUChart1");
+const chart4Div = document.getElementById("validationCPUChart2");
 
 const runButton = document.getElementById("pushdownButton");
 
@@ -646,3 +338,33 @@ opt_dropdownMenu.addEventListener("click", function (e) {
         }
     }
 });
+
+const validationCPUChartBtn = document.getElementById("validationCPUChartBtn");
+const validationPowerChartBtn = document.getElementById("validationPowerChartBtn");
+const validationNetworkChartBtn = document.getElementById("validationNetworkChartBtn");
+
+const validationCPUChartContainer = document.getElementById("validationCPUChartContainer");
+const validationPowerChartContainer = document.getElementById("validationCPUChartContainer");
+const validationNetworkChartContainer = document.getElementById("validationCPUChartContainer");
+
+validationCPUChartBtn.addEventListener("click", function () {
+    console.log("validationCPUChartBtn");
+    validationCPUChartContainer.style.display = "block";        
+    validationPowerChartContainer.style.display = "none";
+    validationNetworkChartContainer.style.display = "none";
+});
+
+validationPowerChartBtn.addEventListener("click", function () {
+    console.log("validationPowerChartBtn");
+    validationCPUChartContainer.style.display = "none";        
+    validationPowerChartContainer.style.display = "block";
+    validationNetworkChartContainer.style.display = "none";
+});
+
+validationNetworkChartBtn.addEventListener("click", function () {
+    console.log("validationNetworkChartBtn");
+    validationCPUChartContainer.style.display = "none";        
+    validationPowerChartContainer.style.display = "none";
+    validationNetworkChartContainer.style.display = "block";
+});
+
