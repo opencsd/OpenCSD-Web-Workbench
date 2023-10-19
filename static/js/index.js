@@ -3,7 +3,7 @@ const connect_btn = document.querySelector('#connect_btn');
 const buttonClickHandler = () => {
     var workbench_user_id = document.getElementById("workbench_user_id").value;
 
-    fetch('http://10.0.4.87:5001/connect', {
+    fetch('http://10.0.4.87:5002/connect', {
         method: 'POST',
         mode: 'cors',
         headers: {
