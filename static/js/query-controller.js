@@ -97,7 +97,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             queryLogTableBody.appendChild(newRow);
         }, 14000); 
 
-        //쿼리 로그 클릭 이벤트 발생 시 모달 로드
+        //쿼리 로그 클릭 이벤트 발생 시 모달 로드 
         dummyButton.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButton.id)});
         
     } else {
@@ -115,16 +115,18 @@ function modalContentsLoad(b){
         var CSDLog = document.getElementById("tab2");
         CSDButton.innerText = "CSD 1";
         CSDLog.innerHTML = totalCSDLog[0];
+        
         //컨테이너 로그 드롭박스 및 출력 데이터 초기화
         var containerButton = document.getElementById("containerButton");
         var containerLog = document.getElementById("tab1");
         containerButton.innerText = "Interface Container"
         containerLog.innerHTML = totalContainerLog[0];
-        
+
         // 모든 모달은 처음 띄워질 때 첫번째 탭 관련 정보만 시각화
-        $('#myTabs a:first').tab('show');
         $("#containerButton").show();
         $("#CSDButton").hide();
+        // $('.nav-tabs a:last').tab('hide');
+
         // 모달 띄우기(모든 탭 관련 정보 설정)
         $("#modal").modal("show");
         var modalDiv = $('#modal');
@@ -164,17 +166,14 @@ $("#modal #close").click(function () {
         var CSDLog = document.getElementById("tab2");
         CSDButton.innerText = "CSD Num";
         CSDLog.innerHTML = "";
+
         //컨테이너 로그 드롭박스 및 출력 데이터 초기화
         var containerButton = document.getElementById("containerButton");
         var containerLog = document.getElementById("tab1");
         containerButton.innerText = "Container"
         containerLog.innerHTML = "";
+
         $("#modal").modal("hide");
-        var modalDiv = $('#modal');
-        modalDiv.modal({
-            backdrop: false,
-            show: false
-        });
     });
 });
 // 2. 모달 드래그 
@@ -183,6 +182,7 @@ $(function () {
         handle: ".modal-header"
     });
 });
+
 // 3. 모달 탭 전환 
 $('a[data-toggle="tab"]').click(function (e) {
         var targetTab = $(e.target).attr('href');
@@ -190,6 +190,7 @@ $('a[data-toggle="tab"]').click(function (e) {
         if (targetTab === '#tab1') {
             $("#containerButton").show();
             $("#CSDButton").hide();
+
         } 
         // 탭 2로 전환 시 내용 업데이트
         else if (targetTab === '#tab2') {
