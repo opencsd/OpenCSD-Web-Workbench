@@ -44,23 +44,8 @@ table[border]:not([border="0"]):not([style*="border-color"]) th,
 table[border]:not([border="0"]):not([style*="border-color"]) td {
   border-color: #ccc;
 }
-figure figcaption {
-  color: #999;
-  margin-top: 0.25rem;
-  text-align: center;
-}
 hr {
   border-color: #ccc;
   border-style: solid;
   border-width: 1px 0 0 0;
-}
-.mce-content-body:not([dir=rtl]) blockquote {
-  border-left: 2px solid #ccc;
-  margin-left: 1.5rem;
-  padding-left: 1rem;
-}
-.mce-content-body[dir=rtl] blockquote {
-  border-right: 2px solid #ccc;
-  margin-right: 1.5rem;
-  padding-right: 1rem;
 }
