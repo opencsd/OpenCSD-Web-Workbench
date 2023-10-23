@@ -81,9 +81,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         newRow.appendChild(dummyButtonCell);
         dummyButtonCell.appendChild(dummyButton);
 
-        setTimeout(() => {
-            queryLogTableBody.appendChild(newRow);
-        }, 60000); 
+        queryLogTableBody.appendChild(newRow);
         
     } else {
         queryLogTableBody.textContent = "No query available.";

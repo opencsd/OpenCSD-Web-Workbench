@@ -55,6 +55,10 @@
   background-image: url("../img/flags/am.svg");
 }
 
+.flag-country-ams {
+  background-image: url("../img/flags/ams.svg");
+}
+
 .flag-country-ao {
   background-image: url("../img/flags/ao.svg");
 }
@@ -1053,4 +1057,24 @@
 
 .flag-xs {
   width: 1.5rem;
+}
+
+.flag-sm {
+  width: 2rem;
+}
+
+.flag-md {
+  width: 4rem;
+}
+
+.flag-lg {
+  width: 5.5rem;
+}
+
+.flag-xl {
+  width: 7rem;
+}
+
+.flag-2xl {
+  width: 11rem;
 }

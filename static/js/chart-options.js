@@ -1,4 +1,4 @@
-var hostServerCPUChartDataOption = {
+var hostServerCPUChartOption = {
     chart: {
         id:"hostServerCPUChart",
         type: "area",
@@ -93,7 +93,7 @@ var hostServerCPUChartDataOption = {
     // },
 }
 
-var hostServerPowerChartDataOption = {
+var hostServerPowerChartOption = {
     chart: {
         id:"hostServerPowerChart",
         type: "area",

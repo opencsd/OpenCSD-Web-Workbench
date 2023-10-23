@@ -93,9 +93,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         newRow.appendChild(dummyButtonCell);
         dummyButtonCell.appendChild(dummyButton);
 
-        setTimeout(() => {
-            queryLogTableBody.appendChild(newRow);
-        }, 14000); 
+        queryLogTableBody.appendChild(newRow);
 
         //쿼리 로그 클릭 이벤트 발생 시 모달 로드 
         dummyButton.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButton.id)});
