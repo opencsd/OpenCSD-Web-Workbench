@@ -1,7 +1,7 @@
 # Introduction of KETI-Web-Workbench
 -------------
 
-KETI-Web-Workbench enables users to monitor databases, perform query pushdown, and run validators to analyze resource utilization and energy savings.
+KETI-Web-Workbench enables users to monitor databases, perform query pushdown, and run validator to analyze resource utilization and energy savings.
 
 ## Contents
 -------------
