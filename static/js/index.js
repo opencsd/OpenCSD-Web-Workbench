@@ -1,9 +1,9 @@
 const connect_btn = document.querySelector('#connect_btn');
 
-const buttonClickHandler = () => {
+connect_btn.addEventListener('click', () => {
     var workbench_user_id = document.getElementById("workbench_user_id").value;
 
-    fetch('http://10.0.4.87:5002/connect', {
+    fetch('http://10.0.4.87:5000/connect', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -22,9 +22,7 @@ const buttonClickHandler = () => {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         alert(error); 
     });
-};
+});
 
-connect_btn.addEventListener('click',buttonClickHandler);

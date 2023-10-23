@@ -25,7 +25,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
         if(temp_id == 1){
             modeIconCell.innerHTML = `
-                <div><img src="../static/free-icon-letter-c.png" width="20" height="20"/></div>
+                <div><img src="../static/image/free-icon-letter-c.png" width="20" height="20"/></div>
             `;
 
             for (let i = 0; i < 4; i++) {
@@ -67,7 +67,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             }
         }else{
             modeIconCell.innerHTML = `
-                <div><img src="../static/free-icon-letter-s.png" width="20" height="20"/></div>
+                <div><img src="../static/image/free-icon-letter-s.png" width="20" height="20"/></div>
             `;
 
             for (let i = 0; i < 4; i++) {
@@ -154,7 +154,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 function modalContentsLoad(b){
     $(function() {
         var containerLog = document.getElementById("tab1");
-        containerLog.innerHTML = SimulatorLog;
+        containerLog.innerHTML = validatorLog;
         $("#modal").modal("show");
         var modalDiv = $('#modal');
         modalDiv.modal({

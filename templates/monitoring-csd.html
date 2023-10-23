@@ -14,8 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>
-    Dashboard - Tabler - Premium and Open Source dashboard template with
-    responsive and high quality UI.
+    KETI Web Workbench CSD Monitoring Tab
   </title>
   <!-- <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script> -->
   <meta name="msapplication-TileColor" content="" />
@@ -25,8 +24,8 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="MobileOptimized" content="320" />
-  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+  <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" /> -->
   <meta name="description"
     content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!" />
   <meta name="canonical" content="https://preview.tabler.io/" />
@@ -53,20 +52,10 @@
   <link href="../static/css/tabler-payments.min.css" rel="stylesheet" />
   <link href="../static/css/tabler-vendors.min.css" rel="stylesheet" />
   <link href="../static/css/demo.min.css" rel="stylesheet" />
-  <link href="../static/css/sql.css" rel="stylesheet" />
 
-  <link href="../static/css/Monitoring.css" rel="stylesheet" />
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/timeline.js"></script>
 
-  <script>
-    // import { SidebarLayout } from "@druids/ui/layout/SidebarLayout";
-    // import { Flex } from "@druids/ui/layout/Flex";
-    // import { Text } from "@druids/ui/typography/Text";
-    // import { Title } from "@druids/ui/typography/Title";
-    // import { Spacing } from "@druids/ui/layout/Spacing";
-  </script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/timeline.js"></script>
   <style>
     @import url("https://rsms.me/inter/inter.css");
 
@@ -82,10 +71,10 @@
 </head>
 
 <body>
-  <script src="../static/js/demo-theme.min.js"></script>
-  <script src="../static/js/dashboard-chart-ssd.js"></script>
+  
   <div class="page">
-    <!-- Navbar -->
+
+    <!-- Header -->
     <header class="navbar navbar-expand-md d-print-none">
       <div class="container-xl">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
@@ -94,7 +83,7 @@
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
           <a href=".">
-            <img src="../static/logo.svg" width="135" height="40" class="navbar-brand-image" />
+            <img src="../static/image/logo.svg" width="135" height="40" class="navbar-brand-image" />
           </a>
         </h1>
         <div class="navbar-nav flex-row order-md-last">
@@ -120,13 +109,15 @@
         </div>
       </div>
     </header>
+
+    <!-- Navbar -->
     <header class="navbar-expand-md">
       <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
           <div class="container-xl">
             <ul class="navbar-nav">
               <li class="nav-item active">
-                <a class="nav-link" href="/monitoring_ssd">
+                <a class="nav-link" href="/monitoring">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +139,7 @@
                 </a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link" href="/query_ssd">
+                <a class="nav-link" href="/query">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google-big-query"
@@ -161,11 +152,11 @@
                       <path d="M14 14l2 2" />
                     </svg>
                   </span>
-                  <span class="nav-link-title" class="query_btn"> Query </span>
+                  <span class="nav-link-title"> Query </span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/simulate">
+                <a class="nav-link" href="/validator">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cardboards" width="44"
@@ -178,7 +169,7 @@
                       <path d="M16 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     </svg>
                   </span>
-                  <span class="nav-link-title" class="simulate_btn"> Validator </span>
+                  <span class="nav-link-title"> Validator </span>
                 </a>
               </li>
             </ul>
@@ -187,15 +178,14 @@
       </div>
     </header>
 
+    <!-- Page -->
     <div class="page-wrapper">
       <!-- Page header -->
       <div class="page-header d-print-none">
         <div class="container-xl">
           <div class="row g-2 align-items-center">
             <div class="col">
-              <!-- Page pre-title -->
-              <div class="page-pretitle">Overview</div>
-              <h2 class="page-title">DB Monitoring</h2>
+              <p class="page-title">DB Monitoring</p>
             </div>
           </div>
         </div>
@@ -204,6 +194,7 @@
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
+
             <div class="col-lg-12">
               <div class="row row-deck row-cards">
                 <div class="col-lg-12">
@@ -211,44 +202,76 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-3 mt-0">
-                          <h2 class="card-title">Connected Database Info</h2>
+                          <p class="card-title">Connected Database Info</p>
+                        </div>
+                        <div class="col-3 mt-0">
+                          <button class="btn btn-link p-0" id="dbInfoSlideBtn">
+                            <svg id="dbInfoSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                              <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                            </svg>
+                            <svg id="dbInfoSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
+                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                            </svg>
+                          </button>
                         </div>
                       </div>
-                      <h2 class="card-title border-bottom"></h2>
+                      <p class="card-title border-bottom"></p>
                       <div class="row">
-                        <div class="col-3">
+                        <div class="col-4">
                           <h2 class="mb-1">DBMS</h2>
                           <span>MySQL</span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                           <h2 class="mb-1">DB Size</h2>
                           <span>2(GB)</span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">DB Name</h2>
-                          <span>tpc-h</span>
-                        </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">Storage</h2>
-                          <span>SSD</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">CSD Count</h2>
+                          <span>8</span>
                         </div>
                       </div>
                       <div class="row mt-3">
-                        <div class="col-3">
-                          <h2 class="mb-1">DB User</h2>
-                          <span>keti</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">DB Name</h2>
+                          <span>tpc-h</span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">Workbench User</h2>
-                          <span>keti_mysql</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Storage Type</h2>
+                          <span>CSD</span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">DB Host Address</h2>
-                          <span>10.0.4.81:3306</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">CSD Kind</h2>
+                          <span>NGD</span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">Store Type</h2>
-                          <span>Row Base</span>
+                      </div>
+                      <div id="hoddenDBInfo" style="display: none;">
+                        <div class="row mt-3">
+                          <div class="col-4">
+                            <h2 class="mb-1">Store Type</h2>
+                            <span>Row Base</span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Block Size</h2>
+                            <span>4096 (MB)</span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Algorithm</h2>
+                            <span>CSD Metric Score</span>
+                          </div>
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-4">
+                            <h2 class="mb-1">DB User</h2>
+                            <span>keti</span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Workbench User</h2>
+                            <span>keti_opencsd</span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">DB Host Address</h2>
+                            <span>10.0.4.80:40001</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -260,28 +283,27 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-3 mt-0">
-                          <h2 class="card-title">Database Monitoring</h2>
+                          <p class="card-title">Database Monitoring</p>
                         </div>
                         <div class="col-3 mt-0">
-                          <button class="btn btn-link p-0 ssd_btn" id="db_monitoring_slide_btn">
-                            <svg class="ssd_btn" id="db_monitoring_slide_up_icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                          <button class="btn btn-link p-0" id="dbMonitoringSlideBtn">
+                            <svg id="dbMonitoringSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                               <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                             </svg>
-                            <svg class="ssd_btn" id="db_monitoring_slide_down_icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
+                            <svg id="dbMonitoringSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
                               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                             </svg>
                           </button>
                         </div>
                       </div>
-                      <h2 class="card-title border-bottom"></h2>
+                      <p class="card-title border-bottom"></p>
                       <div>
-                        <div id="main_db_monitoring">
-                          <!-- 메인 그래프 넣는곳 -->
-                          main graph
+                        <div id="mainDBMonitoring">
+                          <!-- 메인 그래프 -->
                         </div>
-                        <div class="ssd_btn" id="hidden_db_monitoring" style="display: none;">
-                          <!-- 상세 그래프 넣는곳 -->
-                          show graph
+                        <div id="hiddenDBMonitoring" style="display: none;">
+                          <!-- 상세 그래프 -->
+                          show all graph
                         </div>
                       </div>
                     </div>
@@ -293,28 +315,27 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-3 mt-0">
-                          <h2 class="card-title">Host Metric Monitoring</h2>
+                          <p class="card-title">Host Metric Monitoring</p>
                         </div>
                         <div class="col-3 mt-0">
-                          <button class="btn btn-link p-0 ssd_btn" id="host_monitoring_slide_btn">
-                            <svg class="ssd_btn" id="host_monitoring_slide_up_icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                          <button class="btn btn-link p-0" id="hostMonitoringSlideBtn">
+                            <svg id="hostMonitoringSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                               <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                             </svg>
-                            <svg class="ssd_btn" id="host_monitoring_slide_down_icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
+                            <svg id="hostMonitoringSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
                               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                             </svg>
                           </button>
                         </div>
                       </div>
-                      <h2 class="card-title border-bottom"></h2>
+                      <p class="card-title border-bottom"></p>
                       <div>
-                        <div id="main_host_monitoring">
-                          <!-- 메인 그래프 넣는곳 -->
-                          main graph
+                        <div id="mainHostMonitoring">
+                          <!-- 메인 그래프 -->
                         </div>
-                        <div class="ssd_btn" id="hidden_host_monitoring" style="display: none;">
-                          <!-- 상세 그래프 넣는곳 -->
-                          show graph
+                        <div id="hiddenHostMonitoring" style="display: none;">
+                          <!-- 상세 그래프 -->
+                          show all graph
                         </div>
                       </div>
                     </div>
@@ -482,16 +503,15 @@
       </div>
     </div>
   </div>
+
   <!-- Libs JS -->
-  <!-- <script src="../dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/maps/world.js" defer></script>
-  <script src="../dist/libs/jsvectormap/dist/maps/world-merc.js" defer></script> -->
-  <!-- Tabler Core -->
-  <script src="../static/js/tabler.min.js" defer></script>
-  <script src="../static/js/demo.min.js" defer></script>
-  <script src="../static/js/Monitoringcontroller.js" defer></script>
-  <script src="../static/js/db-monitoring-ssd.js" defer></script>
+  <script src="../static/js/libs/demo-theme.min.js"></script>
+  <script src="../static/js/libs/tabler.min.js" defer></script>
+  <script src="../static/js/libs/demo.min.js" defer></script>
+  
+  <script src="../static/js/monitoring-csd-chart-option.js"></script>
+  <script src="../static/js/monitoring-csd-chart.js"></script>
+  <script src="../static/js/monitoring-csd.js" defer></script>
 
 </body>
 

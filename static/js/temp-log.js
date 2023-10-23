@@ -1,4 +1,4 @@
-var SimulatorLog =
+var validatorLog =
 "[Validator] Validator Receive Query, Option <br/>" +
 "[Validator] SELECT l_returnflag, <br/>" +
 "l_linestatus, <br/>" +

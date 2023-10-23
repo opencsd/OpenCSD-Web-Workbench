@@ -14,9 +14,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>
-    Dashboard - Tabler - Premium and Open Source dashboard template with
-    responsive and high quality UI.
+    KETI Web Workbench Query Execution Tab
   </title>
+  <!-- <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script> -->
   <meta name="msapplication-TileColor" content="" />
   <meta name="theme-color" content="" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -24,8 +24,8 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="MobileOptimized" content="320" />
-  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+  <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" /> -->
   <meta name="description"
     content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!" />
   <meta name="canonical" content="https://preview.tabler.io/" />
@@ -54,17 +54,11 @@
   <link href="../static/css/demo.min.css" rel="stylesheet" />
   <link href="../static/css/sql.css" rel="stylesheet" />
 
-  <!-- <script>
-    import { SidebarLayout } from "@druids/ui/layout/SidebarLayout";
-    import { Flex } from "@druids/ui/layout/Flex";
-    import { Text } from "@druids/ui/typography/Text";
-    import { Title } from "@druids/ui/typography/Title";
-    import { Spacing } from "@druids/ui/layout/Spacing";
-  </script> -->
-
+  <!-- JavaScript files (jQuery, 부트스트랩, Apexchat) -->
+  <script src="../static/libs/apexcharts/dist/apexcharts.min.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
@@ -83,10 +77,9 @@
 </head>
 
 <body>
-  <script src="../static/js/demo-theme.min.js"></script>
-  <script src="../static/js/dashboard-chart.js"></script>
   <div class="page">
-    <!-- Navbar -->
+
+    <!-- Header -->
     <header class="navbar navbar-expand-md d-print-none">
       <div class="container-xl">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
@@ -95,7 +88,7 @@
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
           <a href=".">
-            <img src="../static/logo.svg" width="135" height="40" class="navbar-brand-image" />
+            <img src="../static/image/logo.svg" width="135" height="40" class="navbar-brand-image" />
           </a>
         </h1>
         <div class="navbar-nav flex-row order-md-last">
@@ -121,6 +114,8 @@
         </div>
       </div>
     </header>
+
+    <!-- Navbar -->
     <header class="navbar-expand-md">
       <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
@@ -148,7 +143,7 @@
                   <span class="nav-link-title"> DB Monitoring </span>
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item active">
                 <a class="nav-link" href="/query">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -165,8 +160,8 @@
                   <span class="nav-link-title"> Query </span>
                 </a>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/simulate">
+              <li class="nav-item">
+                <a class="nav-link" href="/validator">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cardboards" width="44"
@@ -195,25 +190,25 @@
           <div class="row g-2 align-items-center">
             <div class="col">
               <!-- Page pre-title -->
-              <div class="page-pretitle">Overview</div>
-              <h2 class="page-title">Validator</h2>
+              <p class="page-title">Query Pushdown</p>
             </div>
           </div>
         </div>
       </div>
+
       <!-- Page body -->
       <div class="page-body">
         <div class="container-xl">
-
+          
           <div class="row">
             <div class="col-7" style="margin-bottom: 15px;">
               <div class="col-lg-12">
-                <div class="card" style="height: 420px;"> 
+                <div class="card" style="height: 420px;">
                   <div class="card-body row justify-content-center">
                     <h3 class="card-title col-5">Query Input</h3>
                     <div class="text-end col-7">
                       <div class="d-none d-sm-inline">
-                        <a href="#" id="dropdownToggle" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;" id="dropdownToggle">tpc-h</a>
                         <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
                           <a class="dropdown-item" href="#">none</a>
                         </div>
@@ -239,56 +234,214 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col-4">
-                        <h3 class="card-title" style="margin-top: 5px;">Option Set</h3>
+                        <button class="btn btn-link p-0" id="envSetting">
+                          <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                          </svg>
+                        </button>
                       </div>
                       <div class="col-8" style=" display: flex; flex-direction: row-reverse;">
-                        <div class="dropdown" style="width: auto;">
-                          <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Select Validation Option</a>
-                          <div class="dropdown-menu opt_menu">
-                            <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
-                            <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
-                            <a class="dropdown-item opt_item" href="#">New Option+</a>
-                          </div>
-                        </div>
+                        <ul class="nav nav-pills nav-fill gap-2 small bg-white rounded-5 shadow-sm" id="queryTab" role="tablist" 
+                          style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white); max-width: 230px;">
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link active rounded-5" id="environmentInfoTab" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Environment Info</button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-5" id="dbSchemaTab" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">DB Schema</button>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="card card-body mt-2" style="max-height: 335px;">
+                      <div class="card card-body mt-2" id="environmentInfoContainer" style="max-height: 350px; overflow: auto;"> 
                         <table class="table table-vcenter text-nowrap datatable">
-                          <thead class="text-center">
-                            <th>Option Name</th>
-                            <th>Pushdown Option</th>
-                          </thead>
                           <tbody class="text-center">
                             <tr>
-                              <th scope="row">DBMS</th>
-                              <td class="bg-light" id="dbmsInfo">-</td>
+                              <th scope="row" class="w-26">DB Name</th>
+                              <td class="bg-light">TPC-H</td>
                             </tr>
                             <tr>
-                              <th scope="row">Storage Type</th>
-                              <td class="bg-light" id="storageTypeInfo">-</td>
+                              <th scope="row" class="w-26">DBMS</th>
+                              <td class="bg-light">MySQL</td>
                             </tr>
                             <tr>
-                              <th scope="row">CSD Kind</th>
-                              <td class="bg-light" id="csdkindInfo">-</td>
+                              <th scope="row" class="w-26">Storage Type</th>
+                              <td class="bg-light">CSD</td>
                             </tr>
                             <tr>
-                              <th scope="row">CSD Count</th>
-                              <td class="bg-light" id="csdCountInfo">-</td>
+                              <th scope="row" class="w-26">CSD Count</th>
+                              <td class="bg-light">8</td>
                             </tr>
                             <tr>
-                              <th scope="row">Block Count</th>
-                              <td class="bg-light" id="blockCountInfo">-</td>
+                              <th scope="row" class="w-26">CSD Type</th>
+                              <td class="bg-light">NGD</td>
                             </tr>
                             <tr>
-                              <th scope="row">Algorithm</th>
-                              <td class="bg-light" id="algorithmInfo">-</td>
+                              <th scope="row" class="w-26">DBMS Size</th>
+                              <td class="bg-light">2 (GB)</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="w-26">Block Count</th>
+                              <td class="bg-light">15</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="w-26">Algorithm</th>
+                              <td class="bg-light">CSD Metric Score</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="card card-body mt-2" id="dbSchemaContainer" style="height: 350px; overflow: auto; display: none;"> 
+                        <details>
+                          <summary>customer</summary>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_custkey</strong> / int(11) / NOT NULL
+                              <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ebc334" class="bi bi-key-fill" viewBox="0 0 16 16">
+                                <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                              </svg> -->
+                            </p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_name</strong> / varchar(25) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_address</strong> / varchar(40) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_nationkey</strong> / int(11) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_phone</strong> / char(15) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_acctbal</strong> / decimal(15,2) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_mktsegment</strong> / char(10) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>c_comment</strong> / varchar(117) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>lineitem</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_orderkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_partkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_suppkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_linenumber</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_quantity</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_extendedprice</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_discount</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_tax</strong> / char(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_returnflag</strong> / char(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_linestatus</strong> /char(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_shipDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_commitDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_receiptDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_shipnstruct</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_shipmode</strong> / char(10) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>l_comment</strong> / varchar(44) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>nation</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_nationkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_name</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_regionkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>n_comment</strong> / varchar(152) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>orders</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_custkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderstatus</strong> / cjar(1) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_totalprice</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderDATE</strong> / date / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_orderpriority</strong> / char(15) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_clerk</strong> / char(15) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_shippriority</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>o_comment</strong> / varchar(79) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>part</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_partkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_name</strong> / varchar(55) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_mfgr</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_brand</strong> / char(10) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_type</strong> / varchar(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_size</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_container</strong> / char(10) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_retailprice</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>p_comment</strong> / varchar(23) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>partsupp</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_partkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_suppkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_availqty</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_supplycost</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>ps_comment</strong> / varchar(199) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>region</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>r_regionkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>r_name</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>r_comment</strong> / varchar(152) / NOT NULL</p>
+                        </details>
+                        <details>
+                          <summary>supplier</summary>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_suppkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_name</strong> / char(25) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_address</strong> / varchar(40) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_nationkey</strong> / int(11) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_phone</strong> / char(15) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_acctbal</strong> / decimal(15,2) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>s_comment</strong> / varchar(101) / NOT NULL</p>
+                        </details>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            
+          <div class="row">
+            <div class="col-7" style="margin-bottom: 15px;">
+              <div class="card" style="min-height:305px;">
+                <div class="card-body row" style="padding-bottom: 1.5rem;">
+                  <div class="col-lg-12">
+                    <h3 class="card-title">Query Result</h3>
+                    <div id="resultContainer">
+                      <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
+                    </div>
+                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="card" style="min-height:305px;">
+                <div class="card-body row">
+                  <div class="col-lg-12">
+                    <h3 class="card-title">Query Metric</h3>
+                    <div id="metricContainer">
+                      <div class="table-responsive">
+                        <table class="table table-vcenter text-nowrap datatable">
+                          <tbody class="text-center">
+                            <tr>
+                              <th scope="row" class="w-25">Scanned Row</th>
+                              <td class="bg-light qtable_1">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="w-25">Filtered Row</th>
+                              <td class="bg-light qtable_2">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="w-25">Filter Ratio</th>
+                              <td class="bg-light qtable_3">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="w-25">Execution Time(sec)</th>
+                              <td class="bg-light qtable_4">-</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="w-25">Snippet Count</th>
+                              <td class="bg-light qtable_5">-</td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                  </div>
+                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
+                    </div>  
+                  </div>       
                 </div>
               </div>
             </div>
@@ -300,32 +453,66 @@
                 <div class="card-body row">
                   <div class="col-lg-12">
                     <div class="row">
-                      <h3 class="card-title">Query Log</h3>
-                      <div class="col-9 text-end">
-                        <!-- add -->
+                      <h3 class="card-title col-3">Metric</h3>
+                      <div class="card-title col-9" style=" display: flex; flex-direction: row-reverse; align-items: center;">
+                        <button class="btn btn-link p-0" id="metricViewBtn">
+                          <svg id="metricViewPauseIcon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black" class="bi bi-pause-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
+                          </svg>
+                          <svg id="metricViewPlayIcon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black" class="bi bi-play-circle" viewBox="0 0 16 16" style="display: none;">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                          </svg>
+                        </button>
                       </div>
                     </div>
+                    <div class="col-lg-12" style="display: flex;">
+                      <div class="col-6" style="padding-right: 5px;">
+                        <div class="card" style="padding: 0 15px 10px 0;">
+                          <div style="margin: 5px 15px 15px;">Host Server CPU</div>
+                          <div id="queryHostServerCPU"></div>
+                        </div>
+                      </div>
+                      <div class="col-6" style="padding-left: 5px;">
+                        <div class="card" style="padding: 0 15px 10px 0;">
+                          <div style="margin: 5px 15px 15px;">Host Server Power</div>
+                          <div id="queryHostServerPower"></div>
+                        </div>
+                      </div>                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body row">
+                  <div class="col-lg-12">
+                    <div class="row">
+                      <h3 class="card-title col-3">Query Log</h3>
+                    </div>
                     <div class="table-responsive">
-                      <table class="table table-vcenter text-nowrap datatable" style="width: 100%;">
+                      <table class="table table-vcenter text-nowrap datatable">
                         <thead>
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>
                             <th style="width: 1%;">ID</th>
-                            <th style="width: 5%;">MODE</th>
                             <th style="width: 30%;">QUERY</th>
-                            <th style="width: 12%;">CPU(tick)</th>
-                            <th style="width: 12%;">Power(W)</th>
-                            <th style="width: 12%;">Network(MB)</th>
-                            <th style="width: 12%;">Time(Sec)</th>
+                            <th style="width: 12%;">Scanned Row</th>
+                            <th style="width: 12%;">Filtered Row</th>
+                            <th style="width: 12%;">Filter Ratio</th>
+                            <th style="width: 12%;">Execution Time</th>
                             <th style="width: 5%;"></th>
                           </tr>
                         </thead>
                         <tbody id="queryLogTableBody">
                           <div class="modal fade" id="modal" tabindex="-1" roll="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp" ng-controller="myCtrl">
-                          
-                            <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content" style="width: 47vh; height: 70vh; margin:0; padding:0;">
-
                                     <div class="modal-header">
                                         <h5 class="modal-title">Query Log</h5>    
                                         <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -334,15 +521,46 @@
                                         <!--모달 탭-->
                                         <ul class="nav nav-tabs" id="myTabs" role="tablist">
                                           <li class="nav-item" id="modalBodyTab1">
-                                              <a class="nav-link active" id="tab1-tab" data-toggle="tab" ng-click="switchTab('Tab1')" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false">Validator</a>
+                                              <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Storage Engine</a>
                                           </li>
+                                          <li class="nav-item" id="modalBodyTab2">
+                                              <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="true">CSD</a>
+                                          </li>
+                                          <!-- 드롭다운 1 -->
+                                          <span id="containerButtonArea" class="dropdown" style="top:15; right:0; padding:10px; margin-right: 14px; position: absolute;">
+                                            <button id="containerButton" class="btn btn-sm btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#787878; border:none;">
+                                              Container
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                              <li><a class="dropdown-item" id="Interface">Interface Container</a></li>
+                                              <li><a class="dropdown-item" id="Merging">Merging Container</a></li>
+                                              <li><a class="dropdown-item" id="Monitoring">Monitoring Container</a></li>
+                                              <li><a class="dropdown-item" id="Offloading">Offloading Container</a></li>
+                                            </ul>
+                                          </span>
+                                          <!-- 드롭다운 2 -->
+                                          <span id="CSDButtonArea" class="dropdown" style="top:15; right:0; padding:10px; margin-right: 14px; position: absolute;">
+                                            <button id="CSDButton" class="btn btn-sm btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#787878; border:none;">
+                                                CSD Num
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                              <li><a class="dropdown-item" id="CSD1">1</a></li>
+                                              <li><a class="dropdown-item" id="CSD2">2</a></li>
+                                              <li><a class="dropdown-item" id="CSD3">3</a></li>
+                                              <li><a class="dropdown-item" id="CSD4">4</a></li>
+                                              <li><a class="dropdown-item" id="CSD5">5</a></li>
+                                              <li><a class="dropdown-item" id="CSD6">6</a></li>
+                                              <li><a class="dropdown-item" id="CSD7">7</a></li>
+                                              <li><a class="dropdown-item" id="CSD8">8</a></li>
+                                            </ul>
+                                          </span>
                                         </ul>
                                         <!-- 모달 내용 -->
                                         <div class="tab-content" id="myTabContent" style="height: 92%;">
                                           <!-- 첫번째 탭 -->
-
-                                          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab" style="overflow:overlay; background-color:black; width:100%; height:60vh; color:white;"></div>
-
+                                          <div class="tab-pane active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab" style="overflow:overlay; background-color:black; width:100%; height:60vh; color:white;"></div>
+                                          <!-- 두번째 탭 -->
+                                          <div class="tab-pane" id="tab2" role="tabpanel" aria-labelledby="tab2-tab" style="overflow:overlay; background-color:black; width:100%; height:60vh; color:white;"></div>
                                         </div>
                                     </div>
     
@@ -393,111 +611,8 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-12" style="margin-bottom: 15px;">
-              <div class="card">
-                <div class="card-body row">
-                  <div class="col-lg-12">
-                    <div class="row">
-                      <h3 class="card-title col-10">Selected Validation Query Metric Info</h3>
-                      <div class="dropdown col-2">
-                        <a href="#" id="validationMetricDropdownBtn" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" id="validationCPUChartBtn">CPU</a>
-                          <a class="dropdown-item" id="validationPowerChartBtn">Power</a>
-                          <a class="dropdown-item" id="validationNetworkChartBtn">Network</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="display: flex;">
-                      <div class="col-6" style="padding-right: 5px;">
-                        <div class="card" style="padding: 0 15px 10px 0;">
-                          <div class="row" style="padding-top: 5px;">
-                            <div style="margin: 5px 15px 15px;">Metric Compare</div>
-                            <div id="validationCompareChart1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
-                            <div id="validationCompareChart2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" style="padding-left: 5px;">
-                        <div class="card" style="padding: 0 15px 10px 0;">
-                          <div class="row" id="validationCPUChartContainer" style="padding-top: 5px;">
-                            <div style="margin: 5px 15px 15px;">CPU Detail</div>
-                            <div id="validationCPUChart1" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-                            <div id="validationCPUChart2" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-                          </div>
-                          <div class="row" id="validationPowerChartContainer" style="padding-top: 5px; display: none;">
-                            <div style="margin: 5px 15px 15px;">Power Detail</div>
-                            <div id="validationPowerChart" class="chart-lg"  style="padding: 0 20px;"></div>
-                          </div>
-                          <div class="row" id="validationNetworkChartContainer" style="padding-top: 5px; display: none;">
-                            <div style="margin: 5px 15px 15px;">Network Detail</div>
-                            <div id="validationNetworkChart" class="chart-lg"  style="padding: 0 20px;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" style="display: flex;">
-                      <h4 class="col-10" style="margin-top: 15px; margin-bottom: 0px; padding-left: 10px;">Selected Validation Query Option Info</h4>
-                      <div class="col-12">
-                        <table class="simul_table" style="width: 100%;">
-                          <thead class="simul_thead">
-                            <tr class="simul_tr">
-                              <th class="simul_th">Selected ID</th>
-                              <th class="simul_th">Option Name</th>
-                              <th class="simul_th">DBMS</th>
-                              <th class="simul_th">Storage Type</th>
-                              <th class="simul_th">CSD Kind</th>
-                              <th class="simul_th">CSD Count</th>
-                              <th class="simul_th">Block Count</th>
-                              <th class="simul_th">Algorithm</th>
-                            </tr>
-                          </thead>
-                          <tbody class="simul_tbody">
-                            <tr class="simul_tr">
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                            </tr>
-                            <tr class="simul_tr">
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                            </tr>
-                            <!-- <tr class="simul_tr">
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                            </tr> -->
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
         </div>
       </div>
-      <!-- Page body End -->
 
       <footer class="footer footer-transparent d-print-none">
         <div class="container-xl">
@@ -656,72 +771,34 @@
       </div>
     </div>
   </div>
+
   <!-- Libs JS -->
-  <script src="../static/libs/apexcharts/dist/apexcharts.min.js" defer></script>
   <script src="../static/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
   <script src="../static/libs/jsvectormap/dist/maps/world.js" defer></script>
   <script src="../static/libs/jsvectormap/dist/maps/world-merc.js" defer></script>
-  <!-- Tabler Core -->
-  <script src="../static/js/tabler.min.js" defer></script>
-  <script src="../static/js/demo.min.js" defer></script>
+
+  <script src="../static/js/libs/demo-theme.min.js"></script>
+  <script src="../static/js/libs/tabler.min.js" defer></script>
+  <script src="../static/js/libs/demo.min.js" defer></script>
 
   <script src="../static/js/chart-options.js" defer></script>
-  <script src="../static/js/simulate.js" defer></script>
   <script src="../static/js/temp-log.js" defer></script>
-
+  <script src="../static/js/query-csd-log.js" defer></script>
+  <script src="../static/js/query-csd.js" defer></script>
+  
   <style>
-    .simul_table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem auto;
-      border: 1px solid #ddd;
-      background-color: white;
-      display: flex;
-      text-align: center;
-    }
-    
-    .simul_tr {
-      height: 100%;
-      width: 100%;
-      text-align: center;
-    }
-    
-    .simul_tbody{
-      display:flex;
-      text-align: center;
-      width: 80%;
-    }
-
-    .simul_thead{
-      display:flex;
-      text-align: center;
-      width: 20%;
-    }
-    
-    .simul_th, .simul_td {
-      display: flex;
-      padding: 8px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
-    
-    .simul_th {
-      background-color: #f2f2f2;
-      text-align: center;
-    }
-    
-    .simul_td {
-      padding-left: 15px;
-      text-align: center;
-    }
-
     #tab1::-webkit-scrollbar-thumb {
       background: white; 
       width: 6px;
       border: 0px solid white; 
     }
-    </style>
-
+    #tab2::-webkit-scrollbar-thumb {
+      background: white; 
+      width: 6px;
+      border: 0px solid white; 
+    }
+    
+  </style>
 </body>
 
 </html>
