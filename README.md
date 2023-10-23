@@ -55,6 +55,7 @@ http://10.0.4.87:5001/login
 - Check Query Log
 - Compare two query results
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/26273d40-72c6-4c34-9b18-66abc592fb1c">
+<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/f887cfdc-8f1f-408c-b2c5-cdf41f1d06b9">
 
 
 ## Governance
