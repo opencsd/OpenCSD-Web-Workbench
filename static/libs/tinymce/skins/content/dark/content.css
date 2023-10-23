@@ -38,12 +38,6 @@ figure {
   display: table;
   margin: 1rem auto;
 }
-figure figcaption {
-  color: #8a8f97;
-  display: block;
-  margin-top: 0.25rem;
-  text-align: center;
-}
 hr {
   border-color: #6d737b;
   border-style: solid;
@@ -53,14 +47,4 @@ code {
   background-color: #6d737b;
   border-radius: 3px;
   padding: 0.1rem 0.2rem;
-}
-.mce-content-body:not([dir=rtl]) blockquote {
-  border-left: 2px solid #6d737b;
-  margin-left: 1.5rem;
-  padding-left: 1rem;
-}
-.mce-content-body[dir=rtl] blockquote {
-  border-right: 2px solid #6d737b;
-  margin-right: 1.5rem;
-  padding-right: 1rem;
 }
