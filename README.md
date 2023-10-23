@@ -41,30 +41,20 @@ http://10.0.4.87:5001/login
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/441c7c77-fd86-4049-90ea-e4ddf230c298">
 
 ### 3. Access a Query Pushdown Page
->  Run Query
-> 
->   Check Query Result
-> 
->   Check Query Metric
-> 
->   Check Host Server Metrics
->
-> Check Query Log
+- Run Query
+- Check Query Result
+- Check Query Metric
+- Check Host Server Metrics
+- Check Query Log
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/20b9868c-7e02-4c24-b834-5523b05caa73">
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/f6bf749c-b1bd-4cbc-969b-0f25ad259db1">
 
 ### 4. Access a Validation Page
->   Run Query
-> 
->   Set Query Pushdown Option
-> 
->   Check Query Log
-> 
->   Compare two query results
-
+- Run Query
+- Set Query Pushdown Option
+- Check Query Log
+- Compare two query results
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/26273d40-72c6-4c34-9b18-66abc592fb1c">
-
-
 
 
 ## Governance
