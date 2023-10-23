@@ -16,7 +16,7 @@ KETI-Web-Workbench enables users to monitor databases, perform query pushdown, a
 
 ## Requirement
 -------------
->
+>   ...
 
 
 
@@ -35,10 +35,18 @@ http://10.0.4.87:5001/login
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/879b628c-5383-4f0a-8ec0-3825ff781471">
 
 ### 2. Access a DB Monitoring Page
-> DB Info
-> DB Metrics Monitoring
-> Host Server Metrics Monitoring
+>   DB Info
+>   DB Metrics Monitoring
+>   Host Server Metrics Monitoring
 <img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/441c7c77-fd86-4049-90ea-e4ddf230c298">
+
+### 3. Access a Query Pushdown Page
+>   Query Input
+>   Check Query Result
+>   Check Query Metric
+>   Check Host Server Metrics
+<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/20b9868c-7e02-4c24-b834-5523b05caa73">
+
 
 
 ## Governance
