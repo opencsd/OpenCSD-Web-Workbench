@@ -16,13 +16,19 @@ KETI-Web-Workbench enables users to monitor databases, perform query pushdown, a
 
 ## Requirement
 -------------
->   ...
+>   Python 3.7.5 <br>
+>   Flask 2.2.5 <br>
+>   Werkzeug 2.2.3
+
 
 
 
 ## How To Install
 -------------
->   ...
+```bash
+git clone
+python3 app.py
+```
 
 ## How To Use
 -------------
