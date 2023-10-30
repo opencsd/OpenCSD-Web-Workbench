@@ -3754,7 +3754,5 @@ def query_ssd():
 def validate():
     return render_template('validator.html')
 
-
-
 if __name__ == '__main__':
     app.run(host="10.0.4.87",debug=True)

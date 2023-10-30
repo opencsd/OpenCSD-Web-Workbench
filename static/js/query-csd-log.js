@@ -145,7 +145,6 @@ function modalContentsLoad(b){
     //Container 1~4
     var arr = ['Interface', "Merging", "Monitoring", "Offloading"];
     for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
         document.getElementById(arr[i]).addEventListener('click', function () {
             var containerButton = document.getElementById("containerButton");
             var containerLog = document.getElementById("tab1");

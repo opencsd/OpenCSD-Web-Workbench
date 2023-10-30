@@ -1,0 +1,59 @@
+<div class="modal fade" id="modal" tabindex="-1" roll="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp" ng-controller="myCtrl">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width: 47vh; height: 70vh; margin:0; padding:0;">
+            <div class="modal-header">
+                <h5 class="modal-title">Query Log</h5>    
+                <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 100%;">
+                <!--모달 탭-->
+                <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                  <li class="nav-item" id="modalBodyTab1">
+                      <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Storage Engine</a>
+                  </li>
+                  <li class="nav-item" id="modalBodyTab2">
+                      <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="true">CSD</a>
+                  </li>
+                  <!-- 드롭다운 1 -->
+                  <span id="containerButtonArea" class="dropdown" style="top:15; right:0; padding:10px; margin-right: 14px; position: absolute;">
+                    <button id="containerButton" class="btn btn-sm btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#787878; border:none;">
+                      Container
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" id="Interface">Interface Container</a></li>
+                      <li><a class="dropdown-item" id="Merging">Merging Container</a></li>
+                      <li><a class="dropdown-item" id="Monitoring">Monitoring Container</a></li>
+                      <li><a class="dropdown-item" id="Offloading">Offloading Container</a></li>
+                    </ul>
+                  </span>
+                  <!-- 드롭다운 2 -->
+                  <span id="CSDButtonArea" class="dropdown" style="top:15; right:0; padding:10px; margin-right: 14px; position: absolute;">
+                    <button id="CSDButton" class="btn btn-sm btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#787878; border:none;">
+                        CSD Num
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" id="CSD1">1</a></li>
+                      <li><a class="dropdown-item" id="CSD2">2</a></li>
+                      <li><a class="dropdown-item" id="CSD3">3</a></li>
+                      <li><a class="dropdown-item" id="CSD4">4</a></li>
+                      <li><a class="dropdown-item" id="CSD5">5</a></li>
+                      <li><a class="dropdown-item" id="CSD6">6</a></li>
+                      <li><a class="dropdown-item" id="CSD7">7</a></li>
+                      <li><a class="dropdown-item" id="CSD8">8</a></li>
+                    </ul>
+                  </span>
+                </ul>
+                <!-- 모달 내용 -->
+                <div class="tab-content" id="myTabContent" style="height: 92%;">
+                  <!-- 첫번째 탭 -->
+                  <div class="tab-pane active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab" style="overflow:overlay; background-color:black; width:100%; height:60vh; color:white;"></div>
+                  <!-- 두번째 탭 -->
+                  <div class="tab-pane" id="tab2" role="tabpanel" aria-labelledby="tab2-tab" style="overflow:overlay; background-color:black; width:100%; height:60vh; color:white;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+  </div>
+
+  <script src="../static/js/temp-log.js" defer></script>
