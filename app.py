@@ -3663,7 +3663,7 @@ db_schema = {
 
 
 ####################################################################################
-#                                   Simulator 화면                                 #
+#                                   Validator 화면                                 #
 ####################################################################################
 option_info = {
     "dbms": "MySQL",
@@ -3679,7 +3679,7 @@ option_info_ssd = {
     "storage_type": "SSD"
 }
 
-# simulator log는 query 수행 데이터와 동일
+# validator log는 query 수행 데이터와 동일
 
 simulation_result = {
     "cpu": {
@@ -3724,19 +3724,19 @@ def login():
             return render_template('db_monitoring_ssd.html')
     return render_template('index.html') 
 
-@app.route('/monitoring_ssd')  
-def monitoring_ssd():
-    return render_template('db_monitoring_ssd.html', dashboard_summary=dashboard_summary)
-
 @app.route('/monitoring')  
 def monitoring():
-    return render_template('db_monitoring.html', dashboard_summary=dashboard_summary)
+    return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
+
+@app.route('/monitoring_ssd')  
+def monitoring_ssd():
+    return render_template('monitoring-ssd.html', dashboard_summary=dashboard_summary)
 
 # DB Monitoring
 @app.route('/monitoring/environment', methods=['GET'])
 def db_info():
     # DB로부터 DB 환경정보 가져옴
-    return render_template('db_monitoring.html', dashboard_summary=dashboard_summary)
+    return render_template('monitoring.html', dashboard_summary=dashboard_summary)
 
 # @app.route('/monitoring')
 # def monitoring():
@@ -3790,10 +3790,11 @@ def db_info():
 #                Query 수행 화면              #
 @app.route('/query') # Query Pushdown 화면으로 전환
 def query():
-    return render_template('query.html')
+    return render_template('query-csd.html')
 
 @app.route('/query_ssd') # Query Pushdown 화면으로 전환
 def query_ssd():
+<<<<<<< HEAD
     return render_template('query_ssd.html')
 
 @app.route('/simulate') # Query Pushdown 화면으로 전환
@@ -3813,7 +3814,17 @@ def simulate():
 # def query_run():
 #     # 쿼리 수행 후 결과값 및 메트릭 값
 #     return render_template('Query.html', query_result=query_result, query_metric_csd=query_metric_csd, query_metric_ssd=query_metric_ssd)
+=======
+    return render_template('query-ssd.html')
+>>>>>>> 3ace327c1aefb654cc5edcd3d097ce57c76eff06
 
+@app.route('/validator') # Validator 화면으로 전환
+def validate():
+    return render_template('validator.html')
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     app.run(host='127.0.0.1', port=400005)
+=======
+    app.run(host="10.0.4.87",debug=True)
+>>>>>>> 3ace327c1aefb654cc5edcd3d097ce57c76eff06

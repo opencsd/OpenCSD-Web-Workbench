@@ -219,58 +219,58 @@
                       <div class="row">
                         <div class="col-4">
                           <h2 class="mb-1">DBMS</h2>
-                          <span>MySQL</span>
+                          <span>{{ dashboard_summary['dbms_type']}}</span>
                         </div>
                         <div class="col-4">
                           <h2 class="mb-1">DB Size</h2>
-                          <span>2(GB)</span>
+                          <span>{{ dashboard_summary['dbms_size']}}</span>
                         </div>
                         <div class="col-4">
                           <h2 class="mb-1">CSD Count</h2>
-                          <span>8</span>
+                          <span>{{ dashboard_summary['csd_count']}}</span>
                         </div>
                       </div>
                       <div class="row mt-3">
                         <div class="col-4">
                           <h2 class="mb-1">DB Name</h2>
-                          <span>tpc-h</span>
+                          <span>{{ dashboard_summary['db_name']}}</span>
                         </div>
                         <div class="col-4">
                           <h2 class="mb-1">Storage Type</h2>
-                          <span>CSD</span>
+                          <span>{{ dashboard_summary['storage_type']}}</span>
                         </div>
                         <div class="col-4">
                           <h2 class="mb-1">CSD Kind</h2>
-                          <span>NGD</span>
+                          <span>{{ dashboard_summary['csd_kind']}}</span>
                         </div>
                       </div>
-                      <div id="hoddenDBInfo" style="display: none;">
+                      <div id="hiddenDBInfo" style="display: none;">
                         <div class="row mt-3">
                           <div class="col-4">
                             <h2 class="mb-1">Store Type</h2>
-                            <span>Row Base</span>
+                            <span>{{ dashboard_summary['data_store_type']}}</span>
                           </div>
                           <div class="col-4">
                             <h2 class="mb-1">Block Size</h2>
-                            <span>4096 (MB)</span>
+                            <span>{{ dashboard_summary['block_size']}}</span>
                           </div>
                           <div class="col-4">
                             <h2 class="mb-1">Algorithm</h2>
-                            <span>CSD Metric Score</span>
+                            <span>{{ dashboard_summary['scheduling_algorithm']}}</span>
                           </div>
                         </div>
                         <div class="row mt-3">
                           <div class="col-4">
                             <h2 class="mb-1">DB User</h2>
-                            <span>keti</span>
+                            <span>{{ dashboard_summary['db_account_name']}}</span>
                           </div>
                           <div class="col-4">
                             <h2 class="mb-1">Workbench User</h2>
-                            <span>keti_opencsd</span>
+                            <span>{{ dashboard_summary['user_id']}}</span>
                           </div>
                           <div class="col-4">
                             <h2 class="mb-1">DB Host Address</h2>
-                            <span>10.0.4.80:40001</span>
+                            <span>{{ dashboard_summary['db_host_ip']}}</span>
                           </div>
                         </div>
                       </div>
@@ -303,7 +303,35 @@
                         </div>
                         <div id="hiddenDBMonitoring" style="display: none;">
                           <!-- 상세 그래프 -->
-                          show all graph
+                          <div class="row">
+                            <div class="col-6">
+                              <div id="ConnectedClientChart" style="width: 100%;">
+                                <!-- 연결된 클라이언트수 그래프 -->
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div id="DBRWRateChart" style="width: 100%;">
+                                <!-- DB Disk Read/Write 비율 그래프 -->
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4">
+                              <div id="DBCacheHitRateChart" stype="width: 100%">
+                                <!-- DB Cache Hit 비율 그래프 -->
+                              </div>
+                            </div>
+                            <div class="col-4">
+                              <div id="DBCacheUsageChart" stype="width: 100%">
+                                <!-- DB 사용 용량 그래프 -->
+                              </div>
+                            </div>
+                            <div class="col-4">
+                              <div id="DBCSDScanFilterChart" stype="width: 100%">
+                                <!-- DB의 CSD 내 Scan/Filter 비율 그래프 -->
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

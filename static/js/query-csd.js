@@ -3,16 +3,14 @@ var hostServerCPUChart, hostServerCPUChartData, hostServerCPUChartCategories;
 var hostServerPowerChart, hostServerPowerChartData, hostServerPowerChartCategories;
 
 //임시값들----
-var tempCPUUpdate = [1,3.1,3.2,3.1,3.1,3.1,3.1,3.1,3.3,3.1,3.2,3.1,3.1,3.2,3.1,3.2,3.2,3.2,3.2,3.2];
-var tempPowerUpdate = [74,103,103,106,107,104,104,104,106,106,106,106,106,106,106,106,106,106,106,106];
+var tempCPUUpdate = [1,3.5,6.2,6.3,4.5];
+var tempPowerUpdate = [74,100,115,120,115];
 var clicked = false;
 let tempNum = 0;
 let temp = true;
 //------------
 
 document.addEventListener("DOMContentLoaded", function () {
-    // getLatestChartData();//값 가져오는 코드
-
     hostServerCPUChart = new ApexCharts(document.getElementById("queryHostServerCPU"), hostServerCPUChartOption);
     hostServerPowerChart = new ApexCharts(document.getElementById("queryHostServerPower"), hostServerPowerChartOption);
 
@@ -99,11 +97,11 @@ function getLatestChartData(){
 }
 
 function getQueryChartData(){
-    //쿼리가 돌때의 시간에 해당하는 차트값만 가져오는 로직
-    hostServerCPUChartData = [3.1,3.1,3.2,3.1,3.1,3.1,3.1,3.1,3.3,3.1,3.2,3.1,3.1,3.2,3.1,3.2,3.2,3.2,3.2,3.2];
-    hostServerPowerChartData = [74,103,103,106,107,104,104,104,106,106,106,106,106,106,106,106,106,106,106,106];
-    hostServerCPUChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57','16:59:00','16:59:03','16:59:06','16:59:09','16:59:12','16:59:15','16:59:18','16:59:21','16:59:24','16:59:27','16:59:30','16:59:33','16:59:36','16:59:39','16:59:42','16:59:45'];
-    hostServerPowerChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57','16:59:00','16:59:03','16:59:06','16:59:09','16:59:12','16:59:15','16:59:18','16:59:21','16:59:24','16:59:27','16:59:30','16:59:33','16:59:36','16:59:39','16:59:42','16:59:45'];
+    //쿼리가 도는 동안의 차트값만 가져오는 로직 현재는 임시 (웹서버 연동 필요)
+    hostServerCPUChartData = [1,3.5,6.2,6.3,4.5];
+    hostServerPowerChartData = [74,100,115,120,115];
+    hostServerCPUChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
+    hostServerPowerChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
 }
 
 function updateLatestChart(){
@@ -134,7 +132,7 @@ function updateLatestChart(){
 }
 
 function updateQueryChart(){
-   //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
+    //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
     getQueryChartData();
 
     hostServerCPUChart.updateOptions({
@@ -161,7 +159,7 @@ function updateQueryChart(){
 }
 
 function startInterval(){
-    intervalId = setInterval(updateLatestChart,3000);
+    intervalId = setInterval(updateLatestChart,3000);//메트릭 업데이트 주기 설정
 }
 
 const environmentInfoTab = document.getElementById("environmentInfoTab");
@@ -229,9 +227,16 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
     const scannedtable1 = document.querySelector('td.qtable_1');
     const scannedtable2 = document.querySelector('td.qtable_2');
+    const scannedtable3 = document.querySelector('td.qtable_3');
+    const scannedtable4 = document.querySelector('td.qtable_4');
+    const scannedtable5 = document.querySelector('td.qtable_5');
 
     scannedtable1.textContent = "101255 (line)";
-    scannedtable2.textContent = "62.39 (sec)";
+    scannedtable2.textContent = "101254 (line)";
+    scannedtable3.textContent = "1 (%)";
+    scannedtable4.textContent = "14.28 (sec)";
+    scannedtable5.textContent = "8";
+
     var result = "+-----------------------------------+\n" +
         "|ps_partkey      |value                        |\n" +
         "+-----------------------------------+\n" +
@@ -247,11 +252,10 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     metricViewPauseIcon.style.display = 'none';
 
     isMetricViewBtnClicked = false;
-
+    
     clearInterval(intervalId);
     updateQueryChart();
 });
-
 
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
