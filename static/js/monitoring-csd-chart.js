@@ -4,32 +4,45 @@ var queryChart, queryChartCategories, queryChartSelectData, queryChartInsertData
 var hostServerCPUChart, hostServerCPUChartCategories, hostServerInterfaceCPUChartData, hostServerMonitoringCPUChartData, hostServerOffloadingCPUChartData, hostServerMergingCPUChartData;
 
 document.addEventListener("DOMContentLoaded", function(){
+  // DataBase Monitoring 차트 정의
   queryChart = Highcharts.chart(document.getElementById("mainDBMonitoring"), queryChartOption);
-  hostServerCPUChart = Highcharts.chart(document.getElementById("mainHostMonitoring"), hostServerCPUChartOption);
   ConnectedClientChart = Highcharts.chart(document.getElementById("ConnectedClientChart"), ConnectedClientOption);
   DBRWRateChart = Highcharts.chart(document.getElementById("DBRWRateChart"), DBRWRateOption);
   DBCacheHitRateChart = Highcharts.chart(document.getElementById("DBCacheHitRateChart"), DBCacheHitRateOption);
   DBCacheUsageChart = Highcharts.chart(document.getElementById("DBCacheUsageChart"), DBCacheUsageOption);
   DBCSDScanFilterChart = Highcharts.chart(document.getElementById("DBCSDScanFilterChart"), DBCSDScanFilterOption);
 
+  // Host Metric Monitoring 차트 정의
+  hostServerCPUChart = Highcharts.chart(document.getElementById("mainHostMonitoring"), hostServerCPUChartOption);
+  HostCSDCPUChart = Highcharts.chart(document.getElementById("HostCSDCpuUsageChart"), HostCSDCpuUsageOption);
+  HostCSDMemoryChart = Highcharts.chart(document.getElementById("HostCSDMemoryChart"), HostCSDMemoryOption);
+  HostCSDNetworkChart = Highcharts.chart(document.getElementById("HostCSDNetworkUsageChart"), HostCSDNetworkOption);
+  HostCSDPowerChart = Highcharts.chart(document.getElementById("HostCSDPowerChart"), HostCSDPowerOption);
 
+  // DataBase Monitoring 렌더링
   queryChart.render();
-  hostServerCPUChart.render();
   ConnectedClientChart.render();
   DBRWRateChart.render();
   DBCacheHitRateChart.render();
   DBCacheUsageChart.render();
   DBCSDScanFilterChart.render();
 
+  // Host Metric Monitoring 렌더링
+  hostServerCPUChart.render();
+  HostCSDCPUChart.render();
+  HostCSDMemoryChart.render();
+  HostCSDNetworkChart.render();
+  HostCSDPowerChart.render();
 
   getDDLData();
   updateLatestChart();
+  getConnectedClient();
+  get_ReadWrite();
   // startInterval();
 })
 
+// DDL 데이터
 function getDDLData(){
-  //그래프 최신값 가져오기 (웹서버 연동)
-  
   var timestamps = [];
   var selectCounts = [];
   var insertCounts = [];
@@ -51,6 +64,42 @@ function getDDLData(){
     queryChart.series[2].setData(updateCounts);
     queryChart.series[3].setData(deleteCounts);
     queryChart.xAxis[0].setCategories(timestamps);
+  })
+  .catch(error => console.error('Error: ', error));
+}
+
+// 연결된 클라이언트 수
+function getConnectedClient(){
+  var timestamps = [];
+  var clients = [];
+
+  fetch('/get_ConnectedClient')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        clients.push(item.client);
+      })
+    ConnectedClientChart.series[0].setData(clients);
+    ConnectedClientChart.xAxis[0].setCategories(timestamps);
+  })
+  .catch(error => console.error('Error: ', error));
+}
+
+// Disk R/W Byte
+function get_ReadWrite(){
+  var timestamps = [];
+  var rw_bytes = [];
+
+  fetch('/get_ReadWrite')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        rw_bytes.push(item.rw_byte);
+      })
+      DBRWRateChart.series[0].setData(rw_bytes);
+      DBRWRateChart.xAxis[0].setCategories(timestamps);
   })
   .catch(error => console.error('Error: ', error));
 }

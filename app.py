@@ -200,86 +200,169 @@ ddl_info = [
     }
 ]
 
+connected_client = [
+    {
+        "timestamp": "14:50:00",
+        "client": 1
+    },
+    {
+        "timestamp": "14:50:10",
+        "client": 1
+    },
+    {
+        "timestamp": "14:50:20",
+        "client": 14
+    },
+    {
+        "timestamp": "14:50:30",
+        "client": 2
+    },
+    {
+        "timestamp": "14:50:40",
+        "client": 7
+    },
+    {
+        "timestamp": "14:50:50",
+        "client": 1
+    },
+    {
+        "timestamp": "14:51:00",
+        "client": 14
+    },
+    {
+        "timestamp": "14:51:10",
+        "client": 12
+    },
+    {
+        "timestamp": "14:51:20",
+        "client": 3
+    },
+    {
+        "timestamp": "14:51:30",
+        "client": 2
+    },
+    {
+        "timestamp": "14:51:40",
+        "client": 1
+    },
+    {
+        "timestamp": "14:51:50",
+        "client": 12
+    },
+    {
+        "timestamp": "14:52:00",
+        "client": 11
+    },
+    {
+        "timestamp": "14:52:10",
+        "client": 8
+    },
+    {
+        "timestamp": "14:52:20",
+        "client": 10
+    },
+    {
+        "timestamp": "14:52:30",
+        "client": 15
+    },
+    {
+        "timestamp": "14:52:40",
+        "client": 10
+    },
+    {
+        "timestamp": "14:52:50",
+        "client": 1
+    },
+    {
+        "timestamp": "14:53:00",
+        "client": 6
+    },
+    {
+        "timestamp": "14:53:10",
+        "client": 1
+    }
+]
+
 disk_rw_info = [
     {
-        'timestamp': '14:50:00',
-        'disk_rw': 1.1
+        "timestamp": "14:50:00",
+        "rw_byte": 56
     },
     {
-        'timestamp': '14:50:10',
-        'disk_rw': 2.0
+        "timestamp": "14:50:10",
+        "rw_byte": 67
     },
     {
-        'timestamp': '14:50:20',
-        'disk_rw': 0.8
+        "timestamp": "14:50:20",
+        "rw_byte": 70
     },
     {
-        'timestamp': '14:50:30',
-        'disk_rw': 1.5
+        "timestamp": "14:50:30",
+        "rw_byte": 20
     },
     {
-        'timestamp': '14:50:40',
-        'disk_rw': 1.1
+        "timestamp": "14:50:40",
+        "rw_byte": 23
     },
     {
-        'timestamp': '14:50:50',
-        'disk_rw': 1.9
+        "timestamp": "14:50:50",
+        "rw_byte": 85
     },
     {
-        'timestamp': '14:51:00',
-        'disk_rw': 1.7
+        "timestamp": "14:51:00",
+        "rw_byte": 77
     },
     {
-        'timestamp': '14:51:10',
-        'disk_rw': 1.8
+        "timestamp": "14:51:10",
+        "rw_byte": 93
     },
     {
-        'timestamp': '14:51:20',
-        'disk_rw': 2.1
+        "timestamp": "14:51:20",
+        "rw_byte": 97
     },
     {
-        'timestamp': '14:51:30',
-        'disk_rw': 2.5
+        "timestamp": "14:51:30",
+        "rw_byte": 23
     },
     {
-        'timestamp': '14:51:40',
-        'disk_rw': 1.8
+        "timestamp": "14:51:40",
+        "rw_byte": 55
     },
     {
-        'timestamp': '14:51:50',
-        'disk_rw': 1.5
+        "timestamp": "14:51:50",
+        "rw_byte": 74
     },
     {
-        'timestamp': '14:52:00',
-        'disk_rw': 1.4
+        "timestamp": "14:52:00",
+        "rw_byte": 25
     },
     {
-        'timestamp': '14:52:10',
-        'disk_rw': 1.1
+        "timestamp": "14:52:10",
+        "rw_byte": 61
     },
     {
-        'timestamp': '14:52:20',
-        'disk_rw': 0.8
+        "timestamp": "14:52:20",
+        "rw_byte": 65
     },
     {
-        'timestamp': '14:52:30',
-        'disk_rw': 1.2
+        "timestamp": "14:52:30",
+        "rw_byte": 56
     },
     {
-        'timestamp': '14:52:40',
-        'disk_rw': 1.7
+        "timestamp": "14:52:40",
+        "rw_byte": 93
     },
     {
-        'timestamp': '14:52:50',
-        'disk_rw': 1.6
+        "timestamp": "14:52:50",
+        "rw_byte": 59
     },
     {
-        'timestamp': '14:53:00',
-        'disk_rw': 1.1
+        "timestamp": "14:53:00",
+        "rw_byte": 86
     },
     {
-        'timestamp': '14:53:10',
-        'disk_rw': 0.7
+        "timestamp": "14:53:10",
+        "rw_byte": 80
     }
 ]
 
@@ -330,7 +413,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:51:50',
-        'cache_hit_rate': 100
+        'cache_hit_rate': 53
     },
     {
         'timestamp': '14:52:00',
@@ -338,7 +421,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:52:10',
-        'cache_hit_rate': 0
+        'cache_hit_rate': 50
     },
     {
         'timestamp': '14:52:20',
@@ -346,7 +429,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:52:30',
-        'cache_hit_rate': 2
+        'cache_hit_rate': 42
     },
     {
         'timestamp': '14:52:40',
@@ -358,7 +441,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:53:00',
-        'cache_hit_rate': 0
+        'cache_hit_rate': 19
     },
     {
         'timestamp': '14:53:10',
@@ -3716,11 +3799,23 @@ def login():
 def monitoring():
     return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
 
+# DDL Data Get 요청
 @app.route('/get_queryChart', methods=['GET'])
 def get_queryChart():
-    print("get chart")
+    # print("get chart")
     return jsonify(ddl_info)
 
+# 연결된 클라이언트 수 Get 요청
+@app.route('/get_ConnectedClient', methods=['GET'])
+def get_ConnectedClient():
+    # print("get client")
+    return jsonify(connected_client)
+
+# Disk R/W Get 요청
+@app.route('/get_ReadWrite', methods=['GET'])
+def get_ReadWrite():
+    print("get R/W")
+    return jsonify(disk_rw_info)
 
 
 # DB Monitoring - SSD
