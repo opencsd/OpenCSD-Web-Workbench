@@ -9,7 +9,7 @@ app.secret_key = 'dbms09!'
 CORS(app)
 
 dashboard_summary = {
-    'dbms_type': 'MySQL',
+    'dbms_type': 'MySQL hohoho',
     'db_name': 'tpc-h',
     'data_store_type': 'Row Base',
     'db_user': 'root',
@@ -3703,24 +3703,30 @@ def login():
         data = request.json
         workbench_user_id = data['workbench_user_id']
         if workbench_user_id == "keti_opencsd":
+            print("Login to CSD")
             return jsonify({'loginto': 'csd'})
         elif workbench_user_id == "keti_mysql":
+            print("Login to SSD")
             return jsonify({'loginto': 'ssd'})
     return render_template('index.html') 
 
+
+# DB Monitoring - CSD
 @app.route('/monitoring')  
 def monitoring():
     return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
 
+@app.route('/get_queryChart', methods=['GET'])
+def get_queryChart():
+    print("get chart")
+    return jsonify(ddl_info=ddl_info)
+
+
+
+# DB Monitoring - SSD
 @app.route('/monitoring_ssd')  
 def monitoring_ssd():
     return render_template('monitoring-ssd.html', dashboard_summary=dashboard_summary)
-
-# DB Monitoring
-@app.route('/monitoring/environment', methods=['GET'])
-def db_info():
-    # DB로부터 DB 환경정보 가져옴
-    return render_template('monitoring.html', dashboard_summary=dashboard_summary)
 
 ###############################################
 #                Query 수행 화면              #
