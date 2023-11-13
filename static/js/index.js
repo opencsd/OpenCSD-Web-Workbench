@@ -14,10 +14,13 @@ connect_btn.addEventListener('click', () => {
             "workbench_user_id":workbench_user_id
         })
     })
-    .then(response => {
-        if(workbench_user_id == "keti_opencsd"){
+    .then(response => response.json())  // JSON 파싱
+    .then(data => {
+        console.log(data);
+        if (data.loginto === 'csd') {
             window.location.href = '/monitoring';
-        }else{
+        } 
+        else if (data.loginto === 'ssd'){
             window.location.href = '/monitoring_ssd';
         }
     })

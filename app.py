@@ -26,21 +26,6 @@ dashboard_summary = {
 #                               DB Monitoring 화면                                 #
 ####################################################################################
 
-dashboard_summary = {
-    'db_name': 'tpc-h',
-    'dbms_type': 'mysql',
-    'data_storage_type': 'row',
-    'storage_type': 'csd',
-    'csd_count': 8,
-    'csd_kind': 'ngd',
-    'dbms_size': '64',
-    'block_size': '4096',
-    'scheduling_algorithm': 'csd metric score',
-    'db_account_name': 'keti',
-    'user_id': 'keti',
-    'db_host_ip': '10.0.4.80:40001'
-}
-
 time1 = "14:50:00"
 time2 = "14:50:10"
 time3 = "14:50:20"
@@ -3715,13 +3700,12 @@ def index():
 @app.route('/connect', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # return redirect(url_for('monitoring')) #why?
         data = request.json
         workbench_user_id = data['workbench_user_id']
         if workbench_user_id == "keti_opencsd":
-            return render_template('db_monitoring.html')
+            return jsonify({'loginto': 'csd'})
         elif workbench_user_id == "keti_mysql":
-            return render_template('db_monitoring_ssd.html')
+            return jsonify({'loginto': 'ssd'})
     return render_template('index.html') 
 
 @app.route('/monitoring')  
@@ -3738,54 +3722,6 @@ def db_info():
     # DB로부터 DB 환경정보 가져옴
     return render_template('monitoring.html', dashboard_summary=dashboard_summary)
 
-# @app.route('/monitoring')
-# def monitoring():
-#     return render_template('DB_Monitoring.html',dashboard_summary=dashboard_summary, ddl_info=ddl_info, cpu_usg_info=cpu_usg_info)
-
-# @app.route('/monitoring/environment', methods=['GET'])
-# def db_info():
-#     # DB로부터 DB 환경정보 가져옴
-
-#     return render_template('DB_Monitoring.html', dashboard_summary=dashboard_summary)
-
-# # DB Monitoring Graph 정보
-# @app.route('/monitoring/ddl', methods=['GET'])
-# def ddl():
-#     return render_template('DB_Monitoring.html', ddl_info=ddl_info)
-
-# @app.route('/monitoring/disk_rw', methods=['GET'])
-# def disk_rw():
-#     return render_template('DB_Monitoring.html', disk_rw_info=disk_rw_info)
-
-# @app.route('/monitoring/chache_hit', methods=['GET'])
-# def chache_hit():
-#     return render_template('DB_Monitoring.html', chache_hit_info=chache_hit_info)
-
-# @app.route('/monitoring/chache_usg', methods=['GET'])
-# def chache_usg():
-#     return render_template('DB_Monitoring.html', chache_usage_info=chache_usage_info)
-
-# @app.route('/monitoring/scan_filter', methods=['GET'])
-# def scan_filter():
-#     return render_template('DB_Monitoring.html', scan_filter_info=scan_filter_info)
-
-# @app.route('/monitoring/cpu', methods=['GET'])
-# def cpu_usg():
-#     return render_template('DB_Monitoring.html', cpu_usg_info=cpu_usg_info)
-
-# @app.route('/monitoring/memory', methods=['GET'])
-# def memory_usg():
-#     return render_template('DB_Monitoring.html', memory_usg_info=memory_usg_info)
-
-# @app.route('/monitoring/network', methods=['GET'])
-# def network_usg():
-#     return render_template('DB_Monitoring.html', network_usage_info=network_usage_info)
-
-# @app.route('/monitoring/power', methods=['GET'])
-# def power_usg():
-#     return render_template('DB_Monitoring.html', power_usg_info=power_usg_info)
-
-
 ###############################################
 #                Query 수행 화면              #
 @app.route('/query') # Query Pushdown 화면으로 전환
@@ -3794,37 +3730,11 @@ def query():
 
 @app.route('/query_ssd') # Query Pushdown 화면으로 전환
 def query_ssd():
-<<<<<<< HEAD
-    return render_template('query_ssd.html')
-
-@app.route('/simulate') # Query Pushdown 화면으로 전환
-def simulate():
-    return render_template('simulate.html')
-
-# @app.route('/query') # Query Pushdown 화면으로 전환
-# def query():
-#     return redirect(url_for('/query/environment'))
-
-# @app.route('/query/environment')
-# def query_info():
-#     # DB로부터 쿼리 수행 DB 환경정보 가져옴
-#     return render_template('Query.html', environment_info=environment_info, query_list=query_list, db_schema=db_schema)
-
-# @app.route('/query/run')
-# def query_run():
-#     # 쿼리 수행 후 결과값 및 메트릭 값
-#     return render_template('Query.html', query_result=query_result, query_metric_csd=query_metric_csd, query_metric_ssd=query_metric_ssd)
-=======
     return render_template('query-ssd.html')
->>>>>>> 3ace327c1aefb654cc5edcd3d097ce57c76eff06
 
 @app.route('/validator') # Validator 화면으로 전환
 def validate():
     return render_template('validator.html')
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    app.run(host='127.0.0.1', port=400005)
-=======
-    app.run(host="10.0.4.87",debug=True)
->>>>>>> 3ace327c1aefb654cc5edcd3d097ce57c76eff06
+    app.run(host="10.0.4.87", port=5000, debug=True)
