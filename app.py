@@ -9,17 +9,17 @@ app.secret_key = 'dbms09!'
 CORS(app)
 
 dashboard_summary = {
+    'dbms_type': 'MySQL',
     'db_name': 'tpc-h',
-    'dbms_type': 'mysql',
-    'data_storage_type': 'row',
-    'storage_type': 'csd',
+    'data_store_type': 'Row Base',
+    'db_user': 'root',
+    'db_size': '196 (GB)',
+    'storage_type': 'CSD',
+    'block_size': '4096 (MB)',
+    'workbench_user': 'User 1234',
     'csd_count': 8,
-    'csd_kind': 'ngd',
-    'dbms_size': '64',
-    'block_size': '4096',
-    'scheduling_algorithm': 'csd metric score',
-    'db_account_name': 'keti',
-    'user_id': 'keti',
+    'csd_kind': 'NGD',
+    'scheduling_algorithm': 'Csd Metric Score',
     'db_host_ip': '10.0.4.80:40001'
 }
 ####################################################################################
