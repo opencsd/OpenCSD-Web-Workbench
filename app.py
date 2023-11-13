@@ -3719,7 +3719,7 @@ def monitoring():
 @app.route('/get_queryChart', methods=['GET'])
 def get_queryChart():
     print("get chart")
-    return jsonify(ddl_info=ddl_info)
+    return jsonify(ddl_info)
 
 
 
