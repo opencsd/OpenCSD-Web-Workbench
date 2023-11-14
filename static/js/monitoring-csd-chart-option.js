@@ -223,7 +223,7 @@ var DBRWRateOption = {
     type: 'area'
 },
 title: {
-    text: 'Disk Read/Write Rate'
+    text: 'Disk Read/Write Byte'
 },
 subtitle: {
     text: null
@@ -236,7 +236,7 @@ xAxis: {
 },
 yAxis: {
     title: {
-        text: null
+        text: '(B/s)'
     }
 },
 tooltip: {
