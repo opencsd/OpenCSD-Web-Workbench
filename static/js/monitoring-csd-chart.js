@@ -38,6 +38,8 @@ document.addEventListener("DOMContentLoaded", function(){
   updateLatestChart();
   getConnectedClient();
   get_ReadWrite();
+  get_CacheHit();
+  get_CacheUsage();
   // startInterval();
 })
 
@@ -100,6 +102,42 @@ function get_ReadWrite(){
       })
       DBRWRateChart.series[0].setData(rw_bytes);
       DBRWRateChart.xAxis[0].setCategories(timestamps);
+  })
+  .catch(error => console.error('Error: ', error));
+}
+
+// Cache Hit 비율
+function get_CacheHit(){
+  var timestamps = [];
+  var cache_hits = [];
+
+  fetch('/get_CacheHit')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        cache_hits.push(item.cache_hit_rate);
+      })
+      DBCacheHitRateChart.series[0].setData(cache_hits);
+      DBCacheHitRateChart.xAxis[0].setCategories(timestamps);
+  })
+  .catch(error => console.error('Error: ', error));
+}
+
+// Cache Usage 비율
+function get_CacheUsage(){
+  var timestamps = [];
+  var cache_usg = [];
+
+  fetch('/get_CacheUsage')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        cache_usg.push(item.cache_hit_rate);
+      })
+      DBCacheUsageChart.series[0].setData(cache_usg);
+      DBCacheUsageChart.xAxis[0].setCategories(timestamps);
   })
   .catch(error => console.error('Error: ', error));
 }

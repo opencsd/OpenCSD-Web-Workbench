@@ -298,11 +298,11 @@ disk_rw_info = [
     },
     {
         "timestamp": "14:50:30",
-        "rw_byte": 20
+        "rw_byte": 65
     },
     {
         "timestamp": "14:50:40",
-        "rw_byte": 23
+        "rw_byte": 75
     },
     {
         "timestamp": "14:50:50",
@@ -322,11 +322,11 @@ disk_rw_info = [
     },
     {
         "timestamp": "14:51:30",
-        "rw_byte": 23
+        "rw_byte": 90
     },
     {
         "timestamp": "14:51:40",
-        "rw_byte": 55
+        "rw_byte": 82
     },
     {
         "timestamp": "14:51:50",
@@ -334,7 +334,7 @@ disk_rw_info = [
     },
     {
         "timestamp": "14:52:00",
-        "rw_byte": 25
+        "rw_byte": 70
     },
     {
         "timestamp": "14:52:10",
@@ -346,11 +346,11 @@ disk_rw_info = [
     },
     {
         "timestamp": "14:52:30",
-        "rw_byte": 56
+        "rw_byte": 70
     },
     {
         "timestamp": "14:52:40",
-        "rw_byte": 93
+        "rw_byte": 66
     },
     {
         "timestamp": "14:52:50",
@@ -377,35 +377,35 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:50:20',
-        'cache_hit_rate': 15
+        'cache_hit_rate': 51
     },
     {
         'timestamp': '14:50:30',
-        'cache_hit_rate': 25
+        'cache_hit_rate': 49
     },
     {
         'timestamp': '14:50:40',
-        'cache_hit_rate': 22
+        'cache_hit_rate': 45
     },
     {
         'timestamp': '14:50:50',
-        'cache_hit_rate': 70
+        'cache_hit_rate': 56
     },
     {
         'timestamp': '14:51:00',
-        'cache_hit_rate': 21
+        'cache_hit_rate': 55
     },
     {
         'timestamp': '14:51:10',
-        'cache_hit_rate': 26
+        'cache_hit_rate': 59
     },
     {
         'timestamp': '14:51:20',
-        'cache_hit_rate': 16
+        'cache_hit_rate': 60
     },
     {
         'timestamp': '14:51:30',
-        'cache_hit_rate': 19
+        'cache_hit_rate': 58
     },
     {
         'timestamp': '14:51:40',
@@ -413,7 +413,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:51:50',
-        'cache_hit_rate': 53
+        'cache_hit_rate': 80
     },
     {
         'timestamp': '14:52:00',
@@ -421,7 +421,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:52:10',
-        'cache_hit_rate': 50
+        'cache_hit_rate': 70
     },
     {
         'timestamp': '14:52:20',
@@ -429,7 +429,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:52:30',
-        'cache_hit_rate': 42
+        'cache_hit_rate': 2
     },
     {
         'timestamp': '14:52:40',
@@ -441,7 +441,7 @@ chache_hit_info = [
     },
     {
         'timestamp': '14:53:00',
-        'cache_hit_rate': 19
+        'cache_hit_rate': 0
     },
     {
         'timestamp': '14:53:10',
@@ -460,35 +460,35 @@ chache_usage_info = [
     },
     {
         'timestamp': '14:50:20',
-        'cache_hit_rate': 15
+        'cache_hit_rate': 51
     },
     {
         'timestamp': '14:50:30',
-        'cache_hit_rate': 25
+        'cache_hit_rate': 49
     },
     {
         'timestamp': '14:50:40',
-        'cache_hit_rate': 22
+        'cache_hit_rate': 45
     },
     {
         'timestamp': '14:50:50',
-        'cache_hit_rate': 70
+        'cache_hit_rate': 56
     },
     {
         'timestamp': '14:51:00',
-        'cache_hit_rate': 21
+        'cache_hit_rate': 55
     },
     {
         'timestamp': '14:51:10',
-        'cache_hit_rate': 26
+        'cache_hit_rate': 59
     },
     {
         'timestamp': '14:51:20',
-        'cache_hit_rate': 16
+        'cache_hit_rate': 60
     },
     {
         'timestamp': '14:51:30',
-        'cache_hit_rate': 19
+        'cache_hit_rate': 58
     },
     {
         'timestamp': '14:51:40',
@@ -496,7 +496,7 @@ chache_usage_info = [
     },
     {
         'timestamp': '14:51:50',
-        'cache_hit_rate': 100
+        'cache_hit_rate': 80
     },
     {
         'timestamp': '14:52:00',
@@ -504,7 +504,7 @@ chache_usage_info = [
     },
     {
         'timestamp': '14:52:10',
-        'cache_hit_rate': 0
+        'cache_hit_rate': 70
     },
     {
         'timestamp': '14:52:20',
@@ -534,84 +534,104 @@ chache_usage_info = [
 
 scan_filter_info = [
     {
-        'timestamp': '14:50:00',
-        'scan_filter_rate': 70
+        "timestamp": "14:50:00",
+        "scan": 45763,
+        "filter": 2685
     },
     {
-        'timestamp': '14:50:10',
-        'scan_filter_rate': 55
+        "timestamp": "14:50:10",
+        "scan": 57699,
+        "filter": 45608
     },
     {
-        'timestamp': '14:50:20',
-        'scan_filter_rate': 61
+        "timestamp": "14:50:20",
+        "scan": 45921,
+        "filter": 39978
     },
     {
-        'timestamp': '14:50:30',
-        'scan_filter_rate': 25
+        "timestamp": "14:50:30",
+        "scan": 54971,
+        "filter": 11155
     },
     {
-        'timestamp': '14:50:40',
-        'scan_filter_rate': 32
+        "timestamp": "14:50:40",
+        "scan": 58596,
+        "filter": 41892
     },
     {
-        'timestamp': '14:50:50',
-        'scan_filter_rate': 45
+        "timestamp": "14:50:50",
+        "scan": 51806,
+        "filter": 10015
     },
     {
-        'timestamp': '14:51:00',
-        'scan_filter_rate': 36
+        "timestamp": "14:51:00",
+        "scan": 42643,
+        "filter": 18021
     },
     {
-        'timestamp': '14:51:10',
-        'scan_filter_rate': 12
+        "timestamp": "14:51:10",
+        "scan": 50566,
+        "filter": 34555
     },
     {
-        'timestamp': '14:51:20',
-        'scan_filter_rate': 80
+        "timestamp": "14:51:20",
+        "scan": 44777,
+        "filter": 1051
     },
     {
-        'timestamp': '14:51:30',
-        'scan_filter_rate': 46
+        "timestamp": "14:51:30",
+        "scan": 51534,
+        "filter": 15640
     },
     {
-        'timestamp': '14:51:40',
-        'scan_filter_rate': 62
+        "timestamp": "14:51:40",
+        "scan": 54591,
+        "filter": 13004
     },
     {
-        'timestamp': '14:51:50',
-        'scan_filter_rate': 87
+        "timestamp": "14:51:50",
+        "scan": 50360,
+        "filter": 47174
     },
     {
-        'timestamp': '14:52:00',
-        'scan_filter_rate': 35
+        "timestamp": "14:52:00",
+        "scan": 45898,
+        "filter": 32605
     },
     {
-        'timestamp': '14:52:10',
-        'scan_filter_rate': 26
+        "timestamp": "14:52:10",
+        "scan": 59467,
+        "filter": 19035
     },
     {
-        'timestamp': '14:52:20',
-        'scan_filter_rate': 45
+        "timestamp": "14:52:20",
+        "scan": 49706,
+        "filter": 16255
     },
     {
-        'timestamp': '14:52:30',
-        'scan_filter_rate': 56
+        "timestamp": "14:52:30",
+        "scan": 44177,
+        "filter": 21902
     },
     {
-        'timestamp': '14:52:40',
-        'scan_filter_rate': 26
+        "timestamp": "14:52:40",
+        "scan": 59194,
+        "filter": 29573
     },
     {
-        'timestamp': '14:52:50',
-        'scan_filter_rate': 10
+        "timestamp": "14:52:50",
+        "scan": 41888,
+        "filter": 30210
     },
     {
-        'timestamp': '14:53:00',
-        'scan_filter_rate': 22
+        "timestamp": "14:53:00",
+        "scan": 57244,
+        "filter": 46160
     },
     {
-        'timestamp': '14:53:10',
-        'scan_filter_rate': 51
+        "timestamp": "14:53:10",
+        "scan": 54538,
+        "filter": 16401
     }
 ]
 
@@ -3817,6 +3837,17 @@ def get_ReadWrite():
     print("get R/W")
     return jsonify(disk_rw_info)
 
+# Disk R/W Get 요청
+@app.route('/get_CacheHit', methods=['GET'])
+def get_CacheHit():
+    # print("get R/W")
+    return jsonify(chache_hit_info)
+
+@app.route('/get_CacheUsage', methods=['GET'])
+def get_CacheUsage():
+    print("get Cache Usage")
+    return jsonify(chache_usage_info)
+
 
 # DB Monitoring - SSD
 @app.route('/monitoring_ssd')  
@@ -3838,4 +3869,4 @@ def validate():
     return render_template('validator.html')
 
 if __name__ == '__main__':
-    app.run(host="10.0.4.87", port=5000, debug=True)
+    app.run(host="10.0.4.87", port=7777, debug=True)
