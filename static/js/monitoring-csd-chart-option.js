@@ -154,7 +154,7 @@ var ConnectedClientOption = {
     type: 'area'
   },
   accessibility: {
-    description: 'Image description: An area chart compares the nuclear stockpiles of the USA and the USSR/Russia between 1945 and 2017. The number of nuclear weapons is plotted on the Y-axis and the years on the X-axis. The chart is interactive, and the year-on-year stockpile levels can be traced for each country. The US has a stockpile of 6 nuclear weapons at the dawn of the nuclear age in 1945. This number has gradually increased to 369 by 1950 when the USSR enters the arms race with 6 weapons. At this point, the US starts to rapidly build its stockpile culminating in 32,040 warheads by 1966 compared to the USSR’s 7,089. From this peak in 1966, the US stockpile gradually decreases as the USSR’s stockpile expands. By 1978 the USSR has closed the nuclear gap at 25,393. The USSR stockpile continues to grow until it reaches a peak of 45,000 in 1986 compared to the US arsenal of 24,401. From 1986, the nuclear stockpiles of both countries start to fall. By 2000, the numbers have fallen to 10,577 and 21,000 for the US and Russia, respectively. The decreases continue until 2017 at which point the US holds 4,018 weapons compared to Russia’s 4,500.'
+    // description: 'Image description: An area chart compares the nuclear stockpiles of the USA and the USSR/Russia between 1945 and 2017. The number of nuclear weapons is plotted on the Y-axis and the years on the X-axis. The chart is interactive, and the year-on-year stockpile levels can be traced for each country. The US has a stockpile of 6 nuclear weapons at the dawn of the nuclear age in 1945. This number has gradually increased to 369 by 1950 when the USSR enters the arms race with 6 weapons. At this point, the US starts to rapidly build its stockpile culminating in 32,040 warheads by 1966 compared to the USSR’s 7,089. From this peak in 1966, the US stockpile gradually decreases as the USSR’s stockpile expands. By 1978 the USSR has closed the nuclear gap at 25,393. The USSR stockpile continues to grow until it reaches a peak of 45,000 in 1986 compared to the US arsenal of 24,401. From 1986, the nuclear stockpiles of both countries start to fall. By 2000, the numbers have fallen to 10,577 and 21,000 for the US and Russia, respectively. The decreases continue until 2017 at which point the US holds 4,018 weapons compared to Russia’s 4,500.'
   },
   title: {
     text: 'Connected Client',
@@ -176,7 +176,7 @@ var ConnectedClientOption = {
   },
   tooltip: 
   {
-    pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: 
   {
@@ -240,7 +240,7 @@ yAxis: {
     }
 },
 tooltip: {
-    pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
 },
 plotOptions: {
     area: {
@@ -297,11 +297,10 @@ yAxis: {
     }
 },
 tooltip: {
-    pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
 },
 plotOptions: {
     area: {
-        pointStart: 1940,
         marker: {
             enabled: false,
             symbol: 'circle',
@@ -355,11 +354,10 @@ yAxis: {
     }
 },
 tooltip: {
-    pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
 },
 plotOptions: {
     area: {
-        pointStart: 1940,
         marker: {
             enabled: false,
             symbol: 'circle',
@@ -375,17 +373,7 @@ plotOptions: {
 series: [{
     name: 'DB Cache Usage',
     step: 'center',
-    data: [
-        null, null, null, null, null, 2, 9, 13, 50, 170, 299, 438, 841,
-        1169, 1703, 2422, 3692, 5543, 7345, 12298, 18638, 22229, 25540,
-        28133, 29463, 31139, 31175, 31255, 29561, 27552, 26008, 25830,
-        26516, 27835, 28537, 27519, 25914, 25542, 24418, 24138, 24104,
-        23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
-        21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
-        10685, 10577, 10526, 10457, 10027, 8570, 8360, 7853, 5709, 5273,
-        5113, 5066, 4897, 4881, 4804, 4717, 4571, 4018, 3822, 3785, 3805,
-        3750, 3708, 3708
-    ],
+    data: [],
     color: {
       linearGradient: {
           x1: 0,
@@ -433,7 +421,7 @@ var DBCSDScanFilterOption = {
     }
   ],
   tooltip: {
-      pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
@@ -453,32 +441,20 @@ var DBCSDScanFilterOption = {
   [
     {
       name: 'Scan Rows',
-      data: [
-          32980, 29154, 26734, 24403, 21339, 18179, 15942, 15442, 14368,
-          13188, 12188, 11152, 10114, 9076, 8038, 7000, 6643, 6286, 5929,
-          5527
-      ],
-      color: '#D9E5C1'
+      data: [],
+      color: '#FFBDBD'
     },
     {
       name: 'Filtered Rows',
-      data: [
-          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
-          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
-          10685, 10577
-      ],
-      color: '#FFF7A7'
+      data: [],
+      color: '#9BDEFF'
     },
     {
       type: 'line',
-      name: 'Cache Hit Rate',
+      name: 'Filtered Ratio',
       yAxis: 1,
-      data: 
-      [
-        50, 80, 70, 60, 42, 51, 65, 65, 12, 54, 
-        87, 22, 54, 12, 45, 23, 87, 31, 25, 19
-      ],
-      color: '#4F81BD'
+      data: [],
+      color: '#000000'
     }
   ]
 }
@@ -507,10 +483,12 @@ var HostCSDCpuUsageOption = {
     }
   },
   tooltip: {
-      pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    shared: true,
+      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
+        stacking: 'normal',
           marker: {
               enabled: false,
               symbol: 'circle',
@@ -532,16 +510,79 @@ var HostCSDCpuUsageOption = {
           13188, 12188, 11152, 10114, 9076, 8038, 7000, 6643, 6286, 5929,
           5527
       ],
-      color: '#FFF7A7'
+      color: '#A0D565'
     },
     {
-      name: 'CSD',
+      name: 'CSD1',
       data: [
           23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
           21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
           10685, 10577
       ],
-      color: '#FAC090'
+      color: '#FFFF7D'
+    },
+    {
+      name: 'CSD2',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFF478'
+    },
+    {
+      name: 'CSD3',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFE773'
+    },
+    {
+      name: 'CSD4',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFD56B'
+    },
+    {
+      name: 'CSD5',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFBF61'
+    },
+    {
+      name: 'CSD6',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFA355'
+    },
+    {
+      name: 'CSD7',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FF8548'
+    },
+    {
+      name: 'CSD8',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FF6038'
     }
   ]
 }
@@ -570,10 +611,12 @@ var HostCSDMemoryOption = {
     }
   },
   tooltip: {
-      pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    shared: true,
+      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
+        stacking: 'normal',
           marker: {
               enabled: false,
               symbol: 'circle',
@@ -595,16 +638,79 @@ var HostCSDMemoryOption = {
           13188, 12188, 11152, 10114, 9076, 8038, 7000, 6643, 6286, 5929,
           5527
       ],
-      color: '#FFF7A7'
+      color: '#A0D565'
     },
     {
-      name: 'CSD',
+      name: 'CSD1',
       data: [
           23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
           21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
           10685, 10577
       ],
-      color: '#FAC090'
+      color: '#FFFF7D'
+    },
+    {
+      name: 'CSD2',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFF478'
+    },
+    {
+      name: 'CSD3',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFE773'
+    },
+    {
+      name: 'CSD4',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFD56B'
+    },
+    {
+      name: 'CSD5',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFBF61'
+    },
+    {
+      name: 'CSD6',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFA355'
+    },
+    {
+      name: 'CSD7',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FF8548'
+    },
+    {
+      name: 'CSD8',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FF6038'
     }
   ]
 }
@@ -633,10 +739,12 @@ var HostCSDNetworkOption = {
     }
   },
   tooltip: {
-      pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    shared: true,
+      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
+        stacking: 'normal',
           marker: {
               enabled: false,
               symbol: 'circle',
@@ -658,16 +766,79 @@ var HostCSDNetworkOption = {
           13188, 12188, 11152, 10114, 9076, 8038, 7000, 6643, 6286, 5929,
           5527
       ],
-      color: '#FFF7A7'
+      color: '#A0D565'
     },
     {
-      name: 'CSD',
+      name: 'CSD1',
       data: [
           23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
           21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
           10685, 10577
       ],
-      color: '#FAC090'
+      color: '#FFFF7D'
+    },
+    {
+      name: 'CSD2',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFF478'
+    },
+    {
+      name: 'CSD3',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFE773'
+    },
+    {
+      name: 'CSD4',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFD56B'
+    },
+    {
+      name: 'CSD5',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFBF61'
+    },
+    {
+      name: 'CSD6',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FFA355'
+    },
+    {
+      name: 'CSD7',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FF8548'
+    },
+    {
+      name: 'CSD8',
+      data: [
+          23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+          21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+          10685, 10577
+      ],
+      color: '#FF6038'
     }
   ]
 }
@@ -696,7 +867,7 @@ var HostCSDPowerOption = {
     }
   },
   tooltip: {
-      pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
@@ -720,6 +891,92 @@ var HostCSDPowerOption = {
         13188, 12188, 11152, 10114, 9076, 8038, 7000, 6643, 6286, 5929,
         5527
     ],
-    color: '#FFF7A7'
+    color: {
+      linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+      },
+      stops: [
+          [0, '#A0D565'],
+          [1, '#D8EEC0']
+      ]
+    }
+  }]
+}
+
+var CSDCapacityOption = {
+  chart: {
+    type: 'column'
+},
+title: {
+    text: 'CSD Capacity'
+},
+xAxis: {
+    type: 'category',
+    labels: {
+        autoRotation: [-45, -90],
+        style: {
+            fontSize: '13px',
+            fontFamily: 'Verdana, sans-serif'
+        }
+    }
+},
+yAxis: {
+    min: 0,
+    title: {
+        text: '(GB)'
+    }
+},
+plotOptions: {
+  column: {
+      // dataLabels: {
+      //     enabled: true,
+      //     textAnchor: 'start',
+      //     crop: false,
+      //     overflow: 'none',
+      //     rotation: 0,
+      //     // formatter: function() {
+      //     //     return this.y; // 데이터 값을 반환
+      //     format: '{point.y:.1f} (GB)'
+      // }
+      
+  }
+},
+legend: {
+    enabled: false
+},
+tooltip: {
+    pointFormat: 'Using Capacity: <b>{point.y:.1f} (GB)</b>'
+},
+series: [{
+    name: 'CSD Capacity',
+    colors: ['#C167FF', '#BC9DFF', '#B6B5FF','#ADCAFF', '#A3DAFF', '#9BD2FF', '#85C8FF', '#61B8FF'],
+    // colors: ['#D8EEC0', '#FFAFAF', '#FFAFAF','#FEDBB0', '#D8EEC0', '#D8EEC0', '#D8EEC0', '#FFAFAF'], //초록빨강
+    colorByPoint: true,
+    groupPadding: 0,
+    data: [
+        ['CSD1', 37.3],
+        ['CSD2', 82.9],
+        ['CSD3', 92.7],
+        ['CSD4', 73.2],
+        ['CSD5', 52.9],
+        ['CSD6', 33.7],
+        ['CSD7', 47.3],
+        ['CSD8', 84.8]
+    ],
+    dataLabels: {
+        enabled: true,
+        color: '#FFFFFF',
+        // align: 'right',
+        format: '{point.y:.1f} (GB)', // one decimal
+        y: 10, // 10 pixels down from the top
+        style: {
+            fontSize: '18px',
+            // fontFamily: 'Verdana, sans-serif'
+            fontFamily: 'Verdana'
+        }
+    }
   }]
 }

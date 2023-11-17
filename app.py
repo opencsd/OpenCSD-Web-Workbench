@@ -635,6 +635,149 @@ scan_filter_info = [
     }
 ]
 
+interface_cpu = [
+    {
+        "timestamp": "14:50:00",
+        "interface": 200,
+        "monitoring": 246,
+        "offloading": 239,
+        "merging": 812
+    },
+    {
+        "timestamp": "14:50:10",
+        "interface": 272,
+        "monitoring": 116,
+        "offloading": 268,
+        "merging": 849
+    },
+    {
+        "timestamp": "14:50:20",
+        "interface": 156,
+        "monitoring": 262,
+        "offloading": 255,
+        "merging": 798
+    },
+    {
+        "timestamp": "14:50:30",
+        "interface": 162,
+        "monitoring": 138,
+        "offloading": 277,
+        "merging": 726
+    },
+    {
+        "timestamp": "14:50:40",
+        "interface": 132,
+        "monitoring": 114,
+        "offloading": 202,
+        "merging": 587
+    },
+    {
+        "timestamp": "14:50:50",
+        "interface": 223,
+        "monitoring": 101,
+        "offloading": 118,
+        "merging": 606
+    },
+    {
+        "timestamp": "14:51:00",
+        "interface": 230,
+        "monitoring": 247,
+        "offloading": 185,
+        "merging": 707
+    },
+    {
+        "timestamp": "14:51:10",
+        "interface": 288,
+        "monitoring": 263,
+        "offloading": 288,
+        "merging": 795
+    },
+    {
+        "timestamp": "14:51:20",
+        "interface": 170,
+        "monitoring": 208,
+        "offloading": 214,
+        "merging": 954
+    },
+    {
+        "timestamp": "14:51:30",
+        "interface": 231,
+        "monitoring": 109,
+        "offloading": 192,
+        "merging": 576
+    },
+    {
+        "timestamp": "14:51:40",
+        "interface": 115,
+        "monitoring": 275,
+        "offloading": 261,
+        "merging": 746
+    },
+    {
+        "timestamp": "14:51:50",
+        "interface": 124,
+        "monitoring": 198,
+        "offloading": 231,
+        "merging": 530
+    },
+    {
+        "timestamp": "14:52:00",
+        "interface": 228,
+        "monitoring": 180,
+        "offloading": 277,
+        "merging": 613
+    },
+    {
+        "timestamp": "14:52:10",
+        "interface": 227,
+        "monitoring": 105,
+        "offloading": 150,
+        "merging": 904
+    },
+    {
+        "timestamp": "14:52:20",
+        "interface": 287,
+        "monitoring": 104,
+        "offloading": 111,
+        "merging": 954
+    },
+    {
+        "timestamp": "14:52:30",
+        "interface": 284,
+        "monitoring": 246,
+        "offloading": 275,
+        "merging": 691
+    },
+    {
+        "timestamp": "14:52:40",
+        "interface": 174,
+        "monitoring": 123,
+        "offloading": 169,
+        "merging": 527
+    },
+    {
+        "timestamp": "14:52:50",
+        "interface": 275,
+        "monitoring": 264,
+        "offloading": 294,
+        "merging": 642
+    },
+    {
+        "timestamp": "14:53:00",
+        "interface": 171,
+        "monitoring": 166,
+        "offloading": 242,
+        "merging": 798
+    },
+    {
+        "timestamp": "14:53:10",
+        "interface": 193,
+        "monitoring": 280,
+        "offloading": 213,
+        "merging": 793
+    }
+]
+
 cpu_usg_info = [
     {
         'timestamp': '14:50:00',
@@ -3837,16 +3980,34 @@ def get_ReadWrite():
     print("get R/W")
     return jsonify(disk_rw_info)
 
-# Disk R/W Get 요청
+# Cache Hit Get 요청
 @app.route('/get_CacheHit', methods=['GET'])
 def get_CacheHit():
     # print("get R/W")
     return jsonify(chache_hit_info)
 
+# Cache Usage Get 요청
 @app.route('/get_CacheUsage', methods=['GET'])
 def get_CacheUsage():
     print("get Cache Usage")
     return jsonify(chache_usage_info)
+
+# DB Scna/Filter Get 요청
+@app.route('/get_ScanFilter', methods=['GET'])
+def get_ScanFilter():
+    print("get Scan Filter")
+    return jsonify(scan_filter_info)
+
+# Host Server Interface CPU 사용 값 Get 요청
+@app.route('/get_hostServerCPU', methods=['GET'])
+def get_hostServerCPU():
+    print("get host server cpu")
+    return jsonify(interface_cpu)
+
+@app.route('/get_HostCSDcpu', methods=['GET'])
+def get_HostCSDcpu():
+    print("get Host CSD CPU")
+    return jsonify(cpu_usg_info)
 
 
 # DB Monitoring - SSD

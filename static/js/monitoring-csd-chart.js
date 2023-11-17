@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
   HostCSDMemoryChart = Highcharts.chart(document.getElementById("HostCSDMemoryChart"), HostCSDMemoryOption);
   HostCSDNetworkChart = Highcharts.chart(document.getElementById("HostCSDNetworkUsageChart"), HostCSDNetworkOption);
   HostCSDPowerChart = Highcharts.chart(document.getElementById("HostCSDPowerChart"), HostCSDPowerOption);
+  CSDCapacityChart = Highcharts.chart(document.getElementById("CSDCapacityChart"), CSDCapacityOption);
 
   // DataBase Monitoring 렌더링
   queryChart.render();
@@ -33,13 +34,16 @@ document.addEventListener("DOMContentLoaded", function(){
   HostCSDMemoryChart.render();
   HostCSDNetworkChart.render();
   HostCSDPowerChart.render();
+  CSDCapacityChart.render();
 
   getDDLData();
-  updateLatestChart();
   getConnectedClient();
   get_ReadWrite();
   get_CacheHit();
   get_CacheUsage();
+  get_ScanFilter();
+
+  get_hostServerCPU();
   // startInterval();
 })
 
@@ -142,18 +146,79 @@ function get_CacheUsage(){
   .catch(error => console.error('Error: ', error));
 }
 
-function updateLatestChart(){
-  hostServerCPUChartCategories = ['16:58:00', '16:58:30', '16:59:00', '16:58:30', '17:00:00', '17:00:30', '17:01:00', '17:01:30', '17:02:00', '17:02:30', '17:03:00', '17:03:30', '17:04:00', '17:04:30', '17:05:00', '17:05:30', '17:06:00', '17:06:30', '17:07:00', '17:07:30'];
-  hostServerInterfaceCPUChartData = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
-  hostServerMonitoringCPUChartData = [80, 90, 80, 80, 40, 70, 80, 100, 120, 80, 80, 80, 40, 90, 90, 80, 90, 100, 70, 70];
-  hostServerOffloadingCPUChartData = [80, 90, 80, 80, 40, 70, 80, 100, 120, 80, 80, 80, 40, 90, 90, 80, 90, 100, 70, 70];
-  hostServerMergingCPUChartData = [500, 400, 450, 430, 430, 1000, 1200, 800, 700, 550, 500, 500, 435, 700, 800, 920, 700, 500, 520, 450];
+// DB Scan Filter 로우 수, 비율
+function get_ScanFilter(){
+  var timestamps = [];
+  var scan_rows = [];
+  var filter_rows = [];
+  var filter_ratio = [];
 
-  hostServerCPUChart.series[0].setData(hostServerInterfaceCPUChartData);
-  hostServerCPUChart.series[1].setData(hostServerMonitoringCPUChartData);
-  hostServerCPUChart.series[2].setData(hostServerOffloadingCPUChartData);
-  hostServerCPUChart.series[3].setData(hostServerMergingCPUChartData);
-  hostServerCPUChart.xAxis[0].setCategories(hostServerCPUChartCategories);
+  fetch('/get_ScanFilter')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        scan_rows.push(item.scan);
+        filter_rows.push(item.filter);
+
+        var ratio = (item.filter / item.scan) * 100;
+        filter_ratio.push(ratio);
+      })
+      DBCSDScanFilterChart.series[0].setData(scan_rows);
+      DBCSDScanFilterChart.series[1].setData(filter_rows);
+      DBCSDScanFilterChart.series[2].setData(filter_ratio);
+      DBCSDScanFilterChart.xAxis[0].setCategories(timestamps);
+  })
+  .catch(error => console.error('Error: ', error));
+}
+
+function get_hostServerCPU(){
+  timestamps = [];
+  hostServerInterfaceCPUChartData = [];
+  hostServerMonitoringCPUChartData = [];
+  hostServerOffloadingCPUChartData = [];
+  hostServerMergingCPUChartData = [];
+
+  fetch('/get_hostServerCPU')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        hostServerInterfaceCPUChartData.push(item.interface);
+        hostServerMonitoringCPUChartData.push(item.monitoring);
+        hostServerOffloadingCPUChartData.push(item.offloading);
+        hostServerMergingCPUChartData.push(item.merging);
+      })
+      hostServerCPUChart.series[0].setData(hostServerInterfaceCPUChartData);
+      hostServerCPUChart.series[1].setData(hostServerMonitoringCPUChartData);
+      hostServerCPUChart.series[2].setData(hostServerOffloadingCPUChartData);
+      hostServerCPUChart.series[3].setData(hostServerMergingCPUChartData);
+      hostServerCPUChart.xAxis[0].setCategories(timestamps);
+    })
+    .catch(error => console.error('Error: ', error)); 
+}
+
+function get_HostCSDcpu(){
+  timestamps = [];
+  hostData = [];
+  csd1 = [];
+  csd2 = [];
+  csd3 = [];
+  csd4 = [];
+  csd5 = [];
+  csd6 = [];
+  csd7 = [];
+  csd8 = [];
+
+  fetch('/get_HostCSDcpu')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        hostData.push(item.storage_cpu_usage);
+        
+      })
+    })
 }
 
 function startInterval(){
