@@ -1,34 +1,40 @@
-import json
 import random
-from datetime import datetime, timedelta
+import json
+import datetime
 
 def generate_dummy_data():
-    scan_filter_info = []
-    base_timestamp = datetime.strptime('14:50:00', '%H:%M:%S')
+    data = []
+    storage_min = 100
+    storage_max = 300
+
+    # 현재 시간
+    current_time = datetime.datetime.strptime("14:50:00", "%H:%M:%S")
 
     for i in range(20):
-        timestamp = (base_timestamp + timedelta(seconds=i * 10)).strftime('%H:%M:%S')
-        # scan = random.randint(40000, 60000)
-        # filter_val = random.randint(1000, min(scan - 1, 50000))  # filter 값은 scan 값보다 작아야 함
-        interface = random.randint(100, 300)
-        monitoring = random.randint(100, 300)
-        offloading = random.randint(100, 300)
-        merging = random.randint(500, 1000)
+        timestamp = current_time.strftime("%H:%M:%S")
 
-        data_point = {
-            'timestamp': timestamp,
-            'interface': interface,
-            'monitoring': monitoring,
-            'offloading': offloading,
-            'merging': merging
+        # 랜덤 값 생성
+        storage_network_usage = random.randint(storage_min, storage_max)
+        
+        # csd1부터 csd8까지의 랜덤 값 생성
+        csd_cpu_usages = {f"csd{i+1}": {"csd_cpu_usage": random.randint(storage_min, storage_max)} for i in range(8)}
+        csd_memory_usages = {f"csd{i+1}": {"csd_memory_usage": random.randint(storage_min, storage_max)} for i in range(8)}
+        csd_network_usages = {f"csd{i+1}": {"csd_network_usage": random.randint(storage_min, storage_max)} for i in range(8)}
+
+        # 데이터 구성
+        entry = {
+            "timestamp": timestamp,
+            "storage_network_usage": storage_network_usage,
         }
+        entry.update(csd_network_usages)  # csd1부터 csd8까지의 가변적인 키를 추가
 
-        scan_filter_info.append(data_point)
+        data.append(entry)
 
-    return scan_filter_info
+        # 타임스탬프 업데이트
+        current_time += datetime.timedelta(seconds=10)
 
-# 더미 데이터 생성
-dummy_data = generate_dummy_data()
+    return data
 
-# 생성된 데이터 출력
-print(json.dumps(dummy_data, indent=2))
+# JSON 데이터 생성
+network_usage_info = generate_dummy_data()
+print(json.dumps(network_usage_info, indent=2))

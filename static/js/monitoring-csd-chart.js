@@ -1,7 +1,7 @@
 let intervalID = 1;
 
-var queryChart, queryChartCategories, queryChartSelectData, queryChartInsertData, queryChartUpdateData, queryCharDeletetData
-var hostServerCPUChart, hostServerCPUChartCategories, hostServerInterfaceCPUChartData, hostServerMonitoringCPUChartData, hostServerOffloadingCPUChartData, hostServerMergingCPUChartData;
+// var queryChart, queryChartCategories, queryChartSelectData, queryChartInsertData, queryChartUpdateData, queryCharDeletetData
+// var hostServerCPUChart, hostServerCPUChartCategories, hostServerInterfaceCPUChartData, hostServerMonitoringCPUChartData, hostServerOffloadingCPUChartData, hostServerMergingCPUChartData;
 
 document.addEventListener("DOMContentLoaded", function(){
   // DataBase Monitoring 차트 정의
@@ -44,6 +44,9 @@ document.addEventListener("DOMContentLoaded", function(){
   get_ScanFilter();
 
   get_hostServerCPU();
+  get_HostCSDcpu();
+  get_HostCSDMemory();
+  get_HostCSDNetwork();
   // startInterval();
 })
 
@@ -198,27 +201,141 @@ function get_hostServerCPU(){
     .catch(error => console.error('Error: ', error)); 
 }
 
-function get_HostCSDcpu(){
-  timestamps = [];
-  hostData = [];
-  csd1 = [];
-  csd2 = [];
-  csd3 = [];
-  csd4 = [];
-  csd5 = [];
-  csd6 = [];
-  csd7 = [];
-  csd8 = [];
+// CSD 그래프 색상
+const colors = ['#FFFF7D', '#FFF478', '#FFE773', '#FFD56B', '#FFBF61', '#FFA355', '#FF8548', '#FF6038'];
+
+// Host / CSD 각 CPU 사용량
+function get_HostCSDcpu() {
+  let timestamps = [];
+  let csdSeries = [];
+  let host_cpu_usg = [];
+  let csdCount = 0;
 
   fetch('/get_HostCSDcpu')
     .then(response => response.json())
     .then(data => {
-      data.forEach(function(item) {
+      data.forEach(item => {
         timestamps.push(item.timestamp);
-        hostData.push(item.storage_cpu_usage);
-        
-      })
+        host_cpu_usg.push(item.storage_cpu_usage);
+
+        // 'csd'로 시작하는 키의 개수 파악
+        csdCount = Object.keys(item).filter(key => key.startsWith('csd')).length;
+
+        // 각 CSD에 대한 데이터 추출
+        for (let i = 1; i <= csdCount; i++) {
+          const csdKey = `csd${i}`;
+          if (item[csdKey]) {
+            if (!csdSeries[i - 1]) {
+              csdSeries[i - 1] = {
+                name: csdKey.toUpperCase(), // CSD 이름으로 시리즈 이름 설정
+                data: [], // 각 CSD 데이터를 받아오면 여기에 추가할 것입니다.
+              };
+            }
+            csdSeries[i - 1].data.push(item[csdKey].csd_cpu_usage);
+          }
+        }
+      });
+
+      HostCSDCPUChart.series[0].setData(host_cpu_usg);
+      HostCSDCPUChart.xAxis[0].setCategories(timestamps);
+      csdSeries.forEach((series, index) => {
+        series.color = colors[index % colors.length];
+        HostCSDCPUChart.addSeries(series);
+      });
     })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+// Host / CSD 각 Memory 사용량
+function get_HostCSDMemory() {
+  let timestamps = [];
+  let csdSeries = [];
+  let host_mem_usg = [];
+  let csdCount = 0;
+
+  fetch('/get_HostCSDMemory')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(item => {
+        timestamps.push(item.timestamp);
+        host_mem_usg.push(item.storage_memory_usage);
+
+        // 'csd'로 시작하는 키의 개수 파악
+        csdCount = Object.keys(item).filter(key => key.startsWith('csd')).length;
+
+        // 각 CSD에 대한 데이터 추출
+        for (let i = 1; i <= csdCount; i++) {
+          const csdKey = `csd${i}`;
+          if (item[csdKey]) {
+            if (!csdSeries[i - 1]) {
+              csdSeries[i - 1] = {
+                name: csdKey.toUpperCase(), // CSD 이름으로 시리즈 이름 설정
+                data: [], // 각 CSD 데이터를 받아오면 여기에 추가할 것입니다.
+              };
+            }
+            csdSeries[i - 1].data.push(item[csdKey].csd_memory_usage);
+          }
+        }
+      });
+
+      // csdSeries에는 각 CSD의 데이터가 저장됨
+      HostCSDMemoryChart.series[0].setData(host_mem_usg);
+      HostCSDMemoryChart.xAxis[0].setCategories(timestamps);
+      csdSeries.forEach((series, index) => {
+        series.color = colors[index % colors.length];
+        HostCSDMemoryChart.addSeries(series);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+// Host / CSD 각 Network 사용량
+function get_HostCSDNetwork() {
+  let timestamps = [];
+  let csdSeries = [];
+  let host_net_usg = [];
+  let csdCount = 0;
+
+  fetch('/get_HostCSDNetwork')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(item => {
+        timestamps.push(item.timestamp);
+        host_net_usg.push(item.storage_network_usage);
+
+        // 'csd'로 시작하는 키의 개수 파악
+        csdCount = Object.keys(item).filter(key => key.startsWith('csd')).length;
+
+        // 각 CSD에 대한 데이터 추출
+        for (let i = 1; i <= csdCount; i++) {
+          const csdKey = `csd${i}`;
+          if (item[csdKey]) {
+            if (!csdSeries[i - 1]) {
+              csdSeries[i - 1] = {
+                name: csdKey.toUpperCase(), // CSD 이름으로 시리즈 이름 설정
+                data: [], // 각 CSD 데이터를 받아오면 여기에 추가할 것입니다.
+              };
+            }
+            csdSeries[i - 1].data.push(item[csdKey].csd_network_usage);
+          }
+        }
+      });
+
+      // csdSeries에는 각 CSD의 데이터가 저장됨
+      HostCSDNetworkChart.series[0].setData(host_net_usg);
+      HostCSDNetworkChart.xAxis[0].setCategories(timestamps);
+      csdSeries.forEach((series, index) => {
+        series.color = colors[index % colors.length];
+        HostCSDNetworkChart.addSeries(series);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
 }
 
 function startInterval(){
