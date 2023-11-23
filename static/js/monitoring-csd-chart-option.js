@@ -354,7 +354,6 @@ yAxis: {
     }
 },
 tooltip: {
-    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
 },
 plotOptions: {
     area: {
@@ -421,7 +420,7 @@ var DBCSDScanFilterOption = {
     }
   ],
   tooltip: {
-      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+      pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
@@ -454,18 +453,18 @@ var DBCSDScanFilterOption = {
       name: 'Filtered Ratio',
       yAxis: 1,
       data: [],
-      color: '#000000'
+      color: '#604A7B'
     }
   ]
 }
 
-// Host Server/CSD의 CPU 사용량
+// Host Server의 CPU 사용량
 var HostCSDCpuUsageOption = {
   chart: {
     type: 'area'
   },
   title: {
-      text: 'Host Server/CSD CPU Usage'
+      text: 'Host Server CPU Usage'
   },
   subtitle: {
       text: null
@@ -506,18 +505,29 @@ var HostCSDCpuUsageOption = {
     {
       name: 'Host Server',
       data: [],
-      color: '#A0D565'
+      color: {
+        linearGradient: {
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 1
+        },
+        stops: [
+          [0, '#F79646'],
+          [1, '#FDDFC7']
+        ]
+      }
     },
   ]
 }
 
-// Host Server/CSD의 Memory 사용량
+// Host Server의 Memory 사용량
 var HostCSDMemoryOption = {
   chart: {
     type: 'area'
   },
   title: {
-      text: 'Host Server/CSD Memory Usage'
+      text: 'Host Server Memory Usage'
   },
   subtitle: {
       text: null
@@ -558,18 +568,29 @@ var HostCSDMemoryOption = {
     {
       name: 'Host Server',
       data: [],
-      color: '#A0D565'
+      color: {
+        linearGradient: {
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 1
+        },
+        stops: [
+          [0, '#F79646'],
+          [1, '#FDDFC7']
+        ]
+      }
     },
   ]
 }
 
-// Host Server/CSD의 Network 사용량
+// Host Server의 Network 사용량
 var HostCSDNetworkOption = {
   chart: {
     type: 'area'
   },
   title: {
-      text: 'Host Server/CSD Network Usage'
+      text: 'Host Server Network Usage'
   },
   subtitle: {
       text: null
@@ -610,12 +631,23 @@ var HostCSDNetworkOption = {
     {
       name: 'Host Server',
       data: [],
-      color: '#A0D565'
+      color: {
+        linearGradient: {
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 1
+        },
+        stops: [
+            [0, '#F79646'],
+            [1, '#FDDFC7']
+        ]
+      }
     },
   ]
 }
 
-// Host Server의 Power 사용량
+// Host Server Power 사용량
 var HostCSDPowerOption = {
   chart: {
     type: 'area'
@@ -639,10 +671,12 @@ var HostCSDPowerOption = {
     }
   },
   tooltip: {
+    shared: true,
       // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
   },
   plotOptions: {
       area: {
+        stacking: 'normal',
           marker: {
               enabled: false,
               symbol: 'circle',
@@ -656,24 +690,27 @@ var HostCSDPowerOption = {
       }
   },
   series: 
-  [{
-    name: 'Host Server',
-    data: [],
-    color: {
-      linearGradient: {
-          x1: 0,
-          x2: 0,
-          y1: 0,
-          y2: 1
-      },
-      stops: [
-          [0, '#A0D565'],
-          [1, '#D8EEC0']
-      ]
-    }
-  }]
+  [
+    {
+      name: 'Host Server',
+      data: [],
+      color: {
+        linearGradient: {
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 1
+        },
+        stops: [
+          [0, '#F79646'],
+          [1, '#FDDFC7']
+        ]
+      }
+    },
+  ]
 }
 
+// CSD 저장 용량
 var CSDCapacityOption = {
   chart: {
     type: 'column'
@@ -697,53 +734,227 @@ yAxis: {
         text: '(GB)'
     }
 },
-plotOptions: {
-  column: {
-      // dataLabels: {
-      //     enabled: true,
-      //     textAnchor: 'start',
-      //     crop: false,
-      //     overflow: 'none',
-      //     rotation: 0,
-      //     // formatter: function() {
-      //     //     return this.y; // 데이터 값을 반환
-      //     format: '{point.y:.1f} (GB)'
-      // }
-      
-  }
-},
 legend: {
     enabled: false
 },
 tooltip: {
     pointFormat: 'Using Capacity: <b>{point.y:.1f} (GB)</b>'
 },
-series: [{
-    name: 'CSD Capacity',
-    colors: ['#C167FF', '#BC9DFF', '#B6B5FF','#ADCAFF', '#A3DAFF', '#9BD2FF', '#85C8FF', '#61B8FF'],
-    // colors: ['#D8EEC0', '#FFAFAF', '#FFAFAF','#FEDBB0', '#D8EEC0', '#D8EEC0', '#D8EEC0', '#FFAFAF'], //초록빨강
-    colorByPoint: true,
-    groupPadding: 0,
-    data: [
-        ['CSD1', 37.3],
-        ['CSD2', 82.9],
-        ['CSD3', 92.7],
-        ['CSD4', 73.2],
-        ['CSD5', 52.9],
-        ['CSD6', 33.7],
-        ['CSD7', 47.3],
-        ['CSD8', 84.8]
-    ],
-    dataLabels: {
-        enabled: true,
-        color: '#FFFFFF',
-        // align: 'right',
-        format: '{point.y:.1f} (GB)', // one decimal
-        y: 30, // 10 pixels down from the top
-        style: {
-            fontSize: '18px',
-            fontFamily: 'Verdana, sans-serif'
+series: []
+}
+
+// 선택한 CSD CPU 사용량
+var SelectedCSDcpuOption = {
+  chart: {
+    type: 'area'
+},
+title: {
+    text: 'CPU'
+},
+subtitle: {
+    text: null
+},
+xAxis: {
+    allowDecimals: false,
+},
+yAxis: {
+    title: {
+        text: null
+    }
+},
+tooltip: {
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+},
+plotOptions: {
+    area: {
+        marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+                hover: {
+                    enabled: true
+                }
+            }
         }
+    }
+},
+series: [{
+    name: 'CSD CPU',
+    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    color: {
+      linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+      },
+      stops: [
+        [0, '#FFD85D'],
+        [1, '#FFEEB9']
+      ]
+    }
+  }]
+}
+
+// 선택한 CSD Memory 사용량
+var SelectedCSDmemoryOption = {
+  chart: {
+    type: 'area'
+},
+title: {
+    text: 'Memory'
+},
+subtitle: {
+    text: null
+},
+xAxis: {
+    allowDecimals: false,
+},
+yAxis: {
+    title: {
+        text: null
+    }
+},
+tooltip: {
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+},
+plotOptions: {
+    area: {
+        marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+                hover: {
+                    enabled: true
+                }
+            }
+        }
+    }
+},
+series: [{
+    name: 'CSD Memory',
+    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    color: {
+      linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+      },
+      stops: [
+        [0, '#FFD85D'],
+        [1, '#FFEEB9']
+      ]
+    }
+  }]
+}
+
+// 선택한 CSD Network 사용량
+var SelectedCSDnetworkOption = {
+  chart: {
+    type: 'area'
+},
+title: {
+    text: 'Network'
+},
+subtitle: {
+    text: null
+},
+xAxis: {
+    allowDecimals: false,
+},
+yAxis: {
+    title: {
+        text: null
+    }
+},
+tooltip: {
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+},
+plotOptions: {
+    area: {
+        marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+                hover: {
+                    enabled: true
+                }
+            }
+        }
+    }
+},
+series: [{
+    name: 'CSD Network',
+    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    color: {
+      linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+      },
+      stops: [
+        [0, '#FFD85D'],
+        [1, '#FFEEB9']
+      ]
+    }
+  }]
+}
+
+// 선택한 CSD Power 사용량
+var SelectedCSDpowerOption = {
+  chart: {
+    type: 'area'
+},
+title: {
+    text: 'Power'
+},
+subtitle: {
+    text: null
+},
+xAxis: {
+    allowDecimals: false,
+},
+yAxis: {
+    title: {
+        text: null
+    }
+},
+tooltip: {
+    // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+},
+plotOptions: {
+    area: {
+        marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+                hover: {
+                    enabled: true
+                }
+            }
+        }
+    }
+},
+series: [{
+    name: 'CSD Power',
+    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    color: {
+      linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+      },
+      stops: [
+        [0, '#FFD85D'],
+        [1, '#FFEEB9']
+      ]
     }
   }]
 }

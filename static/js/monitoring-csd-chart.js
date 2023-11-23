@@ -19,6 +19,10 @@ document.addEventListener("DOMContentLoaded", function(){
   HostCSDNetworkChart = Highcharts.chart(document.getElementById("HostCSDNetworkUsageChart"), HostCSDNetworkOption);
   HostCSDPowerChart = Highcharts.chart(document.getElementById("HostCSDPowerChart"), HostCSDPowerOption);
   CSDCapacityChart = Highcharts.chart(document.getElementById("CSDCapacityChart"), CSDCapacityOption);
+  SelectedCSDcpuChart = Highcharts.chart(document.getElementById("SelectedCSDcpuChart"), SelectedCSDcpuOption);
+  SelectedCSDmemoryChart = Highcharts.chart(document.getElementById("SelectedCSDmemoryChart"), SelectedCSDmemoryOption);
+  SelectedCSDnetworkChart = Highcharts.chart(document.getElementById("SelectedCSDnetworkChart"), SelectedCSDnetworkOption);
+  SelectedCSDpowerChart = Highcharts.chart(document.getElementById("SelectedCSDpowerChart"), SelectedCSDpowerOption);
 
   // DataBase Monitoring 렌더링
   queryChart.render();
@@ -47,6 +51,8 @@ document.addEventListener("DOMContentLoaded", function(){
   get_HostCSDcpu();
   get_HostCSDMemory();
   get_HostCSDNetwork();
+  get_HostCSDPower();
+  get_CSDCapacity();
   // startInterval();
 })
 
@@ -217,31 +223,9 @@ function get_HostCSDcpu() {
       data.forEach(item => {
         timestamps.push(item.timestamp);
         host_cpu_usg.push(item.storage_cpu_usage);
-
-        // 'csd'로 시작하는 키의 개수 파악
-        csdCount = Object.keys(item).filter(key => key.startsWith('csd')).length;
-
-        // 각 CSD에 대한 데이터 추출
-        for (let i = 1; i <= csdCount; i++) {
-          const csdKey = `csd${i}`;
-          if (item[csdKey]) {
-            if (!csdSeries[i - 1]) {
-              csdSeries[i - 1] = {
-                name: csdKey.toUpperCase(), // CSD 이름으로 시리즈 이름 설정
-                data: [], // 각 CSD 데이터를 받아오면 여기에 추가할 것입니다.
-              };
-            }
-            csdSeries[i - 1].data.push(item[csdKey].csd_cpu_usage);
-          }
-        }
       });
-
       HostCSDCPUChart.series[0].setData(host_cpu_usg);
       HostCSDCPUChart.xAxis[0].setCategories(timestamps);
-      csdSeries.forEach((series, index) => {
-        series.color = colors[index % colors.length];
-        HostCSDCPUChart.addSeries(series);
-      });
     })
     .catch(error => {
       console.error('Error fetching data:', error);
@@ -261,32 +245,9 @@ function get_HostCSDMemory() {
       data.forEach(item => {
         timestamps.push(item.timestamp);
         host_mem_usg.push(item.storage_memory_usage);
-
-        // 'csd'로 시작하는 키의 개수 파악
-        csdCount = Object.keys(item).filter(key => key.startsWith('csd')).length;
-
-        // 각 CSD에 대한 데이터 추출
-        for (let i = 1; i <= csdCount; i++) {
-          const csdKey = `csd${i}`;
-          if (item[csdKey]) {
-            if (!csdSeries[i - 1]) {
-              csdSeries[i - 1] = {
-                name: csdKey.toUpperCase(), // CSD 이름으로 시리즈 이름 설정
-                data: [], // 각 CSD 데이터를 받아오면 여기에 추가할 것입니다.
-              };
-            }
-            csdSeries[i - 1].data.push(item[csdKey].csd_memory_usage);
-          }
-        }
       });
-
-      // csdSeries에는 각 CSD의 데이터가 저장됨
       HostCSDMemoryChart.series[0].setData(host_mem_usg);
       HostCSDMemoryChart.xAxis[0].setCategories(timestamps);
-      csdSeries.forEach((series, index) => {
-        series.color = colors[index % colors.length];
-        HostCSDMemoryChart.addSeries(series);
-      });
     })
     .catch(error => {
       console.error('Error fetching data:', error);
@@ -306,31 +267,61 @@ function get_HostCSDNetwork() {
       data.forEach(item => {
         timestamps.push(item.timestamp);
         host_net_usg.push(item.storage_network_usage);
-
-        // 'csd'로 시작하는 키의 개수 파악
-        csdCount = Object.keys(item).filter(key => key.startsWith('csd')).length;
-
-        // 각 CSD에 대한 데이터 추출
-        for (let i = 1; i <= csdCount; i++) {
-          const csdKey = `csd${i}`;
-          if (item[csdKey]) {
-            if (!csdSeries[i - 1]) {
-              csdSeries[i - 1] = {
-                name: csdKey.toUpperCase(), // CSD 이름으로 시리즈 이름 설정
-                data: [], // 각 CSD 데이터를 받아오면 여기에 추가할 것입니다.
-              };
-            }
-            csdSeries[i - 1].data.push(item[csdKey].csd_network_usage);
-          }
-        }
       });
-
-      // csdSeries에는 각 CSD의 데이터가 저장됨
       HostCSDNetworkChart.series[0].setData(host_net_usg);
       HostCSDNetworkChart.xAxis[0].setCategories(timestamps);
-      csdSeries.forEach((series, index) => {
-        series.color = colors[index % colors.length];
-        HostCSDNetworkChart.addSeries(series);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+// Host / CSD 각 Power 사용량
+function get_HostCSDPower() {
+  let timestamps = [];
+  let csdSeries = [];
+  let host_power_usg = [];
+  let csdCount = 0;
+
+  fetch('/get_HostCSDPower')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(item => {
+        timestamps.push(item.timestamp);
+        host_power_usg.push(item.storage_power_usage);
+      });
+      HostCSDPowerChart.series[0].setData(host_power_usg);
+      HostCSDPowerChart.xAxis[0].setCategories(timestamps);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+const cpu_capacity_color = ['#C167FF', '#BC9DFF', '#B6B5FF','#ADCAFF', '#A3DAFF', '#9BD2FF', '#85C8FF', '#61B8FF']
+
+// CSD 각 저장 용량
+function get_CSDCapacity() {
+  fetch('/get_CSDCapacity')
+    .then(response => response.json())
+    .then(data => {
+      const csdSeries = Object.keys(data).map(function(key, index) {
+        return {
+          name: key.toUpperCase(),
+          y: data[key].csd_storage_capacity,
+          color: cpu_capacity_color[index % cpu_capacity_color.length],
+          groupPadding: 0,
+          dataLabels: {
+            enabled: true,
+            color: '#FFFFFF',
+            format: '<span style="font-size:18px"><b>{point.y:.1f}</b><span style="font-size:12px"><br> GB</br>', // one decimal
+            y: 36, // 10 pixels down from the top
+        }
+        };
+      });
+      CSDCapacityChart.addSeries({
+        name: 'CSD Capacity',
+        data: csdSeries
       });
     })
     .catch(error => {
