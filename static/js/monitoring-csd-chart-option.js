@@ -710,39 +710,6 @@ var HostCSDPowerOption = {
   ]
 }
 
-// CSD 저장 용량
-var CSDCapacityOption = {
-  chart: {
-    type: 'column'
-},
-title: {
-    text: 'CSD Capacity'
-},
-xAxis: {
-    type: 'category',
-    labels: {
-        autoRotation: [-45, -90],
-        style: {
-            fontSize: '13px',
-            fontFamily: 'Verdana, sans-serif'
-        }
-    }
-},
-yAxis: {
-    min: 0,
-    title: {
-        text: '(GB)'
-    }
-},
-legend: {
-    enabled: false
-},
-tooltip: {
-    pointFormat: 'Using Capacity: <b>{point.y:.1f} (GB)</b>'
-},
-series: []
-}
-
 // 선택한 CSD CPU 사용량
 var SelectedCSDcpuOption = {
   chart: {
@@ -781,7 +748,7 @@ plotOptions: {
 },
 series: [{
     name: 'CSD CPU',
-    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    data: [],
     color: {
       linearGradient: {
           x1: 0,
@@ -835,7 +802,7 @@ plotOptions: {
 },
 series: [{
     name: 'CSD Memory',
-    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    data: [],
     color: {
       linearGradient: {
           x1: 0,
@@ -889,7 +856,7 @@ plotOptions: {
 },
 series: [{
     name: 'CSD Network',
-    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    data: [],
     color: {
       linearGradient: {
           x1: 0,
@@ -943,7 +910,7 @@ plotOptions: {
 },
 series: [{
     name: 'CSD Power',
-    data: [10, 11, 13, 15, 12, 14, 15, 18, 17, 15, 10, 11, 13, 15, 12, 14, 15, 18, 17, 15],
+    data: [],
     color: {
       linearGradient: {
           x1: 0,

@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function(){
   get_HostCSDNetwork();
   get_HostCSDPower();
   get_CSDCapacity();
+  // get_SelectedCSDMetric();
   // startInterval();
 })
 
@@ -64,7 +65,7 @@ function getDDLData(){
   var deleteCounts = [];
   var updateCounts = [];
 
-  fetch('/get_queryChart')
+  fetch('/monitoring/get_queryChart')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -88,7 +89,7 @@ function getConnectedClient(){
   var timestamps = [];
   var clients = [];
 
-  fetch('/get_ConnectedClient')
+  fetch('/monitoring/get_ConnectedClient')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -106,7 +107,7 @@ function get_ReadWrite(){
   var timestamps = [];
   var rw_bytes = [];
 
-  fetch('/get_ReadWrite')
+  fetch('/monitoring/get_ReadWrite')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -124,7 +125,7 @@ function get_CacheHit(){
   var timestamps = [];
   var cache_hits = [];
 
-  fetch('/get_CacheHit')
+  fetch('/monitoring/get_CacheHit')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -142,7 +143,7 @@ function get_CacheUsage(){
   var timestamps = [];
   var cache_usg = [];
 
-  fetch('/get_CacheUsage')
+  fetch('/monitoring/get_CacheUsage')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -162,7 +163,7 @@ function get_ScanFilter(){
   var filter_rows = [];
   var filter_ratio = [];
 
-  fetch('/get_ScanFilter')
+  fetch('/monitoring/get_ScanFilter')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -188,7 +189,7 @@ function get_hostServerCPU(){
   hostServerOffloadingCPUChartData = [];
   hostServerMergingCPUChartData = [];
 
-  fetch('/get_hostServerCPU')
+  fetch('/monitoring/get_hostServerCPU')
     .then(response => response.json())
     .then(data => {
       data.forEach(function(item) {
@@ -213,11 +214,9 @@ const colors = ['#FFFF7D', '#FFF478', '#FFE773', '#FFD56B', '#FFBF61', '#FFA355'
 // Host / CSD 각 CPU 사용량
 function get_HostCSDcpu() {
   let timestamps = [];
-  let csdSeries = [];
   let host_cpu_usg = [];
-  let csdCount = 0;
 
-  fetch('/get_HostCSDcpu')
+  fetch('/monitoring/get_HostCSDcpu')
     .then(response => response.json())
     .then(data => {
       data.forEach(item => {
@@ -235,11 +234,9 @@ function get_HostCSDcpu() {
 // Host / CSD 각 Memory 사용량
 function get_HostCSDMemory() {
   let timestamps = [];
-  let csdSeries = [];
   let host_mem_usg = [];
-  let csdCount = 0;
 
-  fetch('/get_HostCSDMemory')
+  fetch('/monitoring/get_HostCSDMemory')
     .then(response => response.json())
     .then(data => {
       data.forEach(item => {
@@ -257,11 +254,9 @@ function get_HostCSDMemory() {
 // Host / CSD 각 Network 사용량
 function get_HostCSDNetwork() {
   let timestamps = [];
-  let csdSeries = [];
   let host_net_usg = [];
-  let csdCount = 0;
 
-  fetch('/get_HostCSDNetwork')
+  fetch('/monitoring/get_HostCSDNetwork')
     .then(response => response.json())
     .then(data => {
       data.forEach(item => {
@@ -279,11 +274,9 @@ function get_HostCSDNetwork() {
 // Host / CSD 각 Power 사용량
 function get_HostCSDPower() {
   let timestamps = [];
-  let csdSeries = [];
   let host_power_usg = [];
-  let csdCount = 0;
 
-  fetch('/get_HostCSDPower')
+  fetch('/monitoring/get_HostCSDPower')
     .then(response => response.json())
     .then(data => {
       data.forEach(item => {
@@ -298,11 +291,13 @@ function get_HostCSDPower() {
     });
 }
 
+
+
 const cpu_capacity_color = ['#C167FF', '#BC9DFF', '#B6B5FF','#ADCAFF', '#A3DAFF', '#9BD2FF', '#85C8FF', '#61B8FF']
 
 // CSD 각 저장 용량
 function get_CSDCapacity() {
-  fetch('/get_CSDCapacity')
+  fetch('/monitoring/get_CSDCapacity')
     .then(response => response.json())
     .then(data => {
       const csdSeries = Object.keys(data).map(function(key, index) {
@@ -320,13 +315,99 @@ function get_CSDCapacity() {
         };
       });
       CSDCapacityChart.addSeries({
-        name: 'CSD Capacity',
+        // name: 'CSD Capacity',
         data: csdSeries
       });
     })
     .catch(error => {
       console.error('Error fetching data:', error);
     });
+}
+
+// CSD 저장 용량 클릭 이벤트 함수
+function handleBarClick(event) {
+  const clickedSeriesName = event.point.name;
+  const seletesCSD = clickedSeriesName.toLowerCase();
+  console.log('Clicked series name:', seletesCSD);
+
+  let timestamps = [];
+  let cpu_usages = [];
+  let memory_usages = [];
+  let network_usages = [];
+  let power_usages = [];
+
+  // 서버에 CSD 번호를 전송
+  fetch('/monitoring/get_SelectedCSDMetric', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ seletesCSD }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(item) {
+        timestamps.push(item.timestamp);
+        cpu_usages.push(item.cpu_usage);
+        memory_usages.push(item.memory_usage);
+        network_usages.push(item.network_usage);
+        power_usages.push(item.power_usage);
+      });
+      SelectedCSDcpuChart.xAxis[0].setCategories(timestamps);
+      SelectedCSDmemoryChart.xAxis[0].setCategories(timestamps);
+      SelectedCSDnetworkChart.xAxis[0].setCategories(timestamps);
+      SelectedCSDpowerChart.xAxis[0].setCategories(timestamps);
+
+      SelectedCSDcpuChart.series[0].setData(cpu_usages);
+      SelectedCSDmemoryChart.series[0].setData(memory_usages);
+      SelectedCSDnetworkChart.series[0].setData(network_usages);
+      SelectedCSDpowerChart.series[0].setData(power_usages);
+    })
+    .catch(error => {
+      console.error('Error fetching additional metrics:', error);
+    });
+}
+
+// CSD 저장 용량
+var CSDCapacityOption = {
+  chart: {
+    type: 'column'
+},
+title: {
+    text: 'CSD Capacity'
+},
+xAxis: {
+    type: 'category',
+    labels: {
+        autoRotation: [-45, -90],
+        style: {
+            fontSize: '13px',
+            fontFamily: 'Verdana, sans-serif'
+        }
+    }
+},
+yAxis: {
+    min: 0,
+    title: {
+        text: '(GB)'
+    }
+},
+legend: {
+    enabled: false
+},
+tooltip: {
+    pointFormat: 'Using Capacity: <b>{point.y:.1f} (GB)</b>'
+},
+plotOptions: {
+  series: {
+    point: {
+      events: {
+        click: handleBarClick,
+      }
+    }
+  }
+},
+series: []
 }
 
 function startInterval(){
