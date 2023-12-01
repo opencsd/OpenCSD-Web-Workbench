@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>
-    KETI Web Workbench Validator Tab
+    KETI Web Workbench Validation Tab
   </title>
   <meta name="msapplication-TileColor" content="" />
   <meta name="theme-color" content="" />
@@ -60,7 +60,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-  <script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
   <style>
     @import url("https://rsms.me/inter/inter.css");
@@ -215,7 +214,7 @@
                         <button class="btn" style="padding: 5px 15px;">template</button>
                       </span>
                       <span class="d-none d-sm-inline">
-                        <a href="#" id="newQuery" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
+                        <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
                     <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
@@ -231,10 +230,10 @@
                 <div class="card" style="height: 420px;">
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-5">
+                      <div class="col-4">
                         <h3 class="card-title" style="margin-top: 5px;">Option Set</h3>
                       </div>
-                      <div class="col-6" style=" display: flex; flex-direction: row-reverse;">
+                      <div class="col-8" style=" display: flex; flex-direction: row-reverse;">
                         <div class="dropdown" style="width: auto;">
                           <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Select Validation Option</a>
                           <div class="dropdown-menu opt_menu">
@@ -243,13 +242,6 @@
                             <a class="dropdown-item opt_item" href="#">New Option+</a>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-1" style="margin-top: 10px;">
-                        <button class="btn btn-link p-0" id="envSetting">
-                          <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-gear-fill" viewBox="0 0 16 16">
-                            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
-                          </svg>
-                        </button>
                       </div>
                     </div>
                     <div class="row">
@@ -306,7 +298,7 @@
                       </div>
                     </div>
                     <div class="table-responsive">
-                      <table id="validatorLogTable" class="table table-vcenter text-nowrap datatable" style="width: 100%;">
+                      <table class="table table-vcenter text-nowrap datatable" style="width: 100%;">
                         <thead>
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>
@@ -320,19 +312,47 @@
                             <th style="width: 5%;"></th>
                           </tr>
                         </thead>
-                        <tbody id="validatorLogTableBody">
-                          <div id="validatorModal" class="modal fade" tabindex="-1" roll="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp" ng-controller="myCtrl">
-                            {% include 'validator-modal.html' %}
+                        <tbody id="queryLogTableBody">
+                          <div class="modal fade" id="modal" tabindex="-1" roll="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp" ng-controller="myCtrl">
+                          
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content" style="width: 47vh; height: 70vh; margin:0; padding:0;">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Query Log</h5>    
+                                        <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="width: 100%; height: 100%;">
+                                        <!--모달 탭-->
+                                        <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                                          <li class="nav-item" id="modalBodyTab1">
+                                              <a class="nav-link active" id="tab1-tab" data-toggle="tab" ng-click="switchTab('Tab1')" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false">Validator</a>
+                                          </li>
+                                        </ul>
+                                        <!-- 모달 내용 -->
+                                        <div class="tab-content" id="myTabContent" style="height: 92%;">
+                                          <!-- 첫번째 탭 -->
+
+                                          <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab" style="overflow:overlay; background-color:black; width:100%; height:60vh; color:white;"></div>
+
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
                           </div>
                         </tbody>
                       </table>
                     </div>
                     <div class="card-footer d-flex align-items-center">
-                      <p class="m-0 text-secondary"></p>
-                      add delete button
+                      <p class="m-0 text-secondary">
+                        <!-- Showing <span>1</span> to <span>8</span> of
+                        <span>16</span> entries -->
+                      </p>
                       <ul class="pagination m-0 ms-auto">
-                        <li class="page-item disabled" id="validatorLogPrevBtn">
+                        <li class="page-item disabled">
                           <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                               viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                               stroke-linecap="round" stroke-linejoin="round">
@@ -345,7 +365,7 @@
                         <li class="page-item active">
                           <a class="page-link" href="#">1</a>
                         </li>
-                        <li class="page-item" id="validatorLogNextBtn">
+                        <li class="page-item">
                           <a class="page-link" href="#">
                             next
                             <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
@@ -640,7 +660,6 @@
 
   <script src="../static/js/temp-log.js" defer></script>
   <script src="../static/js/chart-options.js" defer></script>
-  <script src="../static/js/validator-log.js" defer></script>
   <script src="../static/js/validator.js" defer></script>
 
   <style>
