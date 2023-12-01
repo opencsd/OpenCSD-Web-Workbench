@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 dashboard_summary = {
-    'dbms_type': 'MySQL hohoho',
+    'dbms_type': 'MySQL',
     'db_name': 'tpc-h',
     'data_store_type': 'Row Base',
     'db_user': 'root',

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
-from routes import login, monitoring, monitoring_ssd, query, query_ssd, validator, views
+from routes import login, monitoring, monitoring_ssd, query, query_ssd, validator
+from influxdb import InfluxDBClient
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'dbms09!'

@@ -208,37 +208,37 @@
                       <div class="row">
                         <div class="col-3">
                           <h2 class="mb-1">DBMS</h2>
-                          <span>MySQL</span>
+                          <span>{{dashboard_summary.dbms_type}}</span>
                         </div>
                         <div class="col-3">
                           <h2 class="mb-1">DB Size</h2>
-                          <span>2(GB)</span>
+                          <span>{{dashboard_summary.db_size}}</span>
                         </div>
                         <div class="col-3">
                           <h2 class="mb-1">DB Name</h2>
-                          <span>tpc-h</span>
+                          <span>{{dashboard_summary.db_name}}</span>
                         </div>
                         <div class="col-3">
                           <h2 class="mb-1">Storage</h2>
-                          <span>SSD</span>
+                          <span>{{dashboard_summary.storage_type}}</span>
                         </div>
                       </div>
                       <div class="row mt-3">
                         <div class="col-3">
                           <h2 class="mb-1">DB User</h2>
-                          <span>keti</span>
+                          <span>{{dashboard_summary.db_user}}</span>
                         </div>
                         <div class="col-3">
                           <h2 class="mb-1">Workbench User</h2>
-                          <span>keti_mysql</span>
+                          <span>{{dashboard_summary.workbench_user}}</span>
                         </div>
                         <div class="col-3">
                           <h2 class="mb-1">DB Host Address</h2>
-                          <span>10.0.4.81:3306</span>
+                          <span>{{dashboard_summary.db_host_ip}}</span>
                         </div>
                         <div class="col-3">
                           <h2 class="mb-1">Store Type</h2>
-                          <span>Row Base</span>
+                          <span>{{dashboard_summary.data_store_type}}</span>
                         </div>
                       </div>
                     </div>
@@ -270,6 +270,30 @@
                         </div>
                         <div id="hiddenDBMonitoring" style="display: none;">
                           <!-- 상세 그래프 -->
+                          <div class="row">
+                            <div class="col-6">
+                              <div id="ConnectedClientChart">
+                                <!-- 연결된 클라이언트 수 -->
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div id="DBRWRateChart">
+                                <!-- DB Read, Write 비율 -->
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6">
+                              <div id="DBCacheUsageChart">
+                                <!-- 캐시 사용 횟수 -->
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div id="SlowQueryChart">
+                                <!-- DB Read, Write 비율 -->
+                              </div>
+                            </div>
+                          </div>
                           show graph
                         </div>
                       </div>
@@ -297,11 +321,35 @@
                       </div>
                       <p class="card-title border-bottom"></p>
                       <div>
-                        <div id="mainHostMonitoring">
+                        <div id="HostCpuUsageChart">
                           <!-- 메인 그래프 -->
                         </div>
                         <div id="hiddenHostMonitoring" style="display: none;">
                           <!-- 상세 그래프 -->
+                          <div class="row">
+                            <div class="col-6">
+                              <div id="HostMemoryChart">
+                                <!-- Host 서버와 각 CSD의 CPU 사용률 -->
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div id="HostNetworkUsageChart">
+                                <!-- Host 서버와 각 CSD의 Memory 사용률 -->
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6">
+                              <div id="HostPowerChart">
+                                <!-- Host 서버와 각 CSD의 네트워크 사용률 -->
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div id="HostDiskIOChart">
+                                <!-- Host 서버와 각 CSD의 파워 사용률 -->
+                              </div>
+                            </div>
+                          </div>
                           show graph
                         </div>
                       </div>

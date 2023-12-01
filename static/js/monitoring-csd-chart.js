@@ -1,7 +1,7 @@
 let intervalID = 1;
 
-// var queryChart, queryChartCategories, queryChartSelectData, queryChartInsertData, queryChartUpdateData, queryCharDeletetData
-// var hostServerCPUChart, hostServerCPUChartCategories, hostServerInterfaceCPUChartData, hostServerMonitoringCPUChartData, hostServerOffloadingCPUChartData, hostServerMergingCPUChartData;
+var queryChart, ConnectedClientChart, DBRWRateChart, DBCacheHitRateChart, DBCacheUsageChart, DBCSDScanFilterChart
+var hostServerCPUChart, HostCSDCPUChart, HostCSDMemoryChart, HostCSDNetworkChart, HostCSDPowerChart, CSDCapacityChart, SelectedCSDcpuChart, SelectedCSDmemoryChart, SelectedCSDnetworkChart, SelectedCSDpowerChart
 
 document.addEventListener("DOMContentLoaded", function(){
   // DataBase Monitoring 차트 정의
@@ -24,22 +24,6 @@ document.addEventListener("DOMContentLoaded", function(){
   SelectedCSDnetworkChart = Highcharts.chart(document.getElementById("SelectedCSDnetworkChart"), SelectedCSDnetworkOption);
   SelectedCSDpowerChart = Highcharts.chart(document.getElementById("SelectedCSDpowerChart"), SelectedCSDpowerOption);
 
-  // DataBase Monitoring 렌더링
-  queryChart.render();
-  ConnectedClientChart.render();
-  DBRWRateChart.render();
-  DBCacheHitRateChart.render();
-  DBCacheUsageChart.render();
-  DBCSDScanFilterChart.render();
-
-  // Host Metric Monitoring 렌더링
-  hostServerCPUChart.render();
-  HostCSDCPUChart.render();
-  HostCSDMemoryChart.render();
-  HostCSDNetworkChart.render();
-  HostCSDPowerChart.render();
-  CSDCapacityChart.render();
-
   getDDLData();
   getConnectedClient();
   get_ReadWrite();
@@ -53,7 +37,8 @@ document.addEventListener("DOMContentLoaded", function(){
   get_HostCSDNetwork();
   get_HostCSDPower();
   get_CSDCapacity();
-  // get_SelectedCSDMetric();
+
+  // 5초에 한번씩 그래프 갱신
   // startInterval();
 })
 
@@ -414,6 +399,17 @@ function startInterval(){
   //메트릭 업데이트 주기 설정
   intervalId = setInterval(function() {
     getDDLData();
-    updateLatestChart();
+    getConnectedClient();
+    get_ReadWrite();
+    get_CacheHit();
+    get_CacheUsage();
+    get_ScanFilter();
+  
+    get_hostServerCPU();
+    get_HostCSDcpu();
+    get_HostCSDMemory();
+    get_HostCSDNetwork();
+    get_HostCSDPower();
+    get_CSDCapacity();
   },5000);
 }
