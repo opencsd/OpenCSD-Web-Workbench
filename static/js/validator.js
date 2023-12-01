@@ -116,6 +116,7 @@ runButton.addEventListener("click", function () {
     }
 });
 
+// TPC-H 쿼리 드롭다운 반응
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
 const queryTextArea = document.getElementById("queryTextarea");
@@ -131,8 +132,33 @@ queryNumbers.forEach((number) => {
     dropdownItem.addEventListener("click", function (event) {
         event.preventDefault(); 
             dropdownToggle.textContent = dropdownItem.textContent;
-            queryTextArea.value = "SELECT\n\t ps_partkey,Sum(ps_supplycost * ps_availqty) AS value\n FROM\n\t   partsupp, supplier,nation\n WHERE\n\t  ps_suppkey = s_suppkey AND\n\t s_nationkey = n_nationkey AND\n\t n_name = 'MOZAMBIQUE'\n GROUP  BY\n\t ps_partkey\n HAVING\n\t Sum(ps_supplycost * ps_availqty) > (\n\tSELECT\n\t\t Sum(ps_supplycost * ps_availqty) * 0.0001000000\n\t FROM\n\t\t   partsupp, supplier, nation\n\t  WHERE\n\t\t  ps_suppkey = s_suppkey AND\n\t\t s_nationkey = n_nationkey AND\n\t\t n_name = 'MOZAMBIQUE'\n\t)\n ORDER  BY value DESC; ";
+
+            // 선택한 쿼리 서버로부터 GET
+            fetch('/validator/get_tpchQuery', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                redirect: 'follow',
+                body: JSON.stringify({
+                    "selected_tpch_num": number
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                queryTextArea.value = data.selected_tpch_query;
+            })
+            .catch(error => {
+                console.error('Fetch 오류: ', error);
+            })
     }); 
+});
+
+// new query 버튼 누르면 쿼리입력창 초기화
+const newQueryButton = document.getElementById("newQuery");
+document.getElementById("newQuery").addEventListener("click", function() {
+    queryTextArea.value = "";
 });
 
 
