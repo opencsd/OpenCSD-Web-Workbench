@@ -27,7 +27,7 @@ KETI-Web-Workbench enables users to monitor databases, perform query pushdown, a
 -------------
 ```bash
 git clone
-python3 app.py
+python3 main.py
 ```
 
 ## How To Use

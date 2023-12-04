@@ -157,13 +157,14 @@ queryNumbers.forEach((number) => {
 
 // new query 버튼 누르면 쿼리입력창 초기화
 const newQueryButton = document.getElementById("newQuery");
-document.getElementById("newQuery").addEventListener("click", function() {
+newQueryButton.addEventListener("click", function() {
     queryTextArea.value = "";
 });
 
-
+// 옵션 드롭다운 선택 시 동작
 const opt_dropdownMenu = document.querySelector(".opt_menu");
 const opt_dropdownToggle = document.querySelector(".opt_toggle");
+var selectedOptionName = "";
 
 const dbmsInfo = document.getElementById("dbmsInfo");
 const storageTypeInfo = document.getElementById("storageTypeInfo");
@@ -184,6 +185,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
             csdCountInfo.textContent = "8";
             blockCountInfo.textContent = "15";
             algorithmInfo.textContent = "CSD Metric Score";
+            selectedOptionName = opt_selectedOption;
 
         } else if (opt_selectedOption === "Non Pushdown Option Set") {
             dbmsInfo.textContent = "MySQL"; 
@@ -192,11 +194,47 @@ opt_dropdownMenu.addEventListener("click", function (e) {
             csdCountInfo.textContent = "-";
             blockCountInfo.textContent = "-";
             algorithmInfo.textContent = "-";
+            selectedOptionName = opt_selectedOption;
         } else{
-
+            // 새로운 옵션 추가 모달 창
         }
     }
 });
+
+
+
+// 옵션 수정 버튼 클릭 시 동작
+const optSettingButton = document.getElementById("optionSetButton");
+const optSettingModal = document.getElementById("validator-optionSettingModal")
+const modalContainer = document.getElementById('modalContainer');
+
+optSettingButton.addEventListener('click', function() {
+    envSettingmodalLoad()
+});
+
+function envSettingmodalLoad(b){
+    $(function() {
+        var OptionName = $("#inputOptionname");
+        var selected_dbms = $("#selected_dbms");
+        var selected_csdkind = $("#selected_csdkind");
+        var SetCsdCount = $("#SetCsdCount");
+        var SetBlockCount = $("#selected_csdkind");
+
+        if(storageTypeInfo.textContent === "CSD") {
+
+        }
+
+        OptionName.val(selectedOptionName);
+        $("#validator-optionSettingModal").modal("show");
+        var modalDiv = $('#validator-optionSettingModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
+
+
 
 const validationCPUChartBtn = document.getElementById("validationCPUChartBtn");
 const validationPowerChartBtn = document.getElementById("validationPowerChartBtn");

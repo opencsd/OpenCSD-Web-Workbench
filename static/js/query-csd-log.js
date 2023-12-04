@@ -267,5 +267,10 @@ $('a[data-toggle="tab"]').click(function (e) {
 function queryLogDetailLoad(b) {
     $(function() {
         $("#queryLogDetail").modal("show");
+        var modalDiv = $('#queryLogDetail');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
     })
 }
