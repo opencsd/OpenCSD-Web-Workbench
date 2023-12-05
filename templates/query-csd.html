@@ -217,7 +217,7 @@
                         <button class="btn" style="padding: 5px 15px;">template</button>
                       </span>
                       <span class="d-none d-sm-inline">
-                        <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
+                        <a href="#" id="newQuery" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
                     <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
@@ -515,9 +515,12 @@
                         </thead>
                         <tbody id="queryLogTableBody">
                           {% include 'query-csd-modal.html' %}
-                          {% include 'query-csd-logDetail.html' %}
+                          
                         </tbody>
                       </table>
+                    </div>
+                    <div class="modal fade" id="queryLogDetail" tabindex="-1" role="dialog" aria-hidden="true">
+                      {% include 'query-csd-logDetail.html' %}
                     </div>
                     <div class="card-footer d-flex align-items-center">
                       <p class="m-0 text-secondary">

@@ -214,7 +214,7 @@
                         <button class="btn" style="padding: 5px 15px;">template</button>
                       </span>
                       <span class="d-none d-sm-inline">
-                        <a href="#" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
+                        <a href="#" id="newQuery" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
                       <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
@@ -471,10 +471,11 @@
                             <tr style="text-align: center;">
                               <th style="width: 5%;"></th>
                               <th style="width: 1%;">ID</th>
-                              <th style="width: 50%;">QUERY</th>
-                              <th style="width: 12%;">Scanned Row</th>
-                              <th style="width: 12%;">Execution Time</th>
-                              <th style="width: 5%;"></th>
+                              <th style="width: 5%;">Type</th>
+                              <th style="width: 30%;">QUERY</th>
+                              <th style="width: 20%;">Scanned Row</th>
+                              <th style="width: 20%;">Execution Time</th>
+                              <!-- <th style="width: 5%;"></th> -->
                             </tr>
                           </thead>
                           <tbody id="queryLogTableBody">

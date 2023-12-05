@@ -1,111 +1,42 @@
-<div class="modal fade" id="queryLogDetail" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Pushdown Query Result Detail</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Query Snippet Info</label>
-                    <!-- 스니펫 테이블 -->
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Scan / Filter Ratio</label>
-                    <!-- 스캔, 필터 비율 -->
-                </div>
-                <!-- <div class="table-responsive">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Pushdown Query Result Detail</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <label class="form-label">Query Snippet Info</label>
+                <!-- 스니펫 테이블 -->
+                <div class="table-responsive">
                     <table class="table table-vcenter">
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Title</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th class="w-1"></th>
+                            <tr style="text-align: center;">
+                                <th style="width: 10%;">Work ID</th>
+                                <th style="width: 15%;">Type</th>
+                                <th style="width: 10%;">Projection</th>
+                                <th style="width: 10%;">Filter</th>
+                                <th style="width: 10%;">Order By</th>
+                                <th style="width: 10%;">Group By</th>
+                                <th style="width: 10%;">Limit</th>
+                                <th style="width: 10%;">Having</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Paweł Kuna</td>
-                                <td class="text-secondary">
-                                    UI Designer, Training
-                                </td>
-                                <td class="text-secondary"><a href="#" class="text-reset">paweluna@howstuffworks.com</a>
-                                </td>
-                                <td class="text-secondary">
-                                    User
-                                </td>
-                                <td>
-                                    <a href="#">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jeffie Lewzey</td>
-                                <td class="text-secondary">
-                                    Chemical Engineer, Support
-                                </td>
-                                <td class="text-secondary"><a href="#" class="text-reset">jlewzey1@seesaa.net</a></td>
-                                <td class="text-secondary">
-                                    Admin
-                                </td>
-                                <td>
-                                    <a href="#">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Mallory Hulme</td>
-                                <td class="text-secondary">
-                                    Geologist IV, Support
-                                </td>
-                                <td class="text-secondary"><a href="#" class="text-reset">mhulme2@domainmarket.com</a>
-                                </td>
-                                <td class="text-secondary">
-                                    User
-                                </td>
-                                <td>
-                                    <a href="#">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Dunn Slane</td>
-                                <td class="text-secondary">
-                                    Research Nurse, Sales
-                                </td>
-                                <td class="text-secondary"><a href="#" class="text-reset">dslane3@epa.gov</a></td>
-                                <td class="text-secondary">
-                                    Owner
-                                </td>
-                                <td>
-                                    <a href="#">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Emmy Levet</td>
-                                <td class="text-secondary">
-                                    VP Product Management, Accounting
-                                </td>
-                                <td class="text-secondary"><a href="#" class="text-reset">elevet4@senate.gov</a></td>
-                                <td class="text-secondary">
-                                    Admin
-                                </td>
-                                <td>
-                                    <a href="#">Edit</a>
-                                </td>
-                            </tr>
+                        <tbody id="logDetailTableBody">
                         </tbody>
                     </table>
-                </div> -->
-
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti
-                dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit
-                tempora totam unde.
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            
+            <div class="mb-3">
+                <label class="form-label">Scan / Filter Ratio</label>
+                Scan / Filter Ratio Chart
+                <!-- 스캔, 필터 비율 -->
             </div>
+            
+        <div class="modal-footer">
+            <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button> -->
         </div>
     </div>
 </div>

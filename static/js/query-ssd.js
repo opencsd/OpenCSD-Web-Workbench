@@ -289,3 +289,9 @@ queryNumbers.forEach((number) => {
 
         }); 
 });
+
+// new query 버튼 누르면 쿼리입력창 초기화
+const newQueryButton = document.getElementById("newQuery");
+document.getElementById("newQuery").addEventListener("click", function() {
+    queryTextArea.value = "";
+});
