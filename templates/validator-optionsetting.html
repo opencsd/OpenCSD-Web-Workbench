@@ -14,7 +14,7 @@
             <div class="form-selectgroup-boxes row mb-3">
             <div class="col-md-6">
                 <label class="form-selectgroup-item">
-                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked />
+                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" id="ssd_selected"/>
                 <span class="form-selectgroup-label d-flex align-items-center p-3">
                     <span class="me-3">
                     <span class="form-selectgroup-check"></span>
@@ -27,7 +27,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-selectgroup-item">
-                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" />
+                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" id="csd_selected"/>
                 <span class="form-selectgroup-label d-flex align-items-center p-3">
                     <span class="me-3">
                     <span class="form-selectgroup-check"></span>
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <label class="form-label">Scheduling Algorithm</label>
-            <div class="btn-group w-100"role="group">
+            <div class="btn-group w-100"role="group" id="scheduling_algorithm">
                 <input type="radio" class="btn-check" name="btn-radio-basic" id="csd-metric-score" autocomplete="off" checked>
                 <label for="btn-radio-basic-1" type="button" class="btn">CSD Metric Score</label>
                 <input type="radio" class="btn-check" name="btn-radio-basic" id="block-count-based" autocomplete="off">
@@ -89,7 +89,7 @@
                     <span class="col"><b>Using Index</b></span>
                     <span class="col-lg-10">
                     <label class="form-check form-check-single form-switch">
-                        <input class="form-check-input" type="checkbox" checked>
+                        <input class="form-check-input" type="checkbox" id="using_index" checked>
                     </label>
                     </span>
                 </label>

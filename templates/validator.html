@@ -240,9 +240,12 @@
                           <div class="dropdown-menu opt_menu">
                             <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
                             <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
-                            <a class="dropdown-item opt_item" href="#">New Option+</a>
+                            <a class="dropdown-item opt_item" href="#" id="new_option">New Option+</a>
                           </div>
                         </div>
+                      </div>
+                      <div class="modal fade" id="validator-newoption" tabindex="-1">
+                        {% include 'validator-newoption.html' %}
                       </div>
                       <div class="col-1" style="margin-top: 10px;">
                         <button class="btn btn-link p-0" id="optionSetButton">
@@ -332,7 +335,7 @@
                     </div>
                     <div class="card-footer d-flex align-items-center">
                       <p class="m-0 text-secondary"></p>
-                      add delete button
+                      <button type="button" class="btn btn-danger" >Delete</button>
                       <ul class="pagination m-0 ms-auto">
                         <li class="page-item disabled" id="validatorLogPrevBtn">
                           <a class="page-link" href="#" tabindex="-1" aria-disabled="true">

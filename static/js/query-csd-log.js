@@ -85,12 +85,50 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="1">`;
         newRow.appendChild(checkboxCell);
 
-        // 쿼리 타입에 따라 아이콘 바꿔야함
-        typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        // 쿼리 타입에 따라 아이콘 
+        const queryType = queryText.slice(0, 10);
+        var lowerCasequeryType = queryType.toLowerCase();
+        if (lowerCasequeryType.includes("select")){
+            console.log("select query type")
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
         <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
         </svg>`
+        }
+        else if (lowerCasequeryType.includes("update")){
+            console.log("update query type")
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
+            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+          </svg>`
+        }
+        else if (lowerCasequeryType.includes("insert")){
+            console.log("insert query type")
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 8v8" />
+            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+          </svg>`
+        }
+        else if (lowerCasequeryType.includes("delete")){
+            console.log("delete query type")
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
+            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+          </svg>`
+        }
+        else {
+            console.log("generic query type")
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-g" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
+            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+          </svg>`
+        }
+        
         newRow.appendChild(typeCell);
 
         queryIDCell.textContent = temp_id;
@@ -264,13 +302,79 @@ $('a[data-toggle="tab"]').click(function (e) {
         }
 });
 
+
+// 쿼리 로그 디테일 모달
 function queryLogDetailLoad(b) {
-    $(function() {
+    const queryDetailTableBody = document.getElementById("logDetailTableBody");
+
+    
+
+    // 웹 서버와 연결해서 db로부터 값 받아서 테이블 채우기
+    fetch('/query/get_querySnippetInfo')
+      .then(response => response.json())
+      .then(data => {
+        
+        queryDetailTableBody.innerHTML = ``;
+
+        data.forEach(function(item) {
+            const SnippetRow = document.createElement("tr");
+            const SnippetRows = [];
+            var SnippetCount = 0;
+            const WIDCell = document.createElement("td");
+            WIDCell.style.width = "10%";
+            WIDCell.style.textAlign = "center";
+            const TypeCell = document.createElement("td");
+            TypeCell.style.width = "15%";
+            TypeCell.style.textAlign = "center";
+            const ProjectionCell = document.createElement("td");
+            ProjectionCell.style.width = "10%";
+            ProjectionCell.style.textAlign = "center";
+            const FilterCell = document.createElement("td");
+            FilterCell.style.width = "10%";
+            FilterCell.style.textAlign = "center";
+            const OrderCell = document.createElement("td");
+            OrderCell.style.width = "10%";
+            OrderCell.style.textAlign = "center";
+            const GroupCell = document.createElement("td");
+            GroupCell.style.width = "10%";
+            GroupCell.style.textAlign = "center";
+            const LimitCell = document.createElement("td");
+            LimitCell.style.width = "10%";
+            LimitCell.style.textAlign = "center";
+            const HavingCell = document.createElement("td");
+            HavingCell.style.width = "10%";
+            HavingCell.style.textAlign = "center";
+
+            WIDCell.textContent = item.work_id;
+            TypeCell.textContent = item.type;
+            ProjectionCell.textContent = item.projection;
+            FilterCell.textContent = item.filter;
+            OrderCell.textContent = item.order_by;
+            GroupCell.textContent = item.group_by;
+            LimitCell.textContent = item.limit;
+            HavingCell.textContent = item.having;
+
+            SnippetRow.appendChild(WIDCell);
+            SnippetRow.appendChild(TypeCell);
+            SnippetRow.appendChild(ProjectionCell);
+            SnippetRow.appendChild(FilterCell);
+            SnippetRow.appendChild(OrderCell);
+            SnippetRow.appendChild(GroupCell);
+            SnippetRow.appendChild(LimitCell);
+            SnippetRow.appendChild(HavingCell);
+
+            queryDetailTableBody.appendChild(SnippetRow);
+        })
+      })
+      .catch(console.error(error => console.error('Error: ', error)));
+
+    // 모달 창 열기
+      $(function() {
         $("#queryLogDetail").modal("show");
         var modalDiv = $('#queryLogDetail');
         modalDiv.modal({
             backdrop: true,
             show: true
         });
-    })
+    });
 }

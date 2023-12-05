@@ -165,6 +165,7 @@ newQueryButton.addEventListener("click", function() {
 const opt_dropdownMenu = document.querySelector(".opt_menu");
 const opt_dropdownToggle = document.querySelector(".opt_toggle");
 var selectedOptionName = "";
+var selectedStorageType = "";
 
 const dbmsInfo = document.getElementById("dbmsInfo");
 const storageTypeInfo = document.getElementById("storageTypeInfo");
@@ -186,6 +187,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
             blockCountInfo.textContent = "15";
             algorithmInfo.textContent = "CSD Metric Score";
             selectedOptionName = opt_selectedOption;
+            selectedStorageType = "CSD";
 
         } else if (opt_selectedOption === "Non Pushdown Option Set") {
             dbmsInfo.textContent = "MySQL"; 
@@ -195,11 +197,24 @@ opt_dropdownMenu.addEventListener("click", function (e) {
             blockCountInfo.textContent = "-";
             algorithmInfo.textContent = "-";
             selectedOptionName = opt_selectedOption;
+            selectedStorageType = "SSD";
         } else{
             // 새로운 옵션 추가 모달 창
+            NewOptionmodalLoad();
         }
     }
 });
+
+function NewOptionmodalLoad(b){
+    $(function() {
+        $("#validator-newoption").modal("show");
+        var modalDiv = $('#validator-newoption');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
 
 
 
@@ -212,16 +227,43 @@ optSettingButton.addEventListener('click', function() {
     envSettingmodalLoad()
 });
 
+var selected_csdkind = $("#selected_csdkind");
+var SetCsdCount = $("#SetCsdCount");
+var SetBlockCount = $("#SetBlockCount");
+var scheduling_algorithm = $("#scheduling_algorithm");
+var using_index = $("#using_index");
+
+$("#csd_selected").on("change", function() {
+    if ($(this).is(":checked")){
+        selected_csdkind.prop('disabled', false)
+        SetCsdCount.prop('disabled', false)
+        SetBlockCount.prop('disabled', false)
+        using_index.prop('disabled', false)
+        scheduling_algorithm.prop('disabled', false)
+    }
+});
+$("#ssd_selected").on("change", function() {
+    if ($(this).is(":checked")){
+        selected_csdkind.prop('disabled', true)
+        SetCsdCount.prop('disabled', true)
+        SetBlockCount.prop('disabled', true)
+        using_index.prop('disabled', true)
+        scheduling_algorithm.prop('disabled', true)
+    }
+});
+
 function envSettingmodalLoad(b){
     $(function() {
         var OptionName = $("#inputOptionname");
-        var selected_dbms = $("#selected_dbms");
-        var selected_csdkind = $("#selected_csdkind");
-        var SetCsdCount = $("#SetCsdCount");
-        var SetBlockCount = $("#selected_csdkind");
+        var using_index = $("#using_index");
+        var ssd_selected = $("#ssd_selected");
+        var csd_selected = $("#csd_selected");
 
-        if(storageTypeInfo.textContent === "CSD") {
-
+        if(selectedStorageType === "CSD" ) {
+            csd_selected.prop("checked", true)
+        }
+        else {
+            ssd_selected.prop("checked", true)
         }
 
         OptionName.val(selectedOptionName);
@@ -233,6 +275,8 @@ function envSettingmodalLoad(b){
         });
     });
 }
+
+
 
 
 
