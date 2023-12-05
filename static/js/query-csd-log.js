@@ -341,9 +341,6 @@ function queryLogDetailLoad(b) {
             const LimitCell = document.createElement("td");
             LimitCell.style.width = "10%";
             LimitCell.style.textAlign = "center";
-            const HavingCell = document.createElement("td");
-            HavingCell.style.width = "10%";
-            HavingCell.style.textAlign = "center";
 
             WIDCell.textContent = item.work_id;
             TypeCell.textContent = item.type;
@@ -352,7 +349,6 @@ function queryLogDetailLoad(b) {
             OrderCell.textContent = item.order_by;
             GroupCell.textContent = item.group_by;
             LimitCell.textContent = item.limit;
-            HavingCell.textContent = item.having;
 
             SnippetRow.appendChild(WIDCell);
             SnippetRow.appendChild(TypeCell);
@@ -361,7 +357,6 @@ function queryLogDetailLoad(b) {
             SnippetRow.appendChild(OrderCell);
             SnippetRow.appendChild(GroupCell);
             SnippetRow.appendChild(LimitCell);
-            SnippetRow.appendChild(HavingCell);
 
             queryDetailTableBody.appendChild(SnippetRow);
         })
