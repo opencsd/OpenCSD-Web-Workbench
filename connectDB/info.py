@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 INFLUX_CSD_IP = "10.0.4.87" # PLATFORM_METRIC_DB_HOST 이걸로 통일
 INFLUX_CSD_PORT = 30703 # PLATFORM_METRIC_DB_PORT 이걸로 통일
@@ -13,6 +14,33 @@ INSTANCE_METRIC_DB_PORT = 30701 #구분 필요
 INSTANCE_METRIC_DB_USER = 'keti' #구분 필요
 INSTANCE_METRIC_DB_PASSWORD = 'ketilinux' #구분 필요
 INSTANCE_METRIC_DB_NAME = "opencsd" #구분 필요
+=======
+#influx
+INFLUX_CSD_IP = "10.0.4.87"
+INFLUX_CSD_PORT = "30703"
+INFLUX_CSD_USERNAME = 'keti'
+INFLUX_CSD_PASSWORD = 'ketilinux'
+INFLUX_CSD_DB = "opencsd_management_platform"
+
+# PLATFORM_METRIC_DB_HOST = "10.0.4.87"
+# PLATFORM_METRIC_DB_PORT = 30703
+# PLATFORM_METRIC_DB_USER = "keti"
+# PLATFORM_METRIC_DB_PASSWORD = "ketilinux"
+# PLATFORM_METRIC_DB_NAME = "opencsd_management_platform"
+
+INSTANCE_METRIC_DB_HOST = "10.0.4.87"
+INSTANCE_METRIC_DB_PORT = 30701
+INSTANCE_METRIC_DB_USER = "keti"
+INSTANCE_METRIC_DB_PASSWORD = "ketilinux"
+INSTANCE_METRIC_DB_NAME = "opencsd"
+
+# mysql
+PLATFORM_MANAGEMENT_DB_HOST = "10.0.4.87"
+PLATFORM_MANAGEMENT_DB_PORT = 30704
+PLATFORM_MANAGEMENT_DB_USER = 'keti' #구분 필요
+PLATFORM_MANAGEMENT_DB_PASSWORD = 'ketilinux' #구분 필요
+PLATFORM_MANAGEMENT_DB_NAME = 'management'
+>>>>>>> hun_branch
 
 INSTANCE_MANAGEMENT_DB_HOST = "10.0.4.87"
 INSTANCE_MANAGEMENT_DB_PORT = 30702 #구분 필요
@@ -20,6 +48,7 @@ INSTANCE_MANAGEMENT_DB_USER = 'keti' #구분 필요
 INSTANCE_MANAGEMENT_DB_PASSWORD = 'ketilinux' #구분 필요
 INSTANCE_MANAGEMENT_DB_NAME = 'opencsd' #구분 필요
 
+<<<<<<< HEAD
 # management platform
 PLATFORM_MANAGEMENT_DB_HOST = "10.0.4.87"
 PLATFORM_MANAGEMENT_DB_PORT = 30704
@@ -39,3 +68,6 @@ MYSQL_DB_PORT = 3306
 MYSQL_DB_USER = 'root'
 MYSQL_DB_PASSWORD = ''
 MYSQL_DB_NAME = 'opencsd_management_platform'
+=======
+query_str = "select projection_count, filter_count, group_by_count, order_by_count from query_snippet"
+>>>>>>> hun_branch
