@@ -310,7 +310,7 @@ function queryLogDetailLoad(b) {
 
 
     // 웹 서버와 연결해서 db로부터 값 받아서 테이블 채우기
-    fetch('/query/get_querySnippetInfo')
+    fetch('/query/snippet')
         .then(response => response.json())
         .then(data => {
 
