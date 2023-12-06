@@ -141,23 +141,12 @@ def delete_handler():
         try:
             data = request.json
             delete_query_id = data['delete_query_id'] #[ids...]
-            user_id = data['user_id']
-            query_type = data['query_type'] #'select','update','insert','delete','dcl','ddl','other'
-            page = data['page']
-            index = page * 10 -10
 
             query = "delete from query_log where query_id in {}".format(tuple(delete_query_id))
 
             result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                         info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                         info.INSTANCE_MANAGEMENT_DB_NAME, query)
-
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-                from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
-        
-            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
             return jsonify(result)
         except:
             return ""
@@ -226,9 +215,10 @@ def run_handler():
             # 너무 많으면 어떻게 나타내지?
             query = "select node_cpu_usage, node_power_usage from instace_monitoring \
                     where time > '{}' and time < '{}'".format(start_time,end_time)
-            query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_METRIC_DB_NAME, query)
+            # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            #                                     info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+            #                                     info.INSTANCE_METRIC_DB_NAME, query)
+            query_metric = "" #임시
             
             json1 = jsonify(query_run_result)
             json2 = jsonify(query_metric)
