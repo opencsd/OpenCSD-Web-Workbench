@@ -1230,19 +1230,40 @@ selected_csd_info = [
   }
 ]
 
+
 from flask import Blueprint, jsonify, request, render_template
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from connectDB import influx, mysql, info
 
 monitoring_bp = Blueprint('monitoring', __name__, url_prefix='/monitoring')
 
 @monitoring_bp.route('/')  
 def monitoring():
-    return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
+  query_str = "select * from database_monitoring order by desc limit 20;"
+  result = influx.query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD, info.INSTANCE_METRIC_DB_NAME, query_str)
+  
+  print(result)
+  return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
 
 # DDL Data Get 요청
 @monitoring_bp.route('/get_queryChart', methods=['GET'])
 def get_queryChart():
-    # print("get chart")
-    return jsonify(ddl_info)
+  ddl_count_outer = []
+  query_str = "select select_count, insert_count, delete_count, update_count from database_monitoring order by desc limit 20;"
+  result = influx.query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD, info.INSTANCE_METRIC_DB_NAME, query_str)
+
+  for i in range(len(result[0])):
+    ddl_count_inner = {} 
+    ddl_count_inner["timestamp"] = 0
+    ddl_count_inner["select_count"] = result[0][i].get('select_count')
+    ddl_count_inner["insert_count"] = result[0][i].get('insert_count')
+    ddl_count_inner["delete_count"] = result[0][i].get('delete_count')
+    ddl_count_inner["update_count"] = result[0][i].get('update_count')
+    ddl_count_outer.append(ddl_count_inner)
+  print(ddl_count_outer)
+
+  return jsonify(ddl_count_outer)
 
 # 연결된 클라이언트 수 Get 요청
 @monitoring_bp.route('/get_ConnectedClient', methods=['GET'])
@@ -1268,7 +1289,7 @@ def get_CacheUsage():
     # print("get Cache Usage")
     return jsonify(chache_usage_info)
 
-# DB Scna/Filter Get 요청
+# DB Scan/Filter Get 요청
 @monitoring_bp.route('/get_ScanFilter', methods=['GET'])
 def get_ScanFilter():
     # print("get Scan Filter")
@@ -1304,13 +1325,44 @@ def get_HostCSDPower():
     # print("get Host CSD Power")
     return jsonify(power_usg_info)
   
+
 # CSD 사용중인 저장 용량
 @monitoring_bp.route('/get_CSDCapacity', methods=['GET'])
 def get_CSDCapacity():
-  # print("get CSD Capacity")
-  return jsonify(csd_capacity_info)
+  disk_capacity_outer = {}
+  
+  for i in range(1, 5):
+    disk_capacity_inner = {}
+    csd_num = str(i)
+    query_str = "select disk_usage from csd" + csd_num + "_metric order by time desc limit 1"
+    result = influx.query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.INFLUX_CSD_PORT, info.INFLUX_CSD_DB, query_str)
+    disk_capacity_inner['csd_storage_capacity'] = result[0][0].get('disk_usage')
+
+    csd_name = "csd" + csd_num
+    disk_capacity_outer[csd_name] = disk_capacity_inner
+
+  return jsonify(disk_capacity_outer)
+
   
 # 선택한 CSD의 메트릭 정보
 @monitoring_bp.route('/get_SelectedCSDMetric', methods=['GET', 'POST'])
 def get_SelectedCSDMetric():
-  return jsonify(selected_csd_info)
+  if request.method == 'POST':
+      data = request.json
+      csd_id = data['seletesCSD']
+  
+  csd_metric_outer = []
+  query_str = "select current_time, cpu_usage, memory_usage, network_bandwidth from " + csd_id + "_metric limit 20"
+  result = influx.query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.INFLUX_CSD_PORT, info.INFLUX_CSD_DB, query_str)
+
+  for i in range(len(result[0])):
+    csd_metric_inner = {} 
+    csd_metric_inner["timestamp"] = result[0][i].get('current_time')
+    csd_metric_inner["cpu_usage"] = result[0][i].get('cpu_usage')
+    csd_metric_inner["memory_usage"] = result[0][i].get('memory_usage')
+    csd_metric_inner["network_usage"] = result[0][i].get('network_bandwidth')
+    csd_metric_inner["power_usage"] = result[0][i].get('network_bandwidth')
+    csd_metric_outer.append(csd_metric_inner)
+
+  return jsonify(csd_metric_outer)
+  # return jsonify(selected_csd_info)
