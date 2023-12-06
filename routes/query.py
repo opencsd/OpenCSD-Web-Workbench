@@ -8,8 +8,7 @@ snippet_info = [
         "filter": 2,
         "order_by": 0,
         "group_by": 0,
-        "limit": 0,
-        "having": 0
+        "limit": 0
     },
     {
         "work_id": 1,
@@ -18,8 +17,7 @@ snippet_info = [
         "filter": 2,
         "order_by": 0,
         "group_by": 0,
-        "limit": 0,
-        "having": 0
+        "limit": 0
     },
     {
         "work_id": 2,
@@ -28,8 +26,7 @@ snippet_info = [
         "filter": 1,
         "order_by": 0,
         "group_by": 0,
-        "limit": 0,
-        "having": 0
+        "limit": 0
     },
     {
         "work_id": 3,
@@ -38,8 +35,7 @@ snippet_info = [
         "filter": 0,
         "order_by": 0,
         "group_by": 0,
-        "limit": 0,
-        "having": 0
+        "limit": 0
     }
 ]
 
