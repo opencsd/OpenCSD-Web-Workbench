@@ -515,15 +515,16 @@
                         </thead>
                         <tbody id="queryLogTableBody">
                           {% include 'query-csd-modal.html' %}
-                          
                         </tbody>
                       </table>
+                      <div class="modal fade" id="queryLogDetail" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% include 'query-csd-logDetail.html' %}
+                      </div>
                     </div>
-                    <div class="modal fade" id="queryLogDetail" tabindex="-1" role="dialog" aria-hidden="true">
-                      {% include 'query-csd-logDetail.html' %}
-                    </div>
+                    
                     <div class="card-footer d-flex align-items-center">
                       <p class="m-0 text-secondary">
+                        <button type="button" class="btn btn-danger" id="QueryLogDelete" >Delete</button>
                         <!-- Showing <span>1</span> to <span>8</span> of
                         <span>16</span> entries -->
                       </p>
