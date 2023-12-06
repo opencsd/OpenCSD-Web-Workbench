@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from flask import Blueprint, jsonify, request, render_template
 from connectDB import mysql, influx, info
 import requests
@@ -25,7 +26,7 @@ def tpch_hadler():
         
     return jsonify(json_data)
 
-# tpc-h 드롭다운에서 선택한 쿼리 GET
+# opencsd 환경정보 획득
 @query_bp.route('/environment', methods=['GET'])
 def environment_hadler():
     # 나중에 db_instance_name 인자로 받기!!
@@ -47,6 +48,30 @@ def environment_hadler():
         
     return jsonify(result)
 
+# # 쿼리 로그, 한 페이지 최대값은 10
+# @query_bp.route('/log-all', methods=['GET', 'POST'])
+# def log_all_hadler():
+#     try:
+#         data = request.json
+#         user_id = data['user_id']
+#         query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
+#         page = data['page']
+#         index = page * 10 -10
+
+#         if query_type == "all":
+#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+#                 from query_log where user_id='{}' order by query_id limit {},10".format(user_id,index)
+#         else:
+#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+#                 from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
+
+#         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
+#         return jsonify(result)
+#     except:
+#         return "" 
+
 # 쿼리 로그, 한 페이지 최대값은 10
 @query_bp.route('/log-all', methods=['GET', 'POST'])
 def log_all_hadler():
@@ -54,15 +79,13 @@ def log_all_hadler():
         data = request.json
         user_id = data['user_id']
         query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
-        page = data['page']
-        index = page * 10 -10
 
         if query_type == "all":
             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-                from query_log where user_id='{}' order by query_id limit {},10".format(user_id,index)
+                from query_log where user_id='{}' order by query_id".format(user_id)
         else:
             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-                from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
+                from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
 
         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
