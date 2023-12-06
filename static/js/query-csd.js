@@ -272,7 +272,7 @@ queryNumbers.forEach((number) => {
     dropdownItem.addEventListener("click", function (event) {
         event.preventDefault(); 
             dropdownToggle.textContent = dropdownItem.textContent;
-            fetch('/query/get_tpchQuery', {
+            fetch('/query/tpch', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {

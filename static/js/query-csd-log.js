@@ -403,11 +403,7 @@ var options = {
     },
     series: [{
         name: "Scan Rows",
-        data: 2112
-    },
-    {
-        name: "Filtered Rows",
-        data: 800
+        data: [2112, 800]
     }],
     tooltip: {
         theme: 'dark'
