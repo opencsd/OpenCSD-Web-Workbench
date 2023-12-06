@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask
+from flask import Flask, session
 from routes import login, monitoring, monitoring_ssd, query, query_ssd, validator
 from influxdb import InfluxDBClient
 
@@ -15,4 +15,4 @@ app.register_blueprint(monitoring_ssd.monitoring_ssd_bp)
 app.register_blueprint(query_ssd.query_ssd_bp)
 
 if __name__ == '__main__':
-    app.run(host="10.0.4.87", port=7777, debug=True)
+    app.run(host="10.0.4.87", port=8087, debug=True)
