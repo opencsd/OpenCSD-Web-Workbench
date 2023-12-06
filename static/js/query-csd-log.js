@@ -37,16 +37,16 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             let max;
             let label;
 
-            if(i==0){
+            if (i == 0) {
                 value = 2112;
                 max = 6000;
-            }else if(i==1){
+            } else if (i == 1) {
                 value = 800;
                 max = 4000;
-            }else if(i==2){
+            } else if (i == 2) {
                 value = 96;
                 max = 200;
-            }else{
+            } else {
                 value = 13;
                 max = 100;
             }
@@ -75,7 +75,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                 </svg>
             </span>
         `;
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('[data-bs-toggle="popover"]').popover();
         });
 
@@ -88,7 +88,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         // 쿼리 타입에 따라 아이콘 
         const queryType = queryText.slice(0, 10);
         var lowerCasequeryType = queryType.toLowerCase();
-        if (lowerCasequeryType.includes("select")){
+        if (lowerCasequeryType.includes("select")) {
             console.log("select query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -96,7 +96,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
         </svg>`
         }
-        else if (lowerCasequeryType.includes("update")){
+        else if (lowerCasequeryType.includes("update")) {
             console.log("update query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -104,7 +104,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
           </svg>`
         }
-        else if (lowerCasequeryType.includes("insert")){
+        else if (lowerCasequeryType.includes("insert")) {
             console.log("insert query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -112,7 +112,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
           </svg>`
         }
-        else if (lowerCasequeryType.includes("delete")){
+        else if (lowerCasequeryType.includes("delete")) {
             console.log("delete query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -128,7 +128,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
           </svg>`
         }
-        
+
         newRow.appendChild(typeCell);
 
         queryIDCell.textContent = temp_id;
@@ -151,8 +151,8 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
         // 쿼리 로그 클릭 이벤트 발생 시 모달 로드 
         // dummyButton.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButton.id)});
-        
-        dummyButton.addEventListener('click', function() {
+
+        dummyButton.addEventListener('click', function () {
             if (popover) {
                 popover.dispose(); // 기존 팝업 제거
             }
@@ -173,7 +173,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                     LogButton.style.width = '80px';
                     LogButton.style.marginBottom = '5px';
                     LogButton.textContent = 'LOG';
-                    LogButton.addEventListener('click', function() {
+                    LogButton.addEventListener('click', function () {
                         modalContentsLoad(dummyButton.id);
                         popover.hide();
                     });
@@ -184,7 +184,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                     DetailButton.style.padding = '5px';
                     DetailButton.style.width = '80px';
                     DetailButton.textContent = 'DETAIL';
-                    DetailButton.addEventListener('click', function() {
+                    DetailButton.addEventListener('click', function () {
                         queryLogDetailLoad(dummyButton.id);
                         popover.hide()
                     });
@@ -197,7 +197,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             });
             popover.show();
         });
-        
+
     } else {
         queryLogTableBody.textContent = "No query available.";
     }
@@ -206,14 +206,14 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 });
 
 //모달 내용 로딩
-function modalContentsLoad(b){
-    $(function() {
+function modalContentsLoad(b) {
+    $(function () {
         //CSD 로그 드롭박스 및 출력 데이터 초기화
         var CSDButton = document.getElementById("CSDButton");
         var CSDLog = document.getElementById("tab2");
         CSDButton.innerText = "CSD 1";
         CSDLog.innerHTML = totalCSDLog[0];
-        
+
         //컨테이너 로그 드롭박스 및 출력 데이터 초기화
         var containerButton = document.getElementById("containerButton");
         var containerLog = document.getElementById("tab1");
@@ -239,7 +239,7 @@ function modalContentsLoad(b){
             var CSDButton = document.getElementById("CSDButton");
             var csdLog = document.getElementById("tab2");
             CSDButton.innerText = "CSD " + i;
-            csdLog.innerHTML = totalCSDLog[i-1];
+            csdLog.innerHTML = totalCSDLog[i - 1];
         });
     };
     //Container 1~4
@@ -257,7 +257,7 @@ function modalContentsLoad(b){
 //###모달 기능#####
 // 1. 모달 닫기 
 $("#modal #close").click(function () {
-    $(function() {
+    $(function () {
         // Storage Engine, CSD tab 초기화
         var SEtab = document.getElementById("tab1-tab");
         var CSDtab = document.getElementById("tab2-tab");
@@ -288,18 +288,18 @@ $(function () {
 
 // 3. 모달 탭 전환 
 $('a[data-toggle="tab"]').click(function (e) {
-        var targetTab = $(e.target).attr('href');
-        // 탭 1로 전환 시 내용 업데이트
-        if (targetTab === '#tab1') {
-            $("#containerButton").show();
-            $("#CSDButton").hide();
+    var targetTab = $(e.target).attr('href');
+    // 탭 1로 전환 시 내용 업데이트
+    if (targetTab === '#tab1') {
+        $("#containerButton").show();
+        $("#CSDButton").hide();
 
-        } 
-        // 탭 2로 전환 시 내용 업데이트
-        else if (targetTab === '#tab2') {
-            $("#containerButton").hide();
-            $("#CSDButton").show();
-        }
+    }
+    // 탭 2로 전환 시 내용 업데이트
+    else if (targetTab === '#tab2') {
+        $("#containerButton").hide();
+        $("#CSDButton").show();
+    }
 });
 
 
@@ -307,64 +307,62 @@ $('a[data-toggle="tab"]').click(function (e) {
 function queryLogDetailLoad(b) {
     const queryDetailTableBody = document.getElementById("logDetailTableBody");
 
-    
+
 
     // 웹 서버와 연결해서 db로부터 값 받아서 테이블 채우기
     fetch('/query/get_querySnippetInfo')
-      .then(response => response.json())
-      .then(data => {
-        
-        queryDetailTableBody.innerHTML = ``;
+        .then(response => response.json())
+        .then(data => {
 
-        data.forEach(function(item) {
-            const SnippetRow = document.createElement("tr");
-            const SnippetRows = [];
-            var SnippetCount = 0;
-            const WIDCell = document.createElement("td");
-            WIDCell.style.width = "10%";
-            WIDCell.style.textAlign = "center";
-            const TypeCell = document.createElement("td");
-            TypeCell.style.width = "15%";
-            TypeCell.style.textAlign = "center";
-            const ProjectionCell = document.createElement("td");
-            ProjectionCell.style.width = "10%";
-            ProjectionCell.style.textAlign = "center";
-            const FilterCell = document.createElement("td");
-            FilterCell.style.width = "10%";
-            FilterCell.style.textAlign = "center";
-            const OrderCell = document.createElement("td");
-            OrderCell.style.width = "10%";
-            OrderCell.style.textAlign = "center";
-            const GroupCell = document.createElement("td");
-            GroupCell.style.width = "10%";
-            GroupCell.style.textAlign = "center";
-            const LimitCell = document.createElement("td");
-            LimitCell.style.width = "10%";
-            LimitCell.style.textAlign = "center";
+            queryDetailTableBody.innerHTML = ``;
 
-            WIDCell.textContent = item.work_id;
-            TypeCell.textContent = item.type;
-            ProjectionCell.textContent = item.projection;
-            FilterCell.textContent = item.filter;
-            OrderCell.textContent = item.order_by;
-            GroupCell.textContent = item.group_by;
-            LimitCell.textContent = item.limit;
+            data.forEach(function (item) {
+                const SnippetRow = document.createElement("tr");
+                const WIDCell = document.createElement("td");
+                WIDCell.style.width = "10%";
+                WIDCell.style.textAlign = "center";
+                const TypeCell = document.createElement("td");
+                TypeCell.style.width = "15%";
+                TypeCell.style.textAlign = "center";
+                const ProjectionCell = document.createElement("td");
+                ProjectionCell.style.width = "10%";
+                ProjectionCell.style.textAlign = "center";
+                const FilterCell = document.createElement("td");
+                FilterCell.style.width = "10%";
+                FilterCell.style.textAlign = "center";
+                const OrderCell = document.createElement("td");
+                OrderCell.style.width = "10%";
+                OrderCell.style.textAlign = "center";
+                const GroupCell = document.createElement("td");
+                GroupCell.style.width = "10%";
+                GroupCell.style.textAlign = "center";
+                const LimitCell = document.createElement("td");
+                LimitCell.style.width = "10%";
+                LimitCell.style.textAlign = "center";
 
-            SnippetRow.appendChild(WIDCell);
-            SnippetRow.appendChild(TypeCell);
-            SnippetRow.appendChild(ProjectionCell);
-            SnippetRow.appendChild(FilterCell);
-            SnippetRow.appendChild(OrderCell);
-            SnippetRow.appendChild(GroupCell);
-            SnippetRow.appendChild(LimitCell);
+                WIDCell.textContent = item.work_id;
+                TypeCell.textContent = item.type;
+                ProjectionCell.textContent = item.projection;
+                FilterCell.textContent = item.filter;
+                OrderCell.textContent = item.order_by;
+                GroupCell.textContent = item.group_by;
+                LimitCell.textContent = item.limit;
 
-            queryDetailTableBody.appendChild(SnippetRow);
+                SnippetRow.appendChild(WIDCell);
+                SnippetRow.appendChild(TypeCell);
+                SnippetRow.appendChild(ProjectionCell);
+                SnippetRow.appendChild(FilterCell);
+                SnippetRow.appendChild(OrderCell);
+                SnippetRow.appendChild(GroupCell);
+                SnippetRow.appendChild(LimitCell);
+
+                queryDetailTableBody.appendChild(SnippetRow);
+            })
         })
-      })
-      .catch(console.error(error => console.error('Error: ', error)));
+        .catch(console.error(error => console.error('Error: ', error)));
 
     // 모달 창 열기
-      $(function() {
+    $(function () {
         $("#queryLogDetail").modal("show");
         var modalDiv = $('#queryLogDetail');
         modalDiv.modal({
@@ -373,3 +371,49 @@ function queryLogDetailLoad(b) {
         });
     });
 }
+
+var options = {
+    series: [{
+        name: 'Scaned Rows',
+        data: [1125]
+    }, {
+        name: 'Filtered Rows',
+        data: [331]
+    }],
+    chart: {
+        type: 'bar',
+        height: 430
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true,
+            dataLabels: {
+                position: 'top',
+            },
+        }
+    },
+    dataLabels: {
+        enabled: true,
+        offsetX: -6,
+        style: {
+            fontSize: '12px',
+            colors: ['#fff']
+        }
+    },
+    stroke: {
+        show: true,
+        width: 1,
+        colors: ['#fff']
+    },
+    tooltip: {
+        shared: true,
+        intersect: false
+    },
+    xaxis: {
+        categories: ['Rows']
+    },
+};
+
+var chart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
+chart.render();
+
