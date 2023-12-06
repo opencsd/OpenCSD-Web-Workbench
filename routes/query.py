@@ -35,7 +35,7 @@ def environment_hadler():
 
     query = "select * from query_environment_info"
         
-    instance_db = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+    instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                 info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                 info.INSTANCE_MANAGEMENT_DB_NAME, info)
     
@@ -64,7 +64,7 @@ def log_all_hadler():
             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
                 from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
 
-        result = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         return jsonify(result)
@@ -82,7 +82,7 @@ def log_handler():
                 scanned_row_coumt, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
         
 
-        query_log = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
@@ -92,7 +92,7 @@ def log_handler():
         # 너무 많으면 어떻게 나타내지?
         query = "select node_cpu_usage, node_power_usage from instace_monitoring \
                 where time > '{}' and time < '{}'".format(start_time,end_time)
-        result = influx.execute_query_influx_instance(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+        result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_METRIC_DB_NAME, query)
 
@@ -125,14 +125,14 @@ def delete_handler():
 
             query = "delete from query_log where query_id in {}".format(tuple(delete_query_id))
 
-            result = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                         info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                         info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
                 from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
         
-            result = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
             return jsonify(result)
@@ -148,7 +148,7 @@ def snippet_handler():
 
         query = "select * from query_snippet where query_id={}".format(query_id)
 
-        result = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         return jsonify(result)
@@ -165,13 +165,13 @@ def debugg_handler():
 
         query = "select * from storage_engine_log where query_id={}".format(query_id)
 
-        storage_engnie_log = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        storage_engnie_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
         query = "select * from csd_log where query_id={}".format(query_id)
 
-        csd_log = mysql.execute_query_mysql_instance(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        csd_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         json1 = jsonify(storage_engnie_log)
@@ -203,7 +203,7 @@ def run_handler():
             # 너무 많으면 어떻게 나타내지?
             query = "select node_cpu_usage, node_power_usage from instace_monitoring \
                     where time > '{}' and time < '{}'".format(start_time,end_time)
-            query_metric = influx.execute_query_influx_instance(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                                 info.INSTANCE_METRIC_DB_NAME, query)
             
@@ -223,7 +223,7 @@ def metric_handler():
     if request.method == 'GET':
         try:
             query = "select node_cpu_usage, node_power_usage from instace_monitoring order by time desc limit 10"
-            result = influx.execute_query_influx_instance(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                                 info.INSTANCE_METRIC_DB_NAME, query)
             return jsonify(result)
@@ -239,7 +239,7 @@ def metric_handler():
             # 너무 많으면 어떻게 나타내지?
             query = "select node_cpu_usage, node_power_usage from instace_monitoring \
                     where time > '{}' and time < '{}'".format(start_time,end_time)
-            result = influx.execute_query_influx_instance(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                                 info.INSTANCE_METRIC_DB_NAME, query)
             return jsonify(result)
