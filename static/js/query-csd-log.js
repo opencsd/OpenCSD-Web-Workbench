@@ -370,50 +370,144 @@ function queryLogDetailLoad(b) {
             show: true
         });
     });
+
+    var chart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
+    chart.render();
+
 }
 
 var options = {
-    series: [{
-        name: 'Scaned Rows',
-        data: [1125]
-    }, {
-        name: 'Filtered Rows',
-        data: [331]
-    }],
     chart: {
-        type: 'bar',
-        height: 430
+        type: "bar",
+        fontFamily: 'inherit',
+        height: 240,
+        parentHeightOffset: 0,
+        toolbar: {
+            show: false,
+        },
+        animations: {
+            enabled: false
+        },
     },
     plotOptions: {
         bar: {
-            horizontal: true,
-            dataLabels: {
-                position: 'top',
-            },
+            barHeight: '50%',
+             horizontal: true,
         }
     },
     dataLabels: {
-        enabled: true,
-        offsetX: -6,
-        style: {
-            fontSize: '12px',
-            colors: ['#fff']
-        }
+        enabled: false,
     },
-    stroke: {
-        show: true,
-        width: 1,
-        colors: ['#fff']
+    fill: {
+        opacity: 1,
     },
+    series: [{
+        name: "Scan Rows",
+        data: 2112
+    },
+    {
+        name: "Filtered Rows",
+        data: 800
+    }],
     tooltip: {
-        shared: true,
-        intersect: false
+        theme: 'dark'
+    },
+    grid: {
+        padding: {
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+        },
+        strokeDashArray: 4,
     },
     xaxis: {
-        categories: ['Rows']
+        labels: {
+            padding: 0,
+        },
+        tooltip: {
+            enabled: false
+        },
+        axisBorder: {
+            show: false,
+        },
+    },
+    yaxis: {
+        title: {
+            text: 'Scan/Filter Ratio'
+        },
+    },
+    colors: [tabler.getColor("primary")],
+    legend: {
+        show: false,
     },
 };
 
-var chart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
-chart.render();
+// var options = {
+//     chart: {
+//         type: "bar",
+//         fontFamily: 'inherit',
+//         height: 240,
+//         parentHeightOffset: 0,
+//         toolbar: {
+//             show: false,
+//         },
+//         animations: {
+//             enabled: false
+//         },
+//     },
+//     plotOptions: {
+//         bar: {
+//             barHeight: '50%',
+//              horizontal: true,
+//         }
+//     },
+//     dataLabels: {
+//         enabled: false,
+//     },
+//     fill: {
+//         opacity: 1,
+//     },
+//     series: [{
+//         name: "Tasks completion",
+//         data: [155, 65, 465, 265, 225, 325, 80]
+//     }],
+//     tooltip: {
+//         theme: 'dark'
+//     },
+//     grid: {
+//         padding: {
+//             top: 0,
+//             right: 0,
+//             left: 0,
+//             bottom: 0
+//         },
+//         strokeDashArray: 4,
+//     },
+//     xaxis: {
+//         labels: {
+//             padding: 0,
+//         },
+//         tooltip: {
+//             enabled: false
+//         },
+//         axisBorder: {
+//             show: false,
+//         },
+//         // type: 'datetime',
+//     },
+//     yaxis: {
+//         labels: {
+//             padding: 4
+//         },
+//     },
+//     labels: [
+//         '2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26'
+//     ],
+//     colors: [tabler.getColor("primary")],
+//     legend: {
+//         show: false,
+//     },
+// };
+
 
