@@ -47,6 +47,15 @@ def environment_hadler():
         return jsonify(management_db_dict)
     except:
         return "" 
+    
+# DB 스키마 -> 구현 전
+@query_bp.route('/schema', methods=['GET'])
+def metric_handler():
+    if request.method == 'GET':
+        try:
+            return jsonify()
+        except:
+            return ""
 
 # # 쿼리 로그, 한 페이지 최대값은 10
 # @query_bp.route('/log-all', methods=['GET', 'POST'])
