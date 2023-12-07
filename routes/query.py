@@ -160,6 +160,21 @@ def delete_handler():
             return ""
 
 # 쿼리 로그의 쿼리 스니펫 팝업
+# @query_bp.route('/snippet', methods=['GET', 'POST'])
+# def snippet_handler():
+#     try:
+#         data = request.json
+#         query_id = data['query_id']
+
+#         query = "select * from query_snippet where query_id={}".format(query_id)
+
+#         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
+#         return jsonify(result)
+#     except:
+#         return ""
+    
 @query_bp.route('/snippet', methods=['GET', 'POST'])
 def snippet_handler():
     try:
