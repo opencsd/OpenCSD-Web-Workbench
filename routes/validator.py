@@ -214,3 +214,19 @@ def snippet_handler():
             return jsonify(result)
         except:
             return ""
+        
+# 벨리데이션 로그의 쿼리 수행 로그 팝업 -> 구현...필요...,db도 만들고
+@validator_bp.route('/debugg', methods=['GET', 'POST'])
+def debugg_handler():
+    try:
+        data = request.json #벨리데이션 id
+
+        query = "select * from validation_debug_log where validation_id={}".format(data['validation_id'])
+        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
+        
+        
+        return jsonify(result)
+    except:
+        return ""

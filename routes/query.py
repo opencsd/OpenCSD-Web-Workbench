@@ -170,12 +170,12 @@ def debugg_handler():
         data = request.json
         query_id = data['query_id']
 
-        query = "select * from storage_engine_log where query_id={}".format(query_id)
+        query = "select * from instance_debug_log where query_id={}".format(query_id)
         storage_engnie_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
-        query = "select * from csd_log where query_id={}".format(query_id)
+        query = "select * from csd_debug_log where query_id={}".format(query_id)
         csd_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
