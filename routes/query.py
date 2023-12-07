@@ -29,23 +29,26 @@ def tpch_hadler():
 # opencsd 환경정보 획득
 @query_bp.route('/environment', methods=['GET'])
 def environment_hadler():
-    # 나중에 db_instance_name 인자로 받기!!
-    query = "select db_name, dbms_type, storage_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'opencsd'"
-        
-    management_db = mysql.execute_query_mysql_management(query)
+    try:
+        # 나중에 db_instance_name 인자로 받기!!
+        query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'keti_db'"
+            
+        management_db = mysql.execute_query_mysql_management(query)
 
-    query = "select * from query_environment_info"
-        
-    instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+        query = "select * from query_environment_info"
+            
+        instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
-    management_db_dict = management_db[0]
-    instance_db_dict = instance_db[0]
+        management_db_dict = management_db[0]
+        instance_db_dict = instance_db[0]
 
-    management_db_dict.update(instance_db_dict)
-        
-    return jsonify(management_db_dict)
+        management_db_dict.update(instance_db_dict)
+            
+        return jsonify(management_db_dict)
+    except:
+        return "" 
 
 # # 쿼리 로그, 한 페이지 최대값은 10
 # @query_bp.route('/log-all', methods=['GET', 'POST'])
@@ -115,9 +118,9 @@ def log_handler():
         query = "select node_cpu_usage from instace_monitoring \
                 where time > '{}' and time < '{}'".format(start_time,end_time)
         
-        query_metric = influx.execute_query_influxdb(info.PLATFORM_METRIC_DB_HOST, info.PLATFORM_METRIC_DB_PORT,
-                                            info.PLATFORM_METRIC_DB_USER, info.PLATFORM_METRIC_DB_PASSWORD,
-                                            info.PLATFORM_METRIC_DB_NAME, query) # DB 위치 체크 필요 -> 구현 전
+        query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
 
         cpu_metric = [{"cpu":1},{"cpu":2},{"cpu":3}]
         power_metric = [{"power":1},{"power":2},{"power":3}]
@@ -224,9 +227,9 @@ def run_handler():
             # print(query_run_result)
             # print(query)
             
-            # query_metric = influx.execute_query_influxdb(info.PLATFORM_METRIC_DB_HOST, info.PLATFORM_METRIC_DB_PORT,
-            #                                     info.PLATFORM_METRIC_DB_USER, info.PLATFORM_METRIC_DB_PASSWORD,
-            #                                     info.PLATFORM_METRIC_DB_NAME, query) # DB 위치 체크 필요 -> 구현 전
+            # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            #                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+            #                                 info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
 
             # cpu_metric = [{"cpu":1},{"cpu":2},{"cpu":3}]
             # power_metric = [{"power":1},{"power":2},{"power":3}]
@@ -242,8 +245,8 @@ def metric_handler():
         try:
             query = "select node_cpu_usage, node_power_usage from instace_monitoring order by time desc limit 10"
             result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_METRIC_DB_NAME, query)
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
             return jsonify(result)
         except:
             return ""
@@ -258,8 +261,8 @@ def metric_handler():
             query = "select node_cpu_usage, node_power_usage from instace_monitoring \
                     where time > '{}' and time < '{}'".format(start_time,end_time)
             result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_METRIC_DB_NAME, query)
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
             return jsonify(result)
         except:
                 return ""
