@@ -41,6 +41,45 @@ snippet_info = [
   }
 ]
 
+environment_Info = {
+  "block_count": 15,
+  "csd_count": 8,
+  "csd_type": "ngd",
+  "db_name": "tpc-h",
+  "db_size": 200.0,
+  "dbms_type": "mysql",
+  "scheduling_algorithm": "dcs",
+  "storage_type": "csd",
+  "using_index": 0
+}
+
+logall_info = [
+  {
+    "execution_time": 3.61174,
+    "filtered_row_count": 27715,
+    "query_id": 0,
+    "query_statement": "SELECT 100.00 * SUM(CASE\n                      WHEN p_type LIKE 'promo%' THEN l_extendedprice *\n                                                     ( 1 - l_discount )\n                      ELSE 0\n                    END) / SUM(l_extendedprice * ( 1 - l_discount )) AS\n       promo_revenue\nFROM   lineitem,\n       part\nWHERE  l_partkey = p_partkey\n       AND l_shipdate >= DATE '1996-12-01'\n       AND l_shipdate < DATE '1996-12-01' + interval '1' month;",
+    "query_type": "select",
+    "scanned_row_count": 620000
+  },
+  {
+    "execution_time": 21.2035,
+    "filtered_row_count": 587494,
+    "query_id": 1,
+    "query_statement": "SELECT l_returnflag,\n       l_linestatus,\n       SUM(l_quantity)                                           AS sum_qty,\n       SUM(l_extendedprice)                                      AS sum_base_price,\n       SUM(l_extendedprice * ( 1 - l_discount ))                 AS sum_disc_price,\n       SUM(l_extendedprice * ( 1 - l_discount ) * ( 1 + l_tax )) AS sum_charge,\n       Avg(l_quantity)                                           AS avg_qty,\n       Avg(l_extendedprice)                                      AS avg_price,\n       Avg(l_discount)                                           AS avg_disc,\n       Count(*)                                                  AS count_order\nFROM   lineitem\nWHERE  l_shipdate <= DATE ('1998-12-01') - interval '108' day\nGROUP  BY l_returnflag,\n          l_linestatus\nORDER  BY l_returnflag,\n          l_linestatus;",
+    "query_type": "select",
+    "scanned_row_count": 632577
+  },
+  {
+    "execution_time": 3.58831,
+    "filtered_row_count": 27715,
+    "query_id": 2,
+    "query_statement": "SELECT 100.00 * SUM(CASE\n                      WHEN p_type LIKE 'promo%' THEN l_extendedprice *\n                                                     ( 1 - l_discount )\n                      ELSE 0\n                    END) / SUM(l_extendedprice * ( 1 - l_discount )) AS\n       promo_revenue\nFROM   lineitem,\n       part\nWHERE  l_partkey = p_partkey\n       AND l_shipdate >= DATE '1996-12-01'\n       AND l_shipdate < DATE '1996-12-01' + interval '1' month;",
+    "query_type": "select",
+    "scanned_row_count": 652577
+  }
+]
+
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, jsonify, request, render_template
@@ -74,47 +113,24 @@ def tpch_hadler():
 @query_bp.route('/environment', methods=['GET'])
 def environment_hadler():
     # 나중에 db_instance_name 인자로 받기!!
-    query = "select db_name, dbms_type, storage_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'opencsd'"
+    # query = "select db_name, dbms_type, storage_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'opencsd'"
         
-    management_db = mysql.execute_query_mysql_management(query)
+    # management_db = mysql.execute_query_mysql_management(query)
 
-    query = "select * from query_environment_info"
+    # query = "select * from query_environment_info"
         
-    instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                info.INSTANCE_MANAGEMENT_DB_NAME, info)
+    # instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+    #                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+    #                                             info.INSTANCE_MANAGEMENT_DB_NAME, info)
     
-    json1 = jsonify(management_db)
-    json2 = jsonify(instance_db)
+    # json1 = jsonify(management_db)
+    # json2 = jsonify(instance_db)
 
-    json1.update(json2)
-    result = json1
+    # json1.update(json2)
+    # result = json1
         
-    return jsonify(result)
-
-# # 쿼리 로그, 한 페이지 최대값은 10
-# @query_bp.route('/log-all', methods=['GET', 'POST'])
-# def log_all_hadler():
-#     try:
-#         data = request.json
-#         user_id = data['user_id']
-#         query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
-#         page = data['page']
-#         index = page * 10 -10
-
-#         if query_type == "all":
-#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-#                 from query_log where user_id='{}' order by query_id limit {},10".format(user_id,index)
-#         else:
-#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-#                 from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
-
-#         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
-#         return jsonify(result)
-#     except:
-#         return "" 
+    # return jsonify(result)
+    return jsonify(environment_Info)
 
 # 쿼리 로그, 한 페이지 최대값은 10
 @query_bp.route('/log-all', methods=['GET', 'POST'])
@@ -123,20 +139,25 @@ def log_all_hadler():
         data = request.json
         user_id = data['user_id']
         query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
+        
+        print("user id : ", user_id)
+        print("query type : ", query_type)
 
-        if query_type == "all":
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-                from query_log where user_id='{}' order by query_id".format(user_id)
-        else:
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
-                from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
+        # if query_type == "all":
+        #     query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+        #         from query_log where user_id='{}' order by query_id".format(user_id)
+        # else:
+        #     query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+        #         from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
 
-        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
-        return jsonify(result)
+        # result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        #                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+        #                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
+        return jsonify(logall_info)
+        # return jsonify(result)
     except:
-        return "" 
+        print("log-all error")
+        return "GET Log-All Error!" 
     
 # 특정 쿼리 클릭 시
 @query_bp.route('/log', methods=['GET', 'POST'])
@@ -219,10 +240,11 @@ def snippet_handler():
 
         query = "select * from query_snippet where query_id={}".format(query_id)
 
-        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
-        return jsonify(result)
+        # result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+        #                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+        #                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
+        return jsonify(snippet_info)
+        # return jsonify(result)
     except:
         return ""
     
@@ -268,24 +290,24 @@ def run_handler():
 
         if response.status_code == 200:
             query_run_result = response.json()
-            start_time = query_run_result['start_time']
-            end_time = query_run_result['end_time']
+            # start_time = query_run_result['start_time']
+            # end_time = query_run_result['end_time']
 
-            # 너무 많으면 어떻게 나타내지?
-            query = "select node_cpu_usage, node_power_usage from instace_monitoring \
-                    where time > '{}' and time < '{}'".format(start_time,end_time)
-            # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-            #                                     info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-            #                                     info.INSTANCE_METRIC_DB_NAME, query)
-            query_metric = "" #임시
+            # # 너무 많으면 어떻게 나타내지?
+            # query = "select node_cpu_usage, node_power_usage from instace_monitoring \
+            #         where time > '{}' and time < '{}'".format(start_time,end_time)
+            # # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            # #                                     info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+            # #                                     info.INSTANCE_METRIC_DB_NAME, query)
+            # query_metric = "" #임시
             
-            json1 = jsonify(query_run_result)
-            json2 = jsonify(query_metric)
+            # json1 = jsonify(query_run_result)
+            # json2 = jsonify(query_metric)
 
-            json1.update(json2)
-            result = json1
+            # json1.update(json2)
+            # result = json1
 
-            return jsonify(result)
+            return jsonify(query_run_result)
         else:
             return 'Error: Unable to fetch data from the remote server'
 
