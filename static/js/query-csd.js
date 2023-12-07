@@ -20,7 +20,20 @@ document.addEventListener("DOMContentLoaded", function () {
     updateLatestChart();
 
     startInterval();
+    // getEnvironmentInfo();
 });
+
+function getEnvironmentInfo() {
+    const dbnameArea = document.getElementById("dbname");
+    fetch('/query/environment')
+        .then(response => response.json())
+        .then(data => {
+            dbnameArea.value = data.db_name;
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        });
+}
 
 function getLatestChartData(){
     //최신 차트 값을 가져오는 로직 (현재는 임시, 웹서버 요청 보내기)
@@ -272,7 +285,7 @@ queryNumbers.forEach((number) => {
     dropdownItem.addEventListener("click", function (event) {
         event.preventDefault(); 
             dropdownToggle.textContent = dropdownItem.textContent;
-            fetch('/query/get_tpchQuery', {
+            fetch('/query/tpch', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {

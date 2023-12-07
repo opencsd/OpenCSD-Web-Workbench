@@ -1,8 +1,52 @@
+snippet_info = [
+  {
+    "filter_count": 3,
+    "group_by_count": 0,
+    "limit_exist": 0,
+    "order_by_count": 0,
+    "projection_count": 2,
+    "query_id": 0,
+    "snippet_type": 0,
+    "work_id": 0
+  },
+  {
+    "filter_count": 0,
+    "group_by_count": 0,
+    "limit_exist": 0,
+    "order_by_count": 0,
+    "projection_count": 2,
+    "query_id": 0,
+    "snippet_type": 0,
+    "work_id": 1
+  },
+  {
+    "filter_count": 1,
+    "group_by_count": 0,
+    "limit_exist": 0,
+    "order_by_count": 0,
+    "projection_count": 2,
+    "query_id": 0,
+    "snippet_type": 3,
+    "work_id": 2
+  },
+  {
+    "filter_count": 0,
+    "group_by_count": 0,
+    "limit_exist": 0,
+    "order_by_count": 0,
+    "projection_count": 1,
+    "query_id": 0,
+    "snippet_type": 1,
+    "work_id": 3
+  }
+]
+
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, jsonify, request, render_template
 from connectDB import mysql, influx, info
 import requests
+import json
 
 query_bp = Blueprint('query', __name__, url_prefix='/query')
 
@@ -152,6 +196,21 @@ def delete_handler():
             return ""
 
 # 쿼리 로그의 쿼리 스니펫 팝업
+# @query_bp.route('/snippet', methods=['GET', 'POST'])
+# def snippet_handler():
+#     try:
+#         data = request.json
+#         query_id = data['query_id']
+
+#         query = "select * from query_snippet where query_id={}".format(query_id)
+
+#         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
+#         return jsonify(result)
+#     except:
+#         return ""
+    
 @query_bp.route('/snippet', methods=['GET', 'POST'])
 def snippet_handler():
     try:
