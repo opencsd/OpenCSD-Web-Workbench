@@ -1,52 +1,8 @@
-snippet_info = [
-  {
-    "filter_count": 3,
-    "group_by_count": 0,
-    "limit_exist": 0,
-    "order_by_count": 0,
-    "projection_count": 2,
-    "query_id": 0,
-    "snippet_type": 0,
-    "work_id": 0
-  },
-  {
-    "filter_count": 0,
-    "group_by_count": 0,
-    "limit_exist": 0,
-    "order_by_count": 0,
-    "projection_count": 2,
-    "query_id": 0,
-    "snippet_type": 0,
-    "work_id": 1
-  },
-  {
-    "filter_count": 1,
-    "group_by_count": 0,
-    "limit_exist": 0,
-    "order_by_count": 0,
-    "projection_count": 2,
-    "query_id": 0,
-    "snippet_type": 3,
-    "work_id": 2
-  },
-  {
-    "filter_count": 0,
-    "group_by_count": 0,
-    "limit_exist": 0,
-    "order_by_count": 0,
-    "projection_count": 1,
-    "query_id": 0,
-    "snippet_type": 1,
-    "work_id": 3
-  }
-]
-
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, jsonify, request, render_template
 from connectDB import mysql, influx, info
 import requests
-import json
 
 query_bp = Blueprint('query', __name__, url_prefix='/query')
 
