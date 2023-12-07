@@ -310,7 +310,7 @@ function queryLogDetailLoad(b) {
 
 
     // 웹 서버와 연결해서 db로부터 값 받아서 테이블 채우기
-    fetch('/query/get_querySnippetInfo')
+    fetch('/query/snippet')
         .then(response => response.json())
         .then(data => {
 
@@ -371,9 +371,13 @@ function queryLogDetailLoad(b) {
         });
     });
 
-    var chart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
-    chart.render();
+    var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
+    ScanFilterChart.render();
 
+}
+
+function get_scanfilterInfo(query_id) {
+    
 }
 
 var options = {
@@ -402,12 +406,8 @@ var options = {
         opacity: 1,
     },
     series: [{
-        name: "Scan Rows",
-        data: 2112
-    },
-    {
-        name: "Filtered Rows",
-        data: 800
+        name: "Rows",
+        data: []
     }],
     tooltip: {
         theme: 'dark'
@@ -433,81 +433,15 @@ var options = {
         },
     },
     yaxis: {
-        title: {
-            text: 'Scan/Filter Ratio'
+        labels: {
+            padding: 4
         },
     },
+    labels: [
+        'Scaned Rows', 'Filtered Rows'
+    ],
     colors: [tabler.getColor("primary")],
     legend: {
         show: false,
     },
 };
-
-// var options = {
-//     chart: {
-//         type: "bar",
-//         fontFamily: 'inherit',
-//         height: 240,
-//         parentHeightOffset: 0,
-//         toolbar: {
-//             show: false,
-//         },
-//         animations: {
-//             enabled: false
-//         },
-//     },
-//     plotOptions: {
-//         bar: {
-//             barHeight: '50%',
-//              horizontal: true,
-//         }
-//     },
-//     dataLabels: {
-//         enabled: false,
-//     },
-//     fill: {
-//         opacity: 1,
-//     },
-//     series: [{
-//         name: "Tasks completion",
-//         data: [155, 65, 465, 265, 225, 325, 80]
-//     }],
-//     tooltip: {
-//         theme: 'dark'
-//     },
-//     grid: {
-//         padding: {
-//             top: 0,
-//             right: 0,
-//             left: 0,
-//             bottom: 0
-//         },
-//         strokeDashArray: 4,
-//     },
-//     xaxis: {
-//         labels: {
-//             padding: 0,
-//         },
-//         tooltip: {
-//             enabled: false
-//         },
-//         axisBorder: {
-//             show: false,
-//         },
-//         // type: 'datetime',
-//     },
-//     yaxis: {
-//         labels: {
-//             padding: 4
-//         },
-//     },
-//     labels: [
-//         '2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26'
-//     ],
-//     colors: [tabler.getColor("primary")],
-//     legend: {
-//         show: false,
-//     },
-// };
-
-
