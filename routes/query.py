@@ -31,12 +31,10 @@ def tpch_hadler():
 def environment_hadler():
     try:
         # 나중에 db_instance_name 인자로 받기!!
-        query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'keti_db'"
-            
+        query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'keti_db'"  
         management_db = mysql.execute_query_mysql_management(query)
 
-        query = "select * from query_environment_info"
-            
+        query = "select * from query_environment_info" 
         instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -106,7 +104,6 @@ def log_handler():
 
         query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time, \
                 scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
-        
         query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -114,18 +111,15 @@ def log_handler():
         start_time = query_log[0]['start_time']
         end_time = query_log[0]['end_time']
         
-        # 너무 많으면 어떻게 나타내지?
-        query = "select node_cpu_usage from instace_monitoring \
-                where time > '{}' and time < '{}'".format(start_time,end_time)
-        
+        # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
+        # memory -> power로 바꾸기!!
+        query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
         query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
+                                        info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                        info.INSTANCE_NODE_METRIC_DB_NAME, query)
 
-        cpu_metric = [{"cpu":1},{"cpu":2},{"cpu":3}]
-        power_metric = [{"power":1},{"power":2},{"power":3}]
-
-        result = {"query_log":query_log, "cpu_metric":cpu_metric, "power_metric":power_metric}
+        result = {"query_log":query_log, "query_metric":query_metric}
 
         return jsonify(result)
     except:
@@ -137,59 +131,37 @@ def delete_handler():
     if request.method == 'POST':
         try:
             data = request.json
-            delete_query_id = data['delete_query_id'] #[ids...]
-            print(delete_query_id)
             
-            # 나중에 log 삭제하는것도 추가
+            # 나중에 log 삭제하는것도 추가 (외래키로 잡힌 테이블 먼저 삭제해야함)
 
-            query = "delete from query_snippet where query_id in {}".format(tuple(delete_query_id))
-            print(query)
-
+            query = "delete from query_snippet where query_id in {}".format(tuple(data['delete_query_id']))
             result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                         info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                         info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
-            query = "delete from query_log where query_id in {}".format(tuple(delete_query_id))
-            print(query)
+            query = "delete from query_log where query_id in {}".format(tuple(data['delete_query_id']))
+            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
+            return ""
+        except:
+            return "delete error"
 
+# 쿼리 로그의 쿼리 스니펫 팝업
+@query_bp.route('/snippet', methods=['GET', 'POST'])
+def snippet_handler():
+    if request.method == 'POST':
+        try:
+            data = request.json
+            query_id = data['query_id']
+
+            query = "select * from query_snippet where query_id={}".format(query_id)
             result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                         info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                         info.INSTANCE_MANAGEMENT_DB_NAME, query)
             return jsonify(result)
         except:
             return ""
-
-# 쿼리 로그의 쿼리 스니펫 팝업
-# @query_bp.route('/snippet', methods=['GET', 'POST'])
-# def snippet_handler():
-#     try:
-#         data = request.json
-#         query_id = data['query_id']
-
-#         query = "select * from query_snippet where query_id={}".format(query_id)
-
-#         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
-#         return jsonify(result)
-#     except:
-#         return ""
-    
-@query_bp.route('/snippet', methods=['GET', 'POST'])
-def snippet_handler():
-    try:
-        data = request.json
-        query_id = data['query_id']
-
-        query = "select * from query_snippet where query_id={}".format(query_id)
-
-        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
-        return jsonify(result)
-    except:
-        return ""
-    
 
 # 쿼리 로그의 쿼리 수행 로그 팝업 -> 구현 전
 @query_bp.route('/debugg', methods=['GET', 'POST'])
@@ -199,13 +171,11 @@ def debugg_handler():
         query_id = data['query_id']
 
         query = "select * from storage_engine_log where query_id={}".format(query_id)
-
         storage_engnie_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
         query = "select * from csd_log where query_id={}".format(query_id)
-
         csd_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -223,46 +193,43 @@ def debugg_handler():
 @query_bp.route('/run', methods=['GET', 'POST'])
 def run_handler():
     if request.method == 'POST':
-        data = request.json
-        execute_query = data['query']
-        user_id = data['user_id']
+        try:
+            data = request.json
+            response = requests.get('http://10.0.4.87:30100/query/run', json=data) #data로 넣어도 될듯? 내일확인
 
-        payload = dict(query=execute_query, user_id=user_id)
-        response = requests.get('http://10.0.4.87:30100/query/run', json=payload)
+            if response.status_code == 200:
+                query_result = response.json()
+                start_time = query_result['start_time']
+                end_time = query_result['end_time']
+                
+                # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
+                # memory -> power로 바꾸기!!
+                query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                        where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
+                query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                                info.INSTANCE_NODE_METRIC_DB_NAME, query)
 
-        if response.status_code == 200:
-            query_run_result = response.json()
-            # start_time = query_run_result['start_time']
-            # end_time = query_run_result['end_time']
-            
-            # 너무 많으면 어떻게 나타내지?
-            # query = "select node_cpu_usage from instace_monitoring \
-            #         where time > '{}' and time < '{}'".format(start_time,end_time)
-            
-            # print(query_run_result)
-            # print(query)
-            
-            # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-            #                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-            #                                 info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
+                result = {"query_result":query_result, "query_metric":query_metric[0]}
 
-            # cpu_metric = [{"cpu":1},{"cpu":2},{"cpu":3}]
-            # power_metric = [{"power":1},{"power":2},{"power":3}]
-
-            return jsonify(query_run_result)
-        else:
-            return 'Error: Unable to fetch data from the remote server'
+                return jsonify(result)
+            else:
+                return 'Error: Unable to fetch data from the remote server'
+        except:
+            return ""
+        
 
 # Metric 그래프 데이터 요청
 @query_bp.route('/metric', methods=['GET', 'POST'])
 def metric_handler():
     if request.method == 'GET':
         try:
-            query = "select node_cpu_usage, node_power_usage from instace_monitoring order by time desc limit 10"
-            result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            # memory -> power로 바꾸기!!
+            query = "select cpu_usage, memory_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
-            return jsonify(result)
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query)
+            return jsonify(metric[0])
         except:
             return ""
     
@@ -272,12 +239,14 @@ def metric_handler():
             start_time = data['start_time'] #yyyy-mm-ff hh:mm:ss
             end_time = data['end_time']
 
-            # 너무 많으면 어떻게 나타내지?
-            query = "select node_cpu_usage, node_power_usage from instace_monitoring \
-                    where time > '{}' and time < '{}'".format(start_time,end_time)
-            result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
+            # memory -> power로 바꾸기!!
+            query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                    where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
+            query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
-            return jsonify(result)
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query)
+
+            return jsonify(query_metric)
         except:
                 return ""
