@@ -73,24 +73,26 @@ def tpch_hadler():
 # opencsd 환경정보 획득
 @query_bp.route('/environment', methods=['GET'])
 def environment_hadler():
-    # 나중에 db_instance_name 인자로 받기!!
-    query = "select db_name, dbms_type, storage_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'opencsd'"
-        
-    management_db = mysql.execute_query_mysql_management(query)
+    try:
+        # 나중에 db_instance_name 인자로 받기!!
+        query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = 'keti_db'"
+            
+        management_db = mysql.execute_query_mysql_management(query)
 
-    query = "select * from query_environment_info"
-        
-    instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                info.INSTANCE_MANAGEMENT_DB_NAME, info)
-    
-    json1 = jsonify(management_db)
-    json2 = jsonify(instance_db)
+        query = "select * from query_environment_info"
+            
+        instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
-    json1.update(json2)
-    result = json1
-        
-    return jsonify(result)
+        management_db_dict = management_db[0]
+        instance_db_dict = instance_db[0]
+
+        management_db_dict.update(instance_db_dict)
+            
+        return jsonify(management_db_dict)
+    except:
+        return "" 
 
 # # 쿼리 로그, 한 페이지 최대값은 10
 # @query_bp.route('/log-all', methods=['GET', 'POST'])
@@ -103,10 +105,10 @@ def environment_hadler():
 #         index = page * 10 -10
 
 #         if query_type == "all":
-#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
 #                 from query_log where user_id='{}' order by query_id limit {},10".format(user_id,index)
 #         else:
-#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
 #                 from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
 
 #         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
@@ -116,7 +118,7 @@ def environment_hadler():
 #     except:
 #         return "" 
 
-# 쿼리 로그, 한 페이지 최대값은 10
+# 쿼리 로그, 10개 이상은 스크롤
 @query_bp.route('/log-all', methods=['GET', 'POST'])
 def log_all_hadler():
     try:
@@ -124,16 +126,17 @@ def log_all_hadler():
         user_id = data['user_id']
         query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
 
-        if query_type == "all":
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+        if query_type == "all": #'all'
+            query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
                 from query_log where user_id='{}' order by query_id".format(user_id)
-        else:
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_coumt, filtered_row_count \
+        else: #'select','update','insert','delete','dcl','ddl','other'
+            query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
                 from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
 
         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
+    
         return jsonify(result)
     except:
         return "" 
@@ -145,48 +148,53 @@ def log_handler():
         data = request.json
         user_id = data['query_id']
 
-        query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time \
-                scanned_row_coumt, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
+        query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time, \
+                scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
         
-
         query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
-        start_time = query_log['start_time']
-        end_time = query_log['end_time']
+        start_time = query_log[0]['start_time']
+        end_time = query_log[0]['end_time']
         
         # 너무 많으면 어떻게 나타내지?
-        query = "select node_cpu_usage, node_power_usage from instace_monitoring \
+        query = "select node_cpu_usage from instace_monitoring \
                 where time > '{}' and time < '{}'".format(start_time,end_time)
-        result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                            info.INSTANCE_METRIC_DB_NAME, query)
-
-        cpu_metric = {}
-        power_metric = {}
-
-        json1 = jsonify(query_log)
-        json2 = jsonify(cpu_metric)
-        json3 = jsonify(power_metric)
-
-        json1.update(json2)
-        json1.update(json3)
-        result = json1
         
+        query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
+
+        cpu_metric = [{"cpu":1},{"cpu":2},{"cpu":3}]
+        power_metric = [{"power":1},{"power":2},{"power":3}]
+
+        result = {"query_log":query_log, "cpu_metric":cpu_metric, "power_metric":power_metric}
+
         return jsonify(result)
     except:
         return ""                          
     
-# 선택 쿼리 로그 삭제
+# 선택 쿼리 로그 삭제 -> 구현 전
 @query_bp.route('/delete', methods=['GET', 'POST'])
 def delete_handler():
     if request.method == 'POST':
         try:
             data = request.json
             delete_query_id = data['delete_query_id'] #[ids...]
+            print(delete_query_id)
+            
+            # 나중에 log 삭제하는것도 추가
+
+            query = "delete from query_snippet where query_id in {}".format(tuple(delete_query_id))
+            print(query)
+
+            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
             query = "delete from query_log where query_id in {}".format(tuple(delete_query_id))
+            print(query)
 
             result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                         info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
@@ -268,24 +276,24 @@ def run_handler():
 
         if response.status_code == 200:
             query_run_result = response.json()
-            start_time = query_run_result['start_time']
-            end_time = query_run_result['end_time']
-
-            # 너무 많으면 어떻게 나타내지?
-            query = "select node_cpu_usage, node_power_usage from instace_monitoring \
-                    where time > '{}' and time < '{}'".format(start_time,end_time)
-            # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-            #                                     info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-            #                                     info.INSTANCE_METRIC_DB_NAME, query)
-            query_metric = "" #임시
+            # start_time = query_run_result['start_time']
+            # end_time = query_run_result['end_time']
             
-            json1 = jsonify(query_run_result)
-            json2 = jsonify(query_metric)
+            # 너무 많으면 어떻게 나타내지?
+            # query = "select node_cpu_usage from instace_monitoring \
+            #         where time > '{}' and time < '{}'".format(start_time,end_time)
+            
+            # print(query_run_result)
+            # print(query)
+            
+            # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+            #                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+            #                                 info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
 
-            json1.update(json2)
-            result = json1
+            # cpu_metric = [{"cpu":1},{"cpu":2},{"cpu":3}]
+            # power_metric = [{"power":1},{"power":2},{"power":3}]
 
-            return jsonify(result)
+            return jsonify(query_run_result)
         else:
             return 'Error: Unable to fetch data from the remote server'
 
@@ -296,8 +304,8 @@ def metric_handler():
         try:
             query = "select node_cpu_usage, node_power_usage from instace_monitoring order by time desc limit 10"
             result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_METRIC_DB_NAME, query)
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
             return jsonify(result)
         except:
             return ""
@@ -312,8 +320,8 @@ def metric_handler():
             query = "select node_cpu_usage, node_power_usage from instace_monitoring \
                     where time > '{}' and time < '{}'".format(start_time,end_time)
             result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_METRIC_DB_NAME, query)
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query) # 구현 전
             return jsonify(result)
         except:
                 return ""
