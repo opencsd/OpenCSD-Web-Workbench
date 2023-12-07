@@ -47,6 +47,15 @@ def environment_hadler():
         return jsonify(management_db_dict)
     except:
         return "" 
+    
+# DB 스키마 -> 구현 전
+@query_bp.route('/schema', methods=['GET'])
+def metric_handler():
+    if request.method == 'GET':
+        try:
+            return jsonify()
+        except:
+            return ""
 
 # # 쿼리 로그, 한 페이지 최대값은 10
 # @query_bp.route('/log-all', methods=['GET', 'POST'])
@@ -170,12 +179,12 @@ def debugg_handler():
         data = request.json
         query_id = data['query_id']
 
-        query = "select * from storage_engine_log where query_id={}".format(query_id)
+        query = "select * from instance_debug_log where query_id={}".format(query_id)
         storage_engnie_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
-        query = "select * from csd_log where query_id={}".format(query_id)
+        query = "select * from csd_debug_log where query_id={}".format(query_id)
         csd_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
