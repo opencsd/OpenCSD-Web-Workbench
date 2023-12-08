@@ -1,3 +1,6 @@
+// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
+var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
 let intervalId;
 var hostServerCPUChart, hostServerCPUChartData, hostServerCPUChartCategories;
 var hostServerPowerChart, hostServerPowerChartData, hostServerPowerChartCategories;
@@ -10,6 +13,8 @@ let tempNum = 0;
 let temp = true;
 //------------
 
+// console.log(storeduserInfo)
+
 document.addEventListener("DOMContentLoaded", function () {
     hostServerCPUChart = new ApexCharts(document.getElementById("queryHostServerCPU"), hostServerCPUChartOption);
     hostServerPowerChart = new ApexCharts(document.getElementById("queryHostServerPower"), hostServerPowerChartOption);
@@ -18,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     hostServerPowerChart.render();
 
     updateLatestChart();
-
     startInterval();
     getEnvironmentInfo();
 });
@@ -44,7 +48,13 @@ function getEnvironmentInfo() {
             dbmsSizeArea.textContent = data.db_size + " (GB)";
             blockCountArea.textContent = data.block_count;
             AgorithmArea.textContent = data.scheduling_algorithm.toUpperCase();
-            indexArea.textContent = data.using_index;
+            if (data.using_index == 0) {
+                indexArea.textContent = "Use";
+            }
+            else {
+                indexArea.textContent = "Not Use";
+            }
+            
         })
         .catch(error => {
             console.error('Fetch 오류: ', error);
@@ -52,11 +62,11 @@ function getEnvironmentInfo() {
 }
 
 // 쿼리 로그 불러오기
-function getQueryLog() {
+function getQueryLogAll() {
     var user_id = "admin-123";
     var query_type = "all";
 
-    fetch('/query/log-all', {
+    fetch('/query/get-all', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -316,15 +326,24 @@ function envSettingmodalLoad(){
     });
 }
 
+
+// 쿼리 Run 동작
 const resultContainer = document.getElementById("resultContainer");
 const metricContainer = document.getElementById("metricContainer");
-const spinnerContainer = document.querySelectorAll(".spinnerContainer");
+const spinnerContainer = document.getElementById("loading");
 
 document.getElementById("pushdownButton").addEventListener("click", function () {
+    // 실행한 TPC-H 쿼리 이름
+    const run_query = dropdownToggle.textContent
     //Query 수행 및 결과 획득 (웹서버 연동 필요)
-    spinnerContainer.forEach((icon) => {
-        icon.style.display = "flex";
-    });
+    var post_data = {
+        query: run_query,
+        user_id: storeduserInfo.workbench_user_id
+    }
+    // spinnerContainer.forEach((icon) => {
+    //     icon.style.display = "flex";
+    // });
+    spinnerContainer.style.display = 'block'
     resultContainer.style.display = "none";
     metricContainer.style.display = "none";  
 
@@ -336,28 +355,45 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     resultContainer.style.display = "block";
     metricContainer.style.display = "block";
 
-    const scannedtable1 = document.querySelector('td.qtable_1');
-    const scannedtable2 = document.querySelector('td.qtable_2');
-    const scannedtable3 = document.querySelector('td.qtable_3');
-    const scannedtable4 = document.querySelector('td.qtable_4');
-    const scannedtable5 = document.querySelector('td.qtable_5');
+    const metrictable1 = document.querySelector('td.qtable_1');
+    const metrictable2 = document.querySelector('td.qtable_2');
+    const metrictable3 = document.querySelector('td.qtable_3');
+    const metrictable4 = document.querySelector('td.qtable_4');
+    const metrictable5 = document.querySelector('td.qtable_5');
 
-    scannedtable1.textContent = "101255 (line)";
-    scannedtable2.textContent = "101254 (line)";
-    scannedtable3.textContent = "1 (%)";
-    scannedtable4.textContent = "14.28 (sec)";
-    scannedtable5.textContent = "8";
+    fetch('/query/run', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify(post_data)
+    })
+    .then(response => {
+        spinnerContainer.style.display = 'none'
+        return response.json();
+    })
+    .then(data => {
+        metrictable1.textContent = data.query_result.scanned_row_count + " (line)";
+        metrictable2.textContent = data.query_result.filtered_row_count + " (line)";
 
-    var result = "+-----------------------------------+\n" +
-        "|ps_partkey      |value                        |\n" +
-        "+-----------------------------------+\n" +
-        "|4877                |18980009.120000   |\n" +
-        "|198585            |16694701.690000   |\n" +
-        "|78280              |15889749.480000   |\n" +
-        "|89702              |15676712.640000   |\n" +
-        "|15055              |15452319.200000   |\n" +
-        "+-----------------------------------+";
-    document.getElementById("queryResult").value = result;
+        let f_ratio = (data.query_result.filtered_row_count / data.query_result.scanned_row_count) * 100;
+        let filter_ratio = f_ratio.toFixed(2);
+        metrictable3.textContent = filter_ratio + " (%)";
+
+        let queryStart = new Date(data.query_result.start_time);
+        let queryEnd = new Date(data.query_result.end_time);
+        let queryTime = queryEnd - queryStart;
+        let ExecutionTime = queryTime / 1000;
+        metrictable4.textContent = ExecutionTime + "(SEC)";
+        metrictable5.textContent = data.query_result.snippet_count;
+
+        document.getElementById("queryResult").value = data.query_result.query_result;
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    })
 
     metricViewPlayIcon.style.display = 'inline';
     metricViewPauseIcon.style.display = 'none';
@@ -372,12 +408,14 @@ const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
 const queryTextArea = document.getElementById("queryTextarea");
 const dropdownToggle = document.getElementById("dropdownToggle");
+const runQueryNum = ""
 
 queryNumbers.forEach((number) => {
     const dropdownItem = document.createElement("a");
     dropdownItem.className = "dropdown-item";
     dropdownItem.href = "#";
-    dropdownItem.textContent = `Q${number}`;
+    const tpchNum = String(number).padStart(2, '0');
+    dropdownItem.textContent = `TPC-H_${tpchNum}`;
     dropdownMenu.appendChild(dropdownItem);
 
     dropdownItem.addEventListener("click", function (event) {
@@ -406,6 +444,15 @@ queryNumbers.forEach((number) => {
 
 // new query 버튼 누르면 쿼리입력창 초기화
 const newQueryButton = document.getElementById("newQuery");
+const queryResultArea = document.getElementById("queryResult");
 newQueryButton.addEventListener("click", function() {
+    const metrictable = document.querySelectorAll('#metrictable tbody td');
+    metrictable.forEach((cell) => {
+        cell.textContent = '-';
+    })
     queryTextArea.value = "";
+    queryResultArea.value = "";
+
+    updateLatestChart();
+    startInterval();
 });
