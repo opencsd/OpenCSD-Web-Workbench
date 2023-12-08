@@ -28,7 +28,7 @@ def tpch_hadler():
 
 # DB 스키마 -> 구현 전
 @query_ssd_bp.route('/schema', methods=['GET'])
-def metric_handler():
+def schema_handler():
     if request.method == 'GET':
         try:
             return jsonify()
