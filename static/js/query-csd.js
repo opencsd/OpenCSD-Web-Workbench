@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function getEnvironmentInfo() {
     const dbnameArea = document.getElementById("dbname");
     const dbmsArea = document.getElementById("dbms");
-    const storageTypeArea = document.getElementById("storage_type");
     const csdCountArea = document.getElementById("csd_count");
     const csdTypeArea = document.getElementById("csd_type");
     const dbmsSizeArea = document.getElementById("dbms_size");
@@ -40,7 +39,6 @@ function getEnvironmentInfo() {
         .then(data => {
             dbnameArea.textContent = data.db_name.toUpperCase();
             dbmsArea.textContent = data.dbms_type.toUpperCase();
-            storageTypeArea.textContent = data.storage_type.toUpperCase();
             csdCountArea.textContent = data.csd_count;
             csdTypeArea.textContent = data.csd_type.toUpperCase();
             dbmsSizeArea.textContent = data.db_size + " (GB)";

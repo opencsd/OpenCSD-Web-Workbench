@@ -4,4 +4,8 @@ __pycache__/*
 *.pyc
 # Byte-compiled / optimized / DLL files
 *.py[cod]
+<<<<<<< HEAD
 *$py.class
+=======
+*$py.class
+>>>>>>> faeab1c7fb5482cd2e40d6aee42081ee89237319
