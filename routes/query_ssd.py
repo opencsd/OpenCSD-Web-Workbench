@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify, request, render_template
 from connectDB import mysql, influx, info
 from datetime import datetime
+from prettytable import PrettyTable
 
 query_ssd_bp = Blueprint('query_ssd', __name__, url_prefix='/query-ssd')
 
@@ -31,7 +32,25 @@ def tpch_hadler():
 def schema_handler():
     if request.method == 'GET':
         try:
-            return jsonify()
+            schema = {}
+
+            query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = SCHEMA()"
+            result = mysql.execute_query_mysql(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
+                                                info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
+                                                info.MYSQL_DB_NAME, query)
+    
+            for arg in result:
+                table_name = arg['TABLE_NAME']
+                query = "SELECT COLUMN_NAME, COLUMN_TYPE, IS_NULLABLE \
+                        FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = SCHEMA() \
+                        AND TABLE_NAME = '{}'".format(table_name)
+
+                result = mysql.execute_query_mysql(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
+                                                    info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
+                                                    info.MYSQL_DB_NAME, query)
+                schema[table_name] = result
+
+            return jsonify(schema)
         except:
             return ""
         
@@ -41,24 +60,24 @@ def run_handler():
     if request.method == 'POST':
         try:
             data = request.json
-
+            
             start_time = datetime.now()
 
-            result = mysql.execute_query_mysql(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
-                                                info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
-                                                info.MYSQL_DB_NAME, data['query']) #쿼리 실행 체크
-            
+            query_result = mysql.execute_query_mysql_get_string_result(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
+                                                                    info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
+                                                                    info.MYSQL_DB_NAME, data['query'])
+                        
             end_time = datetime.now()
 
             query = "select cpu_usage, memory_usage from instance_node_monitoring \
-                    where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
+                        where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
-            
+                        
             execution_time = (end_time - start_time)
-
-            result = {"result":result, "query_metric":query_metric, "execution_time":execution_time}
+        
+            result = {"result":query_result.get_string(), "query_metric":query_metric[0], "execution_time":str(execution_time)}
 
             return jsonify(result)
         except:
@@ -69,10 +88,11 @@ def run_handler():
 def metric_handler():
     if request.method == 'GET':
         try:
-            query = "select cpu_usage, memory_usage from instace_node_monitoring order by time desc limit 10"
-            result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_NODE_METRIC_DB_NAME, query)
-            return jsonify(result)
+            # memory -> power로 바꾸기!!
+            query = "select cpu_usage, memory_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                            info.INSTANCE_NODE_METRIC_DB_NAME, query)
+            return jsonify(metric[0])
         except:
             return ""
