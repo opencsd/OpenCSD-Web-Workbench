@@ -226,7 +226,10 @@ def debugg_handler():
                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
+        temp = {
+            "validation_log": "validation_log test",
+        }
         
-        return jsonify(result)
+        return jsonify(temp)
     except:
         return ""
