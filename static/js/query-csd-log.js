@@ -1,9 +1,12 @@
 let temp_id = 1;
 const queryHistory = [];
+const storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
 var totalContainerLog = [InterfaceContainerLog, MergingContainerLog, MonitoringContainerLog, offloadingContainerLog];
 var totalCSDLog = [csd1Log, csd2Log, csd3Log, csd4Log, csd5Log, csd6Log, csd7Log, csd8Log];
 let popover;
+
+console.log(storeduserInfo);
 
 document.getElementById("pushdownButton").addEventListener("click", function () {
     const queryText = document.getElementById("queryTextarea").value.trim();

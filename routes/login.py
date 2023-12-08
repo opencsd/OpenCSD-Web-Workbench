@@ -13,6 +13,8 @@ def login():
     if request.method == 'POST':
         data = request.json
         workbench_user_id = data['workbench_user_id']
+        db_instance_name = data['db_instance_name']
+        print(data)
         if workbench_user_id == "keti_opencsd":
             print("Login to CSD")
             return jsonify({'loginto': 'csd'})
