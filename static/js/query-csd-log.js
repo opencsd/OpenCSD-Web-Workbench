@@ -304,7 +304,7 @@ $('a[data-toggle="tab"]').click(function (e) {
 
 
 // 쿼리 로그 디테일 모달
-function queryLogDetailLoad(b) {
+function queryLogDetailLoad(query_id) {
     const queryDetailTableBody = document.getElementById("logDetailTableBody");
 
 
@@ -371,7 +371,9 @@ function queryLogDetailLoad(b) {
         });
     });
 
+    // 스캔 필터 비율 차트
     var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
+    get_scanfilterInfo(query_id);
     ScanFilterChart.render();
 
 }
@@ -407,7 +409,7 @@ var options = {
     },
     series: [{
         name: "Rows",
-        data: []
+        data: [2112, 800],
     }],
     tooltip: {
         theme: 'dark'

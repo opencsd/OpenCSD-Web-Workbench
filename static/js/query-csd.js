@@ -20,19 +20,75 @@ document.addEventListener("DOMContentLoaded", function () {
     updateLatestChart();
 
     startInterval();
-    // getEnvironmentInfo();
+    getEnvironmentInfo();
 });
 
+// 쿼리 환경 정보 가져오기
 function getEnvironmentInfo() {
     const dbnameArea = document.getElementById("dbname");
+    const dbmsArea = document.getElementById("dbms");
+    const storageTypeArea = document.getElementById("storage_type");
+    const csdCountArea = document.getElementById("csd_count");
+    const csdTypeArea = document.getElementById("csd_type");
+    const dbmsSizeArea = document.getElementById("dbms_size");
+    const blockCountArea = document.getElementById("block_count");
+    const AgorithmArea = document.getElementById("algorithm");
+    const indexArea = document.getElementById("index");
+
     fetch('/query/environment')
         .then(response => response.json())
         .then(data => {
-            dbnameArea.value = data.db_name;
+            dbnameArea.textContent = data.db_name.toUpperCase();
+            dbmsArea.textContent = data.dbms_type.toUpperCase();
+            storageTypeArea.textContent = data.storage_type.toUpperCase();
+            csdCountArea.textContent = data.csd_count;
+            csdTypeArea.textContent = data.csd_type.toUpperCase();
+            dbmsSizeArea.textContent = data.db_size + " (GB)";
+            blockCountArea.textContent = data.block_count;
+            AgorithmArea.textContent = data.scheduling_algorithm.toUpperCase();
+            indexArea.textContent = data.using_index;
         })
         .catch(error => {
             console.error('Fetch 오류: ', error);
         });
+}
+
+// 쿼리 로그 불러오기
+function getQueryLog() {
+    var user_id = "admin-123";
+    var query_type = "all";
+
+    fetch('/query/log-all', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            "user_id": user_id,
+            "query_type": select
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(function(item) {
+            const newRow = document.createElement("tr");
+            const checkboxCell = document.createElement("td");
+            checkboxCell.style.width = "5%";
+            checkboxCell.style.textAlign = "center";
+            const typeCell = document.createElement("td");
+            typeCell.style.width = "5%";
+            typeCell.style.textAlign = "center";
+            const queryIDCell = document.createElement("td");
+            queryIDCell.style.width = "1%";
+            const queryCell = document.createElement("td");
+            queryCell.style.width = "30%";
+            const progressBarCells = [];
+            const dummyButtonCell = document.createElement("td");
+            dummyButtonCell.style.width = "5%";
+        })
+    })
 }
 
 function getLatestChartData(){
@@ -217,6 +273,50 @@ metricViewBtn.addEventListener('click', () => {
     }
     isMetricViewBtnClicked = !isMetricViewBtnClicked;
 });
+
+
+// 환경 설정 모달 동작
+var selected_csdkind = $("#query_csdkind");
+var SetCsdCount = $("#query_SetCsdCount");
+var SetBlockCount = $("#query_SetBlockCount");
+var scheduling_algorithm = $("#query_scheduling");
+var using_index = $("#query_index");
+
+$("#query-csdSelect").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("CSD Checked")
+        selected_csdkind.prop('disabled', false)
+        SetCsdCount.prop('disabled', false)
+        SetBlockCount.prop('disabled', false)
+        using_index.prop('disabled', false)
+        scheduling_algorithm.prop('disabled', false)
+    }
+});
+$("#query-ssdSelect").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("SSD Checked")
+        selected_csdkind.prop('disabled', true)
+        SetCsdCount.prop('disabled', true)
+        SetBlockCount.prop('disabled', true)
+        using_index.prop('disabled', true)
+        scheduling_algorithm.prop('disabled', true)
+    }
+});
+
+envSetting.addEventListener('click', function() {
+    envSettingmodalLoad()
+});
+
+function envSettingmodalLoad(){
+    $(function() {
+        $("#envSettingModal").modal("show");
+        var modalDiv = $('#envSettingModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
 
 const resultContainer = document.getElementById("resultContainer");
 const metricContainer = document.getElementById("metricContainer");

@@ -1,3 +1,86 @@
+# snippet_info = [
+#   {
+#     "filter_count": 3,
+#     "group_by_count": 0,
+#     "limit_exist": 0,
+#     "order_by_count": 0,
+#     "projection_count": 2,
+#     "query_id": 0,
+#     "snippet_type": 0,
+#     "work_id": 0
+#   },
+#   {
+#     "filter_count": 0,
+#     "group_by_count": 0,
+#     "limit_exist": 0,
+#     "order_by_count": 0,
+#     "projection_count": 2,
+#     "query_id": 0,
+#     "snippet_type": 0,
+#     "work_id": 1
+#   },
+#   {
+#     "filter_count": 1,
+#     "group_by_count": 0,
+#     "limit_exist": 0,
+#     "order_by_count": 0,
+#     "projection_count": 2,
+#     "query_id": 0,
+#     "snippet_type": 3,
+#     "work_id": 2
+#   },
+#   {
+#     "filter_count": 0,
+#     "group_by_count": 0,
+#     "limit_exist": 0,
+#     "order_by_count": 0,
+#     "projection_count": 1,
+#     "query_id": 0,
+#     "snippet_type": 1,
+#     "work_id": 3
+#   }
+# ]
+
+
+# environment_Info = {
+#   "block_count": 15,
+#   "csd_count": 8,
+#   "csd_type": "ngd",
+#   "db_name": "tpc-h",
+#   "db_size": 200.0,
+#   "dbms_type": "mysql",
+#   "scheduling_algorithm": "dcs",
+#   "storage_type": "csd",
+#   "using_index": 0
+# }
+
+# logall_info = [
+#   {
+#     "execution_time": 3.61174,
+#     "filtered_row_count": 27715,
+#     "query_id": 0,
+#     "query_statement": "SELECT 100.00 * SUM(CASE\n                      WHEN p_type LIKE 'promo%' THEN l_extendedprice *\n                                                     ( 1 - l_discount )\n                      ELSE 0\n                    END) / SUM(l_extendedprice * ( 1 - l_discount )) AS\n       promo_revenue\nFROM   lineitem,\n       part\nWHERE  l_partkey = p_partkey\n       AND l_shipdate >= DATE '1996-12-01'\n       AND l_shipdate < DATE '1996-12-01' + interval '1' month;",
+#     "query_type": "select",
+#     "scanned_row_count": 620000
+#   },
+#   {
+#     "execution_time": 21.2035,
+#     "filtered_row_count": 587494,
+#     "query_id": 1,
+#     "query_statement": "SELECT l_returnflag,\n       l_linestatus,\n       SUM(l_quantity)                                           AS sum_qty,\n       SUM(l_extendedprice)                                      AS sum_base_price,\n       SUM(l_extendedprice * ( 1 - l_discount ))                 AS sum_disc_price,\n       SUM(l_extendedprice * ( 1 - l_discount ) * ( 1 + l_tax )) AS sum_charge,\n       Avg(l_quantity)                                           AS avg_qty,\n       Avg(l_extendedprice)                                      AS avg_price,\n       Avg(l_discount)                                           AS avg_disc,\n       Count(*)                                                  AS count_order\nFROM   lineitem\nWHERE  l_shipdate <= DATE ('1998-12-01') - interval '108' day\nGROUP  BY l_returnflag,\n          l_linestatus\nORDER  BY l_returnflag,\n          l_linestatus;",
+#     "query_type": "select",
+#     "scanned_row_count": 632577
+#   },
+#   {
+#     "execution_time": 3.58831,
+#     "filtered_row_count": 27715,
+#     "query_id": 2,
+#     "query_statement": "SELECT 100.00 * SUM(CASE\n                      WHEN p_type LIKE 'promo%' THEN l_extendedprice *\n                                                     ( 1 - l_discount )\n                      ELSE 0\n                    END) / SUM(l_extendedprice * ( 1 - l_discount )) AS\n       promo_revenue\nFROM   lineitem,\n       part\nWHERE  l_partkey = p_partkey\n       AND l_shipdate >= DATE '1996-12-01'\n       AND l_shipdate < DATE '1996-12-01' + interval '1' month;",
+#     "query_type": "select",
+#     "scanned_row_count": 652577
+#   }
+# ]
+
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, jsonify, request, render_template
