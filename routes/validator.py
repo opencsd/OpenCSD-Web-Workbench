@@ -195,7 +195,7 @@ def snippet_handler():
         
 # 벨리데이션 로그의 메트릭 상세 팝업
 @validator_bp.route('/metric', methods=['GET', 'POST'])
-def snippet_handler():
+def metric_handler():
     if request.method == 'POST':
         try:
             data = request.json
