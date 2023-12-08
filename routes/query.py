@@ -139,147 +139,152 @@ def schema_handler():
             return jsonify()
         except:
             return ""
-
-# # 쿼리 로그, 한 페이지 최대값은 10
-# @query_bp.route('/log-all', methods=['GET', 'POST'])
-# def log_all_hadler():
-#     try:
-#         data = request.json
-#         user_id = data['user_id']
-#         query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
-#         page = data['page']
-#         index = page * 10 -10
-
-#         if query_type == "all":
-#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
-#                 from query_log where user_id='{}' order by query_id limit {},10".format(user_id,index)
-#         else:
-#             query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
-#                 from query_log where user_id='{}' and query_type='{}' order by query_id limit {},10".format(user_id,query_type,index)
-
-#         result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
-#         return jsonify(result)
-#     except:
-#         return "" 
-
-# 쿼리 로그, 10개 이상은 스크롤
-@query_bp.route('/log-all', methods=['GET', 'POST'])
-def log_all_hadler():
-    try:
-        data = request.json
-        user_id = data['user_id']
-        query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
-
-        if query_type == "all": #'all'
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
-                from query_log where user_id='{}' order by query_id".format(user_id)
-        else: #'select','update','insert','delete','dcl','ddl','other'
-            query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
-                from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
-
-        result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
-    
-        return jsonify(result)
-    except:
-        return "" 
-    
-# 특정 쿼리 클릭 시
-@query_bp.route('/log', methods=['GET', 'POST'])
-def log_handler():
-    try:
-        data = request.json
-        user_id = data['query_id']
-
-        query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time, \
-                scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
-        query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
-        start_time = query_log[0]['start_time']
-        end_time = query_log[0]['end_time']
-        
-        # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
-        # memory -> power로 바꾸기!!
-        query = "select cpu_usage, memory_usage from instance_node_monitoring \
-                where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
-        query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                        info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                        info.INSTANCE_NODE_METRIC_DB_NAME, query)
+# 쿼리 로그 관련 라우터
+@query_bp.route('/log/<path:action>', methods=['GET', 'POST'])
+def log_handler(action):
+    if action.startswith('get-all'):
+        if request.method == 'POST':
+            try:
+                data = request.json
+                user_id = data['user_id']
+                query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
 
-        result = {"query_log":query_log, "query_metric":query_metric}
+                if query_type == "all": #'all'
+                    query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
+                        from query_log where user_id='{}' order by query_id".format(user_id)
+                else: #'select','update','insert','delete','dcl','ddl','other'
+                    query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
+                        from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
 
-        return jsonify(result)
-    except:
-        return ""                          
-    
-# 선택 쿼리 로그 삭제 -> 구현 전
-@query_bp.route('/delete', methods=['GET', 'POST'])
-def delete_handler():
-    if request.method == 'POST':
-        try:
-            data = request.json
+                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
             
-            # 나중에 log 삭제하는것도 추가 (외래키로 잡힌 테이블 먼저 삭제해야함)
+                return jsonify(result)
+            except:
+                return ""
+    elif action.startswith('get-one'):
+        if request.method == 'POST':
+            try:
+                data = request.json
+                user_id = data['query_id']
 
-            query = "delete from query_snippet where query_id in {}".format(tuple(data['delete_query_id']))
-            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time, \
+                        scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
+                query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                
+                start_time = query_log[0]['start_time']
+                end_time = query_log[0]['end_time']
+                
+                # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
+                # memory -> power로 바꾸기!!
+                query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                        where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
+                query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                                                info.INSTANCE_NODE_METRIC_DB_NAME, query)
 
-            query = "delete from query_log where query_id in {}".format(tuple(data['delete_query_id']))
-            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
-            return ""
-        except:
-            return "delete error"
+                result = {"query_log":query_log, "query_metric":query_metric}
 
-# 쿼리 로그의 쿼리 스니펫 팝업
-@query_bp.route('/snippet', methods=['GET', 'POST'])
-def snippet_handler():
-    if request.method == 'POST':
-        try:
-            data = request.json
-            query_id = data['query_id']
+                return jsonify(result)
+            except:
+                return ""  
+    elif action.startswith('delete'):
+        if request.method == 'POST':
+            try:
+                data = request.json
+                
+                # 나중에 log 삭제하는것도 추가 (외래키로 잡힌 테이블 먼저 삭제해야함)
 
-            query = "select * from query_snippet where query_id={}".format(query_id)
-            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
-            return jsonify(result)
-        except:
-            return ""
+                query = "delete from query_snippet where query_id in {}".format(tuple(data['delete_query_id']))
+                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
-# 쿼리 로그의 쿼리 수행 로그 팝업 -> 구현 전
-@query_bp.route('/debugg', methods=['GET', 'POST'])
-def debugg_handler():
-    try:
-        data = request.json
-        query_id = data['query_id']
+                query = "delete from query_log where query_id in {}".format(tuple(data['delete_query_id']))
+                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                return ""
+            except:
+                return "delete error"
+    else:
+        return "path error"
 
-        query = "select * from instance_debug_log where query_id={}".format(query_id)
-        storage_engnie_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
-        
-        query = "select * from csd_debug_log where query_id={}".format(query_id)
-        csd_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
-        json1 = jsonify(storage_engnie_log)
-        json2 = jsonify(csd_log)
+# 쿼리 로그 관련 라우터
+@query_bp.route('/desc/<path:action>', methods=['GET', 'POST'])
+def desc_handler(action):
+    if action.startswith('snippet'):
+        if request.method == 'POST':
+            try:
+                data = request.json
+                query_id = data['query_id']
 
-        json1.update(json2)
-        result = json1
-        
-        return jsonify(result)
-    except:
-        return ""
+                query = "select * from query_snippet where query_id={}".format(query_id)
+                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                return jsonify(result)
+            except:
+                return ""
+    elif action.startswith('debug'):
+        if request.method == 'POST':
+            try:
+                data = request.json
+                query_id = data['query_id']
+
+                query = "select * from instance_debug_log where query_id={}".format(query_id)
+                instance_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                
+                query = "select * from csd_debug_log where query_id={}".format(query_id)
+                csd_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                json1 = {
+                        "query_engine_log": "query_engine_log test",
+                        "storage_engine_interface_log": "storage_engine_interface_log test",
+                        "storage_engine_offloading_log": "storage_engine_offloading_log test",
+                        "storage_engine_merging_log": "storage_engine_merging_log test",
+                        "storage_engine_monitoring_log": "storage_engine_monitoring_log test",
+                    }
+                json2 = [{
+                        "storage_id": 1,
+                        "csd_log": "csd_log1 test",
+                    },{
+                        "storage_id": 2,
+                        "csd_log": "csd_log2 test",
+                    },{
+                        "storage_id": 3,
+                        "csd_log": "csd_log3 test",
+                    },{
+                        "storage_id": 4,
+                        "csd_log": "csd_log4 test",
+                    },{
+                        "storage_id": 5,
+                        "csd_log": "csd_log5 test",
+                    },{
+                        "storage_id": 6,
+                        "csd_log": "csd_log6 test",
+                    },{
+                        "storage_id": 7,
+                        "csd_log": "csd_log7 test",
+                    },{
+                        "storage_id": 8,
+                        "csd_log": "csd_log8 test",
+                    }]
+
+                result = {"instance_debug_log":json1, "csd_debug_log":json2}
+                
+                return jsonify(result)
+            except:
+                return ""  
+    else:
+        return "path error"
 
 # 쿼리 실행 버튼 ('RUN')
 @query_bp.route('/run', methods=['GET', 'POST'])
