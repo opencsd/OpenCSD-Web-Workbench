@@ -224,17 +224,19 @@ const optSettingModal = document.getElementById("validator-optionSettingModal")
 const modalContainer = document.getElementById('modalContainer');
 
 optSettingButton.addEventListener('click', function() {
+    console.log("Validation option setting")
     envSettingmodalLoad()
 });
 
 var selected_csdkind = $("#selected_csdkind");
-var SetCsdCount = $("#SetCsdCount");
-var SetBlockCount = $("#SetBlockCount");
+var SetCsdCount = $("#val_SetCsdCount");
+var SetBlockCount = $("#val_SetBlockCount");
 var scheduling_algorithm = $("#scheduling_algorithm");
 var using_index = $("#using_index");
 
 $("#csd_selected").on("change", function() {
     if ($(this).is(":checked")){
+        console.log("CSD Checked")
         selected_csdkind.prop('disabled', false)
         SetCsdCount.prop('disabled', false)
         SetBlockCount.prop('disabled', false)
@@ -244,6 +246,7 @@ $("#csd_selected").on("change", function() {
 });
 $("#ssd_selected").on("change", function() {
     if ($(this).is(":checked")){
+        console.log("SSD Checked")
         selected_csdkind.prop('disabled', true)
         SetCsdCount.prop('disabled', true)
         SetBlockCount.prop('disabled', true)
