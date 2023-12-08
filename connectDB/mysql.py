@@ -13,7 +13,11 @@ def execute_query_mysql(host_, port_, user_, password_, db_, query_):
 
         cursor = db.cursor(pymysql.cursors.DictCursor)
         cursor.execute(query_)
+        db.commit()
         result = cursor.fetchall()
+
+        cursor.close()
+        db.close()
 
         return result
 
@@ -29,10 +33,16 @@ def execute_query_mysql_management(query_):
             password=info.PLATFORM_MANAGEMENT_DB_PASSWORD,
             db=info.PLATFORM_MANAGEMENT_DB_NAME
         )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-        result = cursor.execute(query_)
 
-        return list(result)
+        cursor = db.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(query_)
+        db.commit()
+        result = cursor.fetchall()
+
+        cursor.close()
+        db.close()
+
+        return result
     
     except Exception as e:
         return f"Error: {str(e)}"
