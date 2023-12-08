@@ -214,9 +214,6 @@
                         </div>
                       </div>
                       <span class="d-none d-sm-inline">
-                        <button class="btn" style="padding: 5px 15px;">template</button>
-                      </span>
-                      <span class="d-none d-sm-inline">
                         <a href="#" id="newQuery" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
@@ -401,7 +398,7 @@
                     <div id="resultContainer">
                       <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                     </div>
-                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                    <div id="loading" class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
                       <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
                     </div>
                   </div>
@@ -415,7 +412,7 @@
                     <h3 class="card-title">Query Metric</h3>
                     <div id="metricContainer">
                       <div class="table-responsive">
-                        <table class="table table-vcenter text-nowrap datatable">
+                        <table id="metrictable" class="table table-vcenter text-nowrap datatable">
                           <tbody class="text-center">
                             <tr>
                               <th scope="row" class="w-25">Scanned Row</th>
