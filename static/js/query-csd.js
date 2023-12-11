@@ -2,8 +2,9 @@
 var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
 let intervalId;
-var hostServerCPUChart, hostServerCPUChartData, hostServerCPUChartCategories;
-var hostServerPowerChart, hostServerPowerChartData, hostServerPowerChartCategories;
+var hostServerCPUChart, hostServerCPUChartData;
+var hostServerPowerChart, hostServerPowerChartData;
+var timestamps;
 
 //임시값들----
 var tempCPUUpdate = [1,3.5,6.2,6.3,4.5];
@@ -210,7 +211,6 @@ function updateLatestChart(){
 
 function updateQueryChart(){
     //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
-    getQueryChartData();
 
     hostServerCPUChart.updateOptions({
         series: [{
@@ -335,31 +335,26 @@ const spinnerContainer = document.getElementById("loading");
 document.getElementById("pushdownButton").addEventListener("click", function () {
     // 실행한 TPC-H 쿼리 이름
     const run_query = dropdownToggle.textContent
-    //Query 수행 및 결과 획득 (웹서버 연동 필요)
+    // Post 요청 시 서버에 보낼 json 데이터
     var post_data = {
         query: run_query,
         user_id: storeduserInfo.workbench_user_id
     }
-    // spinnerContainer.forEach((icon) => {
-    //     icon.style.display = "flex";
-    // });
-    spinnerContainer.style.display = 'block'
+    // 쿼리 수행 중 로딩 화면
+    spinnerContainer.style.display = "flex";
+    document.getElementById("loading-metric").style.display = "flex";
     resultContainer.style.display = "none";
     metricContainer.style.display = "none";  
-
-    clicked = true;//임시
-
-    spinnerContainer.forEach((icon) => {
-        icon.style.display = "none";
-    });
-    resultContainer.style.display = "block";
-    metricContainer.style.display = "block";
 
     const metrictable1 = document.querySelector('td.qtable_1');
     const metrictable2 = document.querySelector('td.qtable_2');
     const metrictable3 = document.querySelector('td.qtable_3');
     const metrictable4 = document.querySelector('td.qtable_4');
     const metrictable5 = document.querySelector('td.qtable_5');
+
+    hostServerCPUChartData = [];
+    hostServerPowerChartData = [];
+    timestamps = [];
 
     fetch('/query/run', {
         method: 'POST',
@@ -372,6 +367,9 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     })
     .then(response => {
         spinnerContainer.style.display = 'none'
+        document.getElementById("loading-metric").style.display = "none";
+        resultContainer.style.display = "block";
+        metricContainer.style.display = "block";
         return response.json();
     })
     .then(data => {
@@ -386,10 +384,17 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         let queryEnd = new Date(data.query_result.end_time);
         let queryTime = queryEnd - queryStart;
         let ExecutionTime = queryTime / 1000;
-        metrictable4.textContent = ExecutionTime + "(SEC)";
+        metrictable4.textContent = ExecutionTime + " (sec)";
         metrictable5.textContent = data.query_result.snippet_count;
 
         document.getElementById("queryResult").value = data.query_result.query_result;
+
+        data.query_metric.forEach(item => {
+            hostServerCPUChartData.push(item.cpu_usage);
+            hostServerPowerChartData.push(item.memory_usage);
+            timestamps.push(item.time);
+        })
+        updateQueryChart();
     })
     .catch(error => {
         console.error('Fetch 오류: ', error);
@@ -401,9 +406,11 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     isMetricViewBtnClicked = false;
     
     clearInterval(intervalId);
-    updateQueryChart();
+    
 });
 
+
+// TPCH 쿼리 드롭다운
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
 const queryTextArea = document.getElementById("queryTextarea");
