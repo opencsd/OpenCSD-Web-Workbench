@@ -1,9 +1,13 @@
+// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
+var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
 let temp_id = 1;
 const queryHistory = [];
 
 var totalContainerLog = [InterfaceContainerLog, MergingContainerLog, MonitoringContainerLog, offloadingContainerLog];
 var totalCSDLog = [csd1Log, csd2Log, csd3Log, csd4Log, csd5Log, csd6Log, csd7Log, csd8Log];
 let popover;
+
 
 document.getElementById("pushdownButton").addEventListener("click", function () {
     const queryText = document.getElementById("queryTextarea").value.trim();
@@ -89,7 +93,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         const queryType = queryText.slice(0, 10);
         var lowerCasequeryType = queryType.toLowerCase();
         if (lowerCasequeryType.includes("select")) {
-            console.log("select query type")
+            // console.log("select query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
         <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
@@ -97,7 +101,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         </svg>`
         }
         else if (lowerCasequeryType.includes("update")) {
-            console.log("update query type")
+            // console.log("update query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
@@ -105,7 +109,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
           </svg>`
         }
         else if (lowerCasequeryType.includes("insert")) {
-            console.log("insert query type")
+            // console.log("insert query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M12 8v8" />
@@ -113,7 +117,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
           </svg>`
         }
         else if (lowerCasequeryType.includes("delete")) {
-            console.log("delete query type")
+            // console.log("delete query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
@@ -121,7 +125,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
           </svg>`
         }
         else {
-            console.log("generic query type")
+            // console.log("generic query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-g" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
@@ -204,6 +208,18 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
     // document.getElementById("queryTextarea").value = "";
 });
+
+// 쿼리 로그 행 클릭 시 해당 쿼리 정보 로딩
+// const LogTableClick = document.getElementById("queryLogtable")
+
+// LogTableClick.addEventListener('click', function(e) {
+//     const row = e.target.closest('tr');
+//     if (row) {
+//         const cells = row.getElementsByTagName('td');
+//         const query_id = cells[2].innerText;
+//         console.log(query_id);
+//     }
+// })
 
 //모달 내용 로딩
 function modalContentsLoad(b) {
@@ -304,13 +320,13 @@ $('a[data-toggle="tab"]').click(function (e) {
 
 
 // 쿼리 로그 디테일 모달
-function queryLogDetailLoad(b) {
+function queryLogDetailLoad(query_id) {
     const queryDetailTableBody = document.getElementById("logDetailTableBody");
 
 
 
     // 웹 서버와 연결해서 db로부터 값 받아서 테이블 채우기
-    fetch('/query/get_querySnippetInfo')
+    fetch('/query/snippet')
         .then(response => response.json())
         .then(data => {
 
@@ -371,9 +387,15 @@ function queryLogDetailLoad(b) {
         });
     });
 
-    var chart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
-    chart.render();
+    // 스캔 필터 비율 차트
+    var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
+    get_scanfilterInfo(query_id);
+    ScanFilterChart.render();
 
+}
+
+function get_scanfilterInfo(query_id) {
+    
 }
 
 var options = {
@@ -402,12 +424,8 @@ var options = {
         opacity: 1,
     },
     series: [{
-        name: "Scan Rows",
-        data: 2112
-    },
-    {
-        name: "Filtered Rows",
-        data: 800
+        name: "Rows",
+        data: [2112, 800],
     }],
     tooltip: {
         theme: 'dark'
@@ -433,81 +451,15 @@ var options = {
         },
     },
     yaxis: {
-        title: {
-            text: 'Scan/Filter Ratio'
+        labels: {
+            padding: 4
         },
     },
+    labels: [
+        'Scaned Rows', 'Filtered Rows'
+    ],
     colors: [tabler.getColor("primary")],
     legend: {
         show: false,
     },
 };
-
-// var options = {
-//     chart: {
-//         type: "bar",
-//         fontFamily: 'inherit',
-//         height: 240,
-//         parentHeightOffset: 0,
-//         toolbar: {
-//             show: false,
-//         },
-//         animations: {
-//             enabled: false
-//         },
-//     },
-//     plotOptions: {
-//         bar: {
-//             barHeight: '50%',
-//              horizontal: true,
-//         }
-//     },
-//     dataLabels: {
-//         enabled: false,
-//     },
-//     fill: {
-//         opacity: 1,
-//     },
-//     series: [{
-//         name: "Tasks completion",
-//         data: [155, 65, 465, 265, 225, 325, 80]
-//     }],
-//     tooltip: {
-//         theme: 'dark'
-//     },
-//     grid: {
-//         padding: {
-//             top: 0,
-//             right: 0,
-//             left: 0,
-//             bottom: 0
-//         },
-//         strokeDashArray: 4,
-//     },
-//     xaxis: {
-//         labels: {
-//             padding: 0,
-//         },
-//         tooltip: {
-//             enabled: false
-//         },
-//         axisBorder: {
-//             show: false,
-//         },
-//         // type: 'datetime',
-//     },
-//     yaxis: {
-//         labels: {
-//             padding: 4
-//         },
-//     },
-//     labels: [
-//         '2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26'
-//     ],
-//     colors: [tabler.getColor("primary")],
-//     legend: {
-//         show: false,
-//     },
-// };
-
-

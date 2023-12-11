@@ -33,12 +33,8 @@ from
                     ) in ('20', '40', '22', '30', '39', '42', '21')
             )
             and not exists (
-                select
-                    *
-                from
-                    ORDERS
-                where
-                    o_custkey = c_custkey
+                select * from ORDERS
+                where _custkey = c_custkey
             )
     ) as custsale
 group by
