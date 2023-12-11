@@ -340,7 +340,7 @@ disk_rw_info = [
   }
 ]
 
-chache_usage_info = [
+cache_usage_info = [
     {
         'timestamp': '14:50:00',
         'cache_hit_rate': 50
@@ -915,8 +915,150 @@ disk_usage = [
 ]
 
 from flask import Blueprint, jsonify, request, render_template
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from connectDB import influx, mysql, info
+from collections import deque 
 
 monitoring_ssd_bp = Blueprint('monitoring_ssd', __name__, url_prefix='/monitoring_ssd')
+
+# 오른쪽에서 값이 들어오면 왼쪽부터 삭제됨
+ddl_count_outer = deque(maxlen=20)
+client_count_outer = deque(maxlen=20)
+disk_ratio_outer = deque(maxlen=20)
+cache_usage_outer = deque(maxlen=20)
+cache_ratio_outer = deque(maxlen=20)
+
+# DDL (delete, insert, select, update 순)
+def get_ddl_count():
+  query = "SELECT * FROM GLOBAL_STATUS WHERE VARIABLE_NAME = 'Com_select' OR VARIABLE_NAME = 'Com_insert' OR VARIABLE_NAME = 'Com_delete' OR VARIABLE_NAME = 'Com_update'"
+  result = mysql.execute_query_mysql_demo("information_schema", query)
+  # print(result)
+  ddl_count_inner = {}
+  for i in range(len(result)):
+    ddl_count_inner['timestamp'] = 0
+    if result[i]['VARIABLE_NAME'] == 'COM_SELECT':
+      ddl_count_inner['select_count'] = result[i]['VARIABLE_VALUE']
+    elif result[i]['VARIABLE_NAME'] == 'COM_DELETE':
+      ddl_count_inner['delete_count'] = result[i]['VARIABLE_VALUE']
+    elif result[i]['VARIABLE_NAME'] == 'COM_INSERT':
+      ddl_count_inner['insert_count'] = result[i]['VARIABLE_VALUE']
+    elif result[i]['VARIABLE_NAME'] == 'COM_UPDATE':
+      ddl_count_inner['update_count'] = result[i]['VARIABLE_VALUE']
+  ddl_count_outer.append(ddl_count_inner)
+  # print(ddl_count_outer)
+
+# client (시간 추가해야 함)
+def get_client_count():
+  query = "SHOW STATUS LIKE 'Threads_connected'"
+  result = mysql.execute_query_mysql_demo("information_schema", query)
+  client_count_inner = {}
+  client_count_inner['timestamp'] = 0
+  client_count_inner['client'] = int(result[0]['Value'])
+  client_count_outer.append(client_count_inner)
+  # print(client_count_outer)
+
+# disk r/w (시간 추가해야 함)
+def get_disk_rw():
+  query = "SELECT * FROM .GLOBAL_STATUS WHERE VARIABLE_NAME LIKE '%ROCKSDB_BYTES_READ%' OR VARIABLE_NAME LIKE '%ROCKSDB_BYTES_WRITTEN%'"
+  result = mysql.execute_query_mysql_demo("information_schema", query)
+  # print(result)
+  disk_ratio_inner = {}
+  for i in range(len(result)):
+    
+    disk_ratio_inner['timestamp'] = 0
+    if result[i]['VARIABLE_NAME'] == 'ROCKSDB_BYTES_READ':
+      disk_ratio_inner['disk_read'] = int(result[i]['VARIABLE_VALUE'])
+    elif result[i]['VARIABLE_NAME'] == 'ROCKSDB_BYTES_WRITTEN':
+      disk_ratio_inner['disk_write'] = int(result[i]['VARIABLE_VALUE'])
+  disk_ratio_outer.append(disk_ratio_inner)
+  # print(disk_ratio_outer)
+
+# cache usage
+def get_cache_usage():
+  query = "SELECT * FROM information_schema.GLOBAL_STATUS WHERE VARIABLE_NAME LIKE '%ROCKSDB_BLOCK_CACHE_BYTES_READ%' OR VARIABLE_NAME LIKE '%ROCKSDB_BLOCK_CACHE_BYTES_WRITE%'"
+  result = mysql.execute_query_mysql_demo("information_schema", query)
+  cache_usage_inner = {}
+  # print(result)
+  for i in range(len(result)):
+    cache_usage_inner['timestamp'] = 0
+    if result[i]['VARIABLE_NAME'] == 'ROCKSDB_BLOCK_CACHE_BYTES_READ':
+      cache_usage_inner['cache_read'] = int(result[i]['VARIABLE_VALUE'])
+    elif result[i]['VARIABLE_NAME'] == 'ROCKSDB_BLOCK_CACHE_BYTES_WRITE':
+      cache_usage_inner['cache_write'] = int(result[i]['VARIABLE_VALUE'])
+  cache_usage_outer.append(cache_usage_inner)
+  # print(cache_usage_outer)
+
+# cache hit
+def get_cache_ratio():
+  query = "SELECT * FROM information_schema.GLOBAL_STATUS WHERE VARIABLE_NAME LIKE '%ROCKSDB_BLOCK_CACHE_HIT%' OR VARIABLE_NAME LIKE '%ROCKSDB_BLOCK_CACHE_MISS%'"
+  result = mysql.execute_query_mysql_demo("information_schema", query)
+  # print(result)
+  cache_ratio_inner = {}
+  cache_ratio_inner['timestamp'] = 0
+  for i in range(len(result)):
+    if result[i]['VARIABLE_NAME'] == 'ROCKSDB_BLOCK_CACHE_HIT':
+      # cache_ratio_inner['cache_read'] = result[i]['VARIABLE_VALUE']
+      cache_hit = int(result[i]['VARIABLE_VALUE'])
+    elif result[i]['VARIABLE_NAME'] == 'ROCKSDB_BLOCK_CACHE_MISS':
+      # cache_ratio_inner['cache_write'] = result[i]['VARIABLE_VALUE']
+      cache_miss = int(result[i]['VARIABLE_VALUE'])
+  cache_ratio_inner['cache_hit_ratio'] = float(cache_hit) / (cache_hit + cache_miss) * 100
+  cache_ratio_outer.append(cache_ratio_inner)
+  # print(cache_ratio_outer)
+
+get_ddl_count()
+get_client_count()
+get_disk_rw()
+# get_cache_usage()
+get_cache_ratio() 
+
+# host server metric
+cpu_usage_outer = deque(maxlen=20)
+memory_usage_outer = deque(maxlen=20)
+disk_usage_outer = deque(maxlen=20)
+network_usage_outer = deque(maxlen=20)
+power_usage_outer = deque(maxlen=20)
+
+def get_instance_metric():
+  query = "select * from instance_node_monitoring order by desc limit 20;"
+  result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "node_metric", query)
+  # print(result)
+  for i in range(len(result[0])):
+    cpu_usage_inner = {}
+    cpu_usage_inner['timestamp'] = 0
+    cpu_usage_inner['storage_cpu_usage'] = result[0][i].get('cpu_usage')
+
+    memory_usage_inner = {}
+    memory_usage_inner['timestamp'] = 0
+    memory_usage_inner['storage_memory_usage'] = result[0][i].get('memory_usage')
+    
+    disk_usage_inner = {}
+    disk_usage_inner['timestamp'] = 0
+    disk_usage_inner['disk_usage'] = result[0][i].get('disk_usage')
+    
+    network_usage_inner = {}
+    network_usage_inner['timestamp'] = 0
+    network_rx_byte = result[0][i].get('network_rx_byte')
+    network_tx_byte = result[0][i].get('network_tx_byte')
+    if network_rx_byte is None or network_tx_byte is None:
+      pass
+    else:
+      network_usage_inner['storage_network_usage'] = result[0][i].get('network_rx_byte') + result[0][i].get('network_tx_byte')
+
+    power_usage_inner = {}
+    power_usage_inner['timestamp'] = 0
+    power_usage_inner['storage_power_usage'] = result[0][i].get('power_usage')
+
+    cpu_usage_outer.append(cpu_usage_inner)
+    memory_usage_outer.append(memory_usage_inner)
+    disk_usage_outer.append(disk_usage_inner)
+    network_usage_outer.append(network_usage_inner)
+    power_usage_outer.append(power_usage_inner)
+
+get_instance_metric()
+
+# print(cpu_usage_outer)
 
 # DB Monitoring - SSD
 @monitoring_ssd_bp.route('/')  
@@ -927,25 +1069,29 @@ def monitoring_ssd():
 @monitoring_ssd_bp.route('/get_queryChart', methods=['GET'])
 def get_queryChart():
     print("get ddl chart")
-    return jsonify(ddl_info)
+    # return jsonify(ddl_info)
+    return jsonify(list(ddl_count_outer))
 
 # 연결된 클라이언트 수 Get 요청
 @monitoring_ssd_bp.route('/get_ConnectedClient', methods=['GET'])
 def get_ConnectedClient():
     print("get client")
-    return jsonify(connected_client)
+    # return jsonify(connected_client)
+    return jsonify(list(client_count_outer))
 
 # Disk R/W Get 요청
 @monitoring_ssd_bp.route('/get_ReadWrite', methods=['GET'])
 def get_ReadWrite():
     # print("get R/W")
-    return jsonify(disk_rw_info)
+    # return jsonify(disk_rw_info)
+    return jsonify(list(disk_ratio_outer))
 
 # Cache Usage Get 요청
 @monitoring_ssd_bp.route('/get_CacheUsage', methods=['GET'])
 def get_CacheUsage():
     # print("get Cache Usage")
-    return jsonify(chache_usage_info)
+    # return jsonify(cache_usage_info)
+    return jsonify(list(cache_usage_outer))
 
 # Slow Query Get 요청
 @monitoring_ssd_bp.route('/get_SlowQuery', methods=['GET'])
@@ -956,27 +1102,32 @@ def get_SlowQuery():
 @monitoring_ssd_bp.route('/get_HostCSDcpu', methods=['GET'])
 def get_HostCSDcpu():
     print("get Host CPU")
-    return jsonify(cpu_usg_info)
+    # return jsonify(cpu_usg_info)
+    return jsonify(list(cpu_usage_outer))
 
 # Host Server Memory 사용량
 @monitoring_ssd_bp.route('/get_HostCSDMemory', methods=['GET'])
 def get_HostCSDMemory():
     # print("get Host CSD Memory")
-    return jsonify(memory_usg_info)
+    # return jsonify(memory_usg_info)
+    return jsonify(list(memory_usage_outer))
 
 # Host Server Network 사용량
 @monitoring_ssd_bp.route('/get_HostCSDNetwork', methods=['GET'])
 def get_HostCSDNetwork():
     # print("get Host CSD Network")
-    return jsonify(network_usage_info)
+    # return jsonify(network_usage_info)
+    return jsonify(list(network_usage_outer))
 
 # Host Server Power 사용량
 @monitoring_ssd_bp.route('/get_HostCSDPower', methods=['GET'])
 def get_HostCSDPower():
     # print("get Host CSD Power")
-    return jsonify(power_usg_info)
+    # return jsonify(power_usg_info)
+    return jsonify(list(power_usage_outer))
 
 # Host Server Disk I/O 사용량
 @monitoring_ssd_bp.route('/get_DiskUsage', methods=['GET'])
 def get_DiskUsage():
-    return jsonify(disk_usage)
+    # return jsonify(disk_usage)
+    return jsonify(list(disk_usage_outer))

@@ -1235,25 +1235,24 @@ from flask import Blueprint, jsonify, request, render_template
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from connectDB import influx, mysql, info
+from collections import deque 
 
 monitoring_bp = Blueprint('monitoring', __name__, url_prefix='/monitoring')
 
-@monitoring_bp.route('/')  
-def monitoring():
-  query_str = "select * from database_monitoring order by desc limit 20;"
-  result = influx.query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD, info.INSTANCE_METRIC_DB_NAME, query_str)
-  
-  print(result)
-  return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
+ddl_count_outer = [] 
+client_count_outer = [] 
+disk_ratio_outer = []
+cache_hit_ratio_outer = []
+cache_usage_ratio_outer = []
+scan_filter_ratio_outer = []
+disk_capacity_outer = {}
 
-# DDL Data Get 요청
-@monitoring_bp.route('/get_queryChart', methods=['GET'])
-def get_queryChart():
-  ddl_count_outer = []
-  query_str = "select select_count, insert_count, delete_count, update_count from database_monitoring order by desc limit 20;"
-  result = influx.query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD, info.INSTANCE_METRIC_DB_NAME, query_str)
+def get_csd_metric():
+  query = "select * from database_monitoring order by desc limit 20;"
+  result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, 'keti_db', query)
 
   for i in range(len(result[0])):
+    # ddl count
     ddl_count_inner = {} 
     ddl_count_inner["timestamp"] = 0
     ddl_count_inner["select_count"] = result[0][i].get('select_count')
@@ -1261,41 +1260,143 @@ def get_queryChart():
     ddl_count_inner["delete_count"] = result[0][i].get('delete_count')
     ddl_count_inner["update_count"] = result[0][i].get('update_count')
     ddl_count_outer.append(ddl_count_inner)
-  print(ddl_count_outer)
+  
+    # client count
+    client_count_inner = {} 
+    ddl_count_inner["timestamp"] = 0
+    ddl_count_inner["select_count"] = result[0][i].get('client_count')
+    client_count_outer.append(client_count_inner)
+    
+    # disk r/w ratio
+    disk_ratio_inner = {} 
+    disk_ratio_inner["timestamp"] = 0
+    disk_ratio_inner["select_count"] = result[0][i].get('disk_read_rate')
+    disk_ratio_inner["insert_count"] = result[0][i].get('disk_write_rate')
+    disk_ratio_outer.append(disk_ratio_inner)
+    
+    # cache hit ratio
+    cache_hit_ratio_inner = {} 
+    cache_hit_ratio_inner["timestamp"] = 0
+    cache_hit_ratio_inner["select_count"] = result[0][i].get('cache_hit_rate')
+    cache_hit_ratio_outer.append(cache_hit_ratio_inner)
+    
+    # cache usage
+    cache_usage_ratio_inner = {} 
+    cache_usage_ratio_inner["timestamp"] = 0
+    cache_usage_ratio_inner["select_count"] = result[0][i].get('cache_usage_rate')
+    cache_usage_ratio_outer.append(cache_usage_ratio_inner)
+    
+    # scan/filter 
+    scan_filter_ratio_inner = {} 
+    scan_filter_ratio_inner["timestamp"] = 0
+    scan_filter_ratio_inner["select_count"] = result[0][i].get('csd_scan_row_count')
+    scan_filter_ratio_inner["insert_count"] = result[0][i].get('csd_filter_row_count')
+    scan_filter_ratio_outer.append(scan_filter_ratio_inner)
 
+    # csd_result = influx.execute_query_influxdb(info.PLATFORM_METRIC_DB_HOST, info.PLATFORM_METRIC_DB_PORT, info.PLATFORM_METRIC_DB_USER, info.PLATFORM_METRIC_DB_PASSWORD, info.PLATFORM_METRIC_DB_NAME, query_str)
+    # print(csd_result)
+    # csd 1~8 metric monitoring
+
+    for i in range(1, 5):
+      disk_capacity_inner = {}
+      csd_num = str(i)
+      csd_query_str = "select disk_usage from csd" + csd_num + "_metric order by desc limit 1"
+      csd_result = influx.execute_query_influxdb(info.PLATFORM_METRIC_DB_HOST, info.PLATFORM_METRIC_DB_PORT, info.PLATFORM_METRIC_DB_USER, info.PLATFORM_METRIC_DB_PASSWORD, info.PLATFORM_METRIC_DB_NAME, csd_query_str)
+      disk_capacity_inner['csd_storage_capacity'] = csd_result[0][0].get('disk_usage')
+
+      csd_name = "csd" + csd_num
+      disk_capacity_outer[csd_name] = disk_capacity_inner
+
+
+cpu_usage_outer = deque(maxlen=20)
+memory_usage_outer = deque(maxlen=20)
+disk_usage_outer = deque(maxlen=20)
+network_usage_outer = deque(maxlen=20)
+power_usage_outer = deque(maxlen=20)
+
+def get_instance_metric():
+  query = "select * from instance_monitoring order by desc limit 20;"
+  result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "keti_db", query)
+  for i in range(len(result[0])):
+    cpu_usage_inner = {}
+    cpu_usage_inner['timestamp'] = 0
+    cpu_usage_inner['storage_cpu_usage'] = result[0][i].get('cpu_usage')
+
+    memory_usage_inner = {}
+    memory_usage_inner['timestamp'] = 0
+    memory_usage_inner['storage_memory_usage'] = result[0][i].get('memory_usage')
+    
+    disk_usage_inner = {}
+    disk_usage_inner['timestamp'] = 0
+    disk_usage_inner['disk_usage'] = result[0][i].get('disk_usage')
+    
+    network_usage_inner = {}
+    network_usage_inner['timestamp'] = 0
+    network_rx_byte = result[0][i].get('network_rx_usage')
+    network_tx_byte = result[0][i].get('network_tx_usage')
+    if network_rx_byte is None or network_tx_byte is None:
+      pass
+    else:
+      network_usage_inner['storage_network_usage'] = result[0][i].get('network_rx_usage') + result[0][i].get('network_tx_usage')
+
+    # power_usage_inner = {}
+    # power_usage_inner['timestamp'] = 0
+    # power_usage_inner['storage_power_usage'] = result[0][i].get('power_usage')
+
+    cpu_usage_outer.append(cpu_usage_inner)
+    memory_usage_outer.append(memory_usage_inner)
+    disk_usage_outer.append(disk_usage_inner)
+    network_usage_outer.append(network_usage_inner)
+    # power_usage_outer.append(power_usage_inner)
+
+get_instance_metric()
+# print(cpu_usage_outer)
+# print(disk_usage_outer)
+# print(network_usage_outer)
+# print(power_usage_outer)
+
+@monitoring_bp.route('/')  
+def monitoring():
+  return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
+
+# DDL Data Get 요청
+@monitoring_bp.route('/get_queryChart', methods=['GET'])
+def get_queryChart():
   return jsonify(ddl_count_outer)
 
 # 연결된 클라이언트 수 Get 요청
 @monitoring_bp.route('/get_ConnectedClient', methods=['GET'])
 def get_ConnectedClient():
-    # print("get client")
-    return jsonify(connected_client)
+    return jsonify(client_count_outer)
 
 # Disk R/W Get 요청
 @monitoring_bp.route('/get_ReadWrite', methods=['GET'])
 def get_ReadWrite():
     # print("get R/W")
-    return jsonify(disk_rw_info)
+    # return jsonify(disk_rw_info)
+    return jsonify(disk_ratio_outer)
 
 # Cache Hit Get 요청
 @monitoring_bp.route('/get_CacheHit', methods=['GET'])
 def get_CacheHit():
     # print("get Cache Hit")
-    return jsonify(chache_hit_info)
+    # return jsonify(chache_hit_info)
+    return jsonify(cache_hit_ratio_outer)
 
 # Cache Usage Get 요청
 @monitoring_bp.route('/get_CacheUsage', methods=['GET'])
 def get_CacheUsage():
     # print("get Cache Usage")
-    return jsonify(chache_usage_info)
+    # return jsonify(chache_usage_info)
+    return jsonify(cache_usage_ratio_outer)
 
 # DB Scan/Filter Get 요청
 @monitoring_bp.route('/get_ScanFilter', methods=['GET'])
 def get_ScanFilter():
     # print("get Scan Filter")
-    return jsonify(scan_filter_info)
+    return jsonify(scan_filter_ratio_outer)
 
-# Host Server Interface CPU 사용 값 Get 요청
+# Host Server Interface 사용 값 Get 요청
 @monitoring_bp.route('/get_hostServerCPU', methods=['GET'])
 def get_hostServerCPU():
     # print("get host server cpu")
@@ -1305,19 +1406,22 @@ def get_hostServerCPU():
 @monitoring_bp.route('/get_HostCSDcpu', methods=['GET'])
 def get_HostCSDcpu():
     # print("get Host CSD CPU")
-    return jsonify(cpu_usg_info)
+    # return jsonify(cpu_usg_info)
+    return jsonify(list(cpu_usage_outer))
 
 # Host Server Memory 사용량
 @monitoring_bp.route('/get_HostCSDMemory', methods=['GET'])
 def get_HostCSDMemory():
     # print("get Host CSD Memory")
-    return jsonify(memory_usg_info)
+    # return jsonify(memory_usg_info)
+    return jsonify(list(memory_usage_outer))
 
 # Host Server Network 사용량
 @monitoring_bp.route('/get_HostCSDNetwork', methods=['GET'])
 def get_HostCSDNetwork():
     # print("get Host CSD Network")
-    return jsonify(network_usage_info)
+    # return jsonify(network_usage_info)
+    return jsonify(list(network_usage_outer))
 
 # Host Server Power 사용량
 @monitoring_bp.route('/get_HostCSDPower', methods=['GET'])
@@ -1329,31 +1433,31 @@ def get_HostCSDPower():
 # CSD 사용중인 저장 용량
 @monitoring_bp.route('/get_CSDCapacity', methods=['GET'])
 def get_CSDCapacity():
-  disk_capacity_outer = {}
+  # disk_capacity_outer = {}
   
-  for i in range(1, 5):
-    disk_capacity_inner = {}
-    csd_num = str(i)
-    query_str = "select disk_usage from csd" + csd_num + "_metric order by time desc limit 1"
-    result = influx.query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.INFLUX_CSD_PORT, info.INFLUX_CSD_DB, query_str)
-    disk_capacity_inner['csd_storage_capacity'] = result[0][0].get('disk_usage')
+  # for i in range(1, 5):
+  #   disk_capacity_inner = {}
+  #   csd_num = str(i)
+  #   query_str = "select disk_usage from csd" + csd_num + "_metric order by time desc limit 1"
+  #   result = influx.execute_query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.INFLUX_CSD_PORT, info.INFLUX_CSD_DB, query_str)
+  #   disk_capacity_inner['csd_storage_capacity'] = result[0][0].get('disk_usage')
 
-    csd_name = "csd" + csd_num
-    disk_capacity_outer[csd_name] = disk_capacity_inner
-
+  #   csd_name = "csd" + csd_num
+  #   disk_capacity_outer[csd_name] = disk_capacity_inner
+  print(disk_capacity_outer)
   return jsonify(disk_capacity_outer)
 
   
 # 선택한 CSD의 메트릭 정보
 @monitoring_bp.route('/get_SelectedCSDMetric', methods=['GET', 'POST'])
 def get_SelectedCSDMetric():
-  if request.method == 'POST':
+  if request.method == 'POST': # 클릭 이벤트 발생 시, 해당 csd에 대한 메트릭 자세하게 출력 
       data = request.json
       csd_id = data['seletesCSD']
   
   csd_metric_outer = []
-  query_str = "select current_time, cpu_usage, memory_usage, network_bandwidth from " + csd_id + "_metric limit 20"
-  result = influx.query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.INFLUX_CSD_PORT, info.INFLUX_CSD_DB, query_str)
+  query_str = "select current_time, cpu_usage, memory_usage, network_bandwidth from " + csd_id + "_metric order by desc limit 20"
+  result = influx.execute_query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.INFLUX_CSD_PORT, info.INFLUX_CSD_DB, query_str)
 
   for i in range(len(result[0])):
     csd_metric_inner = {} 
