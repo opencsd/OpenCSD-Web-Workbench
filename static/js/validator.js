@@ -134,7 +134,7 @@ queryNumbers.forEach((number) => {
             dropdownToggle.textContent = dropdownItem.textContent;
 
             // 선택한 쿼리 서버로부터 GET
-            fetch('/validator/get_tpchQuery', {
+            fetch('/validator/tpch', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {

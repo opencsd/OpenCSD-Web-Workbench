@@ -398,9 +398,7 @@
                     <div id="resultContainer">
                       <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                     </div>
-                    <div id="loading" class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
-                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
-                    </div>
+                    <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
                   </div>
                 </div>
               </div>
@@ -438,9 +436,7 @@
                         </table>
                       </div>
                     </div>
-                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
-                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
-                    </div>  
+                    <div id="loading-metric" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
                   </div>       
                 </div>
               </div>
@@ -496,7 +492,7 @@
                       <h3 class="card-title col-3">Query Log</h3>
                     </div>
                     <div class="table-responsive">
-                      <table class="table table-vcenter text-nowrap datatable">
+                      <table id="queryLogtable" class="table table-vcenter text-nowrap table-hover datatable">
                         <thead>
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>

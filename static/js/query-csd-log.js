@@ -209,6 +209,18 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     // document.getElementById("queryTextarea").value = "";
 });
 
+// 쿼리 로그 행 클릭 시 해당 쿼리 정보 로딩
+// const LogTableClick = document.getElementById("queryLogtable")
+
+// LogTableClick.addEventListener('click', function(e) {
+//     const row = e.target.closest('tr');
+//     if (row) {
+//         const cells = row.getElementsByTagName('td');
+//         const query_id = cells[2].innerText;
+//         console.log(query_id);
+//     }
+// })
+
 //모달 내용 로딩
 function modalContentsLoad(b) {
     $(function () {
