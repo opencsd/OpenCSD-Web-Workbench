@@ -214,9 +214,6 @@
                         </div>
                       </div>
                       <span class="d-none d-sm-inline">
-                        <button class="btn" style="padding: 5px 15px;">template</button>
-                      </span>
-                      <span class="d-none d-sm-inline">
                         <a href="#" id="newQuery" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
@@ -401,9 +398,7 @@
                     <div id="resultContainer">
                       <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                     </div>
-                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
-                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
-                    </div>
+                    <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
                   </div>
                 </div>
               </div>
@@ -415,7 +410,7 @@
                     <h3 class="card-title">Query Metric</h3>
                     <div id="metricContainer">
                       <div class="table-responsive">
-                        <table class="table table-vcenter text-nowrap datatable">
+                        <table id="metrictable" class="table table-vcenter text-nowrap datatable">
                           <tbody class="text-center">
                             <tr>
                               <th scope="row" class="w-25">Scanned Row</th>
@@ -441,9 +436,7 @@
                         </table>
                       </div>
                     </div>
-                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
-                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
-                    </div>  
+                    <div id="loading-metric" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
                   </div>       
                 </div>
               </div>
@@ -499,7 +492,7 @@
                       <h3 class="card-title col-3">Query Log</h3>
                     </div>
                     <div class="table-responsive">
-                      <table class="table table-vcenter text-nowrap datatable">
+                      <table id="queryLogtable" class="table table-vcenter text-nowrap table-hover datatable">
                         <thead>
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>

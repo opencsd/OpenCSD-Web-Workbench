@@ -1,12 +1,13 @@
+// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
+var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
 let temp_id = 1;
 const queryHistory = [];
-const storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
 var totalContainerLog = [InterfaceContainerLog, MergingContainerLog, MonitoringContainerLog, offloadingContainerLog];
 var totalCSDLog = [csd1Log, csd2Log, csd3Log, csd4Log, csd5Log, csd6Log, csd7Log, csd8Log];
 let popover;
 
-console.log(storeduserInfo);
 
 document.getElementById("pushdownButton").addEventListener("click", function () {
     const queryText = document.getElementById("queryTextarea").value.trim();
@@ -92,7 +93,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         const queryType = queryText.slice(0, 10);
         var lowerCasequeryType = queryType.toLowerCase();
         if (lowerCasequeryType.includes("select")) {
-            console.log("select query type")
+            // console.log("select query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
         <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
@@ -100,7 +101,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         </svg>`
         }
         else if (lowerCasequeryType.includes("update")) {
-            console.log("update query type")
+            // console.log("update query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
@@ -108,7 +109,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
           </svg>`
         }
         else if (lowerCasequeryType.includes("insert")) {
-            console.log("insert query type")
+            // console.log("insert query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M12 8v8" />
@@ -116,7 +117,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
           </svg>`
         }
         else if (lowerCasequeryType.includes("delete")) {
-            console.log("delete query type")
+            // console.log("delete query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
@@ -124,7 +125,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
           </svg>`
         }
         else {
-            console.log("generic query type")
+            // console.log("generic query type")
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-g" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
@@ -207,6 +208,18 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
     // document.getElementById("queryTextarea").value = "";
 });
+
+// 쿼리 로그 행 클릭 시 해당 쿼리 정보 로딩
+// const LogTableClick = document.getElementById("queryLogtable")
+
+// LogTableClick.addEventListener('click', function(e) {
+//     const row = e.target.closest('tr');
+//     if (row) {
+//         const cells = row.getElementsByTagName('td');
+//         const query_id = cells[2].innerText;
+//         console.log(query_id);
+//     }
+// })
 
 //모달 내용 로딩
 function modalContentsLoad(b) {
