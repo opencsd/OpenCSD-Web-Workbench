@@ -98,7 +98,7 @@ def log_handler(action):
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
                 # memory -> power로 바꾸기!!
-                query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                query = "select cpu_usage, power_usage from instance_node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
                 query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
@@ -217,8 +217,7 @@ def run_handler():
                 end_time = query_result['end_time']
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
-                # memory -> power로 바꾸기!!
-                query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                query = "select cpu_usage, power_usage from instance_node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
                 query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
@@ -238,8 +237,7 @@ def run_handler():
 def metric_handler():
     if request.method == 'GET':
         try:
-            # memory -> power로 바꾸기!!
-            query = "select cpu_usage, memory_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            query = "select cpu_usage, power_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
             metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
@@ -254,8 +252,7 @@ def metric_handler():
             end_time = data['end_time']
 
             # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
-            # memory -> power로 바꾸기!!
-            query = "select cpu_usage, memory_usage from instance_node_monitoring \
+            query = "select cpu_usage, power_usage from instance_node_monitoring \
                     where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,

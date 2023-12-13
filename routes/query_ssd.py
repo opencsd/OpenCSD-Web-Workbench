@@ -27,7 +27,23 @@ def tpch_hadler():
         
     return jsonify(json_data)
 
-# DB 스키마 -> 구현 전
+# DB 환경정보 - 구현 전
+@query_ssd_bp.route('/environment', methods=['GET'])
+def environment_handler():
+    if request.method == 'GET':
+        try:
+            result = {
+                "db_name" : "tpch",
+                "dbms_type" : "MySQL",
+                "db_size" : "2.0",
+                "storage_type" : "SSD"
+            }
+
+            return jsonify(result)
+        except:
+            return ""
+
+# DB 스키마
 @query_ssd_bp.route('/schema', methods=['GET'])
 def schema_handler():
     if request.method == 'GET':
@@ -65,11 +81,11 @@ def run_handler():
 
             query_result = mysql.execute_query_mysql_get_string_result(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
                                                                     info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
-                                                                    info.MYSQL_DB_NAME, data['query'])
+                                                                    info.MYSQL_DB_NAME, data['query'])      
                         
             end_time = datetime.now()
 
-            query = "select cpu_usage, memory_usage from instance_node_monitoring \
+            query = "select cpu_usage, power_usage from instance_node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
@@ -79,6 +95,8 @@ def run_handler():
         
             result = {"result":query_result.get_string(), "query_metric":query_metric[0], "execution_time":str(execution_time)}
 
+            print(result)
+            
             return jsonify(result)
         except:
             return ""
@@ -89,7 +107,7 @@ def metric_handler():
     if request.method == 'GET':
         try:
             # memory -> power로 바꾸기!!
-            query = "select cpu_usage, memory_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            query = "select cpu_usage, power_usage from instance_node_monitoring order by time limit 10 tz('Asia/Seoul')"
             metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)

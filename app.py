@@ -1493,7 +1493,7 @@ def monitoring_ssd():
 def query():
     return render_template('query-csd.html')
 
-@app.route('/query_ssd') # Query Pushdown 화면으로 전환
+@app.route('/query-ssd') # Query Pushdown 화면으로 전환
 def query_ssd():
     return render_template('query-ssd.html')
 
