@@ -151,7 +151,14 @@ function addNewQueryLog(){
 
         queryLogTableBody.appendChild(newRow);
 
+        // 쿼리 상세 버튼 클릭 시 동작
         dummyButton.addEventListener('click', function () {
+            var queryRow = this.parentNode.parentNode;
+            var getScan = queryRow.cells[4].querySelectorAll('div');
+            var scannedRows = getScan[2].outerText;
+            var getFilter = queryRow.cells[5].querySelectorAll('div');
+            var filteredRows = getFilter[2].outerText;
+            console.log(scannedRows, filteredRows)
             if (popover) {
                 popover.dispose(); // 기존 팝업 제거
             }
@@ -184,8 +191,16 @@ function addNewQueryLog(){
                     DetailButton.style.width = '80px';
                     DetailButton.textContent = 'DETAIL';
                     DetailButton.addEventListener('click', function () {
+                        // 스니펫 테이블
                         queryLogDetailLoad(dummyButton.id);
+                        
+                        // 스캔 필터 비율 차트
+                        var dataArray = [scannedRows, filteredRows];
+                        ScanFilterChartOption.series[0].data = dataArray;
+                        var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
+                        ScanFilterChart.render();
                         popover.hide()
+
                     });
         
                     popoverContent.appendChild(LogButton);
@@ -202,16 +217,60 @@ function addNewQueryLog(){
 }
 
 // 쿼리 로그 행 클릭 시 해당 쿼리 정보 로딩
-// const LogTableClick = document.getElementById("queryLogtable")
+const LogTableClick = document.getElementById("queryLogtable")
 
-// LogTableClick.addEventListener('click', function(e) {
-//     const row = e.target.closest('tr');
-//     if (row) {
-//         const cells = row.getElementsByTagName('td');
-//         const query_id = cells[2].innerText;
-//         console.log(query_id);
-//     }
-// })
+LogTableClick.addEventListener('click', function(e) {
+    const metrictable1 = document.querySelector('td.qtable_1');
+    const metrictable2 = document.querySelector('td.qtable_2');
+    const metrictable3 = document.querySelector('td.qtable_3');
+    const metrictable4 = document.querySelector('td.qtable_4');
+    const metrictable5 = document.querySelector('td.qtable_5');
+
+    const row = e.target.closest('tr');
+    if (row) {
+        const cells = row.getElementsByTagName('td');
+        const query_id = cells[2].innerText;
+        hostServerCPUChartData = [];
+        hostServerPowerChartData = [];
+        fetch('/query/log/get-one', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            body: JSON.stringify({query_id: query_id})
+        })
+        .then(response => response.json())
+        .then(data => {
+            metrictable1.textContent = data.query_log[0].scanned_row_count + " (line)";
+            metrictable2.textContent = data.query_log[0].filtered_row_count + " (line)";
+            
+            let f_ratio = (data.query_log[0].filtered_row_count / data.query_log[0].scanned_row_count) * 100;
+            filter_ratio = f_ratio.toFixed(2);
+            metrictable3.textContent = filter_ratio + " (%)";
+
+            let queryStart = new Date(data.query_log[0].start_time);
+            let queryEnd = new Date(data.query_log[0].end_time);
+            let queryTime = queryEnd - queryStart;
+            ExecutionTime = queryTime / 1000;
+            metrictable4.textContent = ExecutionTime + " (sec)";
+            metrictable5.textContent = data.query_log[0].snippet_count;
+
+            document.getElementById("queryResult").value = data.query_log[0].query_result;
+
+            data.query_metric[0].forEach(item => {
+                hostServerCPUChartData.push(item.cpu_usage);
+                hostServerPowerChartData.push(item.memory_usage);
+                timestamps.push(item.time);
+            })
+            updateQueryChart();
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        })
+    }
+})
 
 //모달 내용 로딩
 function modalContentsLoad(b) {
@@ -427,12 +486,6 @@ function queryLogDetailLoad(query_id) {
         });
     });
 
-    // 스캔 필터 비율 차트
-    var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
-    get_scanfilterInfo(query_id);
-    ScanFilterChart.render();
 
-}
-function get_scanfilterInfo(query_id){
-    
+
 }

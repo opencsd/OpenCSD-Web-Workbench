@@ -204,7 +204,7 @@ var ScanFilterChartOption = {
     },
     series: [{
         name: "Rows",
-        data: [2112, 800],
+        data: [],
     }],
     tooltip: {
         theme: 'dark'
