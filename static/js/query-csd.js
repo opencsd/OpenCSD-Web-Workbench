@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     hostServerPowerChart.render();
 
     viewUserID();
-    updateLatestChart();
     startInterval();
     getEnvironmentInfo();
 });
@@ -116,92 +115,18 @@ function getQueryLogAll() {
     })
 }
 
-function getLatestChartData(){
-    //최신 차트 값을 가져오는 로직 (현재는 임시, 웹서버 요청 보내기)
-    if(temp){
-        hostServerCPUChartData = [1,1,1,1,1,1,1,1,1,1];//초기값 임시 저장
-        hostServerPowerChartData = [74,74,74,74,74,74,74,74,74,74];
-        hostServerCPUChartCategories = ['16:58:03', '16:58:06', '16:58:09', '16:58:12', '16:58:15', '16:58:18', '16:58:21', '16:58:24', '16:58:27', '16:58:30'];
-        hostServerPowerChartCategories = ['16:58:03', '16:58:06', '16:58:09', '16:58:12', '16:58:15', '16:58:18', '16:58:21', '16:58:24', '16:58:27', '16:58:30'];
-        
-        hostServerCPUChartOption.series[0].data = hostServerCPUChartData;
-        hostServerPowerChartOption.series[0].data = hostServerPowerChartData;
-    
-        hostServerCPUChartOption.xaxis.categories = hostServerCPUChartCategories;
-        hostServerPowerChartOption.xaxis.categories = hostServerPowerChartCategories;
-
-        temp = false;
-    }else{
-        hostServerCPUChartData = hostServerCPUChart.w.globals.series[0];
-        hostServerCPUChartCategories = hostServerCPUChart.w.globals.categoryLabels; 
-
-        hostServerPowerChartData = hostServerPowerChart.w.globals.series[0];
-        hostServerPowerChartCategories = hostServerPowerChart.w.globals.categoryLabels;
-
-        hostServerCPUChartData.push(tempCPUUpdate[tempNum]);
-        hostServerCPUChartData.shift();
-
-        hostServerPowerChartData.push(tempPowerUpdate[tempNum]);
-        hostServerPowerChartData.shift();
-
-        if(clicked){
-            tempNum++;
-        }
-
-        lastTime = hostServerCPUChartCategories[9];
-        timeParts = lastTime.split(':');
-        hours = parseInt(timeParts[0], 10);
-        minutes = parseInt(timeParts[1], 10);
-        seconds = parseInt(timeParts[2], 10);
-        seconds += 3;
-        if (seconds >= 60) {
-            seconds -= 60;
-            minutes++;
-            if (minutes >= 60) {
-                minutes -= 60;
-                hours++;
-            }
-        }
-        updatedTime = hours.toString().padStart(2, '0') + ':' +
-                        minutes.toString().padStart(2, '0') + ':' +
-                        seconds.toString().padStart(2, '0');
-        hostServerCPUChartCategories.push(updatedTime);
-        hostServerCPUChartCategories.shift();
-
-        lastTime = hostServerPowerChartCategories[9];
-        timeParts = lastTime.split(':');
-        hours = parseInt(timeParts[0], 10);
-        minutes = parseInt(timeParts[1], 10);
-        seconds = parseInt(timeParts[2], 10);
-        seconds += 3;
-        if (seconds >= 60) {
-            seconds -= 60;
-            minutes++;
-            if (minutes >= 60) {
-                minutes -= 60;
-                hours++;
-            }
-        }
-        updatedTime = hours.toString().padStart(2, '0') + ':' +
-                        minutes.toString().padStart(2, '0') + ':' +
-                        seconds.toString().padStart(2, '0');
-        hostServerPowerChartCategories.push(updatedTime);
-        hostServerPowerChartCategories.shift();
-    }
-}
-
-function getQueryChartData(){
-    //쿼리가 도는 동안의 차트값만 가져오는 로직 현재는 임시 (웹서버 연동 필요)
-    hostServerCPUChartData = [1,3.5,6.2,6.3,4.5];
-    hostServerPowerChartData = [74,100,115,120,115];
-    hostServerCPUChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
-    hostServerPowerChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
-    timestamps = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
-}
-
 function updateLatestChart(){
     //그래프 실시간 업데이트 하는 함수
-    getLatestChartData();
+    let timestamp = [];
+    let cpu_usage = [];
+    let memory_usage = [];
+    fetch('/query/metric')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(item => {
+                
+            })
+        })
 
     hostServerCPUChart.updateOptions({
         series: [{
@@ -226,12 +151,8 @@ function updateLatestChart(){
     });
 }
 
+//쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
 function updateQueryChart(){
-    //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
-    // console.log(timestamps)
-    // console.log(hostServerCPUChartData)
-    // console.log(hostServerPowerChartData)
-
     hostServerCPUChart.updateOptions({
         series: [{
             name: "cpu",
