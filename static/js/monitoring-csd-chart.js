@@ -4,6 +4,7 @@ var queryChart, ConnectedClientChart, DBRWRateChart, DBCacheHitRateChart, DBCach
 var hostServerCPUChart, HostCSDCPUChart, HostCSDMemoryChart, HostCSDNetworkChart, HostCSDPowerChart, CSDCapacityChart, SelectedCSDcpuChart, SelectedCSDmemoryChart, SelectedCSDnetworkChart, SelectedCSDpowerChart
 
 document.addEventListener("DOMContentLoaded", function(){
+  viewUserID();
   // DataBase Monitoring 차트 정의
   queryChart = Highcharts.chart(document.getElementById("mainDBMonitoring"), queryChartOption);
   ConnectedClientChart = Highcharts.chart(document.getElementById("ConnectedClientChart"), ConnectedClientOption);

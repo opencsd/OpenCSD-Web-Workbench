@@ -1,11 +1,14 @@
-document.addEventListener("DOMContentLoaded", function () {  
-    //웹서버 로그 요청 전송 (최초)
-    // if(true/*response OK*/){
-    //     addValidatorLog({}/*response*/);
-    // }
+// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
+var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
-    // tablePagenation();//table pagenation 함수 실행
-    // $('#validatorLogTableBody').data();
+// 유저 아이디 
+function viewUserID(){
+    const user_id = document.getElementById("user_info");
+    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+}
+document.addEventListener("DOMContentLoaded", function () { 
+    viewUserID();
+
     window.ApexCharts &&
         new ApexCharts(document.getElementById("validationCompareChart1"), validationCompareChart1Option).render();
     window.ApexCharts &&

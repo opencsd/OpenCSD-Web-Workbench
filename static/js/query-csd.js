@@ -14,6 +14,14 @@ let tempNum = 0;
 let temp = true;
 //------------
 
+// /query/run 으로 받은 쿼리 결과 데이터
+let scanned_row_count;
+let filtered_row_count;
+let filter_ratio;
+let ExecutionTime;
+let executionQueryID;
+//------------
+
 // console.log(storeduserInfo)
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -23,10 +31,17 @@ document.addEventListener("DOMContentLoaded", function () {
     hostServerCPUChart.render();
     hostServerPowerChart.render();
 
+    viewUserID();
     updateLatestChart();
     startInterval();
     getEnvironmentInfo();
 });
+
+// 유저 아이디 
+function viewUserID(){
+    const user_id = document.getElementById("user_info");
+    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+}
 
 // 쿼리 환경 정보 가져오기
 function getEnvironmentInfo() {
@@ -50,10 +65,10 @@ function getEnvironmentInfo() {
             blockCountArea.textContent = data.block_count;
             AgorithmArea.textContent = data.scheduling_algorithm.toUpperCase();
             if (data.using_index == 0) {
-                indexArea.textContent = "Use";
+                indexArea.textContent = "Not Use";
             }
             else {
-                indexArea.textContent = "Not Use";
+                indexArea.textContent = "Use";
             }
             
         })
@@ -61,6 +76,7 @@ function getEnvironmentInfo() {
             console.error('Fetch 오류: ', error);
         });
 }
+
 
 // 쿼리 로그 불러오기
 function getQueryLogAll() {
@@ -76,7 +92,7 @@ function getQueryLogAll() {
         redirect: 'follow',
         body: JSON.stringify({
             "user_id": user_id,
-            "query_type": select
+            "query_type": query_type
         })
     })
     .then(response => response.json())
@@ -180,6 +196,7 @@ function getQueryChartData(){
     hostServerPowerChartData = [74,100,115,120,115];
     hostServerCPUChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
     hostServerPowerChartCategories = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
+    timestamps = ['16:58:45','16:58:48','16:58:51','16:58:54','16:58:57'];
 }
 
 function updateLatestChart(){
@@ -211,6 +228,9 @@ function updateLatestChart(){
 
 function updateQueryChart(){
     //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
+    // console.log(timestamps)
+    // console.log(hostServerCPUChartData)
+    // console.log(hostServerPowerChartData)
 
     hostServerCPUChart.updateOptions({
         series: [{
@@ -219,7 +239,7 @@ function updateQueryChart(){
             }
         ],
         xaxis: {
-            categories: hostServerCPUChartCategories
+            categories: timestamps
         }
     });
 
@@ -230,7 +250,7 @@ function updateQueryChart(){
         }
         ],
         xaxis: {
-        categories: hostServerPowerChartCategories
+        categories: timestamps
         }
     });
 }
@@ -355,6 +375,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     hostServerCPUChartData = [];
     hostServerPowerChartData = [];
     timestamps = [];
+    var count = 0;
 
     fetch('/query/run', {
         method: 'POST',
@@ -375,15 +396,18 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
     .then(data => {
         metrictable1.textContent = data.query_result.scanned_row_count + " (line)";
         metrictable2.textContent = data.query_result.filtered_row_count + " (line)";
+        scanned_row_count = data.query_result.scanned_row_count;
+        filtered_row_count = data.query_result.filtered_row_count;
+        executionQueryID = data.query_result.query_id;
 
         let f_ratio = (data.query_result.filtered_row_count / data.query_result.scanned_row_count) * 100;
-        let filter_ratio = f_ratio.toFixed(2);
+        filter_ratio = f_ratio.toFixed(2);
         metrictable3.textContent = filter_ratio + " (%)";
 
         let queryStart = new Date(data.query_result.start_time);
         let queryEnd = new Date(data.query_result.end_time);
         let queryTime = queryEnd - queryStart;
-        let ExecutionTime = queryTime / 1000;
+        ExecutionTime = queryTime / 1000;
         metrictable4.textContent = ExecutionTime + " (sec)";
         metrictable5.textContent = data.query_result.snippet_count;
 
@@ -393,8 +417,10 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             hostServerCPUChartData.push(item.cpu_usage);
             hostServerPowerChartData.push(item.memory_usage);
             timestamps.push(item.time);
+            count++;
         })
         updateQueryChart();
+        addNewQueryLog();
     })
     .catch(error => {
         console.error('Fetch 오류: ', error);
