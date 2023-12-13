@@ -124,31 +124,34 @@ function updateLatestChart(){
         .then(response => response.json())
         .then(data => {
             data.forEach(item => {
-                
-            })
+                timestamp.push(item.time);
+                cpu_usage.push(item.cpu_usage);
+                memory_usage.push(item.memory_usage);
+            });
+            hostServerCPUChart.updateOptions({
+                series: [{
+                    name: "cpu",
+                    data: cpu_usage
+                    }
+                ],
+                xaxis: {
+                    categories: timestamp
+                }
+            });
+        
+            hostServerPowerChart.updateOptions({
+                series: [{
+                    name: "power",
+                    data: memory_usage
+                }
+                ],
+                xaxis: {
+                categories: timestamp
+                }
+            });
         })
 
-    hostServerCPUChart.updateOptions({
-        series: [{
-            name: "cpu",
-            data: hostServerCPUChartData
-            }
-        ],
-        xaxis: {
-            categories: hostServerCPUChartCategories
-        }
-    });
-
-    hostServerPowerChart.updateOptions({
-        series: [{
-            name: "power",
-            data: hostServerPowerChartData
-        }
-        ],
-        xaxis: {
-        categories: hostServerPowerChartCategories
-        }
-    });
+    
 }
 
 //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
