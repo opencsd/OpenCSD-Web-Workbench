@@ -73,7 +73,7 @@ var hostServerCPUChartOption = {
         },
         tickAmount: 10,
         forceNiceScale: true,
-        min: 0,
+        // min: 0,
         // max: 100,
         labels: {
             formatter: function(val) {
@@ -161,6 +161,8 @@ var hostServerPowerChartOption = {
         },
         tickAmount: 10,
         forceNiceScale: true,
+        // min: 0,
+        // max: 200
         min: 80000000000,
         max: 120000000000
     },
