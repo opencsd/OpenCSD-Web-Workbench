@@ -2,6 +2,14 @@ const dbInfoSlideBtn = document.getElementById('dbInfoSlideBtn');
 const dbInfoSlideUpIcon = document.getElementById('dbInfoSlideUpIcon');
 const dbInfoSlideDownIcon = document.getElementById('dbInfoSlideDownIcon');
 let isDBInfoSlideBtnClicked = true;
+// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
+var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
+// 유저 아이디 
+function viewUserID(){
+    const user_id = document.getElementById("user_info");
+    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+}
 
 dbInfoSlideBtn.addEventListener('click', () => {
     const hiddenDBInfo = document.getElementById('hiddenDBInfo');

@@ -1,19 +1,17 @@
 // 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
 var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
-let temp_id = 1;
 const queryHistory = [];
 
 var totalContainerLog = [InterfaceContainerLog, MergingContainerLog, MonitoringContainerLog, offloadingContainerLog];
 var totalCSDLog = [csd1Log, csd2Log, csd3Log, csd4Log, csd5Log, csd6Log, csd7Log, csd8Log];
 let popover;
+// const dummyButton = document.createElement("td");
 
-
-document.getElementById("pushdownButton").addEventListener("click", function () {
+function addNewQueryLog(){
     const queryText = document.getElementById("queryTextarea").value.trim();
 
     const queryLogTableBody = document.getElementById("queryLogTableBody");
-
     if (queryText) {
         const shortenedQuery = queryText.length > 40 ? queryText.slice(0, 40) + "..." : queryText;
         queryHistory.push(shortenedQuery);
@@ -42,17 +40,17 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             let label;
 
             if (i == 0) {
-                value = 2112;
-                max = 6000;
+                value = scanned_row_count;
+                max = value + 100000;
             } else if (i == 1) {
-                value = 800;
-                max = 4000;
+                value = filtered_row_count;
+                max = value + 100000;
             } else if (i == 2) {
-                value = 96;
-                max = 200;
-            } else {
-                value = 13;
+                value = filter_ratio;
                 max = 100;
+            } else {
+                value = ExecutionTime;
+                max = value + 20;
             }
 
             label = value;
@@ -70,6 +68,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             `;
             progressBarCells.push(progressBarCell);
         }
+        // progressBarCells.id = "logDetail"+executionQueryID;
 
         const dummyButton = document.createElement("td");
         dummyButton.innerHTML = `
@@ -83,8 +82,8 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
             $('[data-bs-toggle="popover"]').popover();
         });
 
-        //각 옵션 버튼마다 id 부여 => 추후에 해당 데이터로 DB에 데이터 요청
-        dummyButton.id = "queryLogOption" + temp_id;
+        // 각 옵션 버튼마다 id 부여
+        dummyButton.id = executionQueryID;
 
         checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="1">`;
         newRow.appendChild(checkboxCell);
@@ -135,8 +134,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
         newRow.appendChild(typeCell);
 
-        queryIDCell.textContent = temp_id;
-        temp_id++;
+        queryIDCell.textContent = executionQueryID;
         queryIDCell.style.textAlign = "center";
         newRow.appendChild(queryIDCell);
 
@@ -153,9 +151,6 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
         queryLogTableBody.appendChild(newRow);
 
-        // 쿼리 로그 클릭 이벤트 발생 시 모달 로드 
-        // dummyButton.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButton.id)});
-
         dummyButton.addEventListener('click', function () {
             if (popover) {
                 popover.dispose(); // 기존 팝업 제거
@@ -169,7 +164,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                     const popoverContent = document.createElement('div');
                     popoverContent.classList.add('text-center');
                     popoverContent.style.maxWidth = '200px';
-
+        
                     const LogButton = document.createElement('button');
                     LogButton.setAttribute('type', 'button');
                     LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
@@ -181,7 +176,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                         modalContentsLoad(dummyButton.id);
                         popover.hide();
                     });
-
+        
                     const DetailButton = document.createElement('button');
                     DetailButton.setAttribute('type', 'button');
                     DetailButton.classList.add('btn', 'btn-azure', 'd-block');
@@ -192,22 +187,19 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
                         queryLogDetailLoad(dummyButton.id);
                         popover.hide()
                     });
-
+        
                     popoverContent.appendChild(LogButton);
                     popoverContent.appendChild(DetailButton);
-
+        
                     return popoverContent;
                 }
             });
             popover.show();
         });
-
     } else {
         queryLogTableBody.textContent = "No query available.";
     }
-
-    // document.getElementById("queryTextarea").value = "";
-});
+}
 
 // 쿼리 로그 행 클릭 시 해당 쿼리 정보 로딩
 // const LogTableClick = document.getElementById("queryLogtable")
@@ -322,11 +314,19 @@ $('a[data-toggle="tab"]').click(function (e) {
 // 쿼리 로그 디테일 모달
 function queryLogDetailLoad(query_id) {
     const queryDetailTableBody = document.getElementById("logDetailTableBody");
-
-
-
+    const post_data = {
+        query_id: query_id
+    }
     // 웹 서버와 연결해서 db로부터 값 받아서 테이블 채우기
-    fetch('/query/snippet')
+    fetch('/query/desc/snippet', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify(post_data)
+    })
         .then(response => response.json())
         .then(data => {
 
@@ -338,7 +338,7 @@ function queryLogDetailLoad(query_id) {
                 WIDCell.style.width = "10%";
                 WIDCell.style.textAlign = "center";
                 const TypeCell = document.createElement("td");
-                TypeCell.style.width = "15%";
+                TypeCell.style.width = "20%";
                 TypeCell.style.textAlign = "center";
                 const ProjectionCell = document.createElement("td");
                 ProjectionCell.style.width = "10%";
@@ -357,12 +357,52 @@ function queryLogDetailLoad(query_id) {
                 LimitCell.style.textAlign = "center";
 
                 WIDCell.textContent = item.work_id;
-                TypeCell.textContent = item.type;
-                ProjectionCell.textContent = item.projection;
-                FilterCell.textContent = item.filter;
-                OrderCell.textContent = item.order_by;
-                GroupCell.textContent = item.group_by;
-                LimitCell.textContent = item.limit;
+                TypeCell.textContent = item.snippet_type;
+                switch(item.snippet_type) {
+                    case 0:
+                        TypeCell.textContent = "CSD_SCAN_SNIPPET";
+                        break;
+                    case 1:
+                        TypeCell.textContent = "AGGREGATION_SNIPPET";
+                        break;
+                    case 2:
+                        TypeCell.textContent = "STORAGE_FILTER_SNIPPET";
+                        break;
+                    case 3:
+                        TypeCell.textContent = "INNER_JOIN_SNIPPET";
+                        break;
+                    case 4:
+                        TypeCell.textContent = "LEFT_OUTER_JOIN_SNIPPET";
+                        break;
+                    case 5:
+                        TypeCell.textContent = "RIGHT_OUTER_JOIN_SNIPPET";
+                        break;
+                    case 6:
+                        TypeCell.textContent = "CROSS_JOIN_SNIPPET";
+                        break;
+                    case 7:
+                        TypeCell.textContent = "UNION_SNIPPET";
+                        break;
+                    case 8:
+                        TypeCell.textContent = "IN_SNIPPET";
+                        break;
+                    case 9:
+                        TypeCell.textContent = "DEPENDENCY_INNER_JOIN_SNIPPET";
+                        break;
+                    case 10:
+                        TypeCell.textContent = "DEPENDENCY_EXIST_SNIPPET";
+                        break;
+                    case 11:
+                        TypeCell.textContent = "DEPENDENCY_IN_SNIPPET";
+                        break;
+                    default:
+                        TypeCell.textContent = "ERROR";
+                }
+                ProjectionCell.textContent = item.projection_count;
+                FilterCell.textContent = item.filter_count;
+                OrderCell.textContent = item.order_by_count;
+                GroupCell.textContent = item.group_by_count;
+                LimitCell.textContent = item.limit_exist;
 
                 SnippetRow.appendChild(WIDCell);
                 SnippetRow.appendChild(TypeCell);
@@ -388,78 +428,11 @@ function queryLogDetailLoad(query_id) {
     });
 
     // 스캔 필터 비율 차트
-    var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), options);
+    var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
     get_scanfilterInfo(query_id);
     ScanFilterChart.render();
 
 }
-
-function get_scanfilterInfo(query_id) {
+function get_scanfilterInfo(query_id){
     
 }
-
-var options = {
-    chart: {
-        type: "bar",
-        fontFamily: 'inherit',
-        height: 240,
-        parentHeightOffset: 0,
-        toolbar: {
-            show: false,
-        },
-        animations: {
-            enabled: false
-        },
-    },
-    plotOptions: {
-        bar: {
-            barHeight: '50%',
-             horizontal: true,
-        }
-    },
-    dataLabels: {
-        enabled: false,
-    },
-    fill: {
-        opacity: 1,
-    },
-    series: [{
-        name: "Rows",
-        data: [2112, 800],
-    }],
-    tooltip: {
-        theme: 'dark'
-    },
-    grid: {
-        padding: {
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0
-        },
-        strokeDashArray: 4,
-    },
-    xaxis: {
-        labels: {
-            padding: 0,
-        },
-        tooltip: {
-            enabled: false
-        },
-        axisBorder: {
-            show: false,
-        },
-    },
-    yaxis: {
-        labels: {
-            padding: 4
-        },
-    },
-    labels: [
-        'Scaned Rows', 'Filtered Rows'
-    ],
-    colors: [tabler.getColor("primary")],
-    legend: {
-        show: false,
-    },
-};
