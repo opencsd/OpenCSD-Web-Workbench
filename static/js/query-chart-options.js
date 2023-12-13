@@ -163,6 +163,8 @@ var hostServerPowerChartOption = {
         forceNiceScale: true,
         // min: 0,
         // max: 200
+        min: 80000000000,
+        max: 120000000000
     },
     legend: {
         show: false
@@ -175,6 +177,73 @@ var hostServerPowerChartOption = {
     //     enabled: true,
     // },
 }
+
+
+var ScanFilterChartOption = {
+    chart: {
+        type: "bar",
+        fontFamily: 'inherit',
+        height: 240,
+        parentHeightOffset: 0,
+        toolbar: {
+            show: false,
+        },
+        animations: {
+            enabled: false
+        },
+    },
+    plotOptions: {
+        bar: {
+            barHeight: '50%',
+             horizontal: true,
+        }
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    fill: {
+        opacity: 1,
+    },
+    series: [{
+        name: "Rows",
+        data: [],
+    }],
+    tooltip: {
+        theme: 'dark'
+    },
+    grid: {
+        padding: {
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+        },
+        strokeDashArray: 4,
+    },
+    xaxis: {
+        labels: {
+            padding: 0,
+        },
+        tooltip: {
+            enabled: false
+        },
+        axisBorder: {
+            show: false,
+        },
+    },
+    yaxis: {
+        labels: {
+            padding: 4
+        },
+    },
+    labels: [
+        'Scaned Rows', 'Filtered Rows'
+    ],
+    colors: [tabler.getColor("primary")],
+    legend: {
+        show: false,
+    },
+};
 
 var validationCompareChart1Option = {
     chart: {

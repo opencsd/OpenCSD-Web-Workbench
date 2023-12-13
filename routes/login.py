@@ -15,7 +15,7 @@ def login():
         workbench_user_id = data['workbench_user_id']
         db_instance_name = data['db_instance_name']
         print(data)
-        if workbench_user_id == "keti_opencsd":
+        if workbench_user_id == "admin-123":
             print("Login to CSD")
             return jsonify({'loginto': 'csd'})
         elif workbench_user_id == "keti_mysql":
