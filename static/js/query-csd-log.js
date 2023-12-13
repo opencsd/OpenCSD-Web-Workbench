@@ -434,5 +434,5 @@ function queryLogDetailLoad(query_id) {
 
 }
 function get_scanfilterInfo(query_id){
-
+    
 }
