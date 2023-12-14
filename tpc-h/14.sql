@@ -6,8 +6,8 @@ select
         end
     ) / sum(l_extendedprice * (1 - l_discount)) as promo_revenue
 from
-    LINEITEM,
-    PART
+    lineitem,
+    part
 where
     l_partkey = p_partkey
     and l_shipdate >= date '1996-12-01'

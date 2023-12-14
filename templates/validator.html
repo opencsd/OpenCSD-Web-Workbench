@@ -225,7 +225,7 @@
                     </div>
                     <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
                     <div class="d-flex justify-content-center">
-                      <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+                      <button id="runButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                     </div>
                   </div>
                 </div>
@@ -311,12 +311,13 @@
                 <div class="card-body row">
                   <div class="col-lg-12">
                     <div class="row">
-                      <h3 class="card-title">Query Log</h3>
-                      <div class="col-9 text-end">
-                        <!-- add -->
+                      <h3 class="card-title col-9">Query Log</h3>
+                      <div class="col-3 text-end">
+                        <p class="m-0 text-secondary"></p>
+                        <button type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
                       </div>
                     </div>
-                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                       <table id="validatorLogTable" class="table table-vcenter text-nowrap datatable" style="width: 100%;">
                         <thead>
                           <tr style="text-align: center;">
@@ -345,38 +346,6 @@
                     <div class="modal fade" id="metricModal" tabindex="-1" role="dialog" aria-hidden="true">
                       {% include 'validator-metricModal.html' %}
                     </div>
-
-                    <div class="card-footer d-flex align-items-center">
-                      <p class="m-0 text-secondary"></p>
-                      <button type="button" class="btn btn-danger" >Delete</button>
-                      <!-- <ul class="pagination m-0 ms-auto">
-                        <li class="page-item disabled" id="validatorLogPrevBtn">
-                          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M15 6l-6 6l6 6" />
-                            </svg>
-                            prev
-                          </a>
-                        </li>
-                        <li class="page-item active">
-                          <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item" id="validatorLogNextBtn">
-                          <a class="page-link" href="#">
-                            next
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M9 6l6 6l-6 6" />
-                            </svg>
-                          </a>
-                        </li>
-                      </ul> -->
-                    </div>
                   </div>
                 </div>
               </div>
@@ -389,13 +358,16 @@
                 <div class="card-body row">
                   <div class="col-lg-12">
                     <div class="row">
-                      <h3 class="card-title col-10">Selected Validation Query Metric Info</h3>
-                      <div class="dropdown col-2">
-                        <a href="#" id="validationMetricDropdownBtn" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; margin-left: 58%;">CPU</a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" id="validationCPUChartBtn">CPU</a>
-                          <a class="dropdown-item" id="validationPowerChartBtn">Power</a>
-                          <a class="dropdown-item" id="validationNetworkChartBtn">Network</a>
+                      <h3 class="card-title col-9">Selected Validation Query Metric Info</h3>
+                      <div class="col-3">
+                        <div class="dropdown" align="right">
+                          <a href="#" id="detailMetricDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">CPU</a>
+                          <div id="detailMetric" class="dropdown-menu">
+                            <a class="dropdown-item detailMetricDropdownItem">CPU</a>
+                            <a class="dropdown-item detailMetricDropdownItem">Power</a>
+                            <a class="dropdown-item detailMetricDropdownItem">Network</a>
+                            <a class="dropdown-item detailMetricDropdownItem">Time</a>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -404,25 +376,20 @@
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div class="row" style="padding-top: 5px;">
                             <div style="margin: 5px 15px 15px;">Metric Compare</div>
-                            <div id="validationCompareChart1" class="chart-lg" style="display: none; padding: 0 20px;"></div>
-                            <div id="validationCompareChart2" class="chart-lg" style="display: none; padding: 0 20px;"></div>
+                            <div id="metricCompare" style="display: block;"></div>
                           </div>
                         </div>
                       </div>
                       <div class="col-6" style="padding-left: 5px;">
                         <div class="card" style="padding: 0 15px 10px 0;">
-                          <div class="row" id="validationCPUChartContainer" style="padding-top: 5px;">
-                            <div style="margin: 5px 15px 15px;">CPU Detail</div>
-                            <div id="validationCPUChart1" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-                            <div id="validationCPUChart2" class="chart-lg"  style="display: none; padding: 0 20px;"></div>
-                          </div>
-                          <div class="row" id="validationPowerChartContainer" style="padding-top: 5px; display: none;">
-                            <div style="margin: 5px 15px 15px;">Power Detail</div>
-                            <div id="validationPowerChart" class="chart-lg"  style="padding: 0 20px;"></div>
-                          </div>
-                          <div class="row" id="validationNetworkChartContainer" style="padding-top: 5px; display: none;">
-                            <div style="margin: 5px 15px 15px;">Network Detail</div>
-                            <div id="validationNetworkChart" class="chart-lg"  style="padding: 0 20px;"></div>
+                          <div class="row" style="padding-top: 5px;">
+                            <div style="margin: 5px 15px 15px;">Detail Compare</div>
+                            <div id="detailContainer">
+                              <div id="detailCPU" style="display: block;"></div>
+                              <div id="detailPower" style="display: none;"></div>
+                              <div id="detailNetwork" style="display: none;"></div>
+                              <div id="detailTime" style="display: none;"></div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -437,43 +404,33 @@
                               <th class="simul_th">Option Name</th>
                               <th class="simul_th">DBMS</th>
                               <th class="simul_th">Storage Type</th>
-                              <th class="simul_th">CSD Kind</th>
+                              <th class="simul_th">CSD Type</th>
                               <th class="simul_th">CSD Count</th>
                               <th class="simul_th">Block Count</th>
-                              <th class="simul_th">Algorithm</th>
+                              <th class="simul_th">Scheduling Algorithm</th>
                             </tr>
                           </thead>
                           <tbody class="simul_tbody">
                             <tr class="simul_tr">
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
-                              <td class="simul_td data1">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
+                              <td class="simul_td firstCol">-</td>
                             </tr>
                             <tr class="simul_tr">
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
-                              <td class="simul_td data2">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
+                              <td class="simul_td secondCol">-</td>
                             </tr>
-                            <!-- <tr class="simul_tr">
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                              <td class="simul_td data3">-</td>
-                            </tr> -->
                           </tbody>
                         </table>
                       </div>
@@ -657,7 +614,7 @@
   <script src="../static/js/libs/demo.min.js" defer></script>
 
   <script src="../static/js/temp-log.js" defer></script>
-  <script src="../static/js/validator-chart-option.js" defer></script>
+  <script src="../static/js/validator-chart-options.js" defer></script>
   <script src="../static/js/validator-log.js" defer></script>
   <script src="../static/js/validator.js" defer></script>
 

@@ -36,7 +36,6 @@ function getEnvironmentInfo() {
 }
 
 function getLatestChartData(){
-    console.log("check");
     fetch('/query-ssd/metric', {
         method: 'GET',
         mode: 'cors',
@@ -55,7 +54,7 @@ function updateLatestChart(data){
     hostServerPowerChartData = [];
     hostServerPowerChartCategories = [];
 
-    data.forEach(function(item) {
+    data.reverse().forEach(function(item) {
         hostServerCPUChartData.push(item.cpu_usage);
         hostServerCPUChartCategories.push(item.time);
         hostServerPowerChartData.push(item.power_usage);
@@ -84,7 +83,7 @@ function drawChart(){
         }
         ],
         xaxis: {
-        categories: hostServerPowerChartCategories
+            categories: hostServerPowerChartCategories
         }
     });
 }
