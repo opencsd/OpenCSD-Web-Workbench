@@ -73,6 +73,11 @@
     body {
       font-feature-settings: "cv03", "cv04", "cv11";
     }
+
+    .table-wrapper {
+      max-height: 300px; /* 테이블의 최대 높이를 설정합니다. */
+      overflow-y: auto; /* 세로 스크롤바를 표시합니다. */
+    }
   </style>
 </head>
 
@@ -499,7 +504,7 @@
                     <div class="row">
                       <h3 class="card-title col-3">Query Log</h3>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive table-wrapper">
                       <table id="queryLogtable" class="table table-vcenter text-nowrap table-hover datatable">
                         <thead>
                           <tr style="text-align: center;">
@@ -529,10 +534,9 @@
                         <!-- Showing <span>1</span> to <span>8</span> of
                         <span>16</span> entries -->
                       </p>
-                      <ul class="pagination m-0 ms-auto">
+                      <!-- <ul class="pagination m-0 ms-auto">
                         <li class="page-item disabled">
                           <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                               viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                               stroke-linecap="round" stroke-linejoin="round">
@@ -548,7 +552,6 @@
                         <li class="page-item">
                           <a class="page-link" href="#">
                             next
-                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                               viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                               stroke-linecap="round" stroke-linejoin="round">
@@ -557,7 +560,7 @@
                             </svg>
                           </a>
                         </li>
-                      </ul>
+                      </ul> -->
                     </div>
                   </div>
                 </div>

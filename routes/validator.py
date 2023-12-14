@@ -35,21 +35,23 @@ def run_handler():
             data = request.json # data 형식 체크
             user_id = data['User_ID']
             response = requests.post('http://10.0.4.87:30000/validator/run', json=data)
+
             if response.status_code == 200:
                 result = response.content
                 result = str(result)
                 validation_num = re.sub(r'[^0-9]','',result)
+
                 query = "select * from validation_log where user_id = \"{}\" and validation_id = {}".format(user_id, validation_num)
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
                 return jsonify(result)
             else:
                 return 'Error: Unable to fetch data from the remote server'
         except:
             return ""
         
-# 옵션 관련 라우터
 @validator_bp.route('/option/<path:action>', methods=['GET', 'POST'])
 def option_handler(action):
     if action.startswith('get-all'):
@@ -57,7 +59,6 @@ def option_handler(action):
             try:
                 data = request.json
                 user_id = data['user_id']
-
                 query = "select * from validation_option where user_id={}".format(user_id)
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
@@ -66,6 +67,7 @@ def option_handler(action):
             except:
                 return "get error\n"
     elif action.startswith('get-one'):
+
         if request.method == 'POST':
             try:
                 data = request.json
@@ -75,6 +77,7 @@ def option_handler(action):
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
                 return jsonify(result)
             except:
                 return "get-one error\n"
@@ -118,7 +121,7 @@ def option_handler(action):
             try:
                 # 옵션을 삭제하면 옵션으로 돌린 로그도 전부 삭제해야함 -> 그렇게해...?
                 data = request.json #옵션 id
-
+                
                 query = "delete from validation_snippet where option_id in {}".format(tuple(data['option_id']))
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
@@ -138,7 +141,8 @@ def option_handler(action):
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                return ""
+                
+                return "SUCCESS\n"
             except:
                 return "delete error"
     else:
@@ -163,6 +167,7 @@ def log_handler(action):
             try:
                 data = request.json
                 query = "select * from validation_log where validation_id={} and user_id = \"{}\"".format(data['validation_id'],data['user_id'])
+
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -174,6 +179,7 @@ def log_handler(action):
             try:
                 data = request.json #벨리데이션 id
                 query = "delete from validation_snippet where validation_id in {}".format(tuple(data['validation_id']))
+
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -187,7 +193,7 @@ def log_handler(action):
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                return ""
+                return "SUCCESS\n"
             except:
                 return "delete error"
     else:

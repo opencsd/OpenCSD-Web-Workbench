@@ -233,6 +233,7 @@ function validationLogSnippetLoad(validationID) {
 }
 
 // 로그 모달 내용 로딩
+
 function modalContentsLoad(validationID){
     console.log("LOG Modal Pop, Validation ID :", validationID)
     $(function() {

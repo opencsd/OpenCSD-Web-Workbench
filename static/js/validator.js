@@ -450,6 +450,7 @@ const csdkindInfo = document.getElementById("csdkindInfo");
 const csdCountInfo = document.getElementById("csdCountInfo");
 const blockCountInfo = document.getElementById("blockCountInfo");
 const algorithmInfo = document.getElementById("algorithmInfo");
+var optionID = 0;
 
 var optionID = 0;
 
@@ -457,7 +458,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("opt_item")) {
         const opt_selectedOption = e.target.textContent;
         opt_dropdownToggle.textContent = opt_selectedOption;
-
+        
         if (opt_selectedOption === "Pushdown Option Set") {
             optionID = 0;
         } else if (opt_selectedOption === "Non Pushdown Option Set") {
@@ -495,6 +496,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
     }
 });
 
+// 새로운 옵션 추가 모달
 function NewOptionmodalLoad(b){
     $(function() {
         $("#validator-newoption").modal("show");
@@ -505,6 +507,32 @@ function NewOptionmodalLoad(b){
         });
     });
 }
+var new_selected_csdkind = $("#new_csdkind");
+var new_SetCsdCount = $("#newCsdCount");
+var new_SetBlockCount = $("#newBlockCount");
+var new_scheduling_algorithm = $("#new_scheduling_algorithm");
+var new_using_index = $("#new_using_index");
+
+$("#csd_selected1").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("CSD Checked")
+        new_selected_csdkind.prop('disabled', false)
+        new_SetCsdCount.prop('disabled', false)
+        new_SetBlockCount.prop('disabled', false)
+        new_using_index.prop('disabled', false)
+        new_scheduling_algorithm.prop('disabled', false)
+    }
+});
+$("#ssd_selected1").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("SSD Checked")
+        new_selected_csdkind.prop('disabled', true)
+        new_SetCsdCount.prop('disabled', true)
+        new_SetBlockCount.prop('disabled', true)
+        new_using_index.prop('disabled', true)
+        new_scheduling_algorithm.prop('disabled', true)
+    }
+});
 
 var new_selected_csdkind = $("#new_csdkind");
 var new_SetCsdCount = $("#newCsdCount");
