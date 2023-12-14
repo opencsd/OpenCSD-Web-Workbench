@@ -123,17 +123,17 @@ function updateTable() {
     }
   }
 
-validatorLogPrevBtn.addEventListener("click", () => {
-    if (currentPage > 1) {
-        currentPage--;
-        // 페이지 변경 작업
-    }
-});
+// validatorLogPrevBtn.addEventListener("click", () => {
+//     if (currentPage > 1) {
+//         currentPage--;
+//         // 페이지 변경 작업
+//     }
+// });
 
-validatorLogNextBtn.addEventListener("click", () => {
-    currentPage++;
-    // 페이지 변경 작업
-});
+// validatorLogNextBtn.addEventListener("click", () => {
+//     currentPage++;
+//     // 페이지 변경 작업
+// });
 
 //모달 내용 로딩
 function modalContentsLoad(b){

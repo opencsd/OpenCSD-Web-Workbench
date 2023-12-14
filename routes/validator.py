@@ -53,22 +53,35 @@ def run_handler():
         except:
             return ""
         
-# 옵션 관련 라우터
 @validator_bp.route('/option/<path:action>', methods=['GET', 'POST'])
 def option_handler(action):
-    if action.startswith('get'):
+    if action.startswith('get-all'):
         if request.method == 'POST':
             try:
                 data = request.json
                 user_id = data['user_id']
-                query = "select * from validation_option where user_id=\"{}\"".format(user_id)
+                query = "select * from validation_option where user_id={}".format(user_id)
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
                 #리턴 형식 확인하고 맞춰주기
                 return jsonify(result)
             except:
-                return "get error"
+                return "get error\n"
+    elif action.startswith('get-one'):
+        if request.method == 'POST':
+            try:
+                print("check")
+                data = request.json
+                option_id = data['option_id']
+                query = "select * from validation_option where option_id={}".format(option_id)
+                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                #리턴 형식 확인하고 맞춰주기
+                return jsonify(result)
+            except:
+                return "get-one error\n"
     elif action.startswith('insert'):
         if request.method == 'POST':
             try:
