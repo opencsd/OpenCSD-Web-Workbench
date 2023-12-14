@@ -1,13 +1,12 @@
 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Validation Query Detail</h5>
+            <h5 class="modal-title">Validation Query Result Detail</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="mb-3">
-                <label class="form-label">Validation Query Snippet Info</label>
-                <!-- 스니펫 테이블 -->
+                <!-- 메트릭 테이블 -->
                 <div class="table-responsive">
                     <table class="table table-vcenter">
                         <thead>
@@ -21,15 +20,14 @@
                                 <th style="width: 10%;">Limit</th>
                             </tr>
                         </thead>
-                        <tbody id="logSnippetTableBody">
+                        <tbody id="MetricTableBody">
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <div class="mb-3">
-                <label class="form-label">Validation Query</label>
-                Validation Query
+                <label class="form-label">Host CPU / CSD Total CPU</label>
             </div>
             
         <div class="modal-footer">

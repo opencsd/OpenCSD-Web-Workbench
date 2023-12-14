@@ -338,9 +338,13 @@
                           </div>
                         </tbody>
                       </table>
-                      <div class="modal" id="exampleModal" tabindex="-1">
+                      <div class="modal fade" id="snippetModal" tabindex="-1" role="dialog" aria-hidden="true">
                         {% include 'validator-snippetModal.html' %}
                       </div>
+                      
+                    </div>
+                    <div class="modal fade" id="metricModal" tabindex="-1" role="dialog" aria-hidden="true">
+                      {% include 'validator-metricModal.html' %}
                     </div>
                   </div>
                 </div>

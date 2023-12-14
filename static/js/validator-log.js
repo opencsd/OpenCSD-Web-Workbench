@@ -219,8 +219,64 @@ function dummyButtonCellEventHandler(buttonCell){
 
             return popoverContent;
         }
-    });
-    popover.show();
+        popover = new bootstrap.Popover(dummyButtonCell, {
+            container: 'body',
+            placement: 'right',
+            trigger: 'manual',
+            html: true,
+            content: function () {
+                const popoverContent = document.createElement('div');
+                popoverContent.classList.add('text-center');
+                popoverContent.style.maxWidth = '200px';
+    
+                // 로그 버튼
+                const LogButton = document.createElement('button');
+                LogButton.setAttribute('type', 'button');
+                LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
+                LogButton.style.padding = '5px';
+                LogButton.style.width = '80px';
+                LogButton.textContent = 'LOG';
+                LogButton.addEventListener('click', function () {
+                    modalContentsLoad(dummyButtonCell.id);
+                    popover.hide();
+                });
+    
+                // 스니펫 버튼
+                const SnippetButton = document.createElement('button');
+                SnippetButton.setAttribute('type', 'button');
+                SnippetButton.classList.add('btn', 'btn-azure', 'd-block');
+                SnippetButton.style.padding = '5px';
+                SnippetButton.style.width = '80px';
+                SnippetButton.style.marginBottom = '5px';
+                SnippetButton.textContent = 'SNIPPET';
+                SnippetButton.addEventListener('click', function () {
+                    validationLogSnippetLoad(dummyButtonCell.id);
+                    popover.hide()
+
+                });
+
+                // 메트릭 버튼
+                const MetricButton = document.createElement('button');
+                MetricButton.setAttribute('type', 'button');
+                MetricButton.classList.add('btn', 'btn-azure', 'd-block');
+                MetricButton.style.padding = '5px';
+                MetricButton.style.width = '80px';
+                MetricButton.style.marginBottom = '5px';
+                MetricButton.textContent = 'METRIC';
+                MetricButton.addEventListener('click', function () {
+                    validationLogMetricLoad(dummyButtonCell.id);
+                    // 메트릭 차트 넣기
+                    popover.hide();
+                });
+    
+                popoverContent.appendChild(SnippetButton);
+                popoverContent.appendChild(MetricButton);
+                popoverContent.appendChild(LogButton);
+    
+                return popoverContent;
+            }
+        });
+        popover.show();
 }
 
 const validatorLogTableBody = document.getElementById("validatorLogTableBody");
@@ -229,7 +285,28 @@ const validatorLogNextBtn = document.getElementById("validatorLogNextBtn");
 
 // 스니펫 모달 내용 로드
 function validationLogSnippetLoad(validationID) {
-    console.log("LOG Modal Pop, Validation ID :", validationID)
+    console.log("Snippet Modal Pop, Validation ID :", validationID)
+    $(function () {
+        $("#snippetModal").modal("show");
+        var modalDiv = $('#snippetModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
+
+// 메트릭 모달 내용 로드
+function validationLogMetricLoad(validationID) {
+    console.log("Metric Modal Pop, Validation ID :", validationID)
+    $(function () {
+        $("#metricModal").modal("show");
+        var modalDiv = $('#metricModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
 }
 
 // 로그 모달 내용 로딩
