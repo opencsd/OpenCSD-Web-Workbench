@@ -2,8 +2,8 @@ select
     s_name,
     s_address
 from
-    SUPPLIER,
-    NATION
+    supplier,
+    nation
 where
     s_suppkey in (
         select
@@ -23,7 +23,7 @@ where
                 select
                     0.5 * sum(l_quantity)
                 from
-                    LINEITEM
+                    lineitem
                 where
                     l_partkey = ps_partkey
                     and l_suppkey = ps_suppkey

@@ -12,7 +12,7 @@ from
             ) as cntrycode,
             c_acctbal
         from
-            CUSTOMER
+            customer
         where
             substring(
                 c_phone
@@ -23,7 +23,7 @@ from
                 select
                     avg(c_acctbal)
                 from
-                    CUSTOMER
+                    customer
                 where
                     c_acctbal > 0.00
                     and substring(
@@ -33,7 +33,7 @@ from
                     ) in ('20', '40', '22', '30', '39', '42', '21')
             )
             and not exists (
-                select * from ORDERS
+                select * from orders
                 where _custkey = c_custkey
             )
     ) as custsale
