@@ -214,6 +214,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
             algorithmInfo.textContent = data[0].scheduling_algorithm;
             selectedOptionName = opt_selectedOption;
             selectedStorageType = data[0].storage_type.toUpperCase();
+            console.log(data)
         })
         .catch(error => {
             console.error('Fetch 오류: ', error);

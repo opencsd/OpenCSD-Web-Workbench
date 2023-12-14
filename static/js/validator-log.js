@@ -137,6 +137,7 @@ function updateTable() {
 
 //모달 내용 로딩
 function modalContentsLoad(b){
+    console.log(b)
     $(function() {
         var containerLog = document.getElementById("tab1");
         containerLog.innerHTML = validatorLog;

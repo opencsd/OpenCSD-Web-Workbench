@@ -73,10 +73,6 @@
     body {
       font-feature-settings: "cv03", "cv04", "cv11";
     }
-    .table-wrapper {
-      max-height: 300px; /* 테이블의 최대 높이를 설정합니다. */
-      overflow-y: auto; /* 세로 스크롤바를 표시합니다. */
-    }
   </style>
 </head>
 
@@ -320,7 +316,7 @@
                         <!-- add -->
                       </div>
                     </div>
-                    <div class="table-responsive table-wrapper">
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
                       <table id="validatorLogTable" class="table table-vcenter text-nowrap datatable" style="width: 100%;">
                         <thead>
                           <tr style="text-align: center;">
