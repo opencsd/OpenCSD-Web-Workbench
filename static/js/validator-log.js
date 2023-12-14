@@ -133,11 +133,11 @@ function addValidatorLog(data){
         dummyButtonCell.style.width = "5%";
         dummyButtonCell.id = result.validation_id;
         dummyButtonCell.innerHTML = `
-            <button class="btn btn-link p-0 ssd_btn queryLogDetailClass">
+            <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                 </svg>
-            </button>
+            </span>
         `;
         
         newRow.appendChild(checkboxCell);
@@ -152,15 +152,16 @@ function addValidatorLog(data){
         queryLogTableBody.appendChild(newRow);
 
         //쿼리 로그 클릭 이벤트 발생 시 모달 로드
-        dummyButtonCell.addEventListener('click', function() {dummyButtonCellEventHandler(dummyButtonCell)});
+        dummyButtonCell.addEventListener('click', function() {
+            dummyButtonCellEventHandler(dummyButtonCell)});
     });
 }
 
-function dummyButtonCellEventHandler(buttonCell){
+function dummyButtonCellEventHandler(dummyButtonCell){
     if (popover) {
         popover.dispose(); // 기존 팝업 제거
     }
-    popover = new bootstrap.Popover(buttonCell, {
+    popover = new bootstrap.Popover(dummyButtonCell, {
         container: 'body',
         placement: 'right',
         trigger: 'manual',
@@ -170,6 +171,7 @@ function dummyButtonCellEventHandler(buttonCell){
             popoverContent.classList.add('text-center');
             popoverContent.style.maxWidth = '200px';
 
+            // 로그 버튼
             const LogButton = document.createElement('button');
             LogButton.setAttribute('type', 'button');
             LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
@@ -177,10 +179,11 @@ function dummyButtonCellEventHandler(buttonCell){
             LogButton.style.width = '80px';
             LogButton.textContent = 'LOG';
             LogButton.addEventListener('click', function () {
-                modalContentsLoad(buttonCell.id);
+                modalContentsLoad(dummyButtonCell.id);
                 popover.hide();
             });
 
+            // 스니펫 버튼
             const SnippetButton = document.createElement('button');
             SnippetButton.setAttribute('type', 'button');
             SnippetButton.classList.add('btn', 'btn-azure', 'd-block');
@@ -189,27 +192,22 @@ function dummyButtonCellEventHandler(buttonCell){
             SnippetButton.style.marginBottom = '5px';
             SnippetButton.textContent = 'SNIPPET';
             SnippetButton.addEventListener('click', function () {
-                // 스니펫 테이블
-                validationLogSnippetLoad(buttonCell.id);
-                
-                // 스캔 필터 비율 차트
-                // var dataArray = [scannedRows, filteredRows];
-                // ScanFilterChartOption.series[0].data = dataArray;
-                // var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
-                // ScanFilterChart.render();
-                // popover.hide()
+                validationLogSnippetLoad(dummyButtonCell.id);
+                popover.hide()
 
             });
 
+            // 메트릭 버튼
             const MetricButton = document.createElement('button');
             MetricButton.setAttribute('type', 'button');
-            MetricButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
+            MetricButton.classList.add('btn', 'btn-azure', 'd-block');
             MetricButton.style.padding = '5px';
             MetricButton.style.width = '80px';
             MetricButton.style.marginBottom = '5px';
             MetricButton.textContent = 'METRIC';
             MetricButton.addEventListener('click', function () {
-                modalContentsLoad(buttonCell.id);
+                validationLogMetricLoad(dummyButtonCell.id);
+                // 메트릭 차트 넣기
                 popover.hide();
             });
 
@@ -219,64 +217,8 @@ function dummyButtonCellEventHandler(buttonCell){
 
             return popoverContent;
         }
-        popover = new bootstrap.Popover(dummyButtonCell, {
-            container: 'body',
-            placement: 'right',
-            trigger: 'manual',
-            html: true,
-            content: function () {
-                const popoverContent = document.createElement('div');
-                popoverContent.classList.add('text-center');
-                popoverContent.style.maxWidth = '200px';
-    
-                // 로그 버튼
-                const LogButton = document.createElement('button');
-                LogButton.setAttribute('type', 'button');
-                LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
-                LogButton.style.padding = '5px';
-                LogButton.style.width = '80px';
-                LogButton.textContent = 'LOG';
-                LogButton.addEventListener('click', function () {
-                    modalContentsLoad(dummyButtonCell.id);
-                    popover.hide();
-                });
-    
-                // 스니펫 버튼
-                const SnippetButton = document.createElement('button');
-                SnippetButton.setAttribute('type', 'button');
-                SnippetButton.classList.add('btn', 'btn-azure', 'd-block');
-                SnippetButton.style.padding = '5px';
-                SnippetButton.style.width = '80px';
-                SnippetButton.style.marginBottom = '5px';
-                SnippetButton.textContent = 'SNIPPET';
-                SnippetButton.addEventListener('click', function () {
-                    validationLogSnippetLoad(dummyButtonCell.id);
-                    popover.hide()
-
-                });
-
-                // 메트릭 버튼
-                const MetricButton = document.createElement('button');
-                MetricButton.setAttribute('type', 'button');
-                MetricButton.classList.add('btn', 'btn-azure', 'd-block');
-                MetricButton.style.padding = '5px';
-                MetricButton.style.width = '80px';
-                MetricButton.style.marginBottom = '5px';
-                MetricButton.textContent = 'METRIC';
-                MetricButton.addEventListener('click', function () {
-                    validationLogMetricLoad(dummyButtonCell.id);
-                    // 메트릭 차트 넣기
-                    popover.hide();
-                });
-    
-                popoverContent.appendChild(SnippetButton);
-                popoverContent.appendChild(MetricButton);
-                popoverContent.appendChild(LogButton);
-    
-                return popoverContent;
-            }
-        });
-        popover.show();
+    }),
+    popover.show();
 }
 
 const validatorLogTableBody = document.getElementById("validatorLogTableBody");
@@ -286,6 +228,124 @@ const validatorLogNextBtn = document.getElementById("validatorLogNextBtn");
 // 스니펫 모달 내용 로드
 function validationLogSnippetLoad(validationID) {
     console.log("Snippet Modal Pop, Validation ID :", validationID)
+    const logSnippetTableBody = document.getElementById("logSnippetTableBody");
+    // 웹 서버와 연결해서 스니펫 테이블 채우기
+    fetch('/validator/snippet', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({validation_id: validationID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            logSnippetTableBody.innerHTML = ``;
+
+            data.forEach(function (item) {
+                const SnippetRow = document.createElement("tr");
+                const WIDCell = document.createElement("td");
+                WIDCell.style.width = "10%";
+                WIDCell.style.textAlign = "center";
+                const TypeCell = document.createElement("td");
+                TypeCell.style.width = "20%";
+                TypeCell.style.textAlign = "center";
+                const ProjectionCell = document.createElement("td");
+                ProjectionCell.style.width = "10%";
+                ProjectionCell.style.textAlign = "center";
+                const FilterCell = document.createElement("td");
+                FilterCell.style.width = "10%";
+                FilterCell.style.textAlign = "center";
+                const OrderCell = document.createElement("td");
+                OrderCell.style.width = "10%";
+                OrderCell.style.textAlign = "center";
+                const GroupCell = document.createElement("td");
+                GroupCell.style.width = "10%";
+                GroupCell.style.textAlign = "center";
+                const LimitCell = document.createElement("td");
+                LimitCell.style.width = "10%";
+                LimitCell.style.textAlign = "center";
+
+                WIDCell.textContent = item.work_id;
+                // TypeCell.textContent = item.snippet_type;
+                switch(item.snippet_type) {
+                    case 0:
+                        TypeCell.textContent = "CSD_SCAN_SNIPPET";
+                        break;
+                    case 1:
+                        TypeCell.textContent = "AGGREGATION_SNIPPET";
+                        break;
+                    case 2:
+                        TypeCell.textContent = "STORAGE_FILTER_SNIPPET";
+                        break;
+                    case 3:
+                        TypeCell.textContent = "INNER_JOIN_SNIPPET";
+                        break;
+                    case 4:
+                        TypeCell.textContent = "LEFT_OUTER_JOIN_SNIPPET";
+                        break;
+                    case 5:
+                        TypeCell.textContent = "RIGHT_OUTER_JOIN_SNIPPET";
+                        break;
+                    case 6:
+                        TypeCell.textContent = "CROSS_JOIN_SNIPPET";
+                        break;
+                    case 7:
+                        TypeCell.textContent = "UNION_SNIPPET";
+                        break;
+                    case 8:
+                        TypeCell.textContent = "IN_SNIPPET";
+                        break;
+                    case 9:
+                        TypeCell.textContent = "DEPENDENCY_INNER_JOIN_SNIPPET";
+                        break;
+                    case 10:
+                        TypeCell.textContent = "DEPENDENCY_EXIST_SNIPPET";
+                        break;
+                    case 11:
+                        TypeCell.textContent = "DEPENDENCY_IN_SNIPPET";
+                        break;
+                    default:
+                        TypeCell.textContent = "ERROR";
+                }
+                ProjectionCell.textContent = item.projection_count;
+                FilterCell.textContent = item.filter_count;
+                OrderCell.textContent = item.order_by_count;
+                GroupCell.textContent = item.group_by_count;
+                LimitCell.textContent = item.limit_exist;
+
+                SnippetRow.appendChild(WIDCell);
+                SnippetRow.appendChild(TypeCell);
+                SnippetRow.appendChild(ProjectionCell);
+                SnippetRow.appendChild(FilterCell);
+                SnippetRow.appendChild(OrderCell);
+                SnippetRow.appendChild(GroupCell);
+                SnippetRow.appendChild(LimitCell);
+
+                logSnippetTableBody.appendChild(SnippetRow);
+            })
+        })
+        .catch(console.error(error => console.error('Error: ', error)));
+
+    fetch('/validator/log/get-one', { //html 화면 내에서 가져올 수 있을듯
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'user_id': 'admin-123',//storeduserInfo.workbench_user_id or document.getElementById("user_info"),
+            'validation_id': validationID
+        })
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById("validationQuery").value = data[0].query_statement;
+    })
     $(function () {
         $("#snippetModal").modal("show");
         var modalDiv = $('#snippetModal');
