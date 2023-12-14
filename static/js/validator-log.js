@@ -3,6 +3,7 @@ const queryHistory = [];
 const rowsPerPage = 10;
 let currentPage = 1;
 let temp_id = 0;//임시
+let popover;
 
 function addValidatorLog(queryText,result){
     const queryLogTableBody = document.getElementById("validatorLogTableBody");
@@ -79,12 +80,18 @@ function addValidatorLog(queryText,result){
     const dummyButtonCell = document.createElement("td");
     dummyButtonCell.style.width = "5%";
     dummyButtonCell.innerHTML = `
-        <button class="btn btn-link p-0 ssd_btn queryLogDetailClass">
+        <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                 <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
             </svg>
-        </button>
+        </span>
     `;
+    $(document).ready(function () {
+        $('[data-bs-toggle="popover"]').popover();
+    });
+
+    // 각 로그 버튼마다 id 부여
+    dummyButtonCell.id = temp_id;
     
     newRow.appendChild(checkboxCell);
     newRow.appendChild(queryIDCell);
@@ -97,47 +104,86 @@ function addValidatorLog(queryText,result){
 
     queryLogTableBody.appendChild(newRow);
 
-    //쿼리 로그 클릭 이벤트 발생 시 모달 로드
-    dummyButtonCell.querySelector('.queryLogDetailClass').addEventListener('click', function() {modalContentsLoad(dummyButtonCell.id)});
+    //쿼리 로그 상세 버튼 클릭시 모달 로드
+    // dummyButtonCell.querySelector('.queryLogDetailClass').addEventListener('click', function() {
+    //     modalContentsLoad(dummyButtonCell.id)});
+
+    dummyButtonCell.addEventListener('click', function() {
+        if (popover) {
+            popover.dispose(); // 기존 팝업 제거
+        }
+        popover = new bootstrap.Popover(dummyButtonCell, {
+            container: 'body',
+            placement: 'right',
+            trigger: 'manual',
+            html: true,
+            content: function () {
+                const popoverContent = document.createElement('div');
+                popoverContent.classList.add('text-center');
+                popoverContent.style.maxWidth = '200px';
+    
+                const LogButton = document.createElement('button');
+                LogButton.setAttribute('type', 'button');
+                LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
+                LogButton.style.padding = '5px';
+                LogButton.style.width = '80px';
+                LogButton.textContent = 'LOG';
+                LogButton.addEventListener('click', function () {
+                    modalContentsLoad(dummyButtonCell.id);
+                    popover.hide();
+                });
+    
+                const SnippetButton = document.createElement('button');
+                SnippetButton.setAttribute('type', 'button');
+                SnippetButton.classList.add('btn', 'btn-azure', 'd-block');
+                SnippetButton.style.padding = '5px';
+                SnippetButton.style.width = '80px';
+                SnippetButton.style.marginBottom = '5px';
+                SnippetButton.textContent = 'SNIPPET';
+                SnippetButton.addEventListener('click', function () {
+                    // 스니펫 테이블
+                    validationLogSnippetLoad(dummyButtonCell.id);
+                    
+                    // 스캔 필터 비율 차트
+                    // var dataArray = [scannedRows, filteredRows];
+                    // ScanFilterChartOption.series[0].data = dataArray;
+                    // var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
+                    // ScanFilterChart.render();
+                    // popover.hide()
+
+                });
+
+                const MetricButton = document.createElement('button');
+                MetricButton.setAttribute('type', 'button');
+                MetricButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
+                MetricButton.style.padding = '5px';
+                MetricButton.style.width = '80px';
+                MetricButton.style.marginBottom = '5px';
+                MetricButton.textContent = 'METRIC';
+                MetricButton.addEventListener('click', function () {
+                    modalContentsLoad(dummyButtonCell.id);
+                    popover.hide();
+                });
+    
+                popoverContent.appendChild(SnippetButton);
+                popoverContent.appendChild(MetricButton);
+                popoverContent.appendChild(LogButton);
+    
+                return popoverContent;
+            }
+        });
+        popover.show();
+    });
 }
 
-const validatorLogTableBody = document.getElementById("validatorLogTableBody");
-const validatorLogPrevBtn = document.getElementById("validatorLogPrevBtn");
-const validatorLogNextBtn = document.getElementById("validatorLogNextBtn");
+// 스니펫 모달 내용 로드
+function validationLogSnippetLoad(validationID) {
+    console.log("LOG Modal Pop, Validation ID :", validationID)
+}
 
-// 페이지 갱신 함수
-function updateTable() {
-    // 모든 로우 숨기기
-    const rows = table.getElementsByTagName("tr");
-    for (let i = 1; i < rows.length; i++) {
-      rows[i].style.display = "none";
-    }
-
-    // 현재 페이지에 해당하는 로우만 표시
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    for (let i = startIndex + 1; i < endIndex + 1; i++) {
-      if (rows[i]) {
-        rows[i].style.display = "table-row";
-      }
-    }
-  }
-
-// validatorLogPrevBtn.addEventListener("click", () => {
-//     if (currentPage > 1) {
-//         currentPage--;
-//         // 페이지 변경 작업
-//     }
-// });
-
-// validatorLogNextBtn.addEventListener("click", () => {
-//     currentPage++;
-//     // 페이지 변경 작업
-// });
-
-//모달 내용 로딩
+// 로그 모달 내용 로딩
 function modalContentsLoad(b){
-    console.log(b)
+    console.log("LOG Modal Pop, Validation ID :", b)
     $(function() {
         var containerLog = document.getElementById("tab1");
         containerLog.innerHTML = validatorLog;
