@@ -15,8 +15,8 @@ select
         end
     ) as low_line_count
 from
-    ORDERS,
-    LINEITEM
+    orders,
+    lineitem
 where
     o_orderkey = l_orderkey
     and l_shipmode in ('RAIL', 'FOB')

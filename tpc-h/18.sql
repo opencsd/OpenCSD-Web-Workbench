@@ -6,15 +6,15 @@ select
     o_totalprice,
     sum(l_quantity)
 from
-    CUSTOMER,
-    ORDERS,
-    LINEITEM
+    customer,
+    orders,
+    lineitem
 where
     o_orderkey in (
         select
             l_orderkey
         from
-            LINEITEM
+            lineitem
         group by
             l_orderkey
         having
