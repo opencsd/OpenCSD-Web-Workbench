@@ -69,11 +69,13 @@ def option_handler(action):
             except:
                 return "get error\n"
     elif action.startswith('get-one'):
+        print(request)
         if request.method == 'POST':
             try:
                 print("check")
                 data = request.json
                 option_id = data['option_id']
+                print(data)
                 query = "select * from validation_option where option_id={}".format(option_id)
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,

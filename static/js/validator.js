@@ -222,6 +222,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
     }
 });
 
+// 새로운 옵션 추가 모달
 function NewOptionmodalLoad(b){
     $(function() {
         $("#validator-newoption").modal("show");
@@ -232,10 +233,36 @@ function NewOptionmodalLoad(b){
         });
     });
 }
+var new_selected_csdkind = $("#new_csdkind");
+var new_SetCsdCount = $("#newCsdCount");
+var new_SetBlockCount = $("#newBlockCount");
+var new_scheduling_algorithm = $("#new_scheduling_algorithm");
+var new_using_index = $("#new_using_index");
+
+$("#csd_selected1").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("CSD Checked")
+        new_selected_csdkind.prop('disabled', false)
+        new_SetCsdCount.prop('disabled', false)
+        new_SetBlockCount.prop('disabled', false)
+        new_using_index.prop('disabled', false)
+        new_scheduling_algorithm.prop('disabled', false)
+    }
+});
+$("#ssd_selected1").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("SSD Checked")
+        new_selected_csdkind.prop('disabled', true)
+        new_SetCsdCount.prop('disabled', true)
+        new_SetBlockCount.prop('disabled', true)
+        new_using_index.prop('disabled', true)
+        new_scheduling_algorithm.prop('disabled', true)
+    }
+});
 
 
 
-// 옵션 수정 버튼 클릭 시 동작
+// 옵션 수정 버튼 클릭 시 모달
 const optSettingButton = document.getElementById("optionSetButton");
 const optSettingModal = document.getElementById("validator-optionSettingModal")
 const modalContainer = document.getElementById('modalContainer');
