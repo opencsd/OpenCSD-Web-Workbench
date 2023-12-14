@@ -122,7 +122,7 @@ runButton.addEventListener("click", function () {
 
 // TPC-H 쿼리 드롭다운 반응
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
-const dropdownMenu = document.querySelector(".dropdown-menu");
+const dropdownMenu = document.querySelector("#dropdownMenu");
 const queryTextArea = document.getElementById("queryTextarea");
 const dropdownToggle = document.getElementById("dropdownToggle");
 
