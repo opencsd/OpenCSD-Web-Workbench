@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     hostServerPowerChart.render();
 
     viewUserID();
+    updateLatestChart();
     startInterval();
     getEnvironmentInfo();
 });
@@ -77,7 +78,7 @@ function getEnvironmentInfo() {
 }
 
 
-// 쿼리 로그 불러오기
+// 쿼리 전체 로그 불러오기
 function getQueryLogAll() {
     var user_id = "admin-123";
     var query_type = "all";
@@ -123,32 +124,35 @@ function updateLatestChart(){
     fetch('/query/metric')
         .then(response => response.json())
         .then(data => {
-            data.forEach(item => {
-                
-            })
+            data.reverse().forEach(item => {
+                timestamp.push(item.time);
+                cpu_usage.push(item.cpu_usage);
+                memory_usage.push(item.memory_usage);
+            });
+            hostServerCPUChart.updateOptions({
+                series: [{
+                    name: "cpu",
+                    data: cpu_usage
+                    }
+                ],
+                xaxis: {
+                    categories: timestamp
+                }
+            });
+        
+            hostServerPowerChart.updateOptions({
+                series: [{
+                    name: "power",
+                    data: memory_usage
+                }
+                ],
+                xaxis: {
+                categories: timestamp
+                }
+            });
         })
 
-    hostServerCPUChart.updateOptions({
-        series: [{
-            name: "cpu",
-            data: hostServerCPUChartData
-            }
-        ],
-        xaxis: {
-            categories: hostServerCPUChartCategories
-        }
-    });
-
-    hostServerPowerChart.updateOptions({
-        series: [{
-            name: "power",
-            data: hostServerPowerChartData
-        }
-        ],
-        xaxis: {
-        categories: hostServerPowerChartCategories
-        }
-    });
+    
 }
 
 //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
@@ -205,6 +209,7 @@ dbSchemaTab.addEventListener("click", function() {
     envSetting.style.display = "none";
 });
 
+// 실시간 메트릭 수집 시작/일시정지 버튼
 const metricViewBtn = document.getElementById('metricViewBtn');
 const metricViewPlayIcon = document.getElementById('metricViewPlayIcon');
 const metricViewPauseIcon = document.getElementById('metricViewPauseIcon');

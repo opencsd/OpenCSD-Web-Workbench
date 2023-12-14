@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
 document.getElementById("pushdownButton").addEventListener("click", function () {
     const queryText = document.getElementById("queryTextarea").value.trim();
     // const validatorOption;
@@ -176,35 +177,47 @@ const csdkindInfo = document.getElementById("csdkindInfo");
 const csdCountInfo = document.getElementById("csdCountInfo");
 const blockCountInfo = document.getElementById("blockCountInfo");
 const algorithmInfo = document.getElementById("algorithmInfo");
+var optionID = 0;
 
 opt_dropdownMenu.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("opt_item")) {
         const opt_selectedOption = e.target.textContent;
         opt_dropdownToggle.textContent = opt_selectedOption;
-
+        
         if (opt_selectedOption === "Pushdown Option Set") {
-            dbmsInfo.textContent = "MySQL"; 
-            storageTypeInfo.textContent = "CSD";
-            csdkindInfo.textContent = "NGD";
-            csdCountInfo.textContent = "8";
-            blockCountInfo.textContent = "15";
-            algorithmInfo.textContent = "CSD Metric Score";
-            selectedOptionName = opt_selectedOption;
-            selectedStorageType = "CSD";
-
+            optionID = 0;
         } else if (opt_selectedOption === "Non Pushdown Option Set") {
-            dbmsInfo.textContent = "MySQL"; 
-            storageTypeInfo.textContent = "SSD";
-            csdkindInfo.textContent = "-";
-            csdCountInfo.textContent = "-";
-            blockCountInfo.textContent = "-";
-            algorithmInfo.textContent = "-";
-            selectedOptionName = opt_selectedOption;
-            selectedStorageType = "SSD";
+            optionID = 1
         } else{
             // 새로운 옵션 추가 모달 창
             NewOptionmodalLoad();
         }
+
+        fetch('/validator/option/get-one', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            body: JSON.stringify({
+                option_id: optionID
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
+            storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+            csdkindInfo.textContent = data[0].csd_type;
+            csdCountInfo.textContent = data[0].csd_count;
+            blockCountInfo.textContent = data[0].block_count;
+            algorithmInfo.textContent = data[0].scheduling_algorithm;
+            selectedOptionName = opt_selectedOption;
+            selectedStorageType = data[0].storage_type.toUpperCase();
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        });
     }
 });
 
