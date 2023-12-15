@@ -12,7 +12,7 @@ function addValidatorLog(data){
 
         var query = result.query_statement;
         var shortenedQuery = query.length > 40 ? query.slice(0, 50) + "..." : query;
-        var storageType = document.getElementById("storageTypeInfo");
+        // var storageType = document.getElementById("storageTypeInfo");
 
         const newRow = document.createElement("tr");
 
@@ -28,7 +28,7 @@ function addValidatorLog(data){
         const modeIconCell = document.createElement("td");
         modeIconCell.style.width = "5%";
         modeIconCell.style.textAlign = "center";
-        if(storageType = "CSD"){
+        if(result.option_id == 0){
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-c.png" width="20" height="20"/></div>`;
         }else{//SSD Option 조건일 경우
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-s.png" width="20" height="20"/></div>`;
@@ -134,11 +134,11 @@ function addValidatorLog(data){
         dummyButtonCell.style.width = "5%";
         dummyButtonCell.id = result.validation_id;
         dummyButtonCell.innerHTML = `
-            <button class="btn btn-link p-0 ssd_btn queryLogDetailClass">
+            <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                 </svg>
-            </button>
+            </span>
         `;
         
         newRow.appendChild(checkboxCell);
@@ -153,15 +153,16 @@ function addValidatorLog(data){
         queryLogTableBody.appendChild(newRow);
 
         //쿼리 로그 클릭 이벤트 발생 시 모달 로드
-        dummyButtonCell.addEventListener('click', function() {dummyButtonCellEventHandler(dummyButtonCell)});
+        dummyButtonCell.addEventListener('click', function() {
+            dummyButtonCellEventHandler(dummyButtonCell)});
     });
 }
 
-function dummyButtonCellEventHandler(buttonCell){
+function dummyButtonCellEventHandler(dummyButtonCell){
     if (popover) {
         popover.dispose(); // 기존 팝업 제거
     }
-    popover = new bootstrap.Popover(buttonCell, {
+    popover = new bootstrap.Popover(dummyButtonCell, {
         container: 'body',
         placement: 'right',
         trigger: 'manual',
@@ -171,6 +172,7 @@ function dummyButtonCellEventHandler(buttonCell){
             popoverContent.classList.add('text-center');
             popoverContent.style.maxWidth = '200px';
 
+            // 로그 버튼
             const LogButton = document.createElement('button');
             LogButton.setAttribute('type', 'button');
             LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
@@ -178,10 +180,11 @@ function dummyButtonCellEventHandler(buttonCell){
             LogButton.style.width = '80px';
             LogButton.textContent = 'LOG';
             LogButton.addEventListener('click', function () {
-                modalContentsLoad(buttonCell.id);
+                modalContentsLoad(dummyButtonCell.id);
                 popover.hide();
             });
 
+            // 스니펫 버튼
             const SnippetButton = document.createElement('button');
             SnippetButton.setAttribute('type', 'button');
             SnippetButton.classList.add('btn', 'btn-azure', 'd-block');
@@ -190,27 +193,22 @@ function dummyButtonCellEventHandler(buttonCell){
             SnippetButton.style.marginBottom = '5px';
             SnippetButton.textContent = 'SNIPPET';
             SnippetButton.addEventListener('click', function () {
-                // 스니펫 테이블
-                validationLogSnippetLoad(buttonCell.id);
-                
-                // 스캔 필터 비율 차트
-                // var dataArray = [scannedRows, filteredRows];
-                // ScanFilterChartOption.series[0].data = dataArray;
-                // var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
-                // ScanFilterChart.render();
-                // popover.hide()
+                validationLogSnippetLoad(dummyButtonCell.id);
+                popover.hide()
 
             });
 
+            // 메트릭 버튼
             const MetricButton = document.createElement('button');
             MetricButton.setAttribute('type', 'button');
-            MetricButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
+            MetricButton.classList.add('btn', 'btn-azure', 'd-block');
             MetricButton.style.padding = '5px';
             MetricButton.style.width = '80px';
             MetricButton.style.marginBottom = '5px';
             MetricButton.textContent = 'METRIC';
             MetricButton.addEventListener('click', function () {
-                modalContentsLoad(buttonCell.id);
+                validationLogMetricLoad(dummyButtonCell.id);
+                // 메트릭 차트 넣기
                 popover.hide();
             });
 
@@ -220,7 +218,7 @@ function dummyButtonCellEventHandler(buttonCell){
 
             return popoverContent;
         }
-    });
+    }),
     popover.show();
 }
 
@@ -230,11 +228,238 @@ const validatorLogNextBtn = document.getElementById("validatorLogNextBtn");
 
 // 스니펫 모달 내용 로드
 function validationLogSnippetLoad(validationID) {
-    console.log("LOG Modal Pop, Validation ID :", validationID)
+    console.log("Snippet Modal Pop, Validation ID :", validationID)
+    const logSnippetTableBody = document.getElementById("logSnippetTableBody");
+    // 웹 서버와 연결해서 스니펫 테이블 채우기
+    fetch('/validator/snippet', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({validation_id: validationID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            logSnippetTableBody.innerHTML = ``;
+
+            data.forEach(function (item) {
+                const SnippetRow = document.createElement("tr");
+                const WIDCell = document.createElement("td");
+                WIDCell.style.width = "10%";
+                WIDCell.style.textAlign = "center";
+                const TypeCell = document.createElement("td");
+                TypeCell.style.width = "20%";
+                TypeCell.style.textAlign = "center";
+                const ProjectionCell = document.createElement("td");
+                ProjectionCell.style.width = "10%";
+                ProjectionCell.style.textAlign = "center";
+                const FilterCell = document.createElement("td");
+                FilterCell.style.width = "10%";
+                FilterCell.style.textAlign = "center";
+                const OrderCell = document.createElement("td");
+                OrderCell.style.width = "10%";
+                OrderCell.style.textAlign = "center";
+                const GroupCell = document.createElement("td");
+                GroupCell.style.width = "10%";
+                GroupCell.style.textAlign = "center";
+                const LimitCell = document.createElement("td");
+                LimitCell.style.width = "10%";
+                LimitCell.style.textAlign = "center";
+
+                WIDCell.textContent = item.work_id;
+                // TypeCell.textContent = item.snippet_type;
+                switch(item.snippet_type) {
+                    case 0:
+                        TypeCell.textContent = "CSD_SCAN_SNIPPET";
+                        break;
+                    case 1:
+                        TypeCell.textContent = "AGGREGATION_SNIPPET";
+                        break;
+                    case 2:
+                        TypeCell.textContent = "STORAGE_FILTER_SNIPPET";
+                        break;
+                    case 3:
+                        TypeCell.textContent = "INNER_JOIN_SNIPPET";
+                        break;
+                    case 4:
+                        TypeCell.textContent = "LEFT_OUTER_JOIN_SNIPPET";
+                        break;
+                    case 5:
+                        TypeCell.textContent = "RIGHT_OUTER_JOIN_SNIPPET";
+                        break;
+                    case 6:
+                        TypeCell.textContent = "CROSS_JOIN_SNIPPET";
+                        break;
+                    case 7:
+                        TypeCell.textContent = "UNION_SNIPPET";
+                        break;
+                    case 8:
+                        TypeCell.textContent = "IN_SNIPPET";
+                        break;
+                    case 9:
+                        TypeCell.textContent = "DEPENDENCY_INNER_JOIN_SNIPPET";
+                        break;
+                    case 10:
+                        TypeCell.textContent = "DEPENDENCY_EXIST_SNIPPET";
+                        break;
+                    case 11:
+                        TypeCell.textContent = "DEPENDENCY_IN_SNIPPET";
+                        break;
+                    default:
+                        TypeCell.textContent = "ERROR";
+                }
+                ProjectionCell.textContent = item.projection_count;
+                FilterCell.textContent = item.filter_count;
+                OrderCell.textContent = item.order_by_count;
+                GroupCell.textContent = item.group_by_count;
+                LimitCell.textContent = item.limit_exist;
+
+                SnippetRow.appendChild(WIDCell);
+                SnippetRow.appendChild(TypeCell);
+                SnippetRow.appendChild(ProjectionCell);
+                SnippetRow.appendChild(FilterCell);
+                SnippetRow.appendChild(OrderCell);
+                SnippetRow.appendChild(GroupCell);
+                SnippetRow.appendChild(LimitCell);
+
+                logSnippetTableBody.appendChild(SnippetRow);
+            })
+        })
+        .catch(console.error(error => console.error('Error: ', error)));
+
+    fetch('/validator/log/get-one', { //html 화면 내에서 가져올 수 있을듯
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'user_id': storeduserInfo.workbench_user_id,
+            'validation_id': validationID
+        })
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById("validationQuery").value = data[0].query_statement;
+    })
+    .catch(console.error(error => console.error('Error: ', error)));
+
+    $(function () {
+        $("#snippetModal").modal("show");
+        var modalDiv = $('#snippetModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
+
+// 메트릭 모달 내용 로드
+function validationLogMetricLoad(validationID) {
+    console.log("Metric Modal Pop, Validation ID :", validationID)
+    const MetricTableBody = document.getElementById("MetricTableBody");
+    const cpuRow = document.createElement("tr");
+    const powerRow = document.createElement("tr");
+
+    const cpuCell = document.createElement("td");
+    cpuCell.style.width = "15%";
+    cpuCell.style.textAlign = "center";
+    cpuCell.textContent = `CPU (tick)`
+
+    const powerCell = document.createElement("td");
+    powerCell.style.width = "15%";
+    powerCell.style.textAlign = "center";
+    powerCell.textContent = `Power (W)`
+
+    cpuRow.appendChild(cpuCell)
+    powerRow.appendChild(powerCell)
+
+    var storageCPU;
+    var storagePower;
+
+    var csdCPUTotal;
+    var csdPowerTotal;
+
+    MetricTableBody.innerHTML = ``;
+
+    fetch('/validator/metric/csd', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({validation_id: validationID})
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(function (item) {
+            const csdCPUCell = document.createElement("td");
+            csdCPUCell.style.width = "10%";
+            csdCPUCell.style.textAlign = "center";
+            csdCPUCell.textContent = `${item.csd_cpu_usage_predict}`;
+            cpuRow.appendChild(csdCPUCell)
+
+            const csdPowerCell = document.createElement("td");
+            csdPowerCell.style.width = "10%";
+            csdPowerCell.style.textAlign = "center";
+            csdPowerCell.textContent = `${item.csd_power_usage_predict}`;
+            powerRow.appendChild(csdPowerCell)
+
+            csdCPUTotal += item.csd_cpu_usage_predict;
+            csdPowerTotal += item.csd_power_usage_predict;
+
+        })
+        MetricTableBody.appendChild(cpuRow);
+        MetricTableBody.appendChild(powerRow);
+        getHostMetric(validationID); // Host 데이터 가져오기
+    })
+    .catch(console.error(error => console.error('Error: ', error)));
+    
+
+    fetch('/validator/log/get-one', { 
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'user_id': storeduserInfo.workbench_user_id,
+            'validation_id': validationID
+        })
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        storageCPU = data[0].storage_cpu_usage_predict;
+        storagePower = data[0].storage_power_usage_predict;
+        return (storageCPU, storagePower);
+    })
+    .catch(console.error(error => console.error('Error: ', error)));
+
+
+    $(function () {
+        $("#metricModal").modal("show");
+        var modalDiv = $('#metricModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
+
+function getHostMetric(validationID) {
+
 }
 
 // 로그 모달 내용 로딩
-
 function modalContentsLoad(validationID){
     console.log("LOG Modal Pop, Validation ID :", validationID)
     $(function() {
@@ -248,6 +473,7 @@ function modalContentsLoad(validationID){
         });
     });
 }
+
 
 //###모달 기능#####
 // 1. 모달 닫기 

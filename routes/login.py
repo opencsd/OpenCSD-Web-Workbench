@@ -13,7 +13,7 @@ def login():
     if request.method == 'POST':
         data = request.json
         workbench_user_id = data['workbench_user_id']
-        db_instance_name = data['db_instance_name']
+        # db_instance_name = data['db_instance_name']
         print(data)
         if workbench_user_id == "keti-opencsd-admin":
             print("Login to CSD")
@@ -21,4 +21,4 @@ def login():
         elif workbench_user_id == "keti-mysql-admin":
             print("Login to SSD")
             return jsonify({'loginto': 'ssd'})
-    return render_template('index.html') 
+    return render_template('index.html')

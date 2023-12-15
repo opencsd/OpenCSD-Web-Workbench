@@ -416,7 +416,7 @@ function queryLogDetailLoad(query_id) {
                 LimitCell.style.textAlign = "center";
 
                 WIDCell.textContent = item.work_id;
-                TypeCell.textContent = item.snippet_type;
+                // TypeCell.textContent = item.snippet_type;
                 switch(item.snippet_type) {
                     case 0:
                         TypeCell.textContent = "CSD_SCAN_SNIPPET";
