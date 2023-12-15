@@ -69,7 +69,7 @@ var hostServerCPUChartOption = {
     },
     yaxis: {
         title: {
-            text: "Host CPU (%)"
+            text: "Host CPU (Milli)"
         },
         tickAmount: 10,
         forceNiceScale: true,

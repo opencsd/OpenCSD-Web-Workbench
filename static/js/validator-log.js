@@ -364,7 +364,27 @@ function validationLogMetricLoad(validationID) {
     const MetricTableBody = document.getElementById("MetricTableBody");
     const cpuRow = document.createElement("tr");
     const powerRow = document.createElement("tr");
-    var TotalCPU, TotalPower;
+
+    const cpuCell = document.createElement("td");
+    cpuCell.style.width = "15%";
+    cpuCell.style.textAlign = "center";
+    cpuCell.textContent = `CPU (tick)`
+
+    const powerCell = document.createElement("td");
+    powerCell.style.width = "15%";
+    powerCell.style.textAlign = "center";
+    powerCell.textContent = `Power (W)`
+
+    cpuRow.appendChild(cpuCell)
+    powerRow.appendChild(powerCell)
+
+    var storageCPU;
+    var storagePower;
+
+    var csdCPUTotal;
+    var csdPowerTotal;
+
+    MetricTableBody.innerHTML = ``;
 
     fetch('/validator/metric/csd', {
         method: 'POST',
@@ -378,10 +398,51 @@ function validationLogMetricLoad(validationID) {
     .then(response => response.json())
     .then(data => {
         data.forEach(function (item) {
-            cpuRow.appendChild(item.csd_cpu_usage_predict);
-            powerRow.appendChild(item.csd_power_usage_predict);
+            const csdCPUCell = document.createElement("td");
+            csdCPUCell.style.width = "10%";
+            csdCPUCell.style.textAlign = "center";
+            csdCPUCell.textContent = `${item.csd_cpu_usage_predict}`;
+            cpuRow.appendChild(csdCPUCell)
+
+            const csdPowerCell = document.createElement("td");
+            csdPowerCell.style.width = "10%";
+            csdPowerCell.style.textAlign = "center";
+            csdPowerCell.textContent = `${item.csd_power_usage_predict}`;
+            powerRow.appendChild(csdPowerCell)
+
+            csdCPUTotal += item.csd_cpu_usage_predict;
+            csdPowerTotal += item.csd_power_usage_predict;
+
+        })
+        MetricTableBody.appendChild(cpuRow);
+        MetricTableBody.appendChild(powerRow);
+        getHostMetric(validationID); // Host 데이터 가져오기
+    })
+    .catch(console.error(error => console.error('Error: ', error)));
+    
+
+    fetch('/validator/log/get-one', { 
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'user_id': storeduserInfo.workbench_user_id,
+            'validation_id': validationID
         })
     })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        storageCPU = data[0].storage_cpu_usage_predict;
+        storagePower = data[0].storage_power_usage_predict;
+        return (storageCPU, storagePower);
+    })
+    .catch(console.error(error => console.error('Error: ', error)));
+
 
     $(function () {
         $("#metricModal").modal("show");
@@ -393,8 +454,11 @@ function validationLogMetricLoad(validationID) {
     });
 }
 
-// 로그 모달 내용 로딩
+function getHostMetric(validationID) {
 
+}
+
+// 로그 모달 내용 로딩
 function modalContentsLoad(validationID){
     console.log("LOG Modal Pop, Validation ID :", validationID)
     $(function() {
@@ -408,6 +472,7 @@ function modalContentsLoad(validationID){
         });
     });
 }
+
 
 //###모달 기능#####
 // 1. 모달 닫기 
