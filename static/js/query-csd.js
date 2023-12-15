@@ -80,7 +80,6 @@ function getEnvironmentInfo() {
 
 // 쿼리 전체 로그 불러오기
 function getQueryLogAll() {
-    var user_id = "admin-123";
     var query_type = "all";
 
     fetch('/query/get-all', {
@@ -91,7 +90,7 @@ function getQueryLogAll() {
         },
         redirect: 'follow',
         body: JSON.stringify({
-            "user_id": user_id,
+            "user_id": storeduserInfo.workbench_user_id,
             "query_type": query_type
         })
     })

@@ -1,3 +1,15 @@
+// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
+var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
+// 유저 아이디 
+function viewUserID(){
+    const user_id = document.getElementById("user_info");
+    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+}
+document.addEventListener("DOMContentLoaded", function () {
+    viewUserID();
+})
+
 const dbMonitoringSlideBtn = document.getElementById('dbMonitoringSlideBtn');
 const dbMonitoringSlideUpIcon = document.getElementById('dbMonitoringSlideUpIcon');
 const dbMonitoringSlideDownIcon = document.getElementById('dbMonitoringSlideDownIcon');

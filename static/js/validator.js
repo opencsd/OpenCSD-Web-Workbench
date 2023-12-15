@@ -1,5 +1,6 @@
 // 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
 var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
 var metricCompareChart, metricCompareChartSeries = [], metricCompareChartSeriesReal = [];
 var detailCPUChart, detailCPUChartSeries = [];
 var detailPowerChart, detailPowerChartSeries = [];
@@ -75,7 +76,7 @@ function drawLogTable(){
         },
         redirect: 'follow',
         body: JSON.stringify({
-            'user_id': "admin-123"//storeduserInfo.workbench_user_id,
+            user_id: storeduserInfo.workbench_user_id,
         })
     })
     .then(response => {
@@ -93,8 +94,8 @@ function drawLogTable(){
 const runButton = document.getElementById("runButton");
 
 runButton.addEventListener("click", function () {
-    var queryText = "TPC-H_11";//document.getElementById("dropdownToggle").textContent;//("queryTextarea").value.trim();
-    //storeduserInfo.workbench_user_id
+    var queryText = dropdownToggle.textContent;
+    console.log(queryText);
 
     if(queryText){
         fetch('/validator/run', {
@@ -105,7 +106,7 @@ runButton.addEventListener("click", function () {
             },
             redirect: 'follow',
             body: JSON.stringify({
-                "User_ID": "admin-123",
+                "User_ID": storeduserInfo.workbench_user_id,
                 "Query_Statement": queryText,
                 "Option_ID": optionID
             })
@@ -317,7 +318,7 @@ function logActivateEvent(validationID){
         },
         redirect: 'follow',
         body: JSON.stringify({
-            'user_id': 'admin-123',//storeduserInfo.workbench_user_id or document.getElementById("user_info"),
+            'user_id': storeduserInfo.workbench_user_id,
             'validation_id': validationID
         })
     })
@@ -403,7 +404,8 @@ queryNumbers.forEach((number) => {
     const dropdownItem = document.createElement("a");
     dropdownItem.className = "dropdown-item";
     dropdownItem.href = "#";
-    dropdownItem.textContent = `Q${number}`;
+    const tpchNum = String(number).padStart(2, '0');
+    dropdownItem.textContent = `TPC-H_${tpchNum}`;
     dropdownMenu.appendChild(dropdownItem);
 
     dropdownItem.addEventListener("click", function (event) {
@@ -450,8 +452,6 @@ const csdkindInfo = document.getElementById("csdkindInfo");
 const csdCountInfo = document.getElementById("csdCountInfo");
 const blockCountInfo = document.getElementById("blockCountInfo");
 const algorithmInfo = document.getElementById("algorithmInfo");
-var optionID = 0;
-
 var optionID = 0;
 
 opt_dropdownMenu.addEventListener("click", function (e) {
