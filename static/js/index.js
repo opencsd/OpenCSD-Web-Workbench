@@ -31,6 +31,7 @@ connect_btn.addEventListener('click', () => {
         else if (data.loginto === 'ssd'){
             window.location.href = '/monitoring_ssd';
         }
+        // window.location.href = '/monitoring';
     })
     .catch(error => {
         alert(error); 

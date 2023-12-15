@@ -12,7 +12,7 @@ function addValidatorLog(data){
 
         var query = result.query_statement;
         var shortenedQuery = query.length > 40 ? query.slice(0, 50) + "..." : query;
-        var storageType = document.getElementById("storageTypeInfo");
+        // var storageType = document.getElementById("storageTypeInfo");
 
         const newRow = document.createElement("tr");
 
@@ -28,7 +28,7 @@ function addValidatorLog(data){
         const modeIconCell = document.createElement("td");
         modeIconCell.style.width = "5%";
         modeIconCell.style.textAlign = "center";
-        if(storageType = "CSD"){
+        if(result.option_id == 0){
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-c.png" width="20" height="20"/></div>`;
         }else{//SSD Option 조건일 경우
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-s.png" width="20" height="20"/></div>`;
@@ -336,7 +336,7 @@ function validationLogSnippetLoad(validationID) {
         },
         redirect: 'follow',
         body: JSON.stringify({
-            'user_id': 'admin-123',//storeduserInfo.workbench_user_id or document.getElementById("user_info"),
+            'user_id': storeduserInfo.workbench_user_id,
             'validation_id': validationID
         })
     })
@@ -346,6 +346,8 @@ function validationLogSnippetLoad(validationID) {
     .then(data => {
         document.getElementById("validationQuery").value = data[0].query_statement;
     })
+    .catch(console.error(error => console.error('Error: ', error)));
+
     $(function () {
         $("#snippetModal").modal("show");
         var modalDiv = $('#snippetModal');
@@ -359,6 +361,28 @@ function validationLogSnippetLoad(validationID) {
 // 메트릭 모달 내용 로드
 function validationLogMetricLoad(validationID) {
     console.log("Metric Modal Pop, Validation ID :", validationID)
+    const MetricTableBody = document.getElementById("MetricTableBody");
+    const cpuRow = document.createElement("tr");
+    const powerRow = document.createElement("tr");
+    var TotalCPU, TotalPower;
+
+    fetch('/validator/metric/csd', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({validation_id: validationID})
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(function (item) {
+            cpuRow.appendChild(item.csd_cpu_usage_predict);
+            powerRow.appendChild(item.csd_power_usage_predict);
+        })
+    })
+
     $(function () {
         $("#metricModal").modal("show");
         var modalDiv = $('#metricModal');
