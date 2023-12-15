@@ -115,45 +115,6 @@ function getQueryLogAll() {
     })
 }
 
-function updateLatestChart(){
-    //그래프 실시간 업데이트 하는 함수
-    let timestamp = [];
-    let cpu_usage = [];
-    let memory_usage = [];
-    fetch('/query/metric')
-        .then(response => response.json())
-        .then(data => {
-            data.reverse().forEach(item => {
-                timestamp.push(item.time);
-                cpu_usage.push(item.cpu_usage);
-                memory_usage.push(item.memory_usage);
-            });
-            hostServerCPUChart.updateOptions({
-                series: [{
-                    name: "cpu",
-                    data: cpu_usage
-                    }
-                ],
-                xaxis: {
-                    categories: timestamp
-                }
-            });
-        
-            hostServerPowerChart.updateOptions({
-                series: [{
-                    name: "power",
-                    data: memory_usage
-                }
-                ],
-                xaxis: {
-                categories: timestamp
-                }
-            });
-        })
-
-    
-}
-
 //쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
 function updateQueryChart(){
     hostServerCPUChart.updateOptions({
@@ -178,6 +139,53 @@ function updateQueryChart(){
         }
     });
 }
+
+function updateLatestChart(){
+    //그래프 실시간 업데이트 하는 함수
+    let timestamp = [];
+    let cpu_usage = [];
+    let power_usage = [];
+    fetch('/query/metric')
+        .then(response => response.json())
+        .then(data => {
+            data.reverse().forEach(item => {
+                var date = new Date(item.time);
+                var time = date.getHours()+":"+date.getSeconds();
+                timestamp.push(time);
+                cpu_usage.push((item.cpu_usage)/1000000);
+                power_usage.push(item.power_usage);
+            });
+            hostServerCPUChart.updateOptions({
+                series: [{
+                    name: "cpu",
+                    data: cpu_usage
+                    }
+                ],
+                xaxis: {
+                    categories: timestamp
+                }
+            });
+        
+            hostServerPowerChart.updateOptions({
+                series: [{
+                    name: "power",
+                    data: power_usage
+                }
+                ],
+                xaxis: {
+                categories: timestamp
+                }
+            });
+        })
+
+    
+}
+
+
+function startInterval(){
+    intervalId = setInterval(getLatestChartData,5000);
+}
+
 
 function startInterval(){
     intervalId = setInterval(updateLatestChart,3000);//메트릭 업데이트 주기 설정
@@ -340,7 +348,7 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
 
         data.query_metric.forEach(item => {
             hostServerCPUChartData.push(item.cpu_usage);
-            hostServerPowerChartData.push(item.memory_usage);
+            hostServerPowerChartData.push(item.power_usage);
             timestamps.push(item.time);
             count++;
         })
