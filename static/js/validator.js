@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     metricCompareChart.render();
     detailCPUChart.render();
-    detailPowerChart.render();
-    detailNetworkChart.render();
-    detailTimeChart.render();
+    // detailPowerChart.render();
+    // detailNetworkChart.render();
+    // detailTimeChart.render();
 
     drawLogTable();
 });
@@ -211,6 +211,12 @@ function updateChartData(data){
     detailChartCategories.push(id);
 
     if(metricCompareChartSeries.length == 3){
+        let firstID = detailChartCategories[0];
+        let numberValue = parseInt(firstID.match(/\d+/)[0], 10);
+        const firstCell = document.getElementById(numberValue);
+        firstCell.style.backgroundColor = "#fcfdfe";
+        firstCell.clicked = !firstCell.clicked;
+
         metricCompareChartSeriesReal.shift();
         metricCompareChartSeries.shift();
         detailCPUChartSeries.shift();
@@ -295,15 +301,11 @@ function updateOptionTableData(validationID,optionID){
 
 function logClickEvent(queryCell){
     if(queryCell.clicked){
-        // console.log(queryCell.style.backgroundColor);
-        queryCell.style.backgroundColor = "#f6f8fb";
-        logDeactivateEvent(queryCell.id)
-        // console.log(queryCell.style.backgroundColor);
+        queryCell.style.backgroundColor="#fcfdfe";
+        logDeactivateEvent(queryCell.id);
     }else{
-        // console.log(queryCell.style.backgroundColor);
+        queryCell.style.backgroundColor="#f6f8fb";
         logActivateEvent(queryCell.id);
-        queryCell.style.backgroundColor = "#fcfdfe";
-        // console.log(queryCell.style.backgroundColor);
     }
     queryCell.clicked = !queryCell.clicked;
 }

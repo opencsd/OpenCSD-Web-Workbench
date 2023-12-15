@@ -55,10 +55,12 @@ function updateLatestChart(data){
     hostServerPowerChartCategories = [];
 
     data.reverse().forEach(function(item) {
-        hostServerCPUChartData.push(item.cpu_usage);
-        hostServerCPUChartCategories.push(item.time);
+        hostServerCPUChartData.push(item.cpu_usage / 1000000);
+        var date = new Date(item.time);
+        var time = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+        hostServerCPUChartCategories.push(time);
         hostServerPowerChartData.push(item.power_usage);
-        hostServerPowerChartCategories.push(item.time);
+        hostServerPowerChartCategories.push(time);
     })
 
     drawChart();
@@ -188,10 +190,12 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         hostServerPowerChartCategories = [];
 
         data.query_metric.forEach(item => {
-            hostServerCPUChartData.push(item.cpu_usage);
-            hostServerCPUChartCategories.push(item.time);
+            hostServerCPUChartData.push(item.cpu_usage / 1000000);
+            var date = new Date(item.time);
+            var time = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+            hostServerCPUChartCategories.push(time);
             hostServerPowerChartData.push(item.power_usage);
-            hostServerPowerChartCategories.push(item.time);
+            hostServerPowerChartCategories.push(time);
         })
 
         metricViewPlayIcon.style.display = 'inline';

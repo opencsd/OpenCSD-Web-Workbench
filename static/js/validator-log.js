@@ -39,10 +39,11 @@ function addValidatorLog(data){
         queryCell.style.backgroundColor = "#fcfdfe";
         queryCell.textContent = `${shortenedQuery}`;
         queryCell.id = result.validation_id;
+        queryCell.className = "queryCells";
         queryCell.clicked = false;
-        queryCell.addEventListener('click', function() {logClickEvent(queryCell)});
-        queryCell.addEventListener("mouseover", function() {queryCell.style.backgroundColor="#f6f8fb"});
-        queryCell.addEventListener("mouseout", function() {queryCell.style.backgroundColor="#fcfdfe"});
+        queryCell.addEventListener('click', function() {logClickEvent(queryCell);});
+        // queryCell.addEventListener("mouseenter", function() {queryCell.style.backgroundColor="#f6f8fb"});
+        // queryCell.addEventListener("mouseleave", function() {queryCell.style.backgroundColor=originalColor});
 
         const progressBarCells = [];
         for (let i = 0; i < 4; i++) {

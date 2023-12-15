@@ -380,12 +380,12 @@
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div class="row" style="padding-top: 5px;">
                             <div style="margin: 5px 15px 15px;">Detail Compare</div>
-                            <div id="detailContainer">
+                            <!-- <div id="detailContainer"> -->
                               <div id="detailCPU" style="display: block;"></div>
                               <div id="detailPower" style="display: none;"></div>
                               <div id="detailNetwork" style="display: none;"></div>
                               <div id="detailTime" style="display: none;"></div>
-                            </div>
+                            <!-- </div> -->
                           </div>
                         </div>
                       </div>
@@ -610,7 +610,7 @@
   <script src="../static/js/libs/demo.min.js" defer></script>
 
   <script src="../static/js/temp-log.js" defer></script>
-  <script src="../static/js/validator-chart-options.js" defer></script>
+  <script src="../static/js/validator-chart-option.js" defer></script>
   <script src="../static/js/validator-log.js" defer></script>
   <script src="../static/js/validator.js" defer></script>
 
@@ -664,6 +664,10 @@
       background: white; 
       width: 6px;
       border: 0px solid white; 
+    }
+
+    #validatorLogTableBody .queryCells:hover {
+        background-color: #2760b5;
     }
     </style>
 
