@@ -150,7 +150,13 @@ function updateLatestChart(){
         .then(data => {
             data.reverse().forEach(item => {
                 var date = new Date(item.time);
-                var time = date.getHours()+":"+date.getSeconds();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                var seconds = date.getSeconds();
+                var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+                var formattedHour = hour < 10 ? '0' + hour : hour;
+                var formattedMinute = minute < 10 ? '0' + minute : minute;
+                var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
                 timestamp.push(time);
                 cpu_usage.push((item.cpu_usage)/1000000);
                 power_usage.push(item.power_usage);
