@@ -15,7 +15,7 @@ var queryChartOption = {
   yAxis: {
     min: 0,
     title: {
-      text: null
+      text: '(ddl count)'
     },
     stackLabels: {
       enabled: true
@@ -167,11 +167,12 @@ var ConnectedClientOption = {
     allowDecimals: false,
     accessibility: {
         rangeDescription: null
-    }
+    },
+    categories: []
   },
   yAxis: {
     title: {
-        text: null
+      text: '(client count)'
     }
   },
   tooltip: 
@@ -232,7 +233,8 @@ xAxis: {
     allowDecimals: false,
     accessibility: {
         rangeDescription: 'Range: 1940 to 2017.'
-    }
+    },
+    categories: []
 },
 yAxis: {
     title: {
@@ -289,7 +291,8 @@ xAxis: {
     allowDecimals: false,
     accessibility: {
         rangeDescription: 'Range: 1940 to 2017.'
-    }
+    },
+    categories: []
 },
 yAxis: {
     title: {
@@ -346,7 +349,8 @@ xAxis: {
     allowDecimals: false,
     accessibility: {
         rangeDescription: 'Range: 1940 to 2017.'
-    }
+    },
+    categories: []
 },
 yAxis: {
     title: {
@@ -403,7 +407,8 @@ var DBCSDScanFilterOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   [
@@ -464,7 +469,7 @@ var HostCSDCpuUsageOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server CPU Usage'
+      text: 'CPU Usage'
   },
   subtitle: {
       text: null
@@ -473,7 +478,8 @@ var HostCSDCpuUsageOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
@@ -527,7 +533,7 @@ var HostCSDMemoryOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server Memory Usage'
+      text: 'Memory Usage'
   },
   subtitle: {
       text: null
@@ -536,12 +542,13 @@ var HostCSDMemoryOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(MB)'
+        text: '(KB)'
     }
   },
   tooltip: {
@@ -584,13 +591,17 @@ var HostCSDMemoryOption = {
   ]
 }
 
-// Host Server의 Network 사용량
-var HostCSDNetworkOption = {
+// Host Server의 disk 사용량
+var HostCSDDiskOption = {
   chart: {
-    type: 'area'
+    type: 'area',
+    // renderTo: 'container',
+    // defaultSeriesType: 'spline',
+    // animation: Highcharts.svg, // 실시간 업데이트를 위한 애니메이션 활성화
+    // marginRight: 10,
   },
   title: {
-      text: 'Host Server Network Usage'
+      text: 'Disk Usage'
   },
   subtitle: {
       text: null
@@ -599,12 +610,82 @@ var HostCSDNetworkOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(MB)'
+        text: '(KB)'
+    }
+  },
+  tooltip: {
+    shared: true,
+      // pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+  },
+  plotOptions: {
+      area: {
+        stacking: 'normal',
+          marker: {
+              enabled: false,
+              symbol: 'circle',
+              radius: 2,
+              states: {
+                  hover: {
+                      enabled: true
+                  }
+              }
+          }
+      },
+
+      areaspline: {
+        animation : true
+      }
+  },
+  series: 
+  [
+    {
+      name: 'Host Server',
+      data: [],
+      color: {
+        linearGradient: {
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 1
+        },
+        stops: [
+          [0, '#F79646'],
+          [1, '#FDDFC7']
+        ]
+      }
+    },
+  ]
+}
+
+
+// Host Server의 Network 사용량
+var HostCSDNetworkOption = {
+  chart: {
+    type: 'area'
+  },
+  title: {
+      text: 'Network Usage'
+  },
+  subtitle: {
+      text: null
+  },
+  xAxis: {
+      allowDecimals: false,
+      accessibility: {
+          rangeDescription: null
+      },
+      categories: []
+  },
+  yAxis: 
+  {
+    title: {
+        text: '(KB)'
     }
   },
   tooltip: {
@@ -653,7 +734,7 @@ var HostCSDPowerOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server Power Usage'
+      text: 'Power Usage'
   },
   subtitle: {
       text: null
@@ -662,12 +743,13 @@ var HostCSDPowerOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(W)'
+        text: '(W/s)'
     }
   },
   tooltip: {
@@ -723,10 +805,11 @@ subtitle: {
 },
 xAxis: {
     allowDecimals: false,
+    categories: []
 },
 yAxis: {
     title: {
-        text: null
+        text: '(core)'
     }
 },
 tooltip: {
@@ -777,10 +860,11 @@ subtitle: {
 },
 xAxis: {
     allowDecimals: false,
+    categories: []
 },
 yAxis: {
     title: {
-        text: null
+        text: '(KB)'
     }
 },
 tooltip: {
@@ -831,10 +915,11 @@ subtitle: {
 },
 xAxis: {
     allowDecimals: false,
+    categories: []
 },
 yAxis: {
     title: {
-        text: null
+        text: '(KB)'
     }
 },
 tooltip: {
@@ -885,10 +970,11 @@ subtitle: {
 },
 xAxis: {
     allowDecimals: false,
+    categories: []
 },
 yAxis: {
     title: {
-        text: null
+        text: '(W/s)'
     }
 },
 tooltip: {
