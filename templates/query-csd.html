@@ -232,7 +232,7 @@
                     </div>
                     <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
                     <div class="d-flex justify-content-center">
-                      <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+                      <button id="runButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                     </div>
                   </div>
                 </div>
@@ -411,7 +411,10 @@
                     <div id="resultContainer">
                       <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                     </div>
-                    <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
+                    <!-- <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div> -->
+                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
+                    </div>
                   </div>
                 </div>
               </div>
@@ -449,7 +452,10 @@
                         </table>
                       </div>
                     </div>
-                    <div id="loading-metric" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
+                    <!-- <div id="loading-metric" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div> -->
+                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
+                    </div>
                   </div>       
                 </div>
               </div>
@@ -497,12 +503,24 @@
           </div>
 
           <div class="row">
-            <div class="col-12">
+            <div class="col-12" style="margin-bottom: 15px;">
               <div class="card">
                 <div class="card-body row">
                   <div class="col-lg-12">
                     <div class="row">
-                      <h3 class="card-title col-3">Query Log</h3>
+                      <h3 class="card-title col-9">Query Log</h3>
+                      <div class="col-3 text-end">
+                        <div class="dropdown" align="right">
+                          <a href="#" id="queryDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">ALL</a>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item queryDropdownItem">ALL</a>
+                            <a class="dropdown-item queryDropdownItem">SELECT</a>
+                            <a class="dropdown-item queryDropdownItem">DCL</a>
+                            <a class="dropdown-item queryDropdownItem">DDL</a>
+                            <a class="dropdown-item queryDropdownItem">OTHER</a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="table-responsive table-wrapper">
                       <table id="queryLogtable" class="table table-vcenter text-nowrap table-hover datatable">
@@ -527,41 +545,11 @@
                         {% include 'query-csd-logDetail.html' %}
                       </div>
                     </div>
-                    
-                    <div class="card-footer d-flex align-items-center">
-                      <p class="m-0 text-secondary">
-                        <button type="button" class="btn btn-danger" id="QueryLogDelete" >Delete</button>
-                        <!-- Showing <span>1</span> to <span>8</span> of
-                        <span>16</span> entries -->
-                      </p>
-                      <!-- <ul class="pagination m-0 ms-auto">
-                        <li class="page-item disabled">
-                          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M15 6l-6 6l6 6" />
-                            </svg>
-                            prev
-                          </a>
-                        </li>
-                        <li class="page-item active">
-                          <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                          <a class="page-link" href="#">
-                            next
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                              stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M9 6l6 6l-6 6" />
-                            </svg>
-                          </a>
-                        </li>
-                      </ul> -->
-                    </div>
+                  </div>
+                  <div class="card-footer d-flex align-items-center">
+                    <p class="m-0 text-secondary">
+                      <button id="logDelete" type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
+                    </p>
                   </div>
                 </div>
               </div>

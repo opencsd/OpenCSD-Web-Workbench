@@ -1,15 +1,10 @@
 // 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
 var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
-// 유저 아이디 
-function viewUserID(){
-    const user_id = document.getElementById("user_info");
-    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
-}
-
 let intervalId;
-var hostServerCPUChart, hostServerCPUChartData, hostServerCPUChartCategories;
-var hostServerPowerChart, hostServerPowerChartData, hostServerPowerChartCategories;
+var hostServerCPUChart, hostServerCPUChartData;
+var hostServerPowerChart, hostServerPowerChartData;
+var hostServerChartCategories;
 
 document.addEventListener("DOMContentLoaded", function () {
     hostServerCPUChart = new ApexCharts(document.getElementById("queryHostServerCPU"), hostServerCPUChartOption);
@@ -24,6 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
     startInterval();
 });
 
+// 유저 아이디 
+function viewUserID(){
+    const user_id = document.getElementById("user_info");
+    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+}
 
 const dbName = document.getElementById("dbName");
 const dbms = document.getElementById("dbms");
@@ -37,7 +37,7 @@ function getEnvironmentInfo() {
         .then(data => {
             dbName.textContent = data.db_name;
             dbms.textContent = data.dbms_type;
-            dbSize.textContent = data.db_size + "(GB)";
+            dbSize.textContent = data.db_size + "(MB)";
             storageType.textContent = data.storage_type;
         })
         .catch(error => {
@@ -55,20 +55,26 @@ function getLatestChartData(){
         redirect: 'follow',
     })
     .then(response => response.json())
-    .then(data => updateLatestChart(data))
+    .then(data => updateChartData(data))
 }
 
-function updateLatestChart(data){
+function updateChartData(data){
     hostServerCPUChartData = [];
-    hostServerCPUChartCategories = [];
     hostServerPowerChartData = [];
-    hostServerPowerChartCategories = [];
+    hostServerChartCategories = [];
 
     data.reverse().forEach(function(item) {
-        hostServerCPUChartData.push(item.cpu_usage);
-        hostServerCPUChartCategories.push(item.time);
+        hostServerCPUChartData.push(item.cpu_usage / 1000000);
         hostServerPowerChartData.push(item.power_usage);
-        hostServerPowerChartCategories.push(item.time);
+        var date = new Date(item.time);
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var seconds = date.getSeconds();
+        var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+        var formattedHour = hour < 10 ? '0' + hour : hour;
+        var formattedMinute = minute < 10 ? '0' + minute : minute;
+        var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
+        hostServerChartCategories.push(time);
     })
 
     drawChart();
@@ -82,7 +88,7 @@ function drawChart(){
             }
         ],
         xaxis: {
-            categories: hostServerCPUChartCategories
+            categories: hostServerChartCategories
         }
     });
 
@@ -93,7 +99,7 @@ function drawChart(){
         }
         ],
         xaxis: {
-            categories: hostServerPowerChartCategories
+            categories: hostServerChartCategories
         }
     });
 }
@@ -143,14 +149,62 @@ metricViewBtn.addEventListener('click', () => {
     isMetricViewBtnClicked = !isMetricViewBtnClicked;
 });
 
+function logClickEvent(queryCell){
+    if(queryCell.clicked){
+        queryCell.style.backgroundColor="#fcfdfe";
+        logDeactivateEvent(queryCell.id);
+    }else{
+        queryCell.style.backgroundColor="#f6f8fb";
+        logActivateEvent(queryCell.id);
+    }
+    queryCell.clicked = !queryCell.clicked;
+}
+
+function logActivateEvent(validationID){
+    fetch('/validator/log/get-one', { //html 화면 내에서 가져올 수 있을듯
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'user_id': storeduserInfo.workbench_user_id,
+            'validation_id': validationID
+        })
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        updateChartData(data[0]);
+        drawChart();
+        updateOptionTableData(validationID,data[0].option_id);
+        queryTextArea.value = data[0].query_statement;
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    })
+}
+
+function logDeactivateEvent(validationID){
+    deleteFromChart(validationID);
+    drawChart();
+    drawOptionTable();
+}
+
+// 쿼리 Run 동작
 const resultContainer = document.getElementById("resultContainer");
 const metricContainer = document.getElementById("metricContainer");
 const spinnerContainer = document.querySelectorAll(".spinnerContainer");
 const executionTimeTable = document.querySelector('td.qtable_1');
-const queryResult = document.getElementById("queryResult");
+const queryResultArea = document.getElementById("queryResult");
 const queryTextArea = document.getElementById("queryTextarea");
+const runButton = document.getElementById("runButton");
 
-document.getElementById("pushdownButton").addEventListener("click", function () {
+runButton.addEventListener("click", function () {
+    runButton.disabled = true;
+
     if (!isMetricViewBtnClicked) {
         getLatestChartData();
         metricViewPlayIcon.style.display = 'none';
@@ -189,29 +243,18 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         return response.json();
     })
     .then(data => {
+        clearInterval(intervalId);
+
         executionTimeTable.textContent = data.execution_time;//이거 형식좀
-        queryResult.value = data.result;
-
-        hostServerCPUChartData = [];
-        hostServerCPUChartCategories = [];
-        hostServerPowerChartData = [];
-        hostServerPowerChartCategories = [];
-
-        data.query_metric.forEach(item => {
-            hostServerCPUChartData.push(item.cpu_usage);
-            hostServerCPUChartCategories.push(item.time);
-            hostServerPowerChartData.push(item.power_usage);
-            hostServerPowerChartCategories.push(item.time);
-        })
+        queryResultArea.value = data.result;
 
         metricViewPlayIcon.style.display = 'inline';
         metricViewPauseIcon.style.display = 'none';
     
         isMetricViewBtnClicked = false;
-    
-        clearInterval(intervalId);
+        pushdownButton.disabled = false;
 
-        drawChart();
+        updateChartData(data.query_metric);
     })
     .catch(error => {
         console.error('Fetch 오류: ', error);
@@ -257,6 +300,16 @@ queryNumbers.forEach((number) => {
 
 // new query 버튼 누르면 쿼리입력창 초기화
 const newQueryButton = document.getElementById("newQuery");
-document.getElementById("newQuery").addEventListener("click", function() {
+newQueryButton.addEventListener("click", function() {
     queryTextArea.value = "";
+    queryResultArea.value = "";
+    executionTimeTable.textContent = "";
+
+    if (!isMetricViewBtnClicked) {
+        getLatestChartData();
+        metricViewPlayIcon.style.display = 'none';
+        metricViewPauseIcon.style.display = 'inline';
+        startInterval();
+        isMetricViewBtnClicked = !isMetricViewBtnClicked;
+    }
 });
