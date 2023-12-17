@@ -33,9 +33,9 @@ def environment_handler():
     if request.method == 'GET':
         try:
             result = {
-                "db_name" : "tpch",
+                "db_name" : "TPC-H",
                 "dbms_type" : "MySQL",
-                "db_size" : "2.0",
+                "db_size" : "1089.8",
                 "storage_type" : "SSD"
             }
 
@@ -76,20 +76,18 @@ def run_handler():
     if request.method == 'POST':
         try:
             data = request.json
-            print(data)
             
             start_time = datetime.now()
 
             query_result = mysql.execute_query_mysql_get_string_result(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
                                                                     info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
                                                                     info.MYSQL_DB_NAME, data['query'])    
-
-            print(query_result)  
                         
             end_time = datetime.now()
 
             query = "select cpu_usage, power_usage from instance_node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
+            
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
@@ -97,8 +95,6 @@ def run_handler():
             execution_time = (end_time - start_time)
         
             result = {"result":query_result.get_string(), "query_metric":query_metric[0], "execution_time":str(execution_time)}
-
-            print(result)
             
             return jsonify(result)
         except:

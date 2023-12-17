@@ -1,9 +1,9 @@
 let popover;
 var maxList = {
-    "cpuMax" : 0,
-    "powerMax" : 0,
-    "networkMax" : 0,
-    "timeMax" : 0,
+    "cpuMax" : 10000,
+    "powerMax" : 10000,
+    "networkMax" : 1000,
+    "timeMax" : 3600,
 }
 
 function addValidatorLog(data){
@@ -12,13 +12,12 @@ function addValidatorLog(data){
 
         var query = result.query_statement;
         var shortenedQuery = query.length > 40 ? query.slice(0, 50) + "..." : query;
-        // var storageType = document.getElementById("storageTypeInfo");
 
         const newRow = document.createElement("tr");
 
         const checkboxCell = document.createElement("td");
         checkboxCell.style.width = "5%";
-        checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="2">`;
+        checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input logCheckBox" name="form-type[]" value="2">`;
 
         const queryIDCell = document.createElement("td");
         queryIDCell.style.width = "1%";
@@ -28,7 +27,7 @@ function addValidatorLog(data){
         const modeIconCell = document.createElement("td");
         modeIconCell.style.width = "5%";
         modeIconCell.style.textAlign = "center";
-        if(result.option_id == 0){
+        if(result.storage_type == "CSD"){
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-c.png" width="20" height="20"/></div>`;
         }else{//SSD Option 조건일 경우
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-s.png" width="20" height="20"/></div>`;
@@ -38,7 +37,6 @@ function addValidatorLog(data){
         queryCell.style.width = "30%";
         queryCell.style.backgroundColor = "#fcfdfe";
         queryCell.textContent = `${shortenedQuery}`;
-        queryCell.id = result.validation_id;
         queryCell.className = "queryCells";
         queryCell.clicked = false;
         queryCell.addEventListener('click', function() {logClickEvent(queryCell);});
@@ -55,63 +53,63 @@ function addValidatorLog(data){
 
             if(i==0){//cpu
                 value = result.storage_cpu_usage_predict;
-                if(maxList.cpuMax < value){
-                    maxList.cpuMax = value;
+                // if(maxList.cpuMax < value){
+                //     maxList.cpuMax = value;
 
-                    var tbody = document.getElementById("validatorLogTableBody");
-                    var trList = tbody.getElementsByTagName('tr');
-                    for (var j = 0; j < trList.length; j++) {
-                        var tdList = trList[j].getElementsByTagName('td');
-                        var tdValue = tdList[4].querySelector('.progress-bar').ariaValueNow;
-                        tdList[4].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
-                        tdList[4].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
-                    }
-                }
+                //     var tbody = document.getElementById("validatorLogTableBody");
+                //     var trList = tbody.getElementsByTagName('tr');
+                //     for (var j = 0; j < trList.length; j++) {
+                //         var tdList = trList[j].getElementsByTagName('td');
+                //         var tdValue = tdList[4].querySelector('.progress-bar').ariaValueNow;
+                //         tdList[4].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
+                //         tdList[4].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
+                //     }
+                // }
                 max = maxList.cpuMax;
             }else if(i==1){//power
                 value = result.storage_power_usage_predict;
-                if(maxList.powerMax < value){
-                    maxList.powerMax = value;
+                // if(maxList.powerMax < value){
+                //     maxList.powerMax = value;
 
-                    var tbody = document.getElementById("validatorLogTableBody");
-                    var trList = tbody.getElementsByTagName('tr');
-                    for (var j = 0; j < trList.length; j++) {
-                        var tdList = trList[j].getElementsByTagName('td');
-                        var tdValue = tdList[5].querySelector('.progress-bar').ariaValueNow;
-                        tdList[5].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
-                        tdList[5].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
-                    }
-                }
+                //     var tbody = document.getElementById("validatorLogTableBody");
+                //     var trList = tbody.getElementsByTagName('tr');
+                //     for (var j = 0; j < trList.length; j++) {
+                //         var tdList = trList[j].getElementsByTagName('td');
+                //         var tdValue = tdList[5].querySelector('.progress-bar').ariaValueNow;
+                //         tdList[5].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
+                //         tdList[5].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
+                //     }
+                // }
                 max = maxList.powerMax;
             }else if(i==2){//network
                 value = result.network_usage_predict;
-                if(maxList.networkMax < value){
-                    maxList.networkMax = value;
+                // if(maxList.networkMax < value){
+                //     maxList.networkMax = value;
 
-                    var tbody = document.getElementById("validatorLogTableBody");
-                    var trList = tbody.getElementsByTagName('tr');
-                    for (var j = 0; j < trList.length; j++) {
-                        var tdList = trList[j].getElementsByTagName('td');
-                        var tdValue = tdList[6].querySelector('.progress-bar').ariaValueNow;
-                        tdList[6].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
-                        tdList[6].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
-                    }
-                }
+                //     var tbody = document.getElementById("validatorLogTableBody");
+                //     var trList = tbody.getElementsByTagName('tr');
+                //     for (var j = 0; j < trList.length; j++) {
+                //         var tdList = trList[j].getElementsByTagName('td');
+                //         var tdValue = tdList[6].querySelector('.progress-bar').ariaValueNow;
+                //         tdList[6].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
+                //         tdList[6].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
+                //     }
+                // }
                 max = maxList.networkMax;
             }else if(i==3){//time
                 value = result.execution_time_predict;
-                if(maxList.timeMax < value){
-                    maxList.timeMax = value;
+                // if(maxList.timeMax < value){
+                //     maxList.timeMax = value;
 
-                    var tbody = document.getElementById("validatorLogTableBody");
-                    var trList = tbody.getElementsByTagName('tr');
-                    for (var j = 0; j < trList.length; j++) {
-                        var tdList = trList[j].getElementsByTagName('td');
-                        var tdValue = tdList[7].querySelector('.progress-bar').ariaValueNow;
-                        tdList[7].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
-                        tdList[7].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
-                    }
-                }
+                //     var tbody = document.getElementById("validatorLogTableBody");
+                //     var trList = tbody.getElementsByTagName('tr');
+                //     for (var j = 0; j < trList.length; j++) {
+                //         var tdList = trList[j].getElementsByTagName('td');
+                //         var tdValue = tdList[7].querySelector('.progress-bar').ariaValueNow;
+                //         tdList[7].querySelector('.progress-bar').style.width = (tdValue / maxList.cpuMax) * 100 + "%";
+                //         tdList[7].querySelector('.progress-bar').ariaValueMax = maxList.cpuMax;
+                //     }
+                // }
                 max = maxList.timeMax;
             }
 
@@ -132,7 +130,6 @@ function addValidatorLog(data){
 
         const dummyButtonCell = document.createElement("td");
         dummyButtonCell.style.width = "5%";
-        dummyButtonCell.id = result.validation_id;
         dummyButtonCell.innerHTML = `
             <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
@@ -140,6 +137,7 @@ function addValidatorLog(data){
                 </svg>
             </span>
         `;
+        dummyButtonCell.addEventListener('click', function() {dummyButtonCellEventHandler(dummyButtonCell)});
         
         newRow.appendChild(checkboxCell);
         newRow.appendChild(queryIDCell);
@@ -149,12 +147,9 @@ function addValidatorLog(data){
             newRow.appendChild(progressBarCells[i]);
         }
         newRow.appendChild(dummyButtonCell);
+        newRow.id = result.validation_id;
 
         queryLogTableBody.appendChild(newRow);
-
-        //쿼리 로그 클릭 이벤트 발생 시 모달 로드
-        dummyButtonCell.addEventListener('click', function() {
-            dummyButtonCellEventHandler(dummyButtonCell)});
     });
 }
 
@@ -180,7 +175,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             LogButton.style.width = '80px';
             LogButton.textContent = 'LOG';
             LogButton.addEventListener('click', function () {
-                modalContentsLoad(dummyButtonCell.id);
+                modalContentsLoad(dummyButtonCell.parentNode.id);
                 popover.hide();
             });
 
@@ -193,7 +188,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             SnippetButton.style.marginBottom = '5px';
             SnippetButton.textContent = 'SNIPPET';
             SnippetButton.addEventListener('click', function () {
-                validationLogSnippetLoad(dummyButtonCell.id);
+                validationLogSnippetLoad(dummyButtonCell.parentNode.id);
                 popover.hide()
 
             });
@@ -207,7 +202,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             MetricButton.style.marginBottom = '5px';
             MetricButton.textContent = 'METRIC';
             MetricButton.addEventListener('click', function () {
-                validationLogMetricLoad(dummyButtonCell.id);
+                validationLogMetricLoad(dummyButtonCell.parentNode.id);
                 // 메트릭 차트 넣기
                 popover.hide();
             });

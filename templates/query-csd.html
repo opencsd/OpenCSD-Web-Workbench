@@ -232,7 +232,7 @@
                     </div>
                     <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
                     <div class="d-flex justify-content-center">
-                      <button id="pushdownButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+                      <button id="runButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
                     </div>
                   </div>
                 </div>
@@ -411,7 +411,10 @@
                     <div id="resultContainer">
                       <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                     </div>
-                    <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
+                    <!-- <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div> -->
+                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
+                    </div>
                   </div>
                 </div>
               </div>
@@ -449,7 +452,10 @@
                         </table>
                       </div>
                     </div>
-                    <div id="loading-metric" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div>
+                    <!-- <div id="loading-metric" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div> -->
+                    <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                      <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
+                    </div>
                   </div>       
                 </div>
               </div>
@@ -504,8 +510,16 @@
                     <div class="row">
                       <h3 class="card-title col-9">Query Log</h3>
                       <div class="col-3 text-end">
-                        <p class="m-0 text-secondary"></p>
-                        <button type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
+                        <div class="dropdown" align="right">
+                          <a href="#" id="queryDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">ALL</a>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item queryDropdownItem">ALL</a>
+                            <a class="dropdown-item queryDropdownItem">SELECT</a>
+                            <a class="dropdown-item queryDropdownItem">DCL</a>
+                            <a class="dropdown-item queryDropdownItem">DDL</a>
+                            <a class="dropdown-item queryDropdownItem">OTHER</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="table-responsive table-wrapper">
@@ -531,6 +545,11 @@
                         {% include 'query-csd-logDetail.html' %}
                       </div>
                     </div>
+                  </div>
+                  <div class="card-footer d-flex align-items-center">
+                    <p class="m-0 text-secondary">
+                      <button id="logDelete" type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
+                    </p>
                   </div>
                 </div>
               </div>

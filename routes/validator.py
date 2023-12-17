@@ -35,6 +35,7 @@ def run_handler():
             data = request.json # data 형식 체크
             user_id = data['User_ID']
             response = requests.post('http://10.0.4.87:30000/validator/run', json=data)
+            print(response)
 
             if response.status_code == 200:
                 result = response.content
@@ -178,22 +179,52 @@ def log_handler(action):
         if request.method == 'POST':
             try:
                 data = request.json #벨리데이션 id
-                query = "delete from validation_snippet where validation_id in {}".format(tuple(data['validation_id']))
 
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                
-                query = "delete from validation_csd_metric where validation_id in {}".format(tuple(data['validation_id']))
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                if(len(data['validation_id']) == 1):
+                    query = "delete from validation_snippet where validation_id={}".format(tuple(data['validation_id'])[0])
 
-                query = "delete from validation_log where validation_id in {}".format(tuple(data['validation_id']))
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                return "SUCCESS\n"
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                                        
+                    query = "delete from validation_csd_metric where validation_id={}".format(tuple(data['validation_id'])[0])
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                    
+                    query = "delete from validation_debug_log where validation_id={}".format(tuple(data['validation_id'])[0])
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
+                    query = "delete from validation_log where validation_id={}".format(tuple(data['validation_id'])[0])
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                    
+                else:
+                    query = "delete from validation_snippet where validation_id in {}".format(tuple(data['validation_id']))
+
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                    
+                    query = "delete from validation_csd_metric where validation_id in {}".format(tuple(data['validation_id']))
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                    
+                    query = "delete from validation_debug_log where validation_id in {}".format(tuple(data['validation_id'])[0])
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
+                    query = "delete from validation_log where validation_id in {}".format(tuple(data['validation_id']))
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                    
+                return {}
             except:
                 return "delete error"
     else:
