@@ -434,3 +434,203 @@ var detailTimeChartOption = {
         },
     },
 }
+
+var HostCSDCPUChartOption = {
+    chart: {
+        type: "bar",
+        fontFamily: 'inherit',
+        height: 150,
+        parentHeightOffset: 0,
+        toolbar: {
+            show: false,
+        },
+        animations: {
+            enabled: false
+        },
+    },
+    plotOptions: {
+        bar: {
+            barHeight: '50%',
+             horizontal: true,
+        }
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    fill: {
+        opacity: 1,
+    },
+    series: [{
+        name: "Rows",
+        data: [],
+    }],
+    tooltip: {
+        theme: 'dark'
+    },
+    grid: {
+        padding: {
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+        },
+        strokeDashArray: 4,
+    },
+    xaxis: {
+        labels: {
+            padding: 0,
+        },
+        tooltip: {
+            enabled: false
+        },
+        axisBorder: {
+            show: false,
+        },
+    },
+    yaxis: {
+        labels: {
+            padding: 4
+        },
+    },
+    labels: [
+        'Host CPU', 'CSD Total CPU'
+    ],
+    colors: [tabler.getColor("primary")],
+    legend: {
+        show: false,
+    },
+};
+
+var HostCSDPowerChartOption = {
+    chart: {
+        type: "bar",
+        fontFamily: 'inherit',
+        height: 150,
+        parentHeightOffset: 0,
+        toolbar: {
+            show: false,
+        },
+        animations: {
+            enabled: false
+        },
+    },
+    plotOptions: {
+        bar: {
+            barHeight: '50%',
+             horizontal: true,
+        }
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    fill: {
+        opacity: 1,
+    },
+    series: [{
+        name: "Rows",
+        data: [],
+    }],
+    tooltip: {
+        theme: 'dark'
+    },
+    grid: {
+        padding: {
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+        },
+        strokeDashArray: 4,
+    },
+    xaxis: {
+        labels: {
+            padding: 0,
+        },
+        tooltip: {
+            enabled: false
+        },
+        axisBorder: {
+            show: false,
+        },
+    },
+    yaxis: {
+        labels: {
+            padding: 4
+        },
+    },
+    labels: [
+        'Host CPU', 'CSD Total CPU'
+    ],
+    colors: [tabler.getColor("primary")],
+    legend: {
+        show: false,
+    },
+};
+
+var CSDCpuPowerChartOption = {
+    chart: {
+        type: "bar",
+        fontFamily: 'inherit',
+        height: 338,
+        parentHeightOffset: 0,
+        toolbar: {
+            show: false,
+        },
+        animations: {
+            enabled: false
+        },
+    },
+    plotOptions: {
+        bar: {
+            columnWidth: '50%',
+        }
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    fill: {
+        opacity: 1,
+    },
+    series: [{
+        name: "CSD CPU",
+        data: []
+    },{
+        name: "CSD Power",
+        data: []
+    }],
+    tooltip: {
+        theme: 'dark'
+    },
+    grid: {
+        padding: {
+            top: -20,
+            right: 0,
+            left: -4,
+            bottom: -4
+        },
+        strokeDashArray: 4,
+    },
+    xaxis: {
+        labels: {
+            padding: 0,
+        },
+        tooltip: {
+            enabled: false
+        },
+        axisBorder: {
+            show: false,
+        },
+    },
+    yaxis: {
+        labels: {
+            padding: 4
+        },
+    },
+    labels: [
+        'CSD1', 'CSD2', 'CSD3', 'CSD4', 'CSD5', 'CSD6', 'CSD7', 'CSD8'
+    ],
+    colors: [tabler.getColor("primary"), tabler.getColor("red")],
+    legend: {
+        show: false,
+    },
+}
