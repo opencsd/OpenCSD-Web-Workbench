@@ -1,8 +1,8 @@
 let intervalID = 1;
 
-var queryChart, ConnectedClientChart, DBRWRateChart, DBCacheHitRateChart, DBCacheUsageChart, DBCSDScanFilterChart
+// var queryChart, ConnectedClientChart, DBRWRateChart, DBCacheHitRateChart, DBCacheUsageChart, DBCSDScanFilterChart
 var CSDCapacityChart, SelectedCSDcpuChart, SelectedCSDmemoryChart, SelectedCSDnetworkChart, SelectedCSDpowerChart
-var HostCpuChart, HostMemoryChart, HostDiskChart, HostNetworkChart, HostPowerChart
+var HostCpuChart, HostMemoryChart, HostDiskChart, HostPowerChart
 
 // HostPowerChart= Highcharts.chart(document.getElementById("HostPowerChart"), HostCSDPowerOption);
 
@@ -18,13 +18,6 @@ var HostCpuChart, HostMemoryChart, HostDiskChart, HostNetworkChart, HostPowerCha
 
 document.addEventListener("DOMContentLoaded", function(){
   viewUserID();
-  // DataBase Monitoring 차트 정의
-  queryChart = Highcharts.chart(document.getElementById("mainDBMonitoring"), queryChartOption);
-  ConnectedClientChart = Highcharts.chart(document.getElementById("ConnectedClientChart"), ConnectedClientOption);
-  // DBRWRateChart = Highcharts.chart(document.getElementById("DBRWRateChart"), DBRWRateOption);
-  // DBCacheHitRateChart = Highcharts.chart(document.getElementById("DBCacheHitRateChart"), DBCacheHitRateOption);
-  // DBCacheUsageChart = Highcharts.chart(document.getElementById("DBCacheUsageChart"), DBCacheUsageOption);
-  DBCSDScanFilterChart = Highcharts.chart(document.getElementById("DBCSDScanFilterChart"), DBCSDScanFilterOption);
 
   // Host Metric Monitoring 차트 정의
   // hostServerCPUChart = Highcharts.chart(document.getElementById("mainHostMonitoring"), hostServerCPUChartOption);
@@ -36,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function(){
   HostCpuChart = Highcharts.chart(document.getElementById("HostCpuChart"), HostCSDCpuUsageOption);
   HostMemoryChart = Highcharts.chart(document.getElementById("HostMemoryChart"), HostCSDMemoryOption);
   HostDiskChart = Highcharts.chart(document.getElementById("HostDiskChart"), HostCSDDiskOption);
-  HostNetworkChart = Highcharts.chart(document.getElementById("HostNetworkChart"), HostCSDNetworkOption);
+  // HostNetworkChart = Highcharts.chart(document.getElementById("HostNetworkChart"), HostCSDNetworkOption);
   HostPowerChart= Highcharts.chart(document.getElementById("HostPowerChart"), HostCSDPowerOption);
    
   CSDCapacityChart = Highcharts.chart(document.getElementById("CSDCapacityChart"), CSDCapacityOption);
@@ -71,75 +64,111 @@ document.addEventListener("DOMContentLoaded", function(){
   // CSD5powerChart = Highcharts.chart(document.getElementById("SelectedCSDpowerChart"), SelectedCSDpowerOption);
 
   // get_CSDMetric();
-  // get_HostMetric();
+  get_TotalHostMetric();
   // get_CSDCapacity();
 
   // 5초에 한번씩 그래프 갱신
-  startInterval();
+  // startInterval();
+  setTimeout(startInterval(), 5000); // 5초 기다린 후 metric 수집 시작
 })
 
 // CSD 그래프 색상
 const colors = ['#FFFF7D', '#FFF478', '#FFE773', '#FFD56B', '#FFBF61', '#FFA355', '#FF8548', '#FF6038'];
 
-// csd 메트릭
-function get_CSDMetric() {
-  var select_cnt = [];
-  var insert_cnt = [];
-  var delete_cnt = [];
-  var update_cnt = [];
-  var scan_rows = [];
-  var filter_rows = [];
-  var scan_filter_ratio = [];
+// // csd 메트릭
+// function get_CSDMetric() {
+//   var select_cnt = [];
+//   var insert_cnt = [];
+//   var delete_cnt = [];
+//   var update_cnt = [];
+//   var scan_rows = [];
+//   var filter_rows = [];
+//   var scan_filter_ratio = [];
 
-  fetch('/monitoring/get_CSDMetric')
-  .then(response => response.json())
-  .then(data => {
-    // console.log(data);
-    select_cnt = data[0]['select_count'];
-    insert_cnt = data[0]['insert_count'];
-    delete_cnt = data[0]['delete_count'];
-    update_cnt = data[0]['update_count'];
+//   fetch('/monitoring/get_CSDMetric')
+//   .then(response => response.json())
+//   .then(data => {
+//     // console.log(data);
+//     select_cnt = data[0]['select_count'];
+//     insert_cnt = data[0]['insert_count'];
+//     delete_cnt = data[0]['delete_count'];
+//     update_cnt = data[0]['update_count'];
 
-    client_cnt = data[1]['client'];
+//     client_cnt = data[1]['client'];
 
-    filter_rows = data[2]['filter'];
-    scan_rows = data[2]['scan'];
-    scan_filter_ratio = data[2]['scan_filter_ratio'];
+//     filter_rows = data[2]['filter'];
+//     scan_rows = data[2]['scan'];
+//     scan_filter_ratio = data[2]['scan_filter_ratio'];
 
-    time = data[0]['timestamp'];
+//     time = data[0]['timestamp'];
 
-    // 배열 꽉 차면 맨 앞 데이터 하나 없애기
-    if (queryChart.series[0].data.length >= 12) {
-      queryChart.series[0].data[0].remove();
-    }
-    if (ConnectedClientChart.series[0].data.length >= 12) {
-      ConnectedClientChart.series[0].data[0].remove();
-    }
-    if (DBCSDScanFilterChart.series[0].data.length >= 12) {
-      DBCSDScanFilterChart.series[0].data[0].remove();
-    }
+//     // 배열 꽉 차면 맨 앞 데이터 하나 없애기
+//     if (queryChart.series[0].data.length >= 12) {
+//       queryChart.series[0].data[0].remove();
+//     }
+//     if (ConnectedClientChart.series[0].data.length >= 12) {
+//       ConnectedClientChart.series[0].data[0].remove();
+//     }
+//     if (DBCSDScanFilterChart.series[0].data.length >= 12) {
+//       DBCSDScanFilterChart.series[0].data[0].remove();
+//     }
 
-    queryChart.series[0].addPoint(select_cnt, false);
-    queryChart.series[1].addPoint(insert_cnt, false);
-    queryChart.series[2].addPoint(delete_cnt, false);
-    queryChart.series[3].addPoint(update_cnt, false);
-    queryChart.xAxis[0].categories.push(time);
+//     queryChart.series[0].addPoint(select_cnt, false);
+//     queryChart.series[1].addPoint(insert_cnt, false);
+//     queryChart.series[2].addPoint(delete_cnt, false);
+//     queryChart.series[3].addPoint(update_cnt, false);
+//     queryChart.xAxis[0].categories.push(time);
 
-    ConnectedClientChart.series[0].addPoint(client_cnt);
-    ConnectedClientChart.xAxis[0].categories.push(time);
+//     ConnectedClientChart.series[0].addPoint(client_cnt);
+//     ConnectedClientChart.xAxis[0].categories.push(time);
 
-    DBCSDScanFilterChart.series[0].addPoint(scan_rows);
-    DBCSDScanFilterChart.series[1].addPoint(filter_rows);
-    DBCSDScanFilterChart.series[2].addPoint(scan_filter_ratio);
-    DBCSDScanFilterChart.xAxis[0].categories.push(time);
+//     DBCSDScanFilterChart.series[0].addPoint(scan_rows);
+//     DBCSDScanFilterChart.series[1].addPoint(filter_rows);
+//     DBCSDScanFilterChart.series[2].addPoint(scan_filter_ratio);
+//     DBCSDScanFilterChart.xAxis[0].categories.push(time);
 
-    queryChart.redraw();
-    ConnectedClientChart.redraw();
-    DBCSDScanFilterChart.redraw();
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error);
-  });
+//     queryChart.redraw();
+//     ConnectedClientChart.redraw();
+//     DBCSDScanFilterChart.redraw();
+//   })
+//   .catch(error => {
+//     console.error('Error fetching data:', error);
+//   });
+// }
+
+function get_TotalHostMetric() {
+  fetch('/monitoring/get_TotalHostMetric')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        time = data.timestamp;
+        cpu_usg = data.cpu_usage;
+        mem_usg = data.memory_usage;
+        disk_usg = data.disk_usage;
+        // network_usg = data.network_usage;
+        power_usg = data.power_usage;
+        
+        HostCpuChart.series[0].setData(cpu_usg);
+        HostCpuChart.xAxis[0].setCategories(time);
+
+        HostMemoryChart.series[0].setData(mem_usg);
+        HostMemoryChart.xAxis[0].setCategories(time);
+
+        HostDiskChart.series[0].setData(disk_usg);
+        HostDiskChart.xAxis[0].setCategories(time);
+
+        // HostNetworkChart.series[0].setData(network_usg);
+        // HostNetworkChart.xAxis[0].setCategories(time);
+
+        HostPowerChart.series[0].setData(power_usg);
+        HostPowerChart.xAxis[0].setCategories(time);
+        
+        // console.log(power)
+
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
 }
 
 // Host / CSD 각 CPU 사용량
@@ -147,14 +176,13 @@ function get_HostMetric() {
   fetch('/monitoring/get_HostMetric')
     .then(response => response.json())
     .then(data => {
-      cpu_usg = data[0]['storage_cpu_usage'];
-      mem_usg = data[1]['storage_memory_usage'];
-      disk_usg = data[2]['storage_disk_usage'];
-      net_usg = data[3]['storage_network_usage'];
-      power_usg = data[4]['storage_power_usage'];
-      time = data[0]['timestamp'];
-
-      // 배열 꽉 차면 맨 앞 데이터 하나 없애기
+      console.log(data);
+      time = data.timestamp;
+      cpu_usg = data.cpu_usage;
+      mem_usg = data.memory_usage;
+      disk_usg = data.disk_usage;
+      power_usg = data.power_usage;
+      
       if (HostCpuChart.series[0].data.length >= 12) {
         HostCpuChart.series[0].data[0].remove();
       }
@@ -164,17 +192,15 @@ function get_HostMetric() {
       if (HostDiskChart.series[0].data.length >= 12) {
         HostDiskChart.series[0].data[0].remove();
       }
-      if (HostNetworkChart.series[0].data.length >= 12) {
-        HostNetworkChart.series[0].data[0].remove();
-      }
+      // if (HostNetworkChart.series[0].data.length >= 12) {
+      //   HostNetworkChart.series[0].data[0].remove();
+      // }
       if (HostPowerChart.series[0].data.length >= 12) {
         HostPowerChart.series[0].data[0].remove();
       }
-      
-      // console.log(HostCpuChart);
-      console.log(time);
+
       // 데이터 추가
-      HostCpuChart.series[0].addPoint(cpu_usg, time);
+      HostCpuChart.series[0].addPoint(cpu_usg, false);
       HostCpuChart.xAxis[0].categories.push(time);
 
       HostMemoryChart.series[0].addPoint(mem_usg, false);
@@ -182,18 +208,56 @@ function get_HostMetric() {
       
       HostDiskChart.series[0].addPoint(disk_usg, false);
       HostDiskChart.xAxis[0].categories.push(time);
-      
-      HostNetworkChart.series[0].addPoint(net_usg, false);
-      HostNetworkChart.xAxis[0].categories.push(time);
 
       HostPowerChart.series[0].addPoint(power_usg, false);
       HostPowerChart.xAxis[0].categories.push(time);
-      
+
       HostCpuChart.redraw();
       HostMemoryChart.redraw();
       HostDiskChart.redraw();
-      HostNetworkChart.redraw();
+      // HostNetworkChart.redraw();
       HostPowerChart.redraw();
+
+      // cpu_usg = data[0]['storage_cpu_usage'];
+      // mem_usg = data[1]['storage_memory_usage'];
+      // disk_usg = data[2]['storage_disk_usage'];
+      // net_usg = data[3]['storage_network_usage'];
+      // power_usg = data[4]['storage_power_usage'];
+      // time = data[0]['timestamp'];
+      // data.cpu
+      // 배열 꽉 차면 맨 앞 데이터 하나 없애기
+      // if (HostCpuChart.series[0].data.length >= 12) {
+      //   HostCpuChart.series[0].data[0].remove();
+      // }
+      // if (HostMemoryChart.series[0].data.length >= 12) {
+      //   HostMemoryChart.series[0].data[0].remove();
+      // }
+      // if (HostDiskChart.series[0].data.length >= 12) {
+      //   HostDiskChart.series[0].data[0].remove();
+      // }
+      // if (HostPowerChart.series[0].data.length >= 12) {
+      //   HostPowerChart.series[0].data[0].remove();
+      // }
+      
+      // // console.log(HostCpuChart);
+      // // 데이터 추가
+      // HostCpuChart.series[0].addPoint(cpu_usg, time);
+      // HostCpuChart.xAxis[0].categories.push(time);
+
+      // HostMemoryChart.series[0].addPoint(mem_usg, false);
+      // HostMemoryChart.xAxis[0].categories.push(time);
+      
+      // HostDiskChart.series[0].addPoint(disk_usg, false);
+      // HostDiskChart.xAxis[0].categories.push(time);
+
+      // HostPowerChart.series[0].addPoint(power_usg, false);
+      // HostPowerChart.xAxis[0].categories.push(time);
+      
+      // HostCpuChart.redraw();
+      // HostMemoryChart.redraw();
+      // HostDiskChart.redraw();
+      // HostNetworkChart.redraw();
+      // HostPowerChart.redraw();
     })
     .catch(error => {
       console.error('Error fetching data:', error);
@@ -233,8 +297,6 @@ function get_CSDCapacity() {
       console.error('Error fetching data:', error);
     });
 }
-
-// function get_AllCSDMetric():
 
 var clicked_csd;
 var selectsCSD;
@@ -442,15 +504,11 @@ var CSDCapacityOption = {
 // csd랑 node metric이랑 인터벌 간격 나눠야한다면? => 인터벌 별로 둘이 함수 나눠야 함
 function startInterval(){
   intervalId = setInterval(function() {
-    get_CSDMetric();
+    // get_CSDMetric();
     get_HostMetric();
     get_CSDCapacity();
     // get_totalCSDMetric();
     
-    // 
-    // if (isFunctionEnabled) {
-    //   myFunction();
-    // }
 
     // 클릭 이벤트 활성화시에만 돌아가도록
     if (clicked_csd != selectsCSD){
