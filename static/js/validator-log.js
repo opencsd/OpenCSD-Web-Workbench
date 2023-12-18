@@ -383,9 +383,7 @@ function validationLogMetricLoad(validationID) {
 
     MetricTableBody.innerHTML = ``;
 
-    var HostCSDCPUChart = new ApexCharts(document.querySelector("#HostCSDCPU"), HostCSDCPUChartOption);
-    HostCSDCPUChart.render();
-
+    
     fetch('/validator/metric/getAll', {
         method: 'POST',
         mode: 'cors',
@@ -411,8 +409,11 @@ function validationLogMetricLoad(validationID) {
         csdPowerTotal = csdPowerArr.reduce((acc, curr) => acc + curr, 0);
         csdPowerTotal = csdPowerTotal.toFixed(2);
 
-        var CpuTotal = parseFloat(data.result1[0].storage_cpu_usage_predict) + parseFloat(csdCPUTotal);
-        var PowerTotal = parseFloat(data.result1[0].storage_power_usage_predict) + parseFloat(csdPowerTotal);
+        var preCpuTotal = parseFloat(data.result1[0].storage_cpu_usage_predict) + parseFloat(csdCPUTotal);
+        var prePowerTotal = parseFloat(data.result1[0].storage_power_usage_predict) + parseFloat(csdPowerTotal);
+
+        var CpuTotal = preCpuTotal.toFixed(2)
+        var PowerTotal = prePowerTotal.toFixed(2)
 
         const CPUTotalCell = document.createElement("td");
         CPUTotalCell.style.width = "10%";
@@ -430,24 +431,28 @@ function validationLogMetricLoad(validationID) {
         HostCPUCell.style.width = "10%";
         HostCPUCell.style.textAlign = "center";
         HostCPUCell.textContent = `${data.result1[0].storage_cpu_usage_predict}`;
+        const HostCPU = data.result1[0].storage_cpu_usage_predict;
         cpuRow.appendChild(HostCPUCell);
 
         const HostPowerCell = document.createElement("td");
         HostPowerCell.style.width = "10%";
         HostPowerCell.style.textAlign = "center";
         HostPowerCell.textContent = `${data.result1[0].storage_power_usage_predict}`;
+        const HostPower = data.result1[0].storage_power_usage_predict;
         powerRow.appendChild(HostPowerCell);
 
         const csdCPUTotalCell = document.createElement("td");
         csdCPUTotalCell.style.width = "10%";
         csdCPUTotalCell.style.textAlign = "center";
         csdCPUTotalCell.textContent = `${csdCPUTotal}`;
+        const csdCpu = parseFloat(csdCPUTotal);
         cpuRow.appendChild(csdCPUTotalCell);
 
         const csdPowerTotalCell = document.createElement("td");
         csdPowerTotalCell.style.width = "10%";
         csdPowerTotalCell.style.textAlign = "center";
         csdPowerTotalCell.textContent = `${csdPowerTotal}`;
+        const csdPower = parseFloat(csdPowerTotal);
         powerRow.appendChild(csdPowerTotalCell);
 
         csdCpuArr.forEach(function (item) {
@@ -468,6 +473,22 @@ function validationLogMetricLoad(validationID) {
 
         MetricTableBody.appendChild(cpuRow);
         MetricTableBody.appendChild(powerRow);
+
+        var cpudataArray = [HostCPU, csdCpu]
+        HostCSDCPUChartOption.series[0].data = cpudataArray;
+        var HostCSDCPUChart = new ApexCharts(document.querySelector("#HostCSDCPU"), HostCSDCPUChartOption);
+        HostCSDCPUChart.render();
+
+        var powerdataArray = [HostPower, csdPower]
+        HostCSDPowerChartOption.series[0].data = powerdataArray;
+        var HostCSDPowerChart = new ApexCharts(document.querySelector("#HostCSDPower"), HostCSDPowerChartOption);
+        HostCSDPowerChart.render();
+
+        CSDCpuPowerChartOption.series[0].data = csdCpuArr;
+        CSDCpuPowerChartOption.series[1].data = csdPowerArr;
+        var CSDCpuPowerChart = new ApexCharts(document.querySelector("#CSDCpuPower"), CSDCpuPowerChartOption);
+        CSDCpuPowerChart.render();
+
     })
     .catch(console.error(error => console.error('Error: ', error)));
     
