@@ -28,28 +28,28 @@ function addQueryLog(data){
         const typeCell = document.createElement("td");
         typeCell.style.width = "5%";
         typeCell.style.textAlign = "center";
-        if (result.query_type == "select") {
+        if (result.query_type == "select" || result.query_type == 1) {
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`
         }
-        else if (result.query_type == "update") {
+        else if (result.query_type == "update" || result.query_type == 2) {
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`
         }
-        else if (result.query_type == "insert") {
+        else if (result.query_type == "insert" || result.query_type == 3) {
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M12 8v8" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`
         }
-        else if (result.query_type == "delete") {
+        else if (result.query_type == "delete" || result.query_type == 4) {
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
@@ -121,7 +121,7 @@ function addQueryLog(data){
                 value = filterRatio.toFixed(2);
                 max = maxList.filterRatio;
             }else if(i==3){//time
-                value = result.execution_time;
+                value = (result.execution_time).toFixed(2);
                 // if(maxList.timeMax < value){
                 //     maxList.timeMax = value;
 
@@ -154,7 +154,6 @@ function addQueryLog(data){
 
         const dummyButtonCell = document.createElement("td");
         dummyButtonCell.style.width = "5%";
-        // dummyButtonCell.id = result.query_id;
         dummyButtonCell.innerHTML = `
             <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">

@@ -67,7 +67,7 @@ detailMetricDropdownItems.forEach(function(item) {
 });
 
 function drawLogTable(){
-    fetch('/validator/log/get-all', {
+    fetch('/validator-ssd/log/get-all', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -97,7 +97,7 @@ runButton.addEventListener("click", function () {
     runButton.disabled = true;
 
     if(queryText){
-        fetch('/validator/run', {
+        fetch('/validator-ssd/run', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -263,7 +263,7 @@ function drawChart(){
 }
 
 function updateOptionTableData(validationID,optionID){
-    fetch('/validator/option/get-one', {
+    fetch('/validator-ssd/option/get-one', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -312,7 +312,7 @@ function logClickEvent(queryCell){
 }
 
 function logActivateEvent(validationID){
-    fetch('/validator/log/get-one', { //html 화면 내에서 가져올 수 있을듯
+    fetch('/validator-ssd/log/get-one', { //html 화면 내에서 가져올 수 있을듯
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -415,7 +415,7 @@ queryNumbers.forEach((number) => {
             dropdownToggle.textContent = dropdownItem.textContent;
 
             // 선택한 쿼리 서버로부터 GET
-            fetch('/validator/tpch', {
+            fetch('/validator-ssd/tpch', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
@@ -450,7 +450,7 @@ logDeleteButton.addEventListener("click", function() {
 
     console.log(checkedCheckboxIds)
 
-    fetch('/validator/log/delete', {
+    fetch('/validator-ssd/log/delete', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -517,7 +517,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
             NewOptionmodalLoad();
         }
 
-        fetch('/validator/option/get-one', {
+        fetch('/validator-ssd/option/get-one', {
             method: 'POST',
             mode: 'cors',
             headers: {
