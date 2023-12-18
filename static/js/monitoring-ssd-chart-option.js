@@ -15,7 +15,7 @@ var queryChartOption = {
   yAxis: {
     min: 0,
     title: {
-      text: null
+      text: '(ddl count)'
     },
     stackLabels: {
       enabled: true
@@ -98,11 +98,12 @@ var ConnectedClientOption = {
     allowDecimals: false,
     accessibility: {
         rangeDescription: null
-    }
+    },
+    categories: []
   },
   yAxis: {
     title: {
-        text: null
+      text: '(Client)'
     }
   },
   tooltip: 
@@ -163,11 +164,12 @@ xAxis: {
     allowDecimals: false,
     accessibility: {
         rangeDescription: 'Range: 1940 to 2017.'
-    }
+    },
+    categories: []
 },
 yAxis: {
     title: {
-        text: '(B/s)'
+        text: '(KB)'
     }
 },
 tooltip: {
@@ -215,11 +217,12 @@ xAxis: {
     allowDecimals: false,
     accessibility: {
         rangeDescription: 'Range: 1940 to 2017.'
-    }
+    },
+    categories: []
 },
 yAxis: {
     title: {
-        text: null
+      text: '(KB)'
     }
 },
 tooltip: {
@@ -257,57 +260,115 @@ series: [{
   }]
 }
 
-// Host Server Disk IO 사용량
-var SlowQueryOption = {
+// Cache Hit율
+var DBCacheHitRatioOption = {
   chart: {
     type: 'area'
-  },
-  title: {
-      text: 'Slow Query'
-  },
-  subtitle: {
-      text: null
-  },
-  xAxis: {
-      allowDecimals: false,
-      accessibility: {
-          rangeDescription: null
-      }
-  },
-  yAxis: 
-  [
-    {
-      title: {
-          text: null
-      }
+},
+title: {
+    text: 'DB Cache Hit Ratio'
+},
+subtitle: {
+    text: null
+},
+xAxis: {
+    allowDecimals: false,
+    accessibility: {
+        rangeDescription: 'Range: 1940 to 2017.'
+    },
+    categories: []
+},
+yAxis: {
+    title: {
+      text: '(%)'
     }
-  ],
-  tooltip: {
-      pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
-  },
-  plotOptions: {
-      area: {
-          marker: {
-              enabled: false,
-              symbol: 'circle',
-              radius: 2,
-              states: {
-                  hover: {
-                      enabled: true
-                  }
-              }
-          }
-      }
-  },
-  series: 
-  [
-    {
-      name: 'Slow Query',
-      data: [],
-      color: '#FFBDBD'
+},
+tooltip: {
+},
+plotOptions: {
+    area: {
+        marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 2,
+            states: {
+                hover: {
+                    enabled: true
+                }
+            }
+        }
     }
-  ]
+},
+series: [{
+    name: 'DB Cache Usage',
+    step: 'center',
+    data: [],
+    color: {
+      linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+      },
+      stops: [
+          [0, '#E5BA65'],
+          [1, '#E5CCAB']
+      ]
+    }
+  }]
 }
+
+// // Slow Query 량 
+// var SlowQueryOption = {
+//   chart: {
+//     type: 'area'
+//   },
+//   title: {
+//       text: 'Slow Query'
+//   },
+//   subtitle: {
+//       text: null
+//   },
+//   xAxis: {
+//       allowDecimals: false,
+//       accessibility: {
+//           rangeDescription: null
+//       }
+//   },
+//   yAxis: 
+//   [
+//     {
+//       title: {
+//           text: null
+//       }
+//     }
+//   ],
+//   tooltip: {
+//       pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+//   },
+//   plotOptions: {
+//       area: {
+//           marker: {
+//               enabled: false,
+//               symbol: 'circle',
+//               radius: 2,
+//               states: {
+//                   hover: {
+//                       enabled: true
+//                   }
+//               }
+//           }
+//       }
+//   },
+//   series: 
+//   [
+//     {
+//       name: 'Slow Query',
+//       data: [],
+//       color: '#FFBDBD'
+//     }
+//   ]
+// }
 
 // Host Server의 CPU 사용량
 var HostCpuUsageOption = {
@@ -315,7 +376,7 @@ var HostCpuUsageOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server CPU Usage'
+      text: 'CPU Usage'
   },
   subtitle: {
       text: null
@@ -324,12 +385,13 @@ var HostCpuUsageOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(%)'
+        text: '(core)'
     }
   },
   tooltip: {
@@ -378,7 +440,7 @@ var HostMemoryOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server Memory Usage'
+      text: 'Memory Usage'
   },
   subtitle: {
       text: null
@@ -387,12 +449,13 @@ var HostMemoryOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(MB)'
+        text: '(KB)'
     }
   },
   tooltip: {
@@ -441,7 +504,7 @@ var HostNetworkOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server Network Usage'
+      text: 'Network Usage'
   },
   subtitle: {
       text: null
@@ -450,12 +513,13 @@ var HostNetworkOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(MB)'
+        text: '(byte)'
     }
   },
   tooltip: {
@@ -504,7 +568,7 @@ var HostPowerOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server Power Usage'
+      text: 'Power Usage'
   },
   subtitle: {
       text: null
@@ -513,12 +577,13 @@ var HostPowerOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(W)'
+        text: '(W/s)'
     }
   },
   tooltip: {
@@ -567,7 +632,7 @@ var hostDiskIOOption = {
     type: 'area'
   },
   title: {
-      text: 'Host Server Disk I/O Usage'
+      text: 'Disk Usage'
   },
   subtitle: {
       text: null
@@ -576,12 +641,13 @@ var hostDiskIOOption = {
       allowDecimals: false,
       accessibility: {
           rangeDescription: null
-      }
+      },
+      categories: []
   },
   yAxis: 
   {
     title: {
-        text: '(W)'
+        text: '(KB)'
     }
   },
   tooltip: {
