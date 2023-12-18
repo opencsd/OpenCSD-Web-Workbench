@@ -4,15 +4,7 @@ var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 let intervalId;
 var hostServerCPUChart, hostServerCPUChartData;
 var hostServerPowerChart, hostServerPowerChartData;
-var timestamps;
-
-//임시값들----
-var tempCPUUpdate = [1,3.5,6.2,6.3,4.5];
-var tempPowerUpdate = [74,100,115,120,115];
-var clicked = false;
-let tempNum = 0;
-let temp = true;
-//------------
+var hostServerChartCategories;
 
 // /query/run 으로 받은 쿼리 결과 데이터
 let scanned_row_count;
@@ -20,9 +12,6 @@ let filtered_row_count;
 let filter_ratio;
 let ExecutionTime;
 let executionQueryID;
-//------------
-
-// console.log(storeduserInfo)
 
 document.addEventListener("DOMContentLoaded", function () {
     hostServerCPUChart = new ApexCharts(document.getElementById("queryHostServerCPU"), hostServerCPUChartOption);
@@ -32,9 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
     hostServerPowerChart.render();
 
     viewUserID();
-    updateLatestChart();
-    startInterval();
     getEnvironmentInfo();
+    getLatestChartData();
+    drawLogTable();
+    startInterval();
 });
 
 // 유저 아이디 
@@ -43,17 +33,27 @@ function viewUserID(){
     user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
 }
 
+
+const queryDropdown = document.querySelector("#queryDropdown");
+const queryDropdownItems = document.querySelectorAll(".queryDropdownItem");
+
+queryDropdownItems.forEach(function(item) {
+    item.addEventListener("click", function() {
+        queryDropdown.text = item.textContent;
+    });
+});
+
+const dbnameArea = document.getElementById("dbname");
+const dbmsArea = document.getElementById("dbms");
+const csdCountArea = document.getElementById("csd_count");
+const csdTypeArea = document.getElementById("csd_type");
+const dbmsSizeArea = document.getElementById("dbms_size");
+const blockCountArea = document.getElementById("block_count");
+const AgorithmArea = document.getElementById("algorithm");
+const indexArea = document.getElementById("index");
+
 // 쿼리 환경 정보 가져오기
 function getEnvironmentInfo() {
-    const dbnameArea = document.getElementById("dbname");
-    const dbmsArea = document.getElementById("dbms");
-    const csdCountArea = document.getElementById("csd_count");
-    const csdTypeArea = document.getElementById("csd_type");
-    const dbmsSizeArea = document.getElementById("dbms_size");
-    const blockCountArea = document.getElementById("block_count");
-    const AgorithmArea = document.getElementById("algorithm");
-    const indexArea = document.getElementById("index");
-
     fetch('/query/environment')
         .then(response => response.json())
         .then(data => {
@@ -61,7 +61,7 @@ function getEnvironmentInfo() {
             dbmsArea.textContent = data.dbms_type.toUpperCase();
             csdCountArea.textContent = data.csd_count;
             csdTypeArea.textContent = data.csd_type.toUpperCase();
-            dbmsSizeArea.textContent = data.db_size + " (GB)";
+            dbmsSizeArea.textContent = data.db_size + " (MB)";
             blockCountArea.textContent = data.block_count;
             AgorithmArea.textContent = data.scheduling_algorithm.toUpperCase();
             if (data.using_index == 0) {
@@ -77,46 +77,64 @@ function getEnvironmentInfo() {
         });
 }
 
+// 환경 설정 모달 동작
+var selected_csdkind = $("#query_csdkind");
+var SetCsdCount = $("#query_SetCsdCount");
+var SetBlockCount = $("#query_SetBlockCount");
+var scheduling_algorithm = $("#query_scheduling");
+var using_index = $("#query_index");
 
-// 쿼리 전체 로그 불러오기
-function getQueryLogAll() {
-    var query_type = "all";
+$("#query-csdSelect").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("CSD Checked")
+        selected_csdkind.prop('disabled', false)
+        SetCsdCount.prop('disabled', false)
+        SetBlockCount.prop('disabled', false)
+        using_index.prop('disabled', false)
+        scheduling_algorithm.prop('disabled', false)
+    }
+});
+$("#query-ssdSelect").on("change", function() {
+    if ($(this).is(":checked")){
+        console.log("SSD Checked")
+        selected_csdkind.prop('disabled', true)
+        SetCsdCount.prop('disabled', true)
+        SetBlockCount.prop('disabled', true)
+        using_index.prop('disabled', true)
+        scheduling_algorithm.prop('disabled', true)
+    }
+});
 
-    fetch('/query/get-all', {
-        method: 'POST',
+const envSetting = document.getElementById("envSetting");
+envSetting.addEventListener('click', function() {
+    envSettingmodalLoad()
+});
+
+function envSettingmodalLoad(){
+    $(function() {
+        $("#envSettingModal").modal("show");
+        var modalDiv = $('#envSettingModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
+
+function getLatestChartData(){
+    fetch('/query/metric', {
+        method: 'GET',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
         },
         redirect: 'follow',
-        body: JSON.stringify({
-            "user_id": storeduserInfo.workbench_user_id,
-            "query_type": query_type
-        })
     })
     .then(response => response.json())
-    .then(data => {
-        data.forEach(function(item) {
-            const newRow = document.createElement("tr");
-            const checkboxCell = document.createElement("td");
-            checkboxCell.style.width = "5%";
-            checkboxCell.style.textAlign = "center";
-            const typeCell = document.createElement("td");
-            typeCell.style.width = "5%";
-            typeCell.style.textAlign = "center";
-            const queryIDCell = document.createElement("td");
-            queryIDCell.style.width = "1%";
-            const queryCell = document.createElement("td");
-            queryCell.style.width = "30%";
-            const progressBarCells = [];
-            const dummyButtonCell = document.createElement("td");
-            dummyButtonCell.style.width = "5%";
-        })
-    })
+    .then(data => {updateChartData(data)})
 }
 
-//쿼리 수행 완료 후 쿼리 도는동안의 차트값 그래프 보여주는 함수
-function updateQueryChart(){
+function drawChart(){
     hostServerCPUChart.updateOptions({
         series: [{
             name: "cpu",
@@ -124,7 +142,7 @@ function updateQueryChart(){
             }
         ],
         xaxis: {
-            categories: timestamps
+            categories: hostServerChartCategories
         }
     });
 
@@ -135,66 +153,37 @@ function updateQueryChart(){
         }
         ],
         xaxis: {
-        categories: timestamps
+            categories: hostServerChartCategories
         }
     });
 }
-
-function updateLatestChart(){
-    //그래프 실시간 업데이트 하는 함수
-    let timestamp = [];
-    let cpu_usage = [];
-    let power_usage = [];
-    fetch('/query/metric')
-        .then(response => response.json())
-        .then(data => {
-            data.reverse().forEach(item => {
-                var date = new Date(item.time);
-                var hour = date.getHours();
-                var minute = date.getMinutes();
-                var seconds = date.getSeconds();
-                var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-                var formattedHour = hour < 10 ? '0' + hour : hour;
-                var formattedMinute = minute < 10 ? '0' + minute : minute;
-                var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
-                timestamp.push(time);
-                cpu_usage.push((item.cpu_usage)/1000000);
-                power_usage.push(item.power_usage);
-            });
-            hostServerCPUChart.updateOptions({
-                series: [{
-                    name: "cpu",
-                    data: cpu_usage
-                    }
-                ],
-                xaxis: {
-                    categories: timestamp
-                }
-            });
-        
-            hostServerPowerChart.updateOptions({
-                series: [{
-                    name: "power",
-                    data: power_usage
-                }
-                ],
-                xaxis: {
-                categories: timestamp
-                }
-            });
-        })
-
-    
-}
-
 
 function startInterval(){
     intervalId = setInterval(getLatestChartData,5000);
 }
 
-
-function startInterval(){
-    intervalId = setInterval(updateLatestChart,3000);//메트릭 업데이트 주기 설정
+function drawLogTable(){
+    fetch('/query/log/get-all', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            "user_id": storeduserInfo.workbench_user_id,
+            "query_type": queryDropdown.text
+        })
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        addQueryLog(data);
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    })
 }
 
 const environmentInfoTab = document.getElementById("environmentInfoTab");
@@ -202,7 +191,6 @@ const dbSchemaTab = document.getElementById("dbSchemaTab");
 
 const environmentInfoContainer = document.getElementById("environmentInfoContainer");
 const dbSchemaContainer = document.getElementById("dbSchemaContainer");
-const envSetting = document.getElementById("envSetting");
 
 environmentInfoTab.addEventListener("click", function() {
     environmentInfoTab.classList.add("active");
@@ -234,6 +222,7 @@ metricViewBtn.addEventListener('click', () => {
         metricViewPauseIcon.style.display = 'none';
         clearInterval(intervalId);
     } else {
+        getLatestChartData();
         metricViewPlayIcon.style.display = 'none';
         metricViewPauseIcon.style.display = 'inline';
         startInterval();
@@ -300,9 +289,22 @@ function envSettingmodalLoad(){
 // 쿼리 Run 동작
 const resultContainer = document.getElementById("resultContainer");
 const metricContainer = document.getElementById("metricContainer");
-const spinnerContainer = document.getElementById("loading");
+const spinnerContainer = document.querySelectorAll(".spinnerContainer");
+const queryResultArea = document.getElementById("queryResult");
+const queryTextArea = document.getElementById("queryTextarea");
+const runButton = document.getElementById("runButton");
 
-document.getElementById("pushdownButton").addEventListener("click", function () {
+runButton.addEventListener("click", function () {
+    runButton.disabled = true;
+
+    if (!isMetricViewBtnClicked) {
+        getLatestChartData();
+        metricViewPlayIcon.style.display = 'none';
+        metricViewPauseIcon.style.display = 'inline';
+        startInterval();
+        isMetricViewBtnClicked = !isMetricViewBtnClicked;
+    }
+
     // 실행한 TPC-H 쿼리 이름
     const run_query = dropdownToggle.textContent
     // Post 요청 시 서버에 보낼 json 데이터
@@ -311,21 +313,11 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         user_id: storeduserInfo.workbench_user_id
     }
     // 쿼리 수행 중 로딩 화면
-    spinnerContainer.style.display = "flex";
-    document.getElementById("loading-metric").style.display = "flex";
+    spinnerContainer.forEach((icon) => {
+        icon.style.display = "flex";
+    });
     resultContainer.style.display = "none";
     metricContainer.style.display = "none";  
-
-    const metrictable1 = document.querySelector('td.qtable_1');
-    const metrictable2 = document.querySelector('td.qtable_2');
-    const metrictable3 = document.querySelector('td.qtable_3');
-    const metrictable4 = document.querySelector('td.qtable_4');
-    const metrictable5 = document.querySelector('td.qtable_5');
-
-    hostServerCPUChartData = [];
-    hostServerPowerChartData = [];
-    timestamps = [];
-    var count = 0;
 
     fetch('/query/run', {
         method: 'POST',
@@ -337,62 +329,125 @@ document.getElementById("pushdownButton").addEventListener("click", function () 
         body: JSON.stringify(post_data)
     })
     .then(response => {
-        spinnerContainer.style.display = 'none'
-        document.getElementById("loading-metric").style.display = "none";
+        spinnerContainer.forEach((icon) => {
+            icon.style.display = "none";
+        });
         resultContainer.style.display = "block";
         metricContainer.style.display = "block";
         return response.json();
     })
     .then(data => {
+        clearInterval(intervalId);
+
         console.log(data)
-        metrictable1.textContent = data.query_result.scanned_row_count + " (line)";
-        metrictable2.textContent = data.query_result.filtered_row_count + " (line)";
-        scanned_row_count = data.query_result.scanned_row_count;
-        filtered_row_count = data.query_result.filtered_row_count;
-        executionQueryID = data.query_result.query_id;
 
-        let f_ratio = (data.query_result.filtered_row_count / data.query_result.scanned_row_count) * 100;
-        filter_ratio = f_ratio.toFixed(2);
-        metrictable3.textContent = filter_ratio + " (%)";
+        updateTableData(data);
 
-        let queryStart = new Date(data.query_result.start_time);
-        let queryEnd = new Date(data.query_result.end_time);
-        let queryTime = queryEnd - queryStart;
-        ExecutionTime = queryTime / 1000;
-        metrictable4.textContent = ExecutionTime + " (sec)";
-        metrictable5.textContent = data.query_result.snippet_count;
+        metricViewPlayIcon.style.display = 'inline';
+        metricViewPauseIcon.style.display = 'none';
 
-        document.getElementById("queryResult").value = data.query_result.query_result;
-
-        data.query_metric.forEach(item => {
-            hostServerCPUChartData.push(item.cpu_usage);
-            hostServerPowerChartData.push(item.power_usage);
-            timestamps.push(item.time);
-            count++;
-        })
-        updateQueryChart();
-        addNewQueryLog();
+        isMetricViewBtnClicked = false;
+        runButton.disabled = false;
+        
+        addQueryLog(data.query_result);
+        updateChartData(data.query_metric);
     })
     .catch(error => {
         console.error('Fetch 오류: ', error);
     })
-
-    metricViewPlayIcon.style.display = 'inline';
-    metricViewPauseIcon.style.display = 'none';
-
-    isMetricViewBtnClicked = false;
-    
-    clearInterval(intervalId);
-    
 });
 
+const metrictable1 = document.querySelector('td.qtable_1');
+const metrictable2 = document.querySelector('td.qtable_2');
+const metrictable3 = document.querySelector('td.qtable_3');
+const metrictable4 = document.querySelector('td.qtable_4');
+const metrictable5 = document.querySelector('td.qtable_5');
+
+function updateTableData(data){
+    metrictable1.textContent = data.query_result[0].scanned_row_count + " (line)";
+    metrictable2.textContent = data.query_result[0].filtered_row_count + " (line)";
+    scanned_row_count = data.query_result[0].scanned_row_count;
+    filtered_row_count = data.query_result[0].filtered_row_count;
+
+    let f_ratio = ((data.query_result[0].scanned_row_count - data.query_result[0].filtered_row_count) / data.query_result[0].scanned_row_count) * 100;
+    filter_ratio = f_ratio.toFixed(2);
+    metrictable3.textContent = filter_ratio + " (%)";
+
+    let queryStart = new Date(data.query_result[0].start_time);
+    let queryEnd = new Date(data.query_result[0].end_time);
+    let queryTime = queryEnd - queryStart;
+    ExecutionTime = queryTime / 1000;
+    metrictable4.textContent = ExecutionTime + " (sec)";
+    metrictable5.textContent = data.query_result[0].snippet_count;
+        
+    queryTextArea.value = data.query_result[0].query_statement;
+    queryResultArea.value = data.query_result[0].query_result;
+}
+
+function updateChartData(data){
+    hostServerCPUChartData = [];
+    hostServerPowerChartData = [];
+    hostServerChartCategories = [];
+
+    data.forEach(item => {
+        hostServerCPUChartData.push((item.cpu_usage)/1000000);
+        hostServerPowerChartData.push(item.power_usage);
+        var date = new Date(item.time);
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var seconds = date.getSeconds();
+        var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+        var formattedHour = hour < 10 ? '0' + hour : hour;
+        var formattedMinute = minute < 10 ? '0' + minute : minute;
+        var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
+        hostServerChartCategories.push(time);
+    })
+
+    drawChart();
+}
+
+function logClickEvent(queryCell){
+    fetch('/query/log/get-one', { //html 화면 내에서 가져올 수 있을듯
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'query_id': queryCell.parentNode.id
+        })
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        clearInterval(intervalId);
+
+        updateTableData(data);
+
+        metricViewPlayIcon.style.display = 'inline';
+        metricViewPauseIcon.style.display = 'none';
+
+        isMetricViewBtnClicked = false;
+
+        updateChartData(data.query_metric);
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    })
+}
+
+function logDeactivateEvent(validationID){
+    deleteFromChart(queryID);
+    drawChart();
+    drawOptionTable();
+}
 
 // TPCH 쿼리 드롭다운
 const queryNumbers = Array.from({ length: 22 }, (_, i) => i + 1);
 const dropdownMenu = document.querySelector(".dropdown-menu");
-const queryTextArea = document.getElementById("queryTextarea");
 const dropdownToggle = document.getElementById("dropdownToggle");
-const runQueryNum = ""
 
 queryNumbers.forEach((number) => {
     const dropdownItem = document.createElement("a");
@@ -404,31 +459,30 @@ queryNumbers.forEach((number) => {
 
     dropdownItem.addEventListener("click", function (event) {
         event.preventDefault(); 
-            dropdownToggle.textContent = dropdownItem.textContent;
-            fetch('/query/tpch', {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                redirect: 'follow',
-                body: JSON.stringify({
-                    "selected_tpch_num": number
-                })
+        dropdownToggle.textContent = dropdownItem.textContent;
+        fetch('/query/tpch', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            body: JSON.stringify({
+                "selected_tpch_num": number
             })
-            .then(response => response.json())
-            .then(data => {
-                queryTextArea.value = data.selected_tpch_query;
-            })
-            .catch(error => {
-                console.error('Fetch 오류: ', error);
-            })
-        }); 
+        })
+        .then(response => response.json())
+        .then(data => {
+            queryTextArea.value = data.selected_tpch_query;
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        })
+    }); 
 });
 
 // new query 버튼 누르면 쿼리입력창 초기화
 const newQueryButton = document.getElementById("newQuery");
-const queryResultArea = document.getElementById("queryResult");
 newQueryButton.addEventListener("click", function() {
     const metrictable = document.querySelectorAll('#metrictable tbody td');
     metrictable.forEach((cell) => {
@@ -437,6 +491,49 @@ newQueryButton.addEventListener("click", function() {
     queryTextArea.value = "";
     queryResultArea.value = "";
 
-    updateLatestChart();
-    startInterval();
+    if (!isMetricViewBtnClicked) {
+        getLatestChartData();
+        metricViewPlayIcon.style.display = 'none';
+        metricViewPauseIcon.style.display = 'inline';
+        startInterval();
+        isMetricViewBtnClicked = !isMetricViewBtnClicked;
+    }
+});
+
+const logDeleteButton = document.getElementById("logDelete");
+
+logDeleteButton.addEventListener("click", function() {
+    const checkedCheckboxIds = [];
+
+    const checkboxes = document.querySelectorAll('.logCheckBox');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            checkedCheckboxIds.push(checkbox.parentNode.parentNode.id);
+        }
+    });
+
+    fetch('/query/log/delete', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            "delete_query_id": checkedCheckboxIds
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        checkedCheckboxIds.forEach(rowID => {
+            var rowToDelete = document.getElementById(rowID);
+
+            if (rowToDelete) {
+                rowToDelete.remove();
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    })
 });

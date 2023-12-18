@@ -317,10 +317,6 @@
                   <div class="col-lg-12">
                     <div class="row">
                       <h3 class="card-title col-9">Query Log</h3>
-                      <div class="col-3 text-end">
-                        <p class="m-0 text-secondary"></p>
-                        <button type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
-                      </div>
                     </div>
                     <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                       <table id="validatorLogTable" class="table table-vcenter text-nowrap datatable" style="width: 100%;">
@@ -346,10 +342,17 @@
                       <div class="modal fade" id="snippetModal" tabindex="-1" role="dialog" aria-hidden="true">
                         {% include 'validator-snippetModal.html' %}
                       </div>
-                      
                     </div>
-                    <div class="modal fade" id="metricModal" tabindex="-1" role="dialog" aria-hidden="true">
-                      {% include 'validator-metricModal.html' %}
+                        <div class="modal fade" id="metricModal" tabindex="-1" role="dialog" aria-hidden="true">
+                          {% include 'validator-metricModal.html' %}
+                  </div>
+                  </div>
+                  
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                      <p class="m-0 text-secondary">
+                        <button id="logDelete" type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -389,7 +392,6 @@
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div class="row" style="padding-top: 5px;">
                             <div style="margin: 5px 15px 15px;">Detail Compare</div>
-                            <div id="detailContainer">
                               <div id="detailCPU" style="display: block;"></div>
                               <div id="detailPower" style="display: none;"></div>
                               <div id="detailNetwork" style="display: none;"></div>
@@ -445,7 +447,6 @@
               </div>
             </div>
           </div>
-
 
         </div>
       </div>
@@ -619,7 +620,7 @@
   <script src="../static/js/libs/demo.min.js" defer></script>
 
   <script src="../static/js/temp-log.js" defer></script>
-  <script src="../static/js/validator-chart-options.js" defer></script>
+  <script src="../static/js/validator-chart-option.js" defer></script>
   <script src="../static/js/validator-log.js" defer></script>
   <script src="../static/js/validator.js" defer></script>
 
@@ -673,6 +674,10 @@
       background: white; 
       width: 6px;
       border: 0px solid white; 
+    }
+
+    #validatorLogTableBody .queryCells:hover {
+        background-color: #2760b5;
     }
     </style>
 

@@ -9,8 +9,6 @@ var detailTimeChart, detailTimeChartSeries = [];
 var detailChartCategories = [], optionTableData = [];
 
 document.addEventListener("DOMContentLoaded", function () { 
-    viewUserID();
-
     metricCompareChart = new ApexCharts(document.getElementById("metricCompare"), metricCompareChartOption);
     detailCPUChart = new ApexCharts(document.getElementById("detailCPU"), detailCPUChartOption);
     detailPowerChart = new ApexCharts(document.getElementById("detailPower"), detailPowerChartOption);
@@ -23,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     detailNetworkChart.render();
     detailTimeChart.render();
 
+    viewUserID();
     drawLogTable();
 });
 
@@ -95,7 +94,7 @@ const runButton = document.getElementById("runButton");
 
 runButton.addEventListener("click", function () {
     var queryText = dropdownToggle.textContent;
-    console.log(queryText);
+    runButton.disabled = true;
 
     if(queryText){
         fetch('/validator/run', {
@@ -113,6 +112,7 @@ runButton.addEventListener("click", function () {
         })
         .then(response => response.json())
         .then(data => {
+            runButton.disabled = false;
             addValidatorLog(data);
             updateChartData(data[0]);
             drawChart();
@@ -212,6 +212,12 @@ function updateChartData(data){
     detailChartCategories.push(id);
 
     if(metricCompareChartSeries.length == 3){
+        let firstID = detailChartCategories[0];
+        let numberValue = parseInt(firstID.match(/\d+/)[0], 10);
+        const firstCell = document.getElementById(numberValue);
+        firstCell.style.backgroundColor = "#fcfdfe";
+        firstCell.clicked = !firstCell.clicked;
+
         metricCompareChartSeriesReal.shift();
         metricCompareChartSeries.shift();
         detailCPUChartSeries.shift();
@@ -296,15 +302,11 @@ function updateOptionTableData(validationID,optionID){
 
 function logClickEvent(queryCell){
     if(queryCell.clicked){
-        // console.log(queryCell.style.backgroundColor);
-        queryCell.style.backgroundColor = "#f6f8fb";
-        logDeactivateEvent(queryCell.id)
-        // console.log(queryCell.style.backgroundColor);
+        queryCell.style.backgroundColor="#fcfdfe";
+        logDeactivateEvent(queryCell.parentNode.id);
     }else{
-        // console.log(queryCell.style.backgroundColor);
-        logActivateEvent(queryCell.id);
-        queryCell.style.backgroundColor = "#fcfdfe";
-        // console.log(queryCell.style.backgroundColor);
+        queryCell.style.backgroundColor="#f6f8fb";
+        logActivateEvent(queryCell.parentNode.id);
     }
     queryCell.clicked = !queryCell.clicked;
 }
@@ -432,6 +434,53 @@ queryNumbers.forEach((number) => {
                 console.error('Fetch 오류: ', error);
             })
     }); 
+});
+
+const logDeleteButton = document.getElementById("logDelete");
+
+logDeleteButton.addEventListener("click", function() {
+    const checkedCheckboxIds = [];
+
+    const checkboxes = document.querySelectorAll('.logCheckBox');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            checkedCheckboxIds.push(checkbox.parentNode.parentNode.id);
+        }
+    });
+
+    console.log(checkedCheckboxIds)
+
+    fetch('/validator/log/delete', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            "validation_id": checkedCheckboxIds
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        checkedCheckboxIds.forEach(rowID => {
+            var rowToDelete = document.getElementById(rowID);
+
+            if (rowToDelete) {
+                rowToDelete.remove();
+            }
+
+            let possibleID = "ID " + rowID;
+            const indexOfValue = detailChartCategories.indexOf(possibleID);
+
+            if (indexOfValue != -1) {
+                logDeactivateEvent(rowID);
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    })
 });
 
 // new query 버튼 누르면 쿼리입력창 초기화
