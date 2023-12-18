@@ -84,6 +84,7 @@ var SetBlockCount = $("#query_SetBlockCount");
 var scheduling_algorithm = $("#query_scheduling");
 var using_index = $("#query_index");
 
+
 $("#query-csdSelect").on("change", function() {
     if ($(this).is(":checked")){
         console.log("CSD Checked")
@@ -120,6 +121,7 @@ function envSettingmodalLoad(){
         });
     });
 }
+
 
 function getLatestChartData(){
     fetch('/query/metric', {
@@ -230,7 +232,6 @@ metricViewBtn.addEventListener('click', () => {
     isMetricViewBtnClicked = !isMetricViewBtnClicked;
 });
 
-
 // 환경 설정 모달 동작
 // var selected_csdkind = $("#query_csdkind");
 // var SetCsdCount = $("#query_SetCsdCount");
@@ -284,7 +285,6 @@ function envSettingmodalLoad(){
         });
     });
 }
-
 
 // 쿼리 Run 동작
 const resultContainer = document.getElementById("resultContainer");
@@ -423,6 +423,7 @@ function logClickEvent(queryCell){
     })
     .then(data => {
         clearInterval(intervalId);
+
 
         updateTableData(data);
 
