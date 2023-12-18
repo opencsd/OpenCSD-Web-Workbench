@@ -241,12 +241,17 @@
                       </div>
                       <div class="col-6" style=" display: flex; flex-direction: row-reverse;">
                         <div class="dropdown" style="width: auto;">
-                          <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown">Select Validation Option</a>
+                          <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown" id="OptionDropdown">Select Validation Option</a>
                           <div class="dropdown-menu opt_menu">
                             <a class="dropdown-item opt_item" href="#" data-option="pushdown">Pushdown Option Set</a>
                             <a class="dropdown-item opt_item" href="#" data-option="nonpushdown">Non Pushdown Option Set</a>
                             <a class="dropdown-item opt_item" href="#" id="new_option">New Option+</a>
                           </div>
+                          <!-- <select class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown" id="OptionDropdown" >
+                            <option value="1" selected>Pushdown Option Set</option>
+                            <option value="2">Non Pushdown Option Set</option>
+                            <option value="3">New Option+</option>
+                        </select> -->
                         </div>
                       </div>
                       <div class="modal fade" id="validator-newoption" tabindex="-1">

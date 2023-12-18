@@ -261,7 +261,7 @@ LogTableClick.addEventListener('click', function(e) {
 
             data.query_metric[0].forEach(item => {
                 hostServerCPUChartData.push(item.cpu_usage);
-                hostServerPowerChartData.push(item.memory_usage);
+                hostServerPowerChartData.push(item.power_usage);
                 timestamps.push(item.time);
             })
             updateQueryChart();

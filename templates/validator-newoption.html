@@ -14,7 +14,7 @@
         <div class="form-selectgroup-boxes row mb-3">
         <div class="col-md-6">
             <label class="form-selectgroup-item">
-            <input type="radio" name="report-type" value="1" class="form-selectgroup-input" id="ssd_selected1"/>
+            <input type="radio" name="storage_type" value="1" class="form-selectgroup-input" id="ssd_selected1"/>
             <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                 <span class="form-selectgroup-check"></span>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-6">
             <label class="form-selectgroup-item">
-            <input type="radio" name="report-type" value="1" class="form-selectgroup-input" id="csd_selected1"/>
+            <input type="radio" name="storage_type" value="1" class="form-selectgroup-input" id="csd_selected1"/>
             <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                 <span class="form-selectgroup-check"></span>
@@ -77,12 +77,14 @@
         </div>
         <label class="form-label">Scheduling Algorithm</label>
         <div class="btn-group w-100"role="group" id="new_scheduling_algorithm">
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="new-csd-metric-score" autocomplete="off" checked>
-            <label for="btn-radio-basic-1" type="button" class="btn">CSD Metric Score</label>
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="new-block-count-based" autocomplete="off">
-            <label for="btn-radio-basic-2" type="button" class="btn">Block Count Based</label>
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="new-sst-file-spread" autocomplete="off">
-            <label for="btn-radio-basic-3" type="button" class="btn">SST File Spread</label>
+            <input type="radio" class="btn-check" name="btn-new-algo" id="new-random" autocomplete="off" checked>
+            <label for="btn-radio-basic-1" type="button" class="btn">Random</label>
+            <input type="radio" class="btn-check" name="btn-new-algo" id="new-dcs" autocomplete="off">
+            <label for="btn-radio-basic-2" type="button" class="btn">DCS</label>
+            <input type="radio" class="btn-check" name="btn-new-algo" id="new-dsi" autocomplete="off">
+            <label for="btn-radio-basic-3" type="button" class="btn">DSI</label>
+            <input type="radio" class="btn-check" name="btn-new-algo" id="new_AutoSelection" autocomplete="off">
+            <label for="query_AutoSelection" class="btn">Auto Selection</label>
         </div>
         <div class="mb-3">
             <label class="row" style="margin-top: 15px;">
@@ -99,7 +101,7 @@
         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
         Cancel
         </a>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="NewOptionSave" onclick="addNewOption()">Save</button>
     </div>
     </div>
 </div>

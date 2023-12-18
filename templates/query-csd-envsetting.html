@@ -8,13 +8,13 @@
     <div class="modal-body">
         <div class="mb-3">
             <label class="form-label">DB Name</label>
-            <input type="text" class="form-control" id="inputDBname">
+            <input type="text" class="form-control" id="inputDBname" disabled>
         </div>
         <label class="form-label">Storage Type</label>
         <div class="form-selectgroup-boxes row mb-3">
         <div class="col-md-6">
             <label class="form-selectgroup-item">
-            <input type="radio" id="query-ssdSelect" name="report-type" value="1" class="form-selectgroup-input" />
+            <input type="radio" id="query-ssdSelect" name="report-type" value="1" class="form-selectgroup-input" disabled/>
             <span class="form-selectgroup-label d-flex align-items-center p-3">
                 <span class="me-3">
                 <span class="form-selectgroup-check"></span>
@@ -44,7 +44,7 @@
         <div class="col-lg-6">
             <div class="mb-3">
                 <label class="form-label">DBMS</label>
-                <select class="form-select" id="query_dbms_select">
+                <select class="form-select" id="query_dbms_select" disabled>
                     <option value="1" selected>MySQL</option>
                     <option value="2">K-OpenSourceDB</option>
                     <option value="3">SQLite</option>
@@ -54,7 +54,7 @@
         <div class="col-lg-6">
             <div class="mb-3">
             <label class="form-label">CSD Kind</label>
-            <select class="form-select" id="query_csdkind">
+            <select class="form-select" id="query_csdkind" disabled>
                 <option value="1" selected>NGD System</option>
                 <option value="2">ScaleFlux</option>
                 <option value="3">SmartSSD</option>
@@ -66,7 +66,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label">CSD Count</label>
-                    <input type="number" class="form-control" id="query_SetCsdCount">
+                    <input type="number" class="form-control" id="query_SetCsdCount" disabled>
                     </div>
             </div>
             <div class="col-lg-6">
@@ -77,14 +77,16 @@
             </div>
         </div>
         <label class="form-label">Scheduling Algorithm</label>
-        <div class="btn-group w-100"role="group" id="query_scheduling">
+        <div class="btn-group w-100" role="group" id="query_scheduling">
             <input type="radio" class="btn-check" name="btn-radio-basic" id="query_CsdMetricScore" autocomplete="off" checked>
-            <label for="btn-radio-basic-1" type="button" class="btn">CSD Metric Score</label>
+            <label for="query_CsdMetricScore" class="btn">Random</label>
             <input type="radio" class="btn-check" name="btn-radio-basic" id="query_BlockCountBased" autocomplete="off">
-            <label for="btn-radio-basic-2" type="button" class="btn">Block Count Based</label>
+            <label for="query_BlockCountBased" class="btn">DCS</label>
             <input type="radio" class="btn-check" name="btn-radio-basic" id="query_SSTFileSpread" autocomplete="off">
-            <label for="btn-radio-basic-3" type="button" class="btn">SST File Spread</label>
-        </div>
+            <label for="query_SSTFileSpread" class="btn">DSI</label>
+            <input type="radio" class="btn-check" name="btn-radio-basic" id="query_AutoSelection" autocomplete="off">
+            <label for="query_AutoSelection" class="btn">Auto Selection</label>
+        </div>        
         <div class="mb-3">
             <label class="row" style="margin-top: 15px;">
                 <span class="col"><b>Using Index</b></span>

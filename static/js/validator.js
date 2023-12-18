@@ -497,7 +497,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
 });
 
 // 새로운 옵션 추가 모달
-function NewOptionmodalLoad(b){
+function NewOptionmodalLoad(){
     $(function() {
         $("#validator-newoption").modal("show");
         var modalDiv = $('#validator-newoption');
@@ -507,6 +507,74 @@ function NewOptionmodalLoad(b){
         });
     });
 }
+
+// 새로운 옵션 입력 후 저장 버튼 클릭 시 동작
+function addNewOption() {
+    const option_name = document.getElementById("NewOptionName").value;
+    var storage_type = '';
+    var radios = document.getElementsByName('storage_type');
+
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            storage_type = radios[i].parentNode.querySelector('.form-selectgroup-title').innerText;
+            break;
+        }
+    }
+
+    var dbms_type = document.getElementById("new_dbms").value;
+    var csd_type = document.getElementById("new_csdkind").value;
+    var csd_count = document.getElementById("newCsdCount").value;
+    var block_count = document.getElementById("newBlockCount").value;
+
+    var radioButtons = document.getElementsByName('btn-new-algo');
+    var scheduling = '';
+    for (var i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            scheduling = document.querySelector('label[for="' + radioButtons[i].id + '"]').innerText;
+            break;
+        }
+    }
+
+    console.log(scheduling)
+    
+    // fetch('/validator/option/insert', {
+    //     method: 'POST',
+    //     mode: 'cors',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     redirect: 'follow',
+    //     body: JSON.stringify({
+    //         option_id: optionID
+    //     })
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //     dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
+    //     storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+    //     csdkindInfo.textContent = data[0].csd_type;
+    //     csdCountInfo.textContent = data[0].csd_count;
+    //     blockCountInfo.textContent = data[0].block_count;
+    //     algorithmInfo.textContent = data[0].scheduling_algorithm;
+    //     selectedOptionName = opt_selectedOption;
+    //     selectedStorageType = data[0].storage_type.toUpperCase();
+    // })
+    // .catch(error => {
+    //     console.error('Fetch 오류: ', error);
+    // });
+    
+    
+    var newOption = document.createElement("option");
+    newOption.text = "새로운 항목"; // 저장 시 입력한 옵션 이름
+    newOption.value = "newItem";
+
+    var dropdown = document.getElementById("OptionDropdown");
+    var lastOption = dropdown.lastElementChild;
+
+    dropdown.insertBefore(newOption, lastOption.nextSibling);
+    // dropdown.add(newOption);
+}
+
 var new_selected_csdkind = $("#new_csdkind");
 var new_SetCsdCount = $("#newCsdCount");
 var new_SetBlockCount = $("#newBlockCount");

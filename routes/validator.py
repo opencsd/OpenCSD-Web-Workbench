@@ -245,6 +245,25 @@ def metric_handler(action):
                 return jsonify(result)
             except:
                 return ""
+    # 벨리데이션 로그 메트릭 상세 팝업
+    elif action.startswith('getAll'):
+        if request.method == 'POST':
+            try: 
+                data = request.json
+                print(data)
+                query1 = "select execution_time_predict, storage_cpu_usage_predict, storage_power_usage_predict, network_usage_predict from validation_log where validation_id={}".format(data['validation_id'])
+                result1 = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                           info.INSTANCE_MANAGEMENT_DB_NAME, query1)
+                query2 = "select * from validation_csd_metric where validation_id={}".format(data['validation_id'])
+                result2 = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                           info.INSTANCE_MANAGEMENT_DB_NAME, query2)
+                combined_result = {'result1' : result1, 'result2' : result2}
+
+                return jsonify(combined_result)
+            except:
+                return ""
         
 # 벨리데이션 로그의 쿼리 수행 로그 팝업 -> 구현...필요...,db도 만들고
 @validator_bp.route('/debugg', methods=['GET', 'POST'])
