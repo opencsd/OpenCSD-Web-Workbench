@@ -43,8 +43,6 @@ def get_csd_metric():
   query = "select * from database_monitoring order by time desc limit 1 tz('Asia/Seoul');"
   result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, 'keti_db', query)
   
-  print(result)
-  
   csd_metric = []
     
   ddl_count_inner = {}
@@ -54,7 +52,6 @@ def get_csd_metric():
   time = result[0][0].get('time')
   date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ') + timedelta(hours=9)
   timestamp = date_time_obj.strftime('%H:%M:%S') 
-  print(timestamp)
 
   select_count = result[0][0].get('select_count')
   insert_count = result[0][0].get('insert_count')
@@ -110,7 +107,6 @@ def get_csd_metric():
   csd_metric.append(client_count_outer[-1])
   csd_metric.append(scan_filter_ratio_outer[-1])
 
-  print(csd_metric)
   return csd_metric
 
 def get_selected_csd_metric():
@@ -138,7 +134,6 @@ def get_instance_metric():
   time = result[0][0].get('time')
   date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
   timestamp = date_time_obj.strftime('%H:%M:%S') 
-  print(timestamp)
 
   cpu_usage_inner['timestamp'] = timestamp
   memory_usage_inner['timestamp'] = timestamp
@@ -258,7 +253,6 @@ def get_SelectedCSDMetric():
     time = result[0][0].get('time')
     date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
     timestamp = date_time_obj.strftime('%H:%M:%S') 
-    print(timestamp)
     csd_metric_inner["timestamp"] = timestamp
     csd_metric_inner["cpu_usage"] = result[0][i].get('cpu_usage')
     csd_metric_inner["memory_usage"] = result[0][i].get('memory_usage') + (random.randint(0, 2) * 10000)
@@ -281,7 +275,6 @@ def get_StartCollectSelectedCSDMetric():
   time = result[0][0].get('time')
   date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
   timestamp = date_time_obj.strftime('%H:%M:%S') 
-  print(timestamp)
   csd_metric_inner["timestamp"] = timestamp
   csd_metric_inner["cpu_usage"] = result[0][0].get('cpu_usage')
   csd_metric_inner["memory_usage"] = result[0][0].get('memory_usage')

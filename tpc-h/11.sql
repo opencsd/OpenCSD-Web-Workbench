@@ -25,4 +25,5 @@ having
             and n_name = 'MOZAMBIQUE'
     )
 order by
-    value desc;
+    value desc
+limit 5;

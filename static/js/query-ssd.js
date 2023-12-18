@@ -252,7 +252,7 @@ runButton.addEventListener("click", function () {
         metricViewPauseIcon.style.display = 'none';
     
         isMetricViewBtnClicked = false;
-        pushdownButton.disabled = false;
+        runButton.disabled = false;
 
         updateChartData(data.query_metric);
     })

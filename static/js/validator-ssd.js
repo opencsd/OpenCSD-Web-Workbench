@@ -508,9 +508,9 @@ opt_dropdownMenu.addEventListener("click", function (e) {
         const opt_selectedOption = e.target.textContent;
         opt_dropdownToggle.textContent = opt_selectedOption;
         
-        if (opt_selectedOption === "Pushdown Option Set") {
+        if (opt_selectedOption === "Offloading Option Set") {
             optionID = 0;
-        } else if (opt_selectedOption === "Non Pushdown Option Set") {
+        } else if (opt_selectedOption === "Non Offloading Option Set") {
             optionID = 1;
         } else{
             // 새로운 옵션 추가 모달 창

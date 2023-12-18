@@ -3,7 +3,7 @@ var maxList = {
     "cpuMax" : 10000,
     "powerMax" : 10000,
     "networkMax" : 1000,
-    "timeMax" : 3600,
+    "timeMax" : 1000,
 }
 
 function addValidatorLog(data){
