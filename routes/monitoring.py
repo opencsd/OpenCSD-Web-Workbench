@@ -4,13 +4,13 @@ dashboard_summary = {
     'db_name': 'tpc-h',
     'data_store_type': 'Row Base',
     'db_user': 'root',
-    'db_size': '196 (GB)',
+    'db_size': '1089.8 (MB)',
     'storage_type': 'CSD',
     'block_size': '4096 (MB)',
-    'workbench_user': 'User 1234',
+    'workbench_user': 'keti-opencsd-admin',
     'csd_count': 8,
     'csd_kind': 'NGD',
-    'scheduling_algorithm': 'Csd Metric Score',
+    'scheduling_algorithm': 'CSD Metric Score',
     'db_host_ip': '10.0.4.80:40001'
 }
 

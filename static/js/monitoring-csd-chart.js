@@ -15,6 +15,7 @@ var HostCpuChart, HostMemoryChart, HostDiskChart, HostNetworkChart, HostPowerCha
 // var CSD7 = [];
 // var CSD8 = [];
 
+
 document.addEventListener("DOMContentLoaded", function(){
   viewUserID();
   // DataBase Monitoring 차트 정의
