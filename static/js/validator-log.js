@@ -382,7 +382,10 @@ function validationLogMetricLoad(validationID) {
 
     MetricTableBody.innerHTML = ``;
 
-    fetch('/validator/metric/csd', {
+    var HostCSDCPUChart = new ApexCharts(document.querySelector("#HostCSDCPU"), HostCSDCPUChartOption);
+    HostCSDCPUChart.render();
+
+    fetch('/validator/metric/getAll', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -393,51 +396,81 @@ function validationLogMetricLoad(validationID) {
     })
     .then(response => response.json())
     .then(data => {
-        data.forEach(function (item) {
+        console.log(data)
+
+        var csdCpuArr = [];
+        var csdPowerArr = [];
+        
+        data.result2.forEach(function (item) {
+            csdCpuArr.push(item.csd_cpu_usage_predict);
+            csdPowerArr.push(item.csd_power_usage_predict);
+        })
+        csdCPUTotal = csdCpuArr.reduce((acc, curr) => acc + curr, 0);
+        csdCPUTotal = csdCPUTotal.toFixed(2);
+        csdPowerTotal = csdPowerArr.reduce((acc, curr) => acc + curr, 0);
+        csdPowerTotal = csdPowerTotal.toFixed(2);
+
+        var CpuTotal = parseFloat(data.result1[0].storage_cpu_usage_predict) + parseFloat(csdCPUTotal);
+        var PowerTotal = parseFloat(data.result1[0].storage_power_usage_predict) + parseFloat(csdPowerTotal);
+
+        const CPUTotalCell = document.createElement("td");
+        CPUTotalCell.style.width = "10%";
+        CPUTotalCell.style.textAlign = "center";
+        CPUTotalCell.textContent = `${CpuTotal}`;
+        cpuRow.appendChild(CPUTotalCell);
+
+        const PowerTotalCell = document.createElement("td");
+        PowerTotalCell.style.width = "10%";
+        PowerTotalCell.style.textAlign = "center";
+        PowerTotalCell.textContent = `${PowerTotal}`;
+        powerRow.appendChild(PowerTotalCell);
+
+        const HostCPUCell = document.createElement("td");
+        HostCPUCell.style.width = "10%";
+        HostCPUCell.style.textAlign = "center";
+        HostCPUCell.textContent = `${data.result1[0].storage_cpu_usage_predict}`;
+        cpuRow.appendChild(HostCPUCell);
+
+        const HostPowerCell = document.createElement("td");
+        HostPowerCell.style.width = "10%";
+        HostPowerCell.style.textAlign = "center";
+        HostPowerCell.textContent = `${data.result1[0].storage_power_usage_predict}`;
+        powerRow.appendChild(HostPowerCell);
+
+        const csdCPUTotalCell = document.createElement("td");
+        csdCPUTotalCell.style.width = "10%";
+        csdCPUTotalCell.style.textAlign = "center";
+        csdCPUTotalCell.textContent = `${csdCPUTotal}`;
+        cpuRow.appendChild(csdCPUTotalCell);
+
+        const csdPowerTotalCell = document.createElement("td");
+        csdPowerTotalCell.style.width = "10%";
+        csdPowerTotalCell.style.textAlign = "center";
+        csdPowerTotalCell.textContent = `${csdPowerTotal}`;
+        powerRow.appendChild(csdPowerTotalCell);
+
+        csdCpuArr.forEach(function (item) {
             const csdCPUCell = document.createElement("td");
             csdCPUCell.style.width = "10%";
             csdCPUCell.style.textAlign = "center";
-            csdCPUCell.textContent = `${item.csd_cpu_usage_predict}`;
+            csdCPUCell.textContent = `${item}`;
             cpuRow.appendChild(csdCPUCell)
+        })
 
+        csdPowerArr.forEach(function (item) {
             const csdPowerCell = document.createElement("td");
             csdPowerCell.style.width = "10%";
             csdPowerCell.style.textAlign = "center";
-            csdPowerCell.textContent = `${item.csd_power_usage_predict}`;
+            csdPowerCell.textContent = `${item}`;
             powerRow.appendChild(csdPowerCell)
-
-            csdCPUTotal += item.csd_cpu_usage_predict;
-            csdPowerTotal += item.csd_power_usage_predict;
-
         })
+
         MetricTableBody.appendChild(cpuRow);
         MetricTableBody.appendChild(powerRow);
-        getHostMetric(validationID); // Host 데이터 가져오기
     })
     .catch(console.error(error => console.error('Error: ', error)));
     
-
-    fetch('/validator/log/get-one', { 
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        body: JSON.stringify({
-            'user_id': storeduserInfo.workbench_user_id,
-            'validation_id': validationID
-        })
-    })
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-        storageCPU = data[0].storage_cpu_usage_predict;
-        storagePower = data[0].storage_power_usage_predict;
-        return (storageCPU, storagePower);
-    })
-    .catch(console.error(error => console.error('Error: ', error)));
+    
 
 
     $(function () {
@@ -450,9 +483,8 @@ function validationLogMetricLoad(validationID) {
     });
 }
 
-function getHostMetric(validationID) {
 
-}
+
 
 // 로그 모달 내용 로딩
 function modalContentsLoad(validationID){

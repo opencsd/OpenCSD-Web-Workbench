@@ -84,6 +84,7 @@ var SetBlockCount = $("#query_SetBlockCount");
 var scheduling_algorithm = $("#query_scheduling");
 var using_index = $("#query_index");
 
+
 $("#query-csdSelect").on("change", function() {
     if ($(this).is(":checked")){
         console.log("CSD Checked")
@@ -120,6 +121,7 @@ function envSettingmodalLoad(){
         });
     });
 }
+
 
 function getLatestChartData(){
     fetch('/query/metric', {
@@ -229,6 +231,60 @@ metricViewBtn.addEventListener('click', () => {
     }
     isMetricViewBtnClicked = !isMetricViewBtnClicked;
 });
+
+// 환경 설정 모달 동작
+// var selected_csdkind = $("#query_csdkind");
+// var SetCsdCount = $("#query_SetCsdCount");
+// var SetBlockCount = $("#query_SetBlockCount");
+// var scheduling_algorithm = $("#query_scheduling");
+// var using_index = $("#query_index");
+
+// $("#query-csdSelect").on("change", function() {
+//     if ($(this).is(":checked")){
+//         console.log("CSD Checked")
+//         selected_csdkind.prop('disabled', false)
+//         SetCsdCount.prop('disabled', false)
+//         SetBlockCount.prop('disabled', false)
+//         using_index.prop('disabled', false)
+//         scheduling_algorithm.prop('disabled', false)
+//     }
+// });
+// $("#query-ssdSelect").on("change", function() {
+//     if ($(this).is(":checked")){
+//         console.log("SSD Checked")
+//         selected_csdkind.prop('disabled', true)
+//         SetCsdCount.prop('disabled', true)
+//         SetBlockCount.prop('disabled', true)
+//         using_index.prop('disabled', true)
+//         scheduling_algorithm.prop('disabled', true)
+//     }
+// });
+
+envSetting.addEventListener('click', function() {
+    envSettingmodalLoad()
+});
+
+function envSettingmodalLoad(){
+    const dbName = document.getElementById("dbname").textContent;
+    const dbNameElement = document.getElementById('inputDBname');
+    const csdCountNum = document.getElementById("csd_count").textContent; // 설정할 값
+    const csdCountElement = document.getElementById('query_SetCsdCount');
+    const blockCountNum = document.getElementById("block_count").textContent;
+    const blockCountElement = document.getElementById('query_SetBlockCount');
+    
+    // input 요소에 값을 설정합니다.
+    csdCountElement.value = csdCountNum;
+    dbNameElement.value = dbName;
+    blockCountElement.value = blockCountNum;
+    $(function() {
+        $("#envSettingModal").modal("show");
+        var modalDiv = $('#envSettingModal');
+        modalDiv.modal({
+            backdrop: true,
+            show: true
+        });
+    });
+}
 
 // 쿼리 Run 동작
 const resultContainer = document.getElementById("resultContainer");
@@ -367,6 +423,7 @@ function logClickEvent(queryCell){
     })
     .then(data => {
         clearInterval(intervalId);
+
 
         updateTableData(data);
 
