@@ -484,7 +484,7 @@ var HostCSDCpuUsageOption = {
   yAxis: 
   {
     title: {
-        text: '(%)'
+        text: '(millicpu)'
     }
   },
   tooltip: {
@@ -749,7 +749,7 @@ var HostCSDPowerOption = {
   yAxis: 
   {
     title: {
-        text: '(W/s)'
+        text: '(w/s)'
     }
   },
   tooltip: {

@@ -391,7 +391,7 @@ var HostCpuUsageOption = {
   yAxis: 
   {
     title: {
-        text: '(core)'
+        text: '(millicpu)'
     }
   },
   tooltip: {

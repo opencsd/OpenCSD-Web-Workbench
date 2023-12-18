@@ -107,6 +107,7 @@ def get_csd_metric():
   csd_metric.append(client_count_outer[-1])
   csd_metric.append(scan_filter_ratio_outer[-1])
 
+  # print(csd_metric)
   return csd_metric
 
 def get_selected_csd_metric():
@@ -121,83 +122,135 @@ def get_selected_csd_metric():
     csd_name = "csd" + csd_num
     disk_capacity_outer[csd_name] = disk_capacity_inner
 
-def get_instance_metric():
-  query = "select * from instance_monitoring order by desc limit 1 tz('Asia/Seoul')"
+
+# host server metric 관리
+timestamp_outer = deque(maxlen=20)
+cpu_usage_outer = deque(maxlen=20)
+memory_usage_outer = deque(maxlen=20)
+disk_usage_outer = deque(maxlen=20)
+# network_usage_outer = deque(maxlen=20)
+power_usage_outer = deque(maxlen=20)
+
+def get_total_instance_metric():
+  query = "select * from instance_monitoring order by desc limit 20;"
   result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "keti_db", query)
 
-  host_metric = []  #그냥 패키징 용도라서 함수 내부에 선언 => 매 요청마다 초기화 되어야 함
-  cpu_usage_inner = {}
-  memory_usage_inner = {}
-  disk_usage_inner = {}
-  network_usage_inner = {}
+  host_metric = {}
+
+  for i in range(len(result[0])):
+    host_metric_inner = {}
+
+    time = result[0][i].get('time')
+    date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
+    timestamp = date_time_obj.strftime('%H:%M:%S') 
+    cpu_usage = result[0][i].get('cpu_usage')
+    memory_usage = result[0][i].get('memory_usage')
+    disk_usage = result[0][i].get('disk_usage')
+
+    host_metric_inner['timestamp' ] = timestamp
+    host_metric_inner['cpu_usage'] = cpu_usage
+    host_metric_inner['memory_usage'] = memory_usage
+    host_metric_inner['disk_usage'] = disk_usage
+   
+
+    timestamp_outer.append(timestamp)
+    cpu_usage_outer.append(cpu_usage)
+    memory_usage_outer.append(memory_usage)
+    disk_usage_outer.append(disk_usage)
+
+  query_power = "select power_usage from instance_node_monitoring order by desc limit 20;"
+  result_power = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "node_metric", query_power)    
+
+  # print(result_power)
+  for i in range(len(result_power)):
+    power_metric_inner = {}
+
+    power_usage = result_power[0][i].get('power_usage')
+
+    power_metric_inner['power_usage'] = power_usage
+
+    power_usage_outer.append(power_usage)
+
+  print(power_usage_outer)
+
+  reversed_timestamp_outer = list(deque(reversed(timestamp_outer)))
+  reversed_cpu_usage_outer = list(deque(reversed(cpu_usage_outer)))
+  reversed_memory_usage_outer = list(deque(reversed(memory_usage_outer)))
+  reversed_disk_usage_outer = list(deque(reversed(disk_usage_outer)))
+  reversed_power_usage_outer = list(deque(reversed(power_usage_outer)))
+
+  host_metric['timestamp'] = reversed_timestamp_outer
+  host_metric['cpu_usage'] = reversed_cpu_usage_outer
+  host_metric['memory_usage'] = reversed_memory_usage_outer
+  host_metric['disk_usage'] = reversed_disk_usage_outer
+  host_metric['power_usage'] = reversed_power_usage_outer
+
+  # print(host_metric)
+  return host_metric
+
+def get_instance_metric():
+  query = "select * from instance_monitoring order by time desc limit 1;"
+  result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "keti_db", query)
+  global timestamp_outer, cpu_usage_outer, memory_usage_outer, disk_usage_outer, network_usage_outer, power_usage_outer
+  host_metric = {} #그냥 패키징 용도라서 함수 내부에 선언 => 매 요청마다 초기화 되어야 함
+  
 
   time = result[0][0].get('time')
   date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
   timestamp = date_time_obj.strftime('%H:%M:%S') 
-
-  cpu_usage_inner['timestamp'] = timestamp
-  memory_usage_inner['timestamp'] = timestamp
-  disk_usage_inner['timestamp'] = timestamp
-  network_usage_inner['timestamp'] = timestamp
-  
-  cpu_usage_inner['storage_cpu_usage'] = result[0][0].get('cpu_usage')
-  memory_usage_inner['storage_memory_usage'] = result[0][0].get('memory_usage')
-  
+  cpu_usage = result[0][0].get('cpu_usage')
+  memory_usage = result[0][0].get('memory_usage')
   disk_usage = result[0][0].get('disk_usage')
-  if disk_usage is None:
-    disk_usage_inner['storage_disk_usage'] = 0
-  else:
-    disk_usage_inner['storage_disk_usage'] = disk_usage
-  
-  network_rx_byte = result[0][0].get('network_rx_byte')
-  network_tx_byte = result[0][0].get('network_tx_byte')
+  # network_rx_byte = result[0][0].get('network_rx_byte')
+  # network_tx_byte = result[0][0].get('network_tx_byte')
+  # network_usage = network_rx_byte  + network_tx_byte
+  # power_usage = result[0][0].get('power_usage')
 
-  if network_rx_byte is None and network_tx_byte is None:
-    network_usage_inner['storage_network_usage'] = 0
-  elif network_rx_byte is None:
-    network_usage_inner['storage_network_usage'] = int(network_tx_byte)
-  elif network_tx_byte is None:
-    network_usage_inner['storage_network_usage'] = int(network_rx_byte)
-  else:
-    network_usage_inner['storage_network_usage'] = float(int(network_rx_byte) + int(network_tx_byte)) / 1000
-
-  cpu_usage_outer.append(cpu_usage_inner)
-  memory_usage_outer.append(memory_usage_inner)
-  disk_usage_outer.append(disk_usage_inner)
-  network_usage_outer.append(network_usage_inner)
-
-  query_power = "select power_usage from instance_node_monitoring order by desc limit 12 tz('Asia/Seoul');"
+  query_power = "select power_usage from instance_node_monitoring order by time desc limit 1;"
   result_power = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "node_metric", query_power)    
-
-  power_usage_inner = {}
-  power_usage_inner['timestamp'] = timestamp
-  
   power_usage = result_power[0][0].get('power_usage')
-  if power_usage is None:
-    power_usage_inner['storage_power_usage'] = 0
-  else:
-    power_usage_inner['storage_power_usage'] = power_usage
-  power_usage_outer.append(power_usage_inner)
 
-  cpu_usage_outer.reverse()
-  memory_usage_outer.reverse()
-  disk_usage_outer.reverse()
-  network_usage_outer.reverse()
-  power_usage_outer.reverse()
+  # host_metric_inner['power_usage'] = power_usage
 
-  # host_metric.append(list(cpu_usage_outer))
-  # host_metric.append(list(memory_usage_outer))
-  # host_metric.append(list(disk_usage_outer))
-  # host_metric.append(list(network_usage_outer))
-  # host_metric.append(list(power_usage_outer))
+  host_metric['timestamp'] = timestamp
+  host_metric['cpu_usage'] = cpu_usage
+  host_metric['memory_usage'] = memory_usage
+  host_metric['disk_usage'] = disk_usage
+  host_metric['power_usage'] = power_usage
 
-  host_metric.append(cpu_usage_outer[-1])
-  host_metric.append(memory_usage_outer[-1])
-  host_metric.append(disk_usage_outer[-1])
-  host_metric.append(network_usage_outer[-1])
-  host_metric.append(power_usage_outer[-1])
+  timestamp_outer.append(timestamp)
+  cpu_usage_outer.append(cpu_usage)
+  memory_usage_outer.append(memory_usage)
+  disk_usage_outer.append(disk_usage)
+  power_usage_outer.append(power_usage)    
+  # print(result)
+  
+  # time = result[0][0].get('time')
+  # date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
+  # timestamp = date_time_obj.strftime('%H:%M:%S') 
+  # cpu_usage = result[0][0].get('cpu_usage')
+  # memory_usage = result[0][0].get('memory_usage')
+  # disk_usage = result[0][0].get('disk_usage')
+
+  # query_power = "select power_usage from instance_node_monitoring order by desc limit 1 tz('Asia/Seoul');"
+  # result_power = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "node_metric", query_power)    
+  # power_usage = result_power[0][i].get('power_usage')
+
+  # host_metric['timestamp'] = timestamp
+  # host_metric['cpu_usage'] = cpu_usage
+  # host_metric['memory_usage'] = memory_usage
+  # host_metric['disk_usage'] = disk_usage
+  # host_metric['power_usage'] = power_usage
+
+  # timestamp_outer.append(timestamp)
+  # cpu_usage_outer.append(cpu_usage)
+  # memory_usage_outer.append(memory_usage)
+  # disk_usage_outer.append(disk_usage)
+  # power_usage_outer.append(power_usage)    
+
   # print(host_metric)
-  return host_metric
+  return host_metric  
+
 
 def get_csd_capacity():
   disk_capacity_outer = {}
@@ -206,7 +259,7 @@ def get_csd_capacity():
     disk_capacity_inner = {}
     csd_num = str(i)
     query = "select disk_usage from csd" + csd_num + "_metric order by desc limit 1"
-    result = influx.execute_query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.PLATFORM_METRIC_DB_PASSWORD, info.PLATFORM_METRIC_DB_NAME, query)
+    result = influx.execute_query_influxdb(info.INFLUX_CSD_IP, info.INFLUX_CSD_PORT, info.INFLUX_CSD_USERNAME, info.PLATFORM_METRIC_DB_PASSWORD, "opencsd_management_platform", query)
     disk_capacity_inner['csd_storage_capacity'] = result[0][0].get('disk_usage')
 
     csd_name = "csd" + csd_num
@@ -216,18 +269,26 @@ def get_csd_capacity():
 
 @monitoring_bp.route('/')  
 def monitoring():
+  # get_total_instance_metric()
+  # get_instance_metric()
   return render_template('monitoring-csd.html', dashboard_summary=dashboard_summary)
 
-@monitoring_bp.route('/get_CSDMetric', methods=['GET'])
-def get_CSDMetric():
-  test = get_csd_metric()
-  # print(test)
-  return jsonify(test)
+# @monitoring_bp.route('/get_CSDMetric', methods=['GET'])
+# def get_CSDMetric():
+#   test = get_csd_metric()
+#   # print(test)
+#   return jsonify(test)
 
-# Host Metric
+
+@monitoring_bp.route('/get_TotalHostMetric', methods=['GET'])
+def get_TotalHostMetric():
+    return jsonify(get_total_instance_metric())
+
+
 @monitoring_bp.route('/get_HostMetric', methods=['GET'])
 def get_HostMetric():
     return jsonify(get_instance_metric())
+
 
 # CSD 사용중인 저장 용량
 @monitoring_bp.route('/get_CSDCapacity', methods=['GET'])
@@ -235,6 +296,7 @@ def get_CSDCapacity():
   return jsonify(get_csd_capacity())
 
 selected_csd_metric_outer = deque(maxlen=20)
+
 
 # 선택한 CSD의 메트릭 정보
 @monitoring_bp.route('/get_SelectedCSDMetric', methods=['GET', 'POST'])
@@ -261,6 +323,7 @@ def get_SelectedCSDMetric():
     csd_metric_outer.append(csd_metric_inner)
 
   return jsonify(csd_metric_outer)
+
 
 @monitoring_bp.route('/get_StartCollectSelectedCSDMetric', methods=['GET', 'POST'])
 def get_StartCollectSelectedCSDMetric():

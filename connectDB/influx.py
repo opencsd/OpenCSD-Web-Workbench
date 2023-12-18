@@ -6,6 +6,7 @@ def execute_query_influxdb(ip, port, username, password, dbname, query):
     try:
         client = InfluxDBClient(ip, port, username, password, dbname)
         result = client.query(query)
+        # print(result)
         return list(result)
     
     except Exception as e:

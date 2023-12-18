@@ -288,7 +288,7 @@
                   </div>
                 </div>
 
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                   <div class="card">
                     <div class="card-body">
                       <div class="row">
@@ -309,17 +309,16 @@
                       <p class="card-title border-bottom"></p>
                       <div>
                         <div id="mainDBMonitoring">
-                          <!-- 메인 그래프 -->
+                         
                         </div>
                         <div id="hiddenDBMonitoring" style="display: none;">
-                          <!-- 상세 그래프 -->
+                         
                           <div class="row">
                             <div class="col-6">
                               <div id="ConnectedClientChart">
-                                <!-- 연결된 클라이언트 수 -->
                               </div>
                             </div>
-                            <!-- <div class="col-4">
+                            <div class="col-4">
                               <div id="DBRWRateChart">
                                 
                               </div>
@@ -327,7 +326,7 @@
                             <div class="col-4">
                               <div id="DBCacheUsageChart">
                               </div>
-                            </div> -->
+                            </div> 
                             <div class="col-6">
                               <div id="DBCSDScanFilterChart">
 
@@ -338,7 +337,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="col-lg-12">
                   <div class="card">
                     <div class="card-body">
@@ -346,7 +345,7 @@
                         <div class="col-3 mt-0">
                           <p class="card-title">Host Metric Monitoring</p>
                         </div>
-                        <div class="col-3 mt-0">
+                        <!-- <div class="col-3 mt-0">
                           <button class="btn btn-link p-0" id="hostMonitoringSlideBtn">
                             <svg id="hostMonitoringSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                               <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
@@ -355,39 +354,35 @@
                               <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                             </svg>
                           </button>
-                        </div>
+                        </div> -->
                       </div>
                       <p class="card-title border-bottom"></p>
                       <div>
-                        <div id="HostCpuChart">
-                          <!-- 메인 그래프 -->
-                        </div>
-                        <div id="hiddenHostMonitoring" style="display: none;">
-                          <!-- 상세 그래프 -->
+                        
+                        <div id="hiddenHostMonitoring">
+                          
                           <div class="row">
                             <div class="col-6">
-                              <div id="HostMemoryChart">
-                                <!-- Host 서버와 각 CSD의 memory 사용률 -->
+                              <div id="HostCpuChart">
                               </div>
                             </div>
                             <div class="col-6">
-                              <div id="HostDiskChart">
-                                <!-- Host 서버와 각 CSD의 disk 사용률 -->
+                              <div id="HostMemoryChart">
                               </div>
                             </div>
                           </div>
+
                           <div class="row">
                             <div class="col-6">
-                              <div id="HostNetworkChart">
-                                <!-- Host 서버와 각 CSD의 network 사용률 -->
+                              <div id="HostDiskChart">
                               </div>
                             </div>
                             <div class="col-6">
                               <div id="HostPowerChart">
-                                <!-- Host 서버와 각 CSD의 power 사용률 -->
                               </div>
                             </div>
                           </div>
+                          
                           <div id="CSDCapacityChart">
                             <!-- CSD 용량 그래프 -->
                           </div>
