@@ -3,6 +3,9 @@ let intervalID = 1;
 var queryChart, ConnectedClientChart, DBRWRateChart, DBCacheUsageChart, DBCacheHitRatioChart
 var HostCPUChart, HostMemoryChart, HostNetworkChart, HostPowerChart, hostDiskIOChart
 
+HostCPUChart = Highcharts.chart(document.getElementById("HostCpuUsageChart"), HostCpuUsageOption);
+
+
 document.addEventListener("DOMContentLoaded", function(){
   // DataBase Monitoring 차트 정의
   queryChart = Highcharts.chart(document.getElementById("mainDBMonitoring"), queryChartOption);
@@ -12,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(){
   DBCacheHitRatioChart = Highcharts.chart(document.getElementById("DBCacheHitRatioChart"), DBCacheHitRatioOption);
 
   // Host Metric Monitoring 차트 정의
-  HostCPUChart = Highcharts.chart(document.getElementById("HostCpuUsageChart"), HostCpuUsageOption);
+  
   HostMemoryChart = Highcharts.chart(document.getElementById("HostMemoryChart"), HostMemoryOption);
   HostNetworkChart = Highcharts.chart(document.getElementById("HostNetworkUsageChart"), HostNetworkOption);
   HostPowerChart = Highcharts.chart(document.getElementById("HostPowerChart"), HostPowerOption);

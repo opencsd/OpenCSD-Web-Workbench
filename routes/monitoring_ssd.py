@@ -2,12 +2,12 @@
 
 dashboard_summary = {
     'dbms_type': 'MySQL',
-    'db_size': '196 (GB)',
+    'db_size': '1089.8 (MB)',
     'db_name': 'tpc-h',
     'storage_type': 'SSD',
     'db_user': 'keti',
-    'workbench_user': 'User 1234',
-    'db_host_ip': '10.0.4.80:40001',
+    'workbench_user': 'keti-mysql-admin',
+    'db_host_ip': '10.0.4.80:3306',
     'data_store_type': 'Row Base',
 }
 
