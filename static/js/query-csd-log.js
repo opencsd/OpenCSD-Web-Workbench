@@ -119,7 +119,7 @@ function addQueryLog(data){
             }else if(i==2){//filter ratio
                 let filterRatio = ((result.scanned_row_count - result.filtered_row_count) / result.scanned_row_count) * 100;
                 value = filterRatio.toFixed(2);
-                max = maxList.filterRatio;
+                max = maxList.ratioMax;
             }else if(i==3){//time
                 value = (result.execution_time).toFixed(2);
                 // if(maxList.timeMax < value){
