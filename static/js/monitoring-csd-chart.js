@@ -16,6 +16,7 @@ var HostCpuChart, HostMemoryChart, HostDiskChart, HostNetworkChart, HostPowerCha
 // var CSD8 = [];
 
 document.addEventListener("DOMContentLoaded", function(){
+  viewUserID();
   // DataBase Monitoring 차트 정의
   queryChart = Highcharts.chart(document.getElementById("mainDBMonitoring"), queryChartOption);
   ConnectedClientChart = Highcharts.chart(document.getElementById("ConnectedClientChart"), ConnectedClientOption);

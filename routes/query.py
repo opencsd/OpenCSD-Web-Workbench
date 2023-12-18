@@ -67,10 +67,10 @@ def log_handler(action):
                 user_id = data['user_id']
                 query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
 
-                if query_type == "all": #'all'
+                if query_type == "ALL": #'all'
                     query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
                         from query_log where user_id='{}' order by query_id".format(user_id)
-                else: #'select','update','insert','delete','dcl','ddl','other'
+                else: #'SELECT','DCL','DDL','OTHER' -> 구현 확인 필요
                     query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
                         from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
 
@@ -85,10 +85,10 @@ def log_handler(action):
         if request.method == 'POST':
             try:
                 data = request.json
-                user_id = data['query_id']
+                query_id = data['query_id']
 
                 query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time, \
-                        scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(user_id)
+                        scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(query_id)
                 query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -98,13 +98,13 @@ def log_handler(action):
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
                 # memory -> power로 바꾸기!!
-                query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                query = "select cpu_usage, power_usage from instance_node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
                 query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                                 info.INSTANCE_NODE_METRIC_DB_NAME, query)
 
-                result = {"query_log":query_log, "query_metric":query_metric}
+                result = {"query_result":query_log, "query_metric":query_metric[0]}
 
                 return jsonify(result)
             except:
@@ -113,19 +113,31 @@ def log_handler(action):
         if request.method == 'POST':
             try:
                 data = request.json
+
+                if(len(data['delete_query_id']) == 1):
+                    query = "delete from query_snippet where query_id={}".format(data['delete_query_id'][0])
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
+                    query = "delete from query_log where query_id={}".format(data['delete_query_id'][0])
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                else:
+                    query = "delete from query_snippet where query_id in {}".format(tuple(data['delete_query_id']))
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
+                    query = "delete from query_log where query_id in {}".format(tuple(data['delete_query_id']))
+                    result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                                info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                                info.INSTANCE_MANAGEMENT_DB_NAME, query)
+
                 
-                # 나중에 log 삭제하는것도 추가 (외래키로 잡힌 테이블 먼저 삭제해야함)
-
-                query = "delete from query_snippet where query_id in {}".format(tuple(data['delete_query_id']))
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
-
-                query = "delete from query_log where query_id in {}".format(tuple(data['delete_query_id']))
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                return ""
+                
+                return {}
             except:
                 return "delete error"
     else:
@@ -209,20 +221,21 @@ def run_handler():
     if request.method == 'POST':
         try:
             data = request.json
-            response = requests.get('http://10.0.4.87:30100/query/run', json=data) #data로 넣어도 될듯? 내일확인
+            response = requests.get('http://10.0.4.87:30100/query/run', json=data)
+            query_result = []
 
             if response.status_code == 200:
-                query_result = response.json()
-                start_time = query_result['start_time']
-                end_time = query_result['end_time']
+                query_result.append(response.json()) 
+                start_time = query_result[0]['start_time']
+                end_time = query_result[0]['end_time']
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
-                # memory -> power로 바꾸기!!
-                query = "select cpu_usage, memory_usage from instance_node_monitoring \
+                query = "select cpu_usage, power_usage from instance_node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
                 query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                                 info.INSTANCE_NODE_METRIC_DB_NAME, query)
+                
 
                 result = {"query_result":query_result, "query_metric":query_metric[0]}
 
@@ -230,7 +243,7 @@ def run_handler():
             else:
                 return 'Error: Unable to fetch data from the remote server'
         except:
-            return ""
+            return {}
         
 
 # Metric 그래프 데이터 요청
@@ -238,8 +251,7 @@ def run_handler():
 def metric_handler():
     if request.method == 'GET':
         try:
-            # memory -> power로 바꾸기!!
-            query = "select cpu_usage, memory_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            query = "select cpu_usage, power_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
             metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
@@ -254,8 +266,7 @@ def metric_handler():
             end_time = data['end_time']
 
             # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
-            # memory -> power로 바꾸기!!
-            query = "select cpu_usage, memory_usage from instance_node_monitoring \
+            query = "select cpu_usage, power_usage from instance_node_monitoring \
                     where time > '{}' - 5s and time < '{}' + 5s tz('Asia/Seoul')".format(start_time,end_time)
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,

@@ -15,12 +15,12 @@ from
             ) as l_year,
             l_extendedprice * (1 - l_discount) as volume
         from
-            SUPPLIER,
-            LINEITEM,
-            ORDERS,
-            CUSTOMER,
-            NATION n1,
-            NATION n2
+            supplier,
+            lineitem,
+            orders,
+            customer,
+            nation n1,
+            nation n2
         where
             s_suppkey = l_suppkey
             and o_orderkey = l_orderkey

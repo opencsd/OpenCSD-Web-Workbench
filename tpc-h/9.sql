@@ -13,12 +13,12 @@ from
             ) as o_year,
             l_extendedprice * (1 - l_discount) - ps_supplycost * l_quantity as amount
         from
-            PART,
-            SUPPLIER,
-            LINEITEM,
-            PARTSUPP,
-            ORDERS,
-            NATION
+            part,
+            supplier,
+            lineitem,
+            partsupp,
+            orders,
+            nation
         where
             s_suppkey = l_suppkey
             and ps_suppkey = l_suppkey

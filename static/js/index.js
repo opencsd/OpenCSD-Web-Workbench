@@ -2,7 +2,7 @@ const connect_btn = document.querySelector('#connect_btn');
 
 connect_btn.addEventListener('click', () => {
     var workbench_user_id = document.getElementById("workbench_user_id").value;
-    var db_instance_name = document.getElementById("db_instance_name").value;
+    var db_instance_name = document.getElementById("instance_name").value;
 
     const userInfo = {
         workbench_user_id: workbench_user_id,
@@ -31,6 +31,7 @@ connect_btn.addEventListener('click', () => {
         else if (data.loginto === 'ssd'){
             window.location.href = '/monitoring_ssd';
         }
+        // window.location.href = '/monitoring';
     })
     .catch(error => {
         alert(error); 

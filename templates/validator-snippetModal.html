@@ -1,14 +1,14 @@
 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Pushdown Query Result Detail</h5>
+            <h5 class="modal-title">Validation Query Detail</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="mb-3">
-                <label class="form-label">Query Snippet Info</label>
+                <label class="form-label">Validation Query Snippet Info</label>
                 <!-- 스니펫 테이블 -->
-                <div class="table-responsive">
+                <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
                     <table class="table table-vcenter">
                         <thead class="sticky-top">
                             <tr style="text-align: center;">
@@ -21,16 +21,16 @@
                                 <th style="width: 10%;">Limit</th>
                             </tr>
                         </thead>
-                        <tbody id="logDetailTableBody">
+                        <tbody id="logSnippetTableBody">
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <div class="mb-3">
-                <label class="form-label">Scan / Filter Ratio</label>
-                <div id="ScanFilterChart" style="margin-left:20px;">
-                    <!-- 스캔, 필터 비율 -->
+                <label class="form-label">Validation Query</label>
+                <div id="validationQueryContainer">
+                    <textarea readonly id="validationQuery" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
                 </div>
             </div>
             
