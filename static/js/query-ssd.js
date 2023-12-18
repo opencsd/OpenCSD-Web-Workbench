@@ -270,7 +270,8 @@ queryNumbers.forEach((number) => {
     const dropdownItem = document.createElement("a");
     dropdownItem.className = "dropdown-item";
     dropdownItem.href = "#";
-    dropdownItem.textContent = `Q${number}`;
+    const tpchNum = String(number).padStart(2, '0');
+    dropdownItem.textContent = `TPC-H_${tpchNum}`;
     dropdownMenu.appendChild(dropdownItem);
 
     dropdownItem.addEventListener("click", function (event) {
