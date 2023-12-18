@@ -491,30 +491,6 @@ function validationLogMetricLoad(validationID) {
 
     })
     .catch(console.error(error => console.error('Error: ', error)));
-    
-
-    fetch('/validator/log/get-one', { 
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        body: JSON.stringify({
-            'user_id': storeduserInfo.workbench_user_id,
-            'validation_id': validationID
-        })
-    })
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-        storageCPU = data[0].storage_cpu_usage_predict;
-        storagePower = data[0].storage_power_usage_predict;
-        return (storageCPU, storagePower);
-    })
-    .catch(console.error(error => console.error('Error: ', error)));
-
 
     $(function () {
         $("#metricModal").modal("show");
