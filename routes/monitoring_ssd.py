@@ -183,7 +183,6 @@ def get_instance_metric():
   time = result[0][0].get('time')
   date_time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ') + timedelta(hours=9)
   timestamp = date_time_obj.strftime('%H:%M:%S') 
-  print(timestamp)
 
   # for i in range(len(result[0])):
   cpu_usage_inner = {}

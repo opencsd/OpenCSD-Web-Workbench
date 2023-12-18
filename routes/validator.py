@@ -35,7 +35,6 @@ def run_handler():
             data = request.json # data 형식 체크
             user_id = data['User_ID']
             response = requests.post('http://10.0.4.87:30000/validator/run', json=data)
-            print(response)
 
             if response.status_code == 200:
                 result = response.content

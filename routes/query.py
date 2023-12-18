@@ -256,7 +256,6 @@ def metric_handler():
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
 
-            print(metric)
             return jsonify(metric[0])
         except:
             return ""
