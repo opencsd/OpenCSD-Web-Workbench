@@ -5,14 +5,14 @@ from connectDB import mysql, influx, info
 import requests
 import re
 
-validator_bp = Blueprint('validator', __name__, url_prefix='/validator')
+validator_ssd_bp = Blueprint('validator_ssd', __name__, url_prefix='/validator-ssd')
 
-@validator_bp.route('/') # Validator 화면으로 전환
+@validator_ssd_bp.route('/') # Validator 화면으로 전환
 def validate():
-    return render_template('validator.html')
+    return render_template('validator-ssd.html')
 
 # tpc-h 드롭다운에서 선택한 쿼리 GET
-@validator_bp.route('/tpch', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/tpch', methods=['GET', 'POST'])
 def tpch_hadler():
     if request.method == 'POST':
         data = request.json
@@ -28,7 +28,7 @@ def tpch_hadler():
     return jsonify(json_data)
 
 # 벨리데이션 실행
-@validator_bp.route('/run', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/run', methods=['GET', 'POST'])
 def run_handler():
     if request.method == 'POST':
         try:
@@ -53,7 +53,7 @@ def run_handler():
         except:
             return ""
         
-@validator_bp.route('/option/<path:action>', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/option/<path:action>', methods=['GET', 'POST'])
 def option_handler(action):
     if action.startswith('get-all'):
         if request.method == 'POST':
@@ -150,7 +150,7 @@ def option_handler(action):
         return "path error"
     
 # 벨리데이션 로그 관련 라우터
-@validator_bp.route('/log/<path:action>', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/log/<path:action>', methods=['GET', 'POST'])
 def log_handler(action):
     if action.startswith('get-all'):
         if request.method == 'POST':
@@ -214,7 +214,7 @@ def log_handler(action):
                                                                 info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                                 info.INSTANCE_MANAGEMENT_DB_NAME, query)
                     
-                    query = "delete from validation_debug_log where validation_id in {}".format(tuple(data['validation_id']))
+                    query = "delete from validation_debug_log where validation_id in {}".format(tuple(data['validation_id'])[0])
                     result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                                 info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                                 info.INSTANCE_MANAGEMENT_DB_NAME, query)
@@ -231,7 +231,7 @@ def log_handler(action):
         return "path error"
     
 # 벨리데이션 로그의 스니펫 상세 팝업
-@validator_bp.route('/snippet', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/snippet', methods=['GET', 'POST'])
 def snippet_handler():
     if request.method == 'POST':
         try:
@@ -248,7 +248,7 @@ def snippet_handler():
         
 
 # 벨리데이션 로그의 메트릭 상세 팝업
-@validator_bp.route('/metric/<path:action>', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/metric/<path:action>', methods=['GET', 'POST'])
 def metric_handler(action):
     if action.startswith('csd'):
         if request.method == 'POST':
@@ -276,28 +276,9 @@ def metric_handler(action):
                 return jsonify(result)
             except:
                 return ""
-    # 벨리데이션 로그 메트릭 상세 팝업
-    elif action.startswith('getAll'):
-        if request.method == 'POST':
-            try: 
-                data = request.json
-                print(data)
-                query1 = "select execution_time_predict, storage_cpu_usage_predict, storage_power_usage_predict, network_usage_predict from validation_log where validation_id={}".format(data['validation_id'])
-                result1 = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                           info.INSTANCE_MANAGEMENT_DB_NAME, query1)
-                query2 = "select * from validation_csd_metric where validation_id={}".format(data['validation_id'])
-                result2 = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                           info.INSTANCE_MANAGEMENT_DB_NAME, query2)
-                combined_result = {'result1' : result1, 'result2' : result2}
-
-                return jsonify(combined_result)
-            except:
-                return ""
         
 # 벨리데이션 로그의 쿼리 수행 로그 팝업 -> 구현...필요...,db도 만들고
-@validator_bp.route('/debugg', methods=['GET', 'POST'])
+@validator_ssd_bp.route('/debugg', methods=['GET', 'POST'])
 def debugg_handler():
     try:
         data = request.json #벨리데이션 id

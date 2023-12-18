@@ -221,7 +221,7 @@ def run_handler():
     if request.method == 'POST':
         try:
             data = request.json
-            response = requests.get('http://10.0.4.87:30100/query/run', json=data) #data로 넣어도 될듯? 내일확인
+            response = requests.get('http://10.0.4.87:30100/query/run', json=data)
             query_result = []
 
             if response.status_code == 200:
@@ -243,7 +243,7 @@ def run_handler():
             else:
                 return 'Error: Unable to fetch data from the remote server'
         except:
-            return ""
+            return {}
         
 
 # Metric 그래프 데이터 요청
