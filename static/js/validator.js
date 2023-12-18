@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     metricCompareChart.render();
     detailCPUChart.render();
-    // detailPowerChart.render();
-    // detailNetworkChart.render();
-    // detailTimeChart.render(); //해결필요
+    detailPowerChart.render();
+    detailNetworkChart.render();
+    detailTimeChart.render();
 
     viewUserID();
     drawLogTable();

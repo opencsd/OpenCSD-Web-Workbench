@@ -214,7 +214,7 @@ def log_handler(action):
                                                                 info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                                 info.INSTANCE_MANAGEMENT_DB_NAME, query)
                     
-                    query = "delete from validation_debug_log where validation_id in {}".format(tuple(data['validation_id'])[0])
+                    query = "delete from validation_debug_log where validation_id in {}".format(tuple(data['validation_id']))
                     result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                                 info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                                 info.INSTANCE_MANAGEMENT_DB_NAME, query)

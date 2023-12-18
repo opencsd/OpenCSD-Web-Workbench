@@ -27,7 +27,7 @@ function addValidatorLog(data){
         const modeIconCell = document.createElement("td");
         modeIconCell.style.width = "5%";
         modeIconCell.style.textAlign = "center";
-        if(result.storage_type == "CSD"){
+        if(result.storage_type == "csd"){
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-c.png" width="20" height="20"/></div>`;
         }else{//SSD Option 조건일 경우
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-s.png" width="20" height="20"/></div>`;
@@ -175,6 +175,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             LogButton.style.width = '80px';
             LogButton.textContent = 'LOG';
             LogButton.addEventListener('click', function () {
+                console.log(dummyButtonCell.parentNode.id)
                 modalContentsLoad(dummyButtonCell.parentNode.id);
                 popover.hide();
             });
