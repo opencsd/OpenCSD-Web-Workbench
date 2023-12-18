@@ -461,7 +461,7 @@ var HostCSDCPUChartOption = {
         opacity: 1,
     },
     series: [{
-        name: "Rows",
+        name: "CPU",
         data: [],
     }],
     tooltip: {
@@ -493,7 +493,7 @@ var HostCSDCPUChartOption = {
         },
     },
     labels: [
-        'Host CPU', 'CSD Total CPU'
+        'Host CPU(tick)', 'CSD Total CPU(tick)'
     ],
     colors: [tabler.getColor("primary")],
     legend: {
@@ -527,7 +527,7 @@ var HostCSDPowerChartOption = {
         opacity: 1,
     },
     series: [{
-        name: "Rows",
+        name: "Power",
         data: [],
     }],
     tooltip: {
@@ -559,7 +559,7 @@ var HostCSDPowerChartOption = {
         },
     },
     labels: [
-        'Host CPU', 'CSD Total CPU'
+        'Host Power(W)', 'CSD Total Power(W)'
     ],
     colors: [tabler.getColor("primary")],
     legend: {
@@ -592,10 +592,10 @@ var CSDCpuPowerChartOption = {
         opacity: 1,
     },
     series: [{
-        name: "CSD CPU",
+        name: "CSD CPU(tick)",
         data: []
     },{
-        name: "CSD Power",
+        name: "CSD Power(W)",
         data: []
     }],
     tooltip: {
