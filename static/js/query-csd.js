@@ -389,7 +389,7 @@ function updateChartData(data){
     hostServerPowerChartData = [];
     hostServerChartCategories = [];
 
-    data.forEach(item => {
+    data.reverse().forEach(item => {
         hostServerCPUChartData.push((item.cpu_usage)/1000000);
         hostServerPowerChartData.push(item.power_usage);
         var date = new Date(item.time);
