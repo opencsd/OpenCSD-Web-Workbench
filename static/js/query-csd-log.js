@@ -9,7 +9,7 @@ var maxList = {
     "scannedMax" : 1000000,
     "filteredMax" : 1000000,
     "ratioMax" : 100,
-    "timeMax" : 3600,
+    "timeMax" : 500,
 }
 
 function addQueryLog(data){
