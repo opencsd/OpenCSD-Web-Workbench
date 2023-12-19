@@ -162,7 +162,7 @@ def get_total_instance_metric():
   result_power = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT, info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD, "node_metric", query_power)    
 
   # print(result_power)
-  for i in range(len(result_power)):
+  for i in range(len(result_power[0])):
     power_metric_inner = {}
 
     power_usage = result_power[0][i].get('power_usage')
