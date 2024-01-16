@@ -34,13 +34,14 @@ function viewUserID(){
 const detailMetricDropdown = document.querySelector("#detailMetricDropdown");
 const detailMetricDropdownItems = document.querySelectorAll(".detailMetricDropdownItem");
 
-detailMetricDropdownItems.forEach(function(item) {
+detailMetricDropdownItems.forEach(function(item) { // 드롭다운으로 차트 바꾸기
     item.addEventListener("click", function() {
         detailMetricDropdown.text = item.textContent;
 
         //visibility:hidden 상태와 visibility:visible
 
         //보여지는거 해결좀
+        // 차트 숨기기 -> 보이기 / 차트 데이터 series 바꾸기
 
         // detailCPUChart.updateOptions({ chart: { foreColor: '#000000' } });
         // detailPowerChart.updateOptions({ chart: { foreColor: '#000000' } });

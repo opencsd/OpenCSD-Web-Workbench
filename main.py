@@ -15,5 +15,5 @@ app.register_blueprint(query_ssd.query_ssd_bp)
 app.register_blueprint(validator_ssd.validator_ssd_bp)
 
 if __name__ == '__main__':
-    app.run(host="10.0.4.87", port=7777, debug=True)
+    app.run(host="10.0.4.87", port=7000, debug=True)
 
