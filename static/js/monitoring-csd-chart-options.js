@@ -220,25 +220,25 @@ var networkChartOption = {
     {
       name: "Host RX Net",
       data: [],
-      fillColor: 'rgba(135,206,250,0.7)', 
+      color: 'rgba(135,206,250,0.7)', 
       lineWidth: 1
     }, 
     {
       name: "Host TX Net",
       data: [],
-      fillColor: "rgba(100, 149, 237, 0.7)", 
+      color: "rgba(100, 149, 237, 0.7)", 
       lineWidth: 1
     }, 
     {
       name: "Instance RX Net",
       data: [],
-      fillColor: 'rgba(135,206,250,0.7)', 
+      color: 'rgba(255, 165, 0, 0.5)',
       lineWidth: 1
     }, 
     {
       name: "Instance TX Net",
       data: [],
-      fillColor: "rgba(100, 149, 237, 0.7)", 
+      color: 'rgba(0, 128, 0, 0.5)',
       lineWidth: 1
     }, 
   ]
@@ -273,19 +273,19 @@ var diskChartOption = {
     shared: true,
   },
   plotOptions: {
-      area: {
-        stacking: 'normal',
-          marker: {
-              enabled: false,
-              symbol: 'circle',
-              radius: 2,
-              states: {
-                  hover: {
-                      enabled: true
-                  }
-              }
-          }
+    area: {
+      stacking: 'normal',
+      marker: {
+        enabled: false,
+        symbol: 'circle',
+        radius: 2,
+        states: {
+            hover: {
+                enabled: true
+            }
+        }
       }
+    }
   },
   series: 
   [

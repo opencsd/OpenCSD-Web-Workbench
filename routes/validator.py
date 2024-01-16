@@ -153,27 +153,21 @@ def option_handler(action):
 def log_handler(action):
     if action.startswith('get-all'):
         if request.method == 'POST':
-            try:
-                data = request.json
-                query = "select * from validation_log where user_id='{}'".format(data['user_id'])
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                return jsonify(result)
-            except:
-                return "get-all error"
+            data = request.json
+            query = "select * from validation_log where user_id='{}'".format(data['user_id'])
+            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
+            return jsonify(result)
     elif action.startswith('get-one'):
         if request.method == 'POST':
-            try:
-                data = request.json
-                query = "select * from validation_log where validation_id={} and user_id = \"{}\"".format(data['validation_id'],data['user_id'])
+            data = request.json
+            query = "select * from validation_log where validation_id={} and user_id = \"{}\"".format(data['validation_id'],data['user_id'])
 
-                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                return jsonify(result)
-            except:
-                return "get-one error"
+            result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                        info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                        info.INSTANCE_MANAGEMENT_DB_NAME, query)
+            return jsonify(result)
     elif action.startswith('delete'):
         if request.method == 'POST':
             try:

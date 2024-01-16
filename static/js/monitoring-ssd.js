@@ -57,7 +57,7 @@ function updateChartData(data){
   instanceDiskChartData = [];
   hostChartCategories = [];
 
-  data["host_metric"].reverse().forEach(item => {
+  data.reverse().forEach(item => {
     hostCpuChartData.push((item.cpu_usage_nanocore)/nanocoreTomillicore);
     hostPowerChartData.push((item.power_usage));
     hostMemoryChartData.push((item.memory_usage)/KBToGB);
@@ -73,14 +73,6 @@ function updateChartData(data){
     var formattedMinute = minute < 10 ? '0' + minute : minute;
     var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
     hostChartCategories.push(time);
-  })
-
-  data["instance_metric"].reverse().forEach(item => {
-    instanceCpuChartData.push((item.cpu_usage)/nanocoreTomillicore);
-    instanceMemoryChartData.push((item.memory_usage)/KBToGB);
-    instanceNetworkRXChartData.push((item.network_rx_usage)/KBToGB);
-    instanceNetworkTXChartData.push((item.network_tx_usage)/KBToGB);
-    instanceDiskChartData.push((item.disk_usage)/KBToGB);
   })
 
   drawChart();

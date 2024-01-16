@@ -12,24 +12,22 @@ dashboard_summary = {
 }
 
 from flask import Blueprint, jsonify, request, render_template
-from connectDB import influx, mysql, info
-from collections import deque 
+from connectDB import influx, info
 import sys, os
-from datetime import datetime, timedelta
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 monitoring_ssd_bp = Blueprint('monitoring_ssd', __name__, url_prefix='/monitoring-ssd')
 
 @monitoring_ssd_bp.route('/') 
 def monitoring_ssd():
-    return render_template('monitoring-ssd.html')
+    return render_template('monitoring-ssd.html', dashboard_summary=dashboard_summary)
 
 # Metric 그래프 데이터 요청
 @monitoring_ssd_bp.route('/metric', methods=['GET', 'POST'])
 def metric_handler():
     if request.method == 'GET':
         try:
-            query = "select * from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            query = "select * from node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
             result = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)

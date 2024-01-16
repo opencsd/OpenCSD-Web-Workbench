@@ -15,10 +15,8 @@ dashboard_summary = {
 }
 
 from flask import Blueprint, jsonify, request, render_template
-from connectDB import influx, mysql, info
-from collections import deque 
-from datetime import datetime, timezone, timedelta
-import sys, os, random
+from connectDB import influx, info
+import sys, os
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 monitoring_bp = Blueprint('monitoring', __name__, url_prefix='/monitoring')
@@ -32,16 +30,16 @@ def monitoring():
 def metric_handler():
     if request.method == 'GET':
         try:
-            query = "select * from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            query = "select * from node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
             host_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
-            
-            query = "select * from instance_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+
+            query = "select * from pod_monitoring order by time desc limit 10 tz('Asia/Seoul')"
             instance_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_METRIC_DB_NAME, query)
-            
+
             result = {"host_metric":host_metric[0], "instance_metric":instance_metric[0]}
 
             return jsonify(result)

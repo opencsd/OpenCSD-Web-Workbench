@@ -202,7 +202,7 @@ function updateCSDMetricChartData(data){
   csdNetwockTXChartData = [];
   csdChartCategories = [];
 
-  data.forEach(function(item){
+  data.reverse().forEach(function(item){
     csdCpuChartData.push(item.cpu_usage);
     csdMemoryChartData.push(item.memory_usage);
     csdNetworkRXChartData.push(item.network_rx_byte);

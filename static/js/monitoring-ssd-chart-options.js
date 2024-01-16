@@ -44,23 +44,11 @@ var cpuChartOption = {
   series: 
   [
     {
-      name: "Host CPU",
+      name: 'Host CPU',
       data: [],
       fillColor: 'rgba(135,206,250,0.7)', 
-      color: {
-        linearGradient: {
-          x1: 0,
-          x2: 0,
-          y1: 0,
-          y2: 1
-      },
-      stops: [
-          [0, '#ACC777'],
-          [1, '#E0EACC']
-        ]
-      },
       lineWidth: 1
-    }
+    },
   ]
 }
 
