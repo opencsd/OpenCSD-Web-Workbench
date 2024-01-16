@@ -46,6 +46,7 @@ def run_handler():
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
 
+                print(result)
                 return jsonify(result)
             else:
                 return 'Error: Unable to fetch data from the remote server'
