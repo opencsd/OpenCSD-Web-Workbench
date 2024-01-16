@@ -64,7 +64,7 @@ function updateChartData(data){
     hostServerChartCategories = [];
 
     data.reverse().forEach(function(item) {
-        hostServerCPUChartData.push(item.cpu_usage / 1000000);
+        hostServerCPUChartData.push(item.cpu_usage_tick);
         hostServerPowerChartData.push(item.power_usage);
         var date = new Date(item.time);
         var hour = date.getHours();

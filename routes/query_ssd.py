@@ -85,7 +85,7 @@ def run_handler():
                         
             end_time = datetime.now()
 
-            query = "select cpu_usage, power_usage from instance_node_monitoring \
+            query = "select cpu_usage_tick, power_usage from node_monitoring \
                         where time > '{}' - 5s and time < '{}' + 5s order by time desc limit 10 tz('Asia/Seoul')".format(start_time,end_time)
             
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
@@ -106,7 +106,7 @@ def metric_handler():
     if request.method == 'GET':
         try:
             # memory -> power로 바꾸기!!
-            query = "select cpu_usage, power_usage from instance_node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+            query = "select cpu_usage_tick, power_usage from node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
             metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)

@@ -1,51 +1,104 @@
-// 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
-var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+const twentyFourHours = 86400000;
+const fiveSeconds = 5000;
+const KBToGB = 1048576;
+const nanocoreTomillicore = 1000000;
 
-// 유저 아이디 
-function viewUserID(){
-    const user_id = document.getElementById("user_info");
-    user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
-}
-document.addEventListener("DOMContentLoaded", function () {
-    viewUserID();
+let metricIntervalID;
+let storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
+let cpuChart, hostCpuChartData, instanceCpuChartData;
+let powerChart, hostPowerChartData;
+let memoryChart, hostMemoryChartData, instanceMemoryChartData;
+let networkChart, hostNetworkRXChartData, hostNetworkTXChartData, instanceNetworkRXChartData, instanceNetworkTXChartData;
+let diskChart, hostDiskChartData, instanceDiskChartData;
+let hostChartCategories;
+
+document.addEventListener("DOMContentLoaded", function(){
+  cpuChart = Highcharts.chart(document.getElementById("cpuChart"), cpuChartOption);
+  powerChart = Highcharts.chart(document.getElementById("powerChart"), powerChartOption);
+  memoryChart = Highcharts.chart(document.getElementById("memoryChart"), memoryChartOption);
+  networkChart = Highcharts.chart(document.getElementById("networkChart"), networkChartOption);
+  diskChart = Highcharts.chart(document.getElementById("diskChart"), diskChartOption);
+
+  viewUserID();
+  getLatestChartData();
+  startInterval();
 })
 
-// const dbMonitoringSlideBtn = document.getElementById('dbMonitoringSlideBtn');
-// const dbMonitoringSlideUpIcon = document.getElementById('dbMonitoringSlideUpIcon');
-// const dbMonitoringSlideDownIcon = document.getElementById('dbMonitoringSlideDownIcon');
-// let isDBMonitoringSlideBtnClicked = true;
+function viewUserID(){
+  const user_id = document.getElementById("user_info");
+  user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+}
 
-// dbMonitoringSlideBtn.addEventListener('click', () => {
-//     const hiddenDBMonitoring = document.getElementById('hiddenDBMonitoring');
+function getLatestChartData(){
+  fetch('/monitoring-ssd/metric', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+  })
+  .then(response => response.json())
+  .then(data => {updateChartData(data)})
+}
 
-//     if (isDBMonitoringSlideBtnClicked) {
-//         dbMonitoringSlideUpIcon.style.display = 'none';
-//         dbMonitoringSlideDownIcon.style.display = 'inline';
-//         hiddenDBMonitoring.style.display = 'block';
-//     } else {
-//         dbMonitoringSlideUpIcon.style.display = 'inline';
-//         dbMonitoringSlideDownIcon.style.display = 'none';
-//         hiddenDBMonitoring.style.display = 'none';
-//     }
-//     isDBMonitoringSlideBtnClicked = !isDBMonitoringSlideBtnClicked;
-// });
+function updateChartData(data){
+  hostCpuChartData = [];
+  instanceCpuChartData = [];
+  hostPowerChartData = [];
+  hostMemoryChartData = [];
+  instanceMemoryChartData = [];
+  hostNetworkRXChartData = [];
+  hostNetworkTXChartData = [];
+  instanceNetworkRXChartData = [];
+  instanceNetworkTXChartData = [];
+  hostDiskChartData = [];
+  instanceDiskChartData = [];
+  hostChartCategories = [];
 
-// const hostMonitoringSlideBtn = document.getElementById('hostMonitoringSlideBtn');
-// const hostMonitoringSlideUpIcon = document.getElementById('hostMonitoringSlideUpIcon');
-// const hostMonitoringSlideDownIcon = document.getElementById('hostMonitoringSlideDownIcon');
-// let isHostMonitoringSlideBtnClicked = true;
+  data.reverse().forEach(item => {
+    hostCpuChartData.push((item.cpu_usage_nanocore)/nanocoreTomillicore);
+    hostPowerChartData.push((item.power_usage));
+    hostMemoryChartData.push((item.memory_usage)/KBToGB);
+    hostNetworkRXChartData.push((item.network_rx_byte)/KBToGB);
+    hostNetworkTXChartData.push((item.network_tx_byte)/KBToGB);
+    hostDiskChartData.push((item.disk_usage)/KBToGB);
+    var date = new Date(item.time);
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var seconds = date.getSeconds();
+    var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+    var formattedHour = hour < 10 ? '0' + hour : hour;
+    var formattedMinute = minute < 10 ? '0' + minute : minute;
+    var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
+    hostChartCategories.push(time);
+  })
 
-// hostMonitoringSlideBtn.addEventListener('click', () => {
-//     const hiddenHostMonitoring = document.getElementById('hiddenHostMonitoring');
+  drawChart();
+}
 
-//     if (isHostMonitoringSlideBtnClicked) {
-//         hostMonitoringSlideUpIcon.style.display = 'none';
-//         hostMonitoringSlideDownIcon.style.display = 'inline';
-//         hiddenHostMonitoring.style.display = 'block';
-//     } else {
-//         hostMonitoringSlideUpIcon.style.display = 'inline';
-//         hostMonitoringSlideDownIcon.style.display = 'none';
-//         hiddenHostMonitoring.style.display = 'none';
-//     }
-//     isHostMonitoringSlideBtnClicked = !isHostMonitoringSlideBtnClicked;
-// });
+function drawChart(){
+  cpuChart.series[0].setData(hostCpuChartData);
+  cpuChart.xAxis[0].setCategories(hostChartCategories);
+  powerChart.series[0].setData(hostPowerChartData);
+  powerChart.xAxis[0].setCategories(hostChartCategories);
+  memoryChart.series[0].setData(hostMemoryChartData);
+  memoryChart.xAxis[0].setCategories(hostChartCategories);
+  networkChart.series[0].setData(hostNetworkRXChartData);
+  networkChart.series[1].setData(hostNetworkTXChartData);
+  networkChart.xAxis[0].setCategories(hostChartCategories);
+  diskChart.series[0].setData(hostDiskChartData);
+  diskChart.xAxis[0].setCategories(hostChartCategories);
+
+  cpuChart.redraw();
+  powerChart.redraw();
+  memoryChart.redraw();
+  networkChart.redraw();
+  diskChart.redraw();
+}
+
+function startInterval(){
+  metricIntervalID = setInterval(getLatestChartData, fiveSeconds);
+}
+
