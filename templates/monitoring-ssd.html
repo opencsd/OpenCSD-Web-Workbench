@@ -116,7 +116,7 @@
           <div class="container-xl">
             <ul class="navbar-nav">
               <li class="nav-item active">
-                <a class="nav-link" href="/monitoring_ssd">
+                <a class="nav-link" href="/monitoring-ssd">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -254,62 +254,6 @@
                   </div>
                 </div>
 
-                <!-- <div class="col-lg-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-3 mt-0">
-                          <p class="card-title">Database Monitoring</p>
-                        </div>
-                        <div class="col-3 mt-0">
-                          <button class="btn btn-link p-0" id="dbMonitoringSlideBtn">
-                            <svg id="dbMonitoringSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                              <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                            </svg>
-                            <svg id="dbMonitoringSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
-                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                      <p class="card-title border-bottom"></p>
-                      <div>
-                        <div id="mainDBMonitoring">
-                         
-                        </div>
-                        <div id="hiddenDBMonitoring" style="display: none;">
-                          
-                          <div class="row">
-                            <div class="col-6">
-                              <div id="ConnectedClientChart">
-                              
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div id="DBRWRateChart">
-                              
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-6">
-                              <div id="DBCacheUsageChart">
-                             
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div id="DBCacheHitRatioChart">
-                            
-                              </div>
-                            </div>
-                          </div>
-                          show graph
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-
                 <div class="col-lg-12">
                   <div class="card">
                     <div class="card-body">
@@ -317,54 +261,33 @@
                         <div class="col-3 mt-0">
                           <p class="card-title">Host Metric Monitoring</p>
                         </div>
-                        <!-- <div class="col-3 mt-0">
-                          <button class="btn btn-link p-0" id="hostMonitoringSlideBtn">
-                            <svg id="hostMonitoringSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                              <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                            </svg>
-                            <svg id="hostMonitoringSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
-                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                            </svg>
-                          </button>
-                        </div> -->
                       </div>
                       <p class="card-title border-bottom"></p>
                       <div>
-                        <div id="HostCpuUsageChart">
-                          <!-- 메인 그래프 -->
+                        <div class="row">
+                          <div class="col-6">
+                            <div id="cpuChart"></div>
+                          </div>
+                          <div class="col-6">
+                            <div id="powerChart"></div>
+                          </div>
                         </div>
-                        <div id="hiddenHostMonitoring">
-                          <!-- 상세 그래프 -->
-                          <div class="row">
-                            <div class="col-6">
-                              <div id="HostMemoryChart">
-                                <!-- Host 서버와 각 CSD의 CPU 사용률 -->
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div id="HostDiskIOChart">
-                                <!-- Host 서버와 각 CSD의 Memory 사용률 -->
-                              </div>
-                            </div>
+                        <div class="row">
+                          <div class="col-4">
+                            <div id="memoryChart"></div>
                           </div>
-                          <div class="row">
-                            <div class="col-6">
-                              <div id="HostNetworkUsageChart">
-                                <!-- Host 서버와 각 CSD의 네트워크 사용률 -->
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div id="HostPowerChart">
-                                <!-- Host 서버와 각 CSD의 파워 사용률 -->
-                              </div>
-                            </div>
+                          <div class="col-4">
+                            <div id="networkChart"></div>
                           </div>
-                          show graph
+                          <div class="col-4">
+                            <div id="diskChart"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -533,8 +456,7 @@
   <script src="../static/js/libs/tabler.min.js" defer></script>
   <script src="../static/js/libs/demo.min.js" defer></script>
 
-  <script src="../static/js/monitoring-ssd-chart-option.js"></script>
-  <script src="../static/js/monitoring-ssd-chart.js"></script>
+  <script src="../static/js/monitoring-ssd-chart-options.js"></script>
   <script src="../static/js/monitoring-ssd.js" defer></script>
 
 </body>

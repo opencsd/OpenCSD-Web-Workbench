@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, session
+from flask_cors import CORS
 from routes import login, monitoring, monitoring_ssd, query, query_ssd, validator, validator_ssd
-from influxdb import InfluxDBClient
+
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'dbms09!'
+CORS(app)
 
 app.register_blueprint(login.login_bp)
 app.register_blueprint(monitoring.monitoring_bp)

@@ -69,12 +69,12 @@ var hostServerCPUChartOption = {
     },
     yaxis: {
         title: {
-            text: "Host CPU (Milli)"
+            text: "Host CPU (tick)"
         },
         tickAmount: 10,
         forceNiceScale: true,
-        min: 0,
-        max: 5000,
+        min: 1000,
+        max: 8000,
         labels: {
             formatter: function(val) {
                 return val.toFixed(0);
@@ -162,7 +162,7 @@ var hostServerPowerChartOption = {
         tickAmount: 10,
         forceNiceScale: true,
         min: 0,
-        max: 80
+        max: 100
     },
     legend: {
         show: false

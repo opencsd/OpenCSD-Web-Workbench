@@ -54,27 +54,34 @@ const indexArea = document.getElementById("index");
 
 // 쿼리 환경 정보 가져오기
 function getEnvironmentInfo() {
-    fetch('/query/environment')
-        .then(response => response.json())
-        .then(data => {
-            dbnameArea.textContent = data.db_name.toUpperCase();
-            dbmsArea.textContent = data.dbms_type.toUpperCase();
-            csdCountArea.textContent = data.csd_count;
-            csdTypeArea.textContent = data.csd_type.toUpperCase();
-            dbmsSizeArea.textContent = data.db_size + " (MB)";
-            blockCountArea.textContent = data.block_count;
-            AgorithmArea.textContent = data.scheduling_algorithm.toUpperCase();
-            if (data.using_index == 0) {
-                indexArea.textContent = "Not Use";
-            }
-            else {
-                indexArea.textContent = "Use";
-            }
-            
-        })
-        .catch(error => {
-            console.error('Fetch 오류: ', error);
-        });
+    fetch('/query/environment',{
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+    })
+    .then(response => response.json())
+    .then(data => {
+        dbnameArea.textContent = data.db_name.toUpperCase();
+        dbmsArea.textContent = data.dbms_type.toUpperCase();
+        csdCountArea.textContent = data.csd_count;
+        csdTypeArea.textContent = data.csd_type.toUpperCase();
+        dbmsSizeArea.textContent = data.db_size + " (MB)";
+        blockCountArea.textContent = data.block_count;
+        AgorithmArea.textContent = data.scheduling_algorithm.toUpperCase();
+        if (data.using_index == 0) {
+            indexArea.textContent = "Not Use";
+        }
+        else {
+            indexArea.textContent = "Use";
+        }
+        
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    });
 }
 
 // 환경 설정 모달 동작
@@ -181,7 +188,11 @@ function drawLogTable(){
         return response.json();
     })
     .then(data => {
-        addQueryLog(data);
+        if(data.length != 0){
+            addQueryLog(data);
+        }else{
+            console.log("no query log data")
+        }
     })
     .catch(error => {
         console.error('Fetch error: ', error);
@@ -390,7 +401,7 @@ function updateChartData(data){
     hostServerChartCategories = [];
 
     data.reverse().forEach(item => {
-        hostServerCPUChartData.push((item.cpu_usage)/1000000);
+        hostServerCPUChartData.push(item.cpu_usage_tick);
         hostServerPowerChartData.push(item.power_usage);
         var date = new Date(item.time);
         var hour = date.getHours();
