@@ -212,6 +212,18 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             popoverContent.appendChild(MetricButton);
             popoverContent.appendChild(LogButton);
 
+            function documentClickHandler(e) {
+                // 팝오버가 열려있을 때만 동작하도록 체크
+                if (popover._element && !popover._element.contains(e.target)) {
+                    popover.hide();
+                    document.removeEventListener('click', documentClickHandler);
+                }
+            }
+    
+            // document의 click 이벤트에 대한 핸들러 등록
+            document.addEventListener('click', documentClickHandler);
+
+
             return popoverContent;
         }
     }),
@@ -219,8 +231,6 @@ function dummyButtonCellEventHandler(dummyButtonCell){
 }
 
 const validatorLogTableBody = document.getElementById("validatorLogTableBody");
-const validatorLogPrevBtn = document.getElementById("validatorLogPrevBtn");
-const validatorLogNextBtn = document.getElementById("validatorLogNextBtn");
 
 // 스니펫 모달 내용 로드
 function validationLogSnippetLoad(validationID) {

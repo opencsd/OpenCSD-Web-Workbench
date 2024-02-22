@@ -155,13 +155,16 @@ function addQueryLog(data){
         const dummyButtonCell = document.createElement("td");
         dummyButtonCell.style.width = "5%";
         dummyButtonCell.innerHTML = `
-            <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
+            <a class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                 </svg>
-            </span>
+            </a>
         `;
-        dummyButtonCell.addEventListener('click', function() {dummyButtonCellEventHandler(dummyButtonCell)});
+        dummyButtonCell.addEventListener('click', function() {
+            dummyButtonCellEventHandler(dummyButtonCell)
+            console.log("dummy Button Click!")
+        });
         
         newRow.appendChild(checkboxCell);
         newRow.appendChild(typeCell);
@@ -191,9 +194,10 @@ function dummyButtonCellEventHandler(dummyButtonCell){
     popover = new bootstrap.Popover(dummyButtonCell, {
         container: 'body',
         placement: 'right',
-        trigger: 'manual',
+        trigger: 'focus',
         html: true,
         content: function () {
+            
             const popoverContent = document.createElement('div');
             popoverContent.classList.add('text-center');
             popoverContent.style.maxWidth = '200px';
@@ -232,287 +236,24 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             popoverContent.appendChild(LogButton);
             popoverContent.appendChild(DetailButton);
 
+            function documentClickHandler(e) {
+                // 팝오버가 열려있을 때만 동작하도록 체크
+                if (popover._element && !popover._element.contains(e.target)) {
+                    popover.hide();
+                    document.removeEventListener('click', documentClickHandler);
+                }
+            }
+    
+            // document의 click 이벤트에 대한 핸들러 등록
+            document.addEventListener('click', documentClickHandler);
+
             return popoverContent;
         }
     });
     popover.show();
 }
 
-// function addNewQueryLog(){
-//     const queryLogTableBody = document.getElementById("queryLogTableBody");
-
-//     const queryText = document.getElementById("queryTextarea").value.trim();
-
-//     if (queryText) {
-//         const shortenedQuery = queryText.length > 40 ? queryText.slice(0, 40) + "..." : queryText;
-//         queryHistory.push(shortenedQuery);
-
-//         const newRow = document.createElement("tr");
-//         const checkboxCell = document.createElement("td");
-//         checkboxCell.style.width = "5%";
-//         checkboxCell.style.textAlign = "center";
-//         const typeCell = document.createElement("td");
-//         typeCell.style.width = "5%";
-//         typeCell.style.textAlign = "center";
-//         const queryIDCell = document.createElement("td");
-//         queryIDCell.style.width = "1%";
-//         const queryCell = document.createElement("td");
-//         queryCell.style.width = "30%";
-//         const progressBarCells = [];
-//         const dummyButtonCell = document.createElement("td");
-//         dummyButtonCell.style.width = "5%";
-
-//         for (let i = 0; i < 4; i++) {
-//             const progressBarCell = document.createElement("td");
-//             progressBarCell.style.width = "12%";
-//             let width;
-//             let value;
-//             let max;
-//             let label;
-
-//             if (i == 0) {
-//                 value = scanned_row_count;
-//                 max = value + 100000;
-//             } else if (i == 1) {
-//                 value = filtered_row_count;
-//                 max = value + 100000;
-//             } else if (i == 2) {
-//                 value = filter_ratio;
-//                 max = 100;
-//             } else {
-//                 value = ExecutionTime;
-//                 max = value + 20;
-//             }
-
-//             label = value;
-//             width = (value / max) * 100;
-//             progressBarCell.innerHTML = `
-//                 <div class="progress">
-//                     <div class="progress-bar" style="width: ${width}%" role="progressbar" aria-valuenow="${value}"
-//                         aria-valuemin="0" aria-valuemax="${max}" aria-label="${label}% Complete">
-                        
-//                     </div>
-//                 </div>
-//                 <div style="text-align:center">
-//                     <h6 style="margin-top:5px; margin-bottom:0px;">${value}</h6>
-//                 </div>
-//             `;
-//             progressBarCells.push(progressBarCell);
-//         }
-//         // progressBarCells.id = "logDetail"+executionQueryID;
-
-//         const dummyButton = document.createElement("td");
-//         dummyButton.innerHTML = `
-//             <span class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
-//                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-//                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-//                 </svg>
-//             </span>
-//         `;
-//         $(document).ready(function () {
-//             $('[data-bs-toggle="popover"]').popover();
-//         });
-
-//         // 각 옵션 버튼마다 id 부여
-//         dummyButton.id = executionQueryID;
-
-//         checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input" name="form-type[]" value="1">`;
-//         newRow.appendChild(checkboxCell);
-
-//         // 쿼리 타입에 따라 아이콘 
-//         const queryType = queryText.slice(0, 10);
-//         var lowerCasequeryType = queryType.toLowerCase();
-//         if (lowerCasequeryType.includes("select")) {
-//             // console.log("select query type")
-//             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
-//         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-//         <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
-//         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-//         </svg>`
-//         }
-//         else if (lowerCasequeryType.includes("update")) {
-//             // console.log("update query type")
-//             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
-//             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-//             <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
-//             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-//           </svg>`
-//         }
-//         else if (lowerCasequeryType.includes("insert")) {
-//             // console.log("insert query type")
-//             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
-//             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-//             <path d="M12 8v8" />
-//             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-//           </svg>`
-//         }
-//         else if (lowerCasequeryType.includes("delete")) {
-//             // console.log("delete query type")
-//             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
-//             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-//             <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
-//             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-//           </svg>`
-//         }
-//         else {
-//             // console.log("generic query type")
-//             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-g" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-//             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-//             <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
-//             <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-//           </svg>`
-//         }
-
-//         newRow.appendChild(typeCell);
-
-//         queryIDCell.textContent = executionQueryID;
-//         queryIDCell.style.textAlign = "center";
-//         newRow.appendChild(queryIDCell);
-
-//         queryCell.textContent = `${shortenedQuery}`;
-//         queryCell.style.backgroundColor = "#fcfdfe";
-//         newRow.appendChild(queryCell);
-
-//         for (let i = 0; i < 4; i++) {
-//             newRow.appendChild(progressBarCells[i]);
-//         }
-
-//         newRow.appendChild(dummyButtonCell);
-//         dummyButtonCell.appendChild(dummyButton);
-
-//         queryLogTableBody.appendChild(newRow);
-
-//         // 쿼리 상세 버튼 클릭 시 동작
-//         dummyButton.addEventListener('click', function () {
-//             var queryRow = this.parentNode.parentNode;
-//             var getScan = queryRow.cells[4].querySelectorAll('div');
-//             var scannedRows = getScan[2].outerText;
-//             var getFilter = queryRow.cells[5].querySelectorAll('div');
-//             var filteredRows = getFilter[2].outerText;
-//             console.log(scannedRows, filteredRows)
-//             if (popover) {
-//                 popover.dispose(); // 기존 팝업 제거
-//             }
-
-//             popover = new bootstrap.Popover(dummyButton, {
-//                 container: 'body',
-//                 placement: 'right',
-//                 trigger: 'manual',
-//                 html: true,
-//                 content: function () {
-//                     const popoverContent = document.createElement('div');
-//                     popoverContent.classList.add('text-center');
-//                     popoverContent.style.maxWidth = '200px';
-        
-//                     const LogButton = document.createElement('button');
-//                     LogButton.setAttribute('type', 'button');
-//                     LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
-//                     LogButton.style.padding = '5px';
-//                     LogButton.style.width = '80px';
-//                     LogButton.style.marginBottom = '5px';
-//                     LogButton.textContent = 'LOG';
-//                     LogButton.addEventListener('click', function () {
-//                         modalContentsLoad(dummyButton.id);
-//                         popover.hide();
-//                     });
-        
-//                     const DetailButton = document.createElement('button');
-//                     DetailButton.setAttribute('type', 'button');
-//                     DetailButton.classList.add('btn', 'btn-azure', 'd-block');
-//                     DetailButton.style.padding = '5px';
-//                     DetailButton.style.width = '80px';
-//                     DetailButton.textContent = 'DETAIL';
-//                     DetailButton.addEventListener('click', function () {
-//                         // 스니펫 테이블
-//                         queryLogDetailLoad(dummyButton.id);
-                        
-//                         // 스캔 필터 비율 차트
-//                         var dataArray = [scannedRows, filteredRows];
-//                         ScanFilterChartOption.series[0].data = dataArray;
-//                         var ScanFilterChart = new ApexCharts(document.querySelector("#ScanFilterChart"), ScanFilterChartOption);
-//                         ScanFilterChart.render();
-//                         popover.hide()
-
-//                     });
-        
-//                     popoverContent.appendChild(LogButton);
-//                     popoverContent.appendChild(DetailButton);
-        
-//                     return popoverContent;
-//                 }
-//             });
-//             popover.show();
-//         });
-//     } else {
-//         queryLogTableBody.textContent = "No query available.";
-//     }
-// }
-
-// // 쿼리 로그 행 클릭 시 해당 쿼리 정보 로딩
-// const LogTableClick = document.getElementById("queryLogtable")
-
-// LogTableClick.addEventListener('click', function(e) {
-//     const metrictable1 = document.querySelector('td.qtable_1');
-//     const metrictable2 = document.querySelector('td.qtable_2');
-//     const metrictable3 = document.querySelector('td.qtable_3');
-//     const metrictable4 = document.querySelector('td.qtable_4');
-//     const metrictable5 = document.querySelector('td.qtable_5');
-
-//     const row = e.target.closest('tr');
-//     if (row) {
-//         const cells = row.getElementsByTagName('td');
-//         const query_id = cells[2].innerText;
-//         hostServerCPUChartData = [];
-//         hostServerPowerChartData = [];
-//         fetch('/query/log/get-one', {
-//             method: 'POST',
-//             mode: 'cors',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             redirect: 'follow',
-//             body: JSON.stringify({query_id: query_id})
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             metrictable1.textContent = data.query_log[0].scanned_row_count + " (line)";
-//             metrictable2.textContent = data.query_log[0].filtered_row_count + " (line)";
-            
-//             let f_ratio = (data.query_log[0].filtered_row_count / data.query_log[0].scanned_row_count) * 100;
-//             filter_ratio = f_ratio.toFixed(2);
-//             metrictable3.textContent = filter_ratio + " (%)";
-
-//             let queryStart = new Date(data.query_log[0].start_time);
-//             let queryEnd = new Date(data.query_log[0].end_time);
-//             let queryTime = queryEnd - queryStart;
-//             ExecutionTime = queryTime / 1000;
-//             metrictable4.textContent = ExecutionTime + " (sec)";
-//             metrictable5.textContent = data.query_log[0].snippet_count;
-
-//             document.getElementById("queryResult").value = data.query_log[0].query_result;
-
-//             data.query_metric[0].forEach(item => {
-//                 hostServerCPUChartData.push((item.cpu_usage)/1000000);
-//                 hostServerPowerChartData.push(item.power_usage);
-//                 var date = new Date(item.time);
-//                 var hour = date.getHours();
-//                 var minute = date.getMinutes();
-//                 var seconds = date.getSeconds();
-//                 var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-//                 var formattedHour = hour < 10 ? '0' + hour : hour;
-//                 var formattedMinute = minute < 10 ? '0' + minute : minute;
-//                 var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
-//                 timestamps.push(time);
-//             })
-//             updateQueryChart();
-//         })
-//         .catch(error => {
-//             console.error('Fetch 오류: ', error);
-//         })
-//     }
-// })
-
-//모달 내용 로딩
+// 쿼리 로그
 function modalContentsLoad(b) {
     $(function () {
         //CSD 로그 드롭박스 및 출력 데이터 초기화

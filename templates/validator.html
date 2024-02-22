@@ -371,10 +371,10 @@
                         <div class="dropdown" align="right">
                           <a href="#" id="detailMetricDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">CPU</a>
                           <div id="detailMetric" class="dropdown-menu">
-                            <a class="dropdown-item detailMetricDropdownItem">CPU</a>
-                            <a class="dropdown-item detailMetricDropdownItem">Power</a>
-                            <a class="dropdown-item detailMetricDropdownItem">Network</a>
-                            <a class="dropdown-item detailMetricDropdownItem">Time</a>
+                            <a class="dropdown-item detailMetricDropdownItem" id="cpuMetric">CPU</a>
+                            <a class="dropdown-item detailMetricDropdownItem" id="powerMetric">Power</a>
+                            <a class="dropdown-item detailMetricDropdownItem" id="networkMetric">Network</a>
+                            <a class="dropdown-item detailMetricDropdownItem" id="executionTime">Time</a>
                           </div>
                         </div>
                       </div>
@@ -392,10 +392,11 @@
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div class="row" style="padding-top: 5px;">
                             <div style="margin: 5px 15px 15px;">Detail Compare</div>
-                              <div id="detailCPU" style="display: block;"></div>
+                              <!-- <div id="detailCPU" style="display: block;"></div>
                               <div id="detailPower" style="display: none;"></div>
                               <div id="detailNetwork" style="display: none;"></div>
-                              <div id="detailTime" style="display: none;"></div>
+                              <div id="detailTime" style="display: none;"></div> -->
+                              <div id="detailChart" style="display: block;"></div>
                             </div>
                           </div>
                         </div>

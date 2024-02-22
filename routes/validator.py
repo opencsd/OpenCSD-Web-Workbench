@@ -101,6 +101,25 @@ def option_handler(action):
                 return str(option_id[0]['id'] + 1) + "\n"
             except:
                 return "insert error"
+    elif action.startswith('new'):
+        if request.method == 'POST':
+            try:
+                data = request.json #옵션 내용 전부
+
+                query = "select MAX(option_id) as id from validation_option"
+                option_id = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                print(option_id[0]['id'] + 1)
+                query = "insert validation_option values ({},\"{}\",\"{}\",\"{}\",\"{}\",{},\"{}\",{},\"{}\",{})" \
+                    .format(option_id[0]['id'] + 1,data['option_name'],data['user_id'],data['dbms_type'],data['storage_type'] \
+                            ,data['csd_count'],data['csd_type'],data['block_count'],data['scheduling_algorithm'],data['using_index'],)
+                result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                return str(option_id[0]['id'] + 1) + "\n"
+            except:
+                return "insert error"   
     elif action.startswith('update'):
         if request.method == 'POST':
             try:

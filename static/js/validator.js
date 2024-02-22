@@ -2,24 +2,30 @@
 var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
 var metricCompareChart, metricCompareChartSeries = [], metricCompareChartSeriesReal = [];
-var detailCPUChart, detailCPUChartSeries = [];
-var detailPowerChart, detailPowerChartSeries = [];
-var detailNetworkChart, detailNetworkChartSeries = [];
-var detailTimeChart, detailTimeChartSeries = [];
+// var detailCPUChart, detailCPUChartSeries = [];
+// var detailPowerChart, detailPowerChartSeries = [];
+// var detailNetworkChart, detailNetworkChartSeries = [];
+// var detailTimeChart, detailTimeChartSeries = [];
+var detailChart, detailChartSeries = [];
 var detailChartCategories = [], optionTableData = [];
+
+var cpuMetric, powerMetric, networkMetric, executionTime;
 
 document.addEventListener("DOMContentLoaded", function () { 
     metricCompareChart = new ApexCharts(document.getElementById("metricCompare"), metricCompareChartOption);
-    detailCPUChart = new ApexCharts(document.getElementById("detailCPU"), detailCPUChartOption);
-    detailPowerChart = new ApexCharts(document.getElementById("detailPower"), detailPowerChartOption);
-    detailNetworkChart = new ApexCharts(document.getElementById("detailNetwork"), detailNetworkChartOption);
-    detailTimeChart = new ApexCharts(document.getElementById("detailTime"), detailTimeChartOption);
+    // detailCPUChart = new ApexCharts(document.getElementById("detailCPU"), detailCPUChartOption);
+    // detailPowerChart = new ApexCharts(document.getElementById("detailPower"), detailPowerChartOption);
+    // detailNetworkChart = new ApexCharts(document.getElementById("detailNetwork"), detailNetworkChartOption);
+    // detailTimeChart = new ApexCharts(document.getElementById("detailTime"), detailTimeChartOption);
+
+    detailChart = new ApexCharts(document.getElementById("detailChart"), detailChartOption);
 
     metricCompareChart.render();
-    detailCPUChart.render();
-    detailPowerChart.render();
-    detailNetworkChart.render();
-    detailTimeChart.render();
+    // detailCPUChart.render();
+    // detailPowerChart.render();
+    // detailNetworkChart.render();
+    // detailTimeChart.render();
+    detailChart.render();
 
     viewUserID();
     drawLogTable();
@@ -46,24 +52,43 @@ detailMetricDropdownItems.forEach(function(item) { // 드롭다운으로 차트 
         // detailCPUChart.updateOptions({ chart: { foreColor: '#000000' } });
         // detailPowerChart.updateOptions({ chart: { foreColor: '#000000' } });
 
-        detailCPU.style.display = "none"; 
-        detailPower.style.display = "none"; 
-        detailNetwork.style.display = "none"; 
-        detailTime.style.display = "none"; 
+        // detailCPU.style.display = "none"; 
+        // detailPower.style.display = "none"; 
+        // detailNetwork.style.display = "none"; 
+        // detailTime.style.display = "none"; 
+
+        // if(item.textContent == "Power"){
+        //     detailPower.style.display = "block"; 
+        //     detailChart.render();
+        // }else if(item.textContent == "Network"){
+        //     detailNetwork.style.display = "block"; 
+        //     detailChart.render()
+        // }else if(item.textContent == "Time"){ 
+        //     detailTime.style.display = "block"; 
+        //     detailChart.render()
+        // }else{//"CPU"
+        //     detailCPU.style.display = "block"; 
+        //     detailChart.render()
+        // }
 
         if(item.textContent == "Power"){
-            detailPower.style.display = "block"; 
-            detailPowerChart.render();
+            detailChartSeries.push(powerMetric);
+            detailChart.style.display = "block"; 
+            detailChart.update();
         }else if(item.textContent == "Network"){
-            detailNetwork.style.display = "block"; 
-            detailNetworkChart.render()
+            detailChartSeries.push(networkMetric);
+            detailChart.style.display = "block";
+            detailChart.update()
         }else if(item.textContent == "Time"){ 
-            detailTime.style.display = "block"; 
-            detailTimeChart.render()
-        }else{//"CPU"
-            detailCPU.style.display = "block"; 
-            detailCPUChart.render()
+            detailChartSeries.push(executionTime);
+            detailChart.style.display = "block";
+            detailChart.update()
+        }else{ // "CPU"
+            detailChartSeries.push(cpuMetric);
+            detailChart.style.display = "block";
+            detailChart.update()
         }
+
     });
 });
 
@@ -128,7 +153,7 @@ runButton.addEventListener("click", function () {
 });
 
 function updateChartData(data){
-    var compareMetric, compareMetricReal, cpuMetric, powerMetric, networkMetric, executionTime;
+    var compareMetric, compareMetricReal;
     var color;
     var id = "ID " + data.validation_id;
 
@@ -206,10 +231,11 @@ function updateChartData(data){
 
     metricCompareChartSeriesReal.push(compareMetricReal);
     metricCompareChartSeries.push(compareMetric);
-    detailCPUChartSeries.push(cpuMetric);
-    detailPowerChartSeries.push(powerMetric);
-    detailNetworkChartSeries.push(networkMetric);
-    detailTimeChartSeries.push(executionTime);
+    detailChartSeries.push(cpuMetric);
+    // detailCPUChartSeries.push(cpuMetric);
+    // detailPowerChartSeries.push(powerMetric);
+    // detailNetworkChartSeries.push(networkMetric);
+    // detailTimeChartSeries.push(executionTime);
     detailChartCategories.push(id);
 
     if(metricCompareChartSeries.length == 3){
@@ -221,10 +247,11 @@ function updateChartData(data){
 
         metricCompareChartSeriesReal.shift();
         metricCompareChartSeries.shift();
-        detailCPUChartSeries.shift();
-        detailPowerChartSeries.shift();
-        detailNetworkChartSeries.shift();
-        detailTimeChartSeries.shift();
+        detailChartSeries.shift();
+        // detailCPUChartSeries.shift();
+        // detailPowerChartSeries.shift();
+        // detailNetworkChartSeries.shift();
+        // detailTimeChartSeries.shift();
         detailChartCategories.shift();
     }
 }
@@ -234,33 +261,40 @@ function drawChart(){
         series: metricCompareChartSeries,
     });
 
-    detailCPUChart.updateOptions({
-        series: detailCPUChartSeries,
+    detailChart.updateOptions({
+        series: detailChartSeries,
         xaxis: {
             categories: detailChartCategories
         }
     });
 
-    detailPowerChart.updateOptions({
-        series: detailPowerChartSeries,
-        xaxis: {
-            categories: detailChartCategories
-        }
-    });
+    // detailCPUChart.updateOptions({
+    //     series: detailCPUChartSeries,
+    //     xaxis: {
+    //         categories: detailChartCategories
+    //     }
+    // });
 
-    detailNetworkChart.updateOptions({
-        series: detailNetworkChartSeries,
-        xaxis: {
-            categories: detailChartCategories
-        }
-    });
+    // detailPowerChart.updateOptions({
+    //     series: detailPowerChartSeries,
+    //     xaxis: {
+    //         categories: detailChartCategories
+    //     }
+    // });
 
-    detailTimeChart.updateOptions({
-        series: detailTimeChartSeries,
-        xaxis: {
-            categories: detailChartCategories
-        }
-    });
+    // detailNetworkChart.updateOptions({
+    //     series: detailNetworkChartSeries,
+    //     xaxis: {
+    //         categories: detailChartCategories
+    //     }
+    // });
+
+    // detailTimeChart.updateOptions({
+    //     series: detailTimeChartSeries,
+    //     xaxis: {
+    //         categories: detailChartCategories
+    //     }
+    // });
 }
 
 function updateOptionTableData(validationID,optionID){
@@ -350,10 +384,11 @@ function deleteFromChart(validationID){
     let index = detailChartCategories.indexOf(lookupID);
     metricCompareChartSeriesReal.splice(index, 1);
     metricCompareChartSeries.splice(index, 1);
-    detailCPUChartSeries.splice(index, 1);
-    detailPowerChartSeries.splice(index, 1);
-    detailNetworkChartSeries.splice(index, 1);
-    detailTimeChartSeries.splice(index, 1);
+    detailChartSeries.splice(index, 1);
+    // detailCPUChartSeries.splice(index, 1);
+    // detailPowerChartSeries.splice(index, 1);
+    // detailNetworkChartSeries.splice(index, 1);
+    // detailTimeChartSeries.splice(index, 1);
     detailChartCategories.splice(index, 1);
     optionTableData.splice(index, 1);
 
@@ -509,10 +544,11 @@ opt_dropdownMenu.addEventListener("click", function (e) {
         const opt_selectedOption = e.target.textContent;
         opt_dropdownToggle.textContent = opt_selectedOption;
         
+        // 옵션 드롭다운 선택 시
         if (opt_selectedOption === "Offloading Option Set") {
-            optionID = 0;
-        } else if (opt_selectedOption === "Non Offloading Option Set") {
             optionID = 1;
+        } else if (opt_selectedOption === "Non Offloading Option Set") {
+            optionID = 2;
         } else{
             // 새로운 옵션 추가 모달 창
             NewOptionmodalLoad();
@@ -612,6 +648,32 @@ function addNewOption() {
     // .catch(error => {
     //     console.error('Fetch 오류: ', error);
     // });
+
+    fetch('/validator/option/new', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            option_id: optionID
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
+        storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+        csdkindInfo.textContent = data[0].csd_type;
+        csdCountInfo.textContent = data[0].csd_count;
+        blockCountInfo.textContent = data[0].block_count;
+        algorithmInfo.textContent = data[0].scheduling_algorithm;
+        selectedOptionName = opt_selectedOption;
+        selectedStorageType = data[0].storage_type.toUpperCase();
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    });
     
     
     var newOption = document.createElement("option");

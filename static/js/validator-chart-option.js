@@ -119,6 +119,7 @@ var detailChartOption = {
         //     color: "#e6c333ff" 
         // },
     ],
+
     dataLabels: {
         enabled: true,
     },
@@ -655,7 +656,7 @@ var HostCSDPowerChartOption = {
 
 var CSDCpuPowerChartOption = {
     chart: {
-        type: "bar",
+        type: "line",
         fontFamily: 'inherit',
         height: 338,
         parentHeightOffset: 0,
@@ -707,11 +708,23 @@ var CSDCpuPowerChartOption = {
             show: false,
         },
     },
-    yaxis: {
-        labels: {
-            padding: 4
+    yaxis: [{
+        // labels: {
+        //     padding: 4
+        // }, 
+        title: {
+            text: 'CSD CPU(tick)'
         },
-    },
+        // min: 5000,
+        // max: 10000
+    }, {
+        opposite: true,
+        title: {
+            text: 'CSD Power(W)'
+        },
+        // min: 2000,
+        // max: 3000
+    }],
     labels: [
         'CSD1', 'CSD2', 'CSD3', 'CSD4', 'CSD5', 'CSD6', 'CSD7', 'CSD8'
     ],
