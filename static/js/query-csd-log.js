@@ -1,8 +1,11 @@
 // 세션에 저장된 유저 정보 (유저 아이디, 인스턴스네임)
 var storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
-var totalContainerLog = [InterfaceContainerLog, MergingContainerLog, MonitoringContainerLog, offloadingContainerLog];
-var totalCSDLog = [csd1Log, csd2Log, csd3Log, csd4Log, csd5Log, csd6Log, csd7Log, csd8Log];
+// var totalContainerLog = [InterfaceContainerLog, MergingContainerLog, MonitoringContainerLog, offloadingContainerLog];
+// var totalCSDLog = [csd1Log, csd2Log, csd3Log, csd4Log, csd5Log, csd6Log, csd7Log, csd8Log];
+
+var totalContainerLog = [];
+var totalCSDLog = [];
 
 let popover;
 var maxList = {
@@ -11,6 +14,11 @@ var maxList = {
     "ratioMax" : 100,
     "timeMax" : 500,
 }
+
+var selectIcon = "";
+var dclIcon = "";
+var ddlIcon = "";
+var otherIcon = "";
 
 function addQueryLog(data){
     data.forEach(function(result){
@@ -33,35 +41,40 @@ function addQueryLog(data){
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`
+                    </svg>`;
+                    selectIcon = typeCell.innerHTML;
+                    
         }
-        else if (result.query_type == "update" || result.query_type == 2) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-u" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        else if (result.query_type == "dcl" || result.query_type == 2) {
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-c" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`
+                    </svg>`;
+                    dclIcon = typeCell.innerHTML;
         }
-        else if (result.query_type == "insert" || result.query_type == 3) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-i" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        else if (result.query_type == "ddl" || result.query_type == 3) {
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M12 8v8" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`
+                    </svg>`;
+                    ddlIcon = typeCell.innerHTML;
         }
-        else if (result.query_type == "delete" || result.query_type == 4) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
-                        <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`
-        }
+        // else if (result.query_type == "delete" || result.query_type == 4) {
+        //     typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        //                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        //                 <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
+        //                 <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+        //             </svg>`
+        // }
         else {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-g" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-o" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`
+                    </svg>`;
+                    otherIcon = typeCell.innerHTML;
         }
 
         const queryIDCell = document.createElement("td");
@@ -163,7 +176,6 @@ function addQueryLog(data){
         `;
         dummyButtonCell.addEventListener('click', function() {
             dummyButtonCellEventHandler(dummyButtonCell)
-            console.log("dummy Button Click!")
         });
         
         newRow.appendChild(checkboxCell);
@@ -254,27 +266,64 @@ function dummyButtonCellEventHandler(dummyButtonCell){
 }
 
 // 쿼리 로그
-function modalContentsLoad(b) {
+function modalContentsLoad(query_id) {
+    const containerButton = document.getElementById("containerButton");
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    // 드롭다운에서 선택한 항목 보이기
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function() {
+            containerButton.textContent = item.textContent;
+        });
+    });
+
+    const post_data = {
+        query_id: query_id
+    }
+
+    // 웹 서버 연결해서 디버그 정보 받아오기
+    fetch('/query/desc/debug', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify(post_data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data)
+
+            // instance log 데이터 배열에 넣기
+            totalContainerLog = Object.values(data['instance_debug_log']);
+
+            var containerLog = document.getElementById("tab1");
+            containerLog.innerHTML = totalContainerLog[0];
+
+            // csd log 데이터 배열에 넣기
+            data.csd_debug_log.forEach(function (item) {
+                totalCSDLog.push(item.csd_log);
+            })
+            var CSDLog = document.getElementById("tab2");
+            CSDLog.innerHTML = totalCSDLog[0];
+        })
+
     $(function () {
         //CSD 로그 드롭박스 및 출력 데이터 초기화
         var CSDButton = document.getElementById("CSDButton");
-        var CSDLog = document.getElementById("tab2");
         CSDButton.innerText = "CSD 1";
-        CSDLog.innerHTML = totalCSDLog[0];
 
-        //컨테이너 로그 드롭박스 및 출력 데이터 초기화
-        var containerButton = document.getElementById("containerButton");
-        var containerLog = document.getElementById("tab1");
-        containerButton.innerText = "Interface Container"
-        containerLog.innerHTML = totalContainerLog[0];
+        // 출력 데이터 초기화
+        containerButton.innerText = "Query Engine"
 
         // 모든 모달은 처음 띄워질 때 첫번째 탭 관련 정보만 시각화
         $("#containerButton").show();
         $("#CSDButton").hide();
-        // $('.nav-tabs a:last').tab('hide');
 
         // 모달 띄우기(모든 탭 관련 정보 설정)
         $("#modal").modal("show");
+        $("#tab1-tab").tab("show");
         var modalDiv = $('#modal');
         modalDiv.modal({
             backdrop: true,
@@ -291,39 +340,20 @@ function modalContentsLoad(b) {
         });
     };
     //Container 1~4
-    var arr = ['Interface', "Merging", "Monitoring", "Offloading"];
+    var arr = ['Query', 'Interface', "Merging", "Monitoring", "Offloading"];
     for (let i = 0; i < arr.length; i++) {
         document.getElementById(arr[i]).addEventListener('click', function () {
-            var containerButton = document.getElementById("containerButton");
             var containerLog = document.getElementById("tab1");
-            containerButton.innerText = arr[i] + " Container";
             containerLog.innerHTML = totalContainerLog[i];
         });
     };
 }
 
-//###모달 기능#####
+// ###모달 기능#####
+
 // 1. 모달 닫기 
 $("#modal #close").click(function () {
     $(function () {
-        // Storage Engine, CSD tab 초기화
-        var SEtab = document.getElementById("tab1-tab");
-        var CSDtab = document.getElementById("tab2-tab");
-        SEtab.ariaSelected = 'true';
-        CSDtab.ariaSelected = 'false';
-
-        // CSD 로그 드롭박스 및 출력 데이터 초기화
-        var CSDButton = document.getElementById("CSDButton");
-        var CSDLog = document.getElementById("tab2");
-        CSDButton.innerText = "CSD Num";
-        CSDLog.innerHTML = "";
-
-        //컨테이너 로그 드롭박스 및 출력 데이터 초기화
-        var containerButton = document.getElementById("containerButton");
-        var containerLog = document.getElementById("tab1");
-        containerButton.innerText = "Container"
-        containerLog.innerHTML = "";
-
         $("#modal").modal("hide");
     });
 });
@@ -337,6 +367,7 @@ $(function () {
 // 3. 모달 탭 전환 
 $('a[data-toggle="tab"]').click(function (e) {
     var targetTab = $(e.target).attr('href');
+    
     // 탭 1로 전환 시 내용 업데이트
     if (targetTab === '#tab1') {
         $("#containerButton").show();
@@ -466,7 +497,4 @@ function queryLogDetailLoad(query_id) {
             show: true
         });
     });
-
-
-
 }

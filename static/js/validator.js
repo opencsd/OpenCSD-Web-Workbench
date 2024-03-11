@@ -367,6 +367,7 @@ function logActivateEvent(validationID){
         drawChart();
         updateOptionTableData(validationID,data[0].option_id);
         queryTextArea.value = data[0].query_statement;
+        // console.log(data[0])
     })
     .catch(error => {
         console.error('Fetch error: ', error);

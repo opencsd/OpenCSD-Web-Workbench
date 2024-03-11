@@ -45,9 +45,9 @@
             <div class="mb-3">
                 <label class="form-label">DBMS</label>
                 <select class="form-select" id="query_dbms_select" disabled>
-                    <option value="1" selected>MySQL</option>
-                    <option value="2">K-OpenSourceDB</option>
-                    <option value="3">SQLite</option>
+                    <option value="mysql" selected>MySQL</option>
+                    <option value="kopen">K-OpenSourceDB</option>
+                    <option value="sqlite">SQLite</option>
                 </select>
                 </div>
         </div>
@@ -55,9 +55,9 @@
             <div class="mb-3">
             <label class="form-label">CSD Kind</label>
             <select class="form-select" id="query_csdkind" disabled>
-                <option value="1" selected>NGD System</option>
-                <option value="2">ScaleFlux</option>
-                <option value="3">SmartSSD</option>
+                <option value="ngd" selected>NGD System</option>
+                <option value="scale">ScaleFlux</option>
+                <option value="smart">SmartSSD</option>
             </select>
             </div>
         </div>
@@ -78,14 +78,14 @@
         </div>
         <label class="form-label">Scheduling Algorithm</label>
         <div class="btn-group w-100" role="group" id="query_scheduling">
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="query_CsdMetricScore" autocomplete="off" checked>
-            <label for="query_CsdMetricScore" class="btn">Random</label>
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="query_BlockCountBased" autocomplete="off">
-            <label for="query_BlockCountBased" class="btn">DCS</label>
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="query_SSTFileSpread" autocomplete="off">
-            <label for="query_SSTFileSpread" class="btn">DSI</label>
-            <input type="radio" class="btn-check" name="btn-radio-basic" id="query_AutoSelection" autocomplete="off">
-            <label for="query_AutoSelection" class="btn">Auto Selection</label>
+            <input type="radio" class="btn-check" name="btn-radio-basic" id="random_algo" autocomplete="off" checked>
+            <label for="random_algo" class="btn">Random</label>
+            <input type="radio" class="btn-check" name="btn-radio-basic" id="dcs_algo" autocomplete="off">
+            <label for="dcs_algo" class="btn">DCS</label>
+            <input type="radio" class="btn-check" name="btn-radio-basic" id="dsi_algo" autocomplete="off">
+            <label for="dsi_algo" class="btn">DSI</label>
+            <input type="radio" class="btn-check" name="btn-radio-basic" id="auto_algo" autocomplete="off">
+            <label for="auto_algo" class="btn">Auto Selection</label>
         </div>        
         <div class="mb-3">
             <label class="row" style="margin-top: 15px;">
@@ -102,7 +102,7 @@
         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
         Cancel
         </a>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Modify</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="query_option_modify">Modify</button>
     </div>
     </div>
 </div>

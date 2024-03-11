@@ -78,7 +78,8 @@ def option_handler(action):
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
-
+                
+                # print(resulat.)
                 return jsonify(result)
             except:
                 return "get-one error\n"
