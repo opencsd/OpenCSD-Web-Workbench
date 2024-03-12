@@ -646,51 +646,53 @@ function addNewOption() {
 
     var radioButtons = document.getElementsByName('btn-new-algo');
     var scheduling = '';
-    for (var i = 0; i < radioButtons.length; i++) {
-        if (radioButtons[i].checked) {
-            scheduling = document.querySelector('label[for="' + radioButtons[i].id + '"]').innerText;
-            break;
-        }
+    // for (var i = 0; i < radioButtons.length; i++) {
+    //     if (radioButtons[i].checked) {
+    //         scheduling = document.querySelector('label[for="' + radioButtons[i].id + '"]').innerText;
+    //         break;
+    //     }
+    // }
+
+    var new_option = {
+        option_name: option_name,
+        user_id: storeduserInfo.workbench_user_id,
+        dbms_type: dbms_type,
+        storage_type: storage_type,
+        csd_count: csd_count,
+        csd_type: csd_type,
+        block_count: block_count,
+        scheduling_algorithm: scheduling,
+        using_index: 1
     }
 
-    console.log(scheduling)
+    console.log(new_option)
 
-    fetch('/validator/option/new', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        body: JSON.stringify({
-            option_id: optionID
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
-        storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
-        csdkindInfo.textContent = data[0].csd_type;
-        csdCountInfo.textContent = data[0].csd_count;
-        blockCountInfo.textContent = data[0].block_count;
-        algorithmInfo.textContent = data[0].scheduling_algorithm;
-        selectedOptionName = opt_selectedOption;
-        selectedStorageType = data[0].storage_type.toUpperCase();
-    })
-    .catch(error => {
-        console.error('Fetch 오류: ', error);
-    });
-    
-    
-    var newOption = document.createElement("option");
-    newOption.text = "새로운 항목"; // 저장 시 입력한 옵션 이름
-    newOption.value = "newItem";
+    // fetch('/validator/option/new', {
+    //     method: 'POST',
+    //     mode: 'cors',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     redirect: 'follow',
+    //     body: JSON.stringify({
+    //         option_id: optionID
+    //     })
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //     dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
+    //     storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+    //     csdkindInfo.textContent = data[0].csd_type;
+    //     csdCountInfo.textContent = data[0].csd_count;
+    //     blockCountInfo.textContent = data[0].block_count;
+    //     algorithmInfo.textContent = data[0].scheduling_algorithm;
+    //     selectedOptionName = opt_selectedOption;
+    //     selectedStorageType = data[0].storage_type.toUpperCase();
+    // })
+    // .catch(error => {
+    //     console.error('Fetch 오류: ', error);
+    // });
 
-    var dropdown = document.getElementById("OptionDropdown");
-    var lastOption = dropdown.lastElementChild;
-
-    dropdown.insertBefore(newOption, lastOption.nextSibling);
-    // dropdown.add(newOption);
 }
 
 var new_selected_csdkind = $("#new_csdkind");
