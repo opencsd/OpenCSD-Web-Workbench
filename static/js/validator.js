@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     viewUserID();
     drawLogTable();
+    getOptionList();
 });
 
 // 유저 아이디 
@@ -109,6 +110,38 @@ function drawLogTable(){
     })
     .then(data => {
         addValidatorLog(data);
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    })
+}
+
+// 옵션 드롭다운 리스트 불러오기
+function getOptionList(){
+    fetch('/validator/option/get-all', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            user_id: storeduserInfo.workbench_user_id,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        var dropdown = document.querySelector(".opt_menu");
+        data.forEach(function(item) {
+            var option = document.createElement("a");
+            option.classList.add("dropdown-item", "opt_item");
+            option.href = "#";
+            option.dataset.option = item["data-option"];
+            option.innerText = item.option_name;
+            option.value = item.option_id;
+            dropdown.appendChild(option);
+        })
     })
     .catch(error => {
         console.error('Fetch error: ', error);
@@ -544,42 +577,40 @@ opt_dropdownMenu.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("opt_item")) {
         const opt_selectedOption = e.target.textContent;
         opt_dropdownToggle.textContent = opt_selectedOption;
-        
-        // 옵션 드롭다운 선택 시
-        if (opt_selectedOption === "Offloading Option Set") {
-            optionID = 1;
-        } else if (opt_selectedOption === "Non Offloading Option Set") {
-            optionID = 2;
-        } else{
-            // 새로운 옵션 추가 모달 창
+        const opt_selectedOptionID = e.target.value;
+
+        optionID = opt_selectedOptionID;
+
+        if(optionID){
+            fetch('/validator/option/get-one', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                redirect: 'follow',
+                body: JSON.stringify({
+                    option_id: optionID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
+                storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+                csdkindInfo.textContent = data[0].csd_type;
+                csdCountInfo.textContent = data[0].csd_count;
+                blockCountInfo.textContent = data[0].block_count;
+                algorithmInfo.textContent = data[0].scheduling_algorithm;
+                selectedOptionName = opt_selectedOption;
+                selectedStorageType = data[0].storage_type.toUpperCase();
+            })
+            .catch(error => {
+                console.error('Fetch 오류: ', error);
+            });
+        }
+        else {
             NewOptionmodalLoad();
         }
-
-        fetch('/validator/option/get-one', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            redirect: 'follow',
-            body: JSON.stringify({
-                option_id: optionID
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
-            storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
-            csdkindInfo.textContent = data[0].csd_type;
-            csdCountInfo.textContent = data[0].csd_count;
-            blockCountInfo.textContent = data[0].block_count;
-            algorithmInfo.textContent = data[0].scheduling_algorithm;
-            selectedOptionName = opt_selectedOption;
-            selectedStorageType = data[0].storage_type.toUpperCase();
-        })
-        .catch(error => {
-            console.error('Fetch 오류: ', error);
-        });
     }
 });
 
@@ -623,32 +654,6 @@ function addNewOption() {
     }
 
     console.log(scheduling)
-    
-    // fetch('/validator/option/insert', {
-    //     method: 'POST',
-    //     mode: 'cors',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     redirect: 'follow',
-    //     body: JSON.stringify({
-    //         option_id: optionID
-    //     })
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
-    //     storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
-    //     csdkindInfo.textContent = data[0].csd_type;
-    //     csdCountInfo.textContent = data[0].csd_count;
-    //     blockCountInfo.textContent = data[0].block_count;
-    //     algorithmInfo.textContent = data[0].scheduling_algorithm;
-    //     selectedOptionName = opt_selectedOption;
-    //     selectedStorageType = data[0].storage_type.toUpperCase();
-    // })
-    // .catch(error => {
-    //     console.error('Fetch 오류: ', error);
-    // });
 
     fetch('/validator/option/new', {
         method: 'POST',
