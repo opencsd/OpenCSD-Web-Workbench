@@ -77,12 +77,14 @@
             </div>
             <label class="form-label">Scheduling Algorithm</label>
             <div class="btn-group w-100"role="group" id="scheduling_algorithm">
-                <input type="radio" class="btn-check" name="btn-radio-basic" id="csd-metric-score" autocomplete="off" checked>
-                <label for="btn-radio-basic-1" type="button" class="btn">CSD Metric Score</label>
-                <input type="radio" class="btn-check" name="btn-radio-basic" id="block-count-based" autocomplete="off">
-                <label for="btn-radio-basic-2" type="button" class="btn">Block Count Based</label>
-                <input type="radio" class="btn-check" name="btn-radio-basic" id="sst-file-spread" autocomplete="off">
-                <label for="btn-radio-basic-3" type="button" class="btn">SST File Spread</label>
+                <input type="radio" class="btn-check" name="btn-new-algo" id="modi-random" autocomplete="off" checked>
+                <label for="modi-random" class="btn">Random</label>
+                <input type="radio" class="btn-check" name="btn-new-algo" id="modi-dcs" autocomplete="off">
+                <label for="modi-dcs"  class="btn">DCS</label>
+                <input type="radio" class="btn-check" name="btn-new-algo" id="modi-dsi" autocomplete="off">
+                <label for="modi-dsi"  class="btn">DSI</label>
+                <input type="radio" class="btn-check" name="btn-new-algo" id="modi_AutoSelection" autocomplete="off">
+                <label for="modi_AutoSelection" class="btn">Auto Selection</label>
             </div>
             <div class="mb-3">
                 <label class="row" style="margin-top: 15px;">
@@ -99,8 +101,8 @@
             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
             Cancel
             </a>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Modify</button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="optionModify">Modify</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="optionDelete">Delete</button>
         </div>
         </div>
     </div>

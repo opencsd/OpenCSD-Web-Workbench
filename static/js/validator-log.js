@@ -512,23 +512,34 @@ function validationLogMetricLoad(validationID) {
     });
 }
 
-
-
-
 // 로그 모달 내용 로딩
-function modalContentsLoad(validationID){
-    console.log("LOG Modal Pop, Validation ID :", validationID)
-    $(function() {
-        var containerLog = document.getElementById("tab1");
-        containerLog.innerHTML = validatorLog;
-        $("#validatorModal").modal("show");
-        var modalDiv = $('#validatorModal');
-        modalDiv.modal({
-            backdrop: true,
-            show: true
-        });
-    });
-}
+// function modalContentsLoad(validationID){
+//     console.log("LOG Modal Pop, Validation ID :", validationID)
+//     var containerLog = document.getElementById("tab1");
+//     fetch('/validator/debug', {
+//         method: 'POST',
+//         mode: 'cors',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         redirect: 'follow',
+//         body: JSON.stringify({validation_id: validationID})
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data)
+//         containerLog.innerHTML = data.validation_log;
+//     })
+
+//     $(function() {
+//         $("#validatorModal").modal("show");
+//         var modalDiv = $('#validatorModal');
+//         modalDiv.modal({
+//             backdrop: true,
+//             show: true
+//         });
+//     });
+// }
 
 
 //###모달 기능#####

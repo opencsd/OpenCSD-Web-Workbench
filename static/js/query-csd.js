@@ -84,7 +84,7 @@ function getEnvironmentInfo() {
         });
 }
 
-// 환결 설정 모달 창 동작
+// 환경 설정 모달 창 동작
 const envSetting = document.getElementById("envSetting");
 
 envSetting.addEventListener('click', function () {
@@ -158,15 +158,10 @@ function envSettingmodalLoad() {
     // 인덱스 스캔 사용 여부
     if (IndexInfo === "Use"){
         IndexInfoElement.checked = true;
-        // settingInfo.set_Index = 1;
     }
     else {
         IndexInfoElement.checked = false;
-        // settingInfo.set_Index = 0;
     }
-
-    // settingInfo.set_blockCount = blockCountNum;
-    // settingInfo.set_schedAlgo = schedAlgo;
 
     $("#envSettingModal").modal("show");
     var modalDiv = $('#envSettingModal');
@@ -206,7 +201,7 @@ envModifyButton.addEventListener('click', function () {
 
 // 옵션 수정 버튼 클릭 시 동작
 function envSettingModify(settingInfo) {
-    fetch('/query/environment/modify', {
+    fetch('/query/environment/update', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -220,12 +215,12 @@ function envSettingModify(settingInfo) {
         })
         .then(data => {
             if(data.result === 0) {
-                // 옵션 수정 완료 팝업
+                // 옵션 수정 완료
                 getEnvironmentInfo();
                 console.log("option modify success")
             }
             else {
-                // 옵션 수정 실패 팝업
+                // 옵션 수정 실패
                 console.log("option modify failed")
             }
         })

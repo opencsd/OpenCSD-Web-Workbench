@@ -100,6 +100,7 @@ def environment_hadler(action):
 # DB 스키마 -> 구현 전
 @query_bp.route('/schema', methods=['GET'])
 def schema_handler():
+    # descData = 
     if request.method == 'GET':
         try:
             return jsonify()
