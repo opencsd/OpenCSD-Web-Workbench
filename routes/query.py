@@ -27,34 +27,80 @@ def tpch_hadler():
     return jsonify(json_data)
 
 # opencsd 환경정보 획득
-@query_bp.route('/environment', methods=['GET'])
-def environment_hadler():
-    try:
-        # 나중에 db_instance_name 인자로 받기!!
-        db_instance_name = "keti_opencsd"
-        query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = '{}'".format(db_instance_name)
-        # management_db = mysql.execute_query_mysql_management(query)
-        management_db = mysql.execute_query_mysql(info.PLATFORM_MANAGEMENT_DB_HOST, info.PLATFORM_MANAGEMENT_DB_PORT,
-                                                    info.PLATFORM_MANAGEMENT_DB_USER, info.PLATFORM_MANAGEMENT_DB_PASSWORD,
-                                                    info.PLATFORM_MANAGEMENT_DB_NAME, query)
+# @query_bp.route('/environment', methods=['GET'])
+# def environment_hadler():
+#     try:
+#         # 나중에 db_instance_name 인자로 받기!!
+#         db_instance_name = "keti_opencsd"
+#         query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = '{}'".format(db_instance_name)
+#         # management_db = mysql.execute_query_mysql_management(query)
+#         management_db = mysql.execute_query_mysql(info.PLATFORM_MANAGEMENT_DB_HOST, info.PLATFORM_MANAGEMENT_DB_PORT,
+#                                                     info.PLATFORM_MANAGEMENT_DB_USER, info.PLATFORM_MANAGEMENT_DB_PASSWORD,
+#                                                     info.PLATFORM_MANAGEMENT_DB_NAME, query)
 
-        query = "select * from query_environment_info" 
-        instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
-                                                    info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
-                                                    info.INSTANCE_MANAGEMENT_DB_NAME, query)
+#         query = "select * from query_environment_info" 
+#         instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+#                                                     info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+#                                                     info.INSTANCE_MANAGEMENT_DB_NAME, query)
         
-        management_db_dict = management_db[0]
-        instance_db_dict = instance_db[0]
+#         management_db_dict = management_db[0]
+#         instance_db_dict = instance_db[0]
 
-        management_db_dict.update(instance_db_dict)
+#         management_db_dict.update(instance_db_dict)
             
-        return jsonify(management_db_dict)
-    except:
-        return "" 
+#         return jsonify(management_db_dict)
+#     except:
+#         return "" 
     
+@query_bp.route('/environment/<path:action>', methods=['GET', 'POST'])
+def environment_hadler(action):
+    if action.startswith('get'):
+        if request.method == 'GET':
+            try:
+                # 나중에 db_instance_name 인자로 받기!!
+                db_instance_name = "keti_opencsd"
+                query = "select db_name, dbms_type, csd_count, csd_type, db_size from db_instance_info where db_instance_name = '{}'".format(db_instance_name)
+                # management_db = mysql.execute_query_mysql_management(query)
+                management_db = mysql.execute_query_mysql(info.PLATFORM_MANAGEMENT_DB_HOST, info.PLATFORM_MANAGEMENT_DB_PORT,
+                                                            info.PLATFORM_MANAGEMENT_DB_USER, info.PLATFORM_MANAGEMENT_DB_PASSWORD,
+                                                            info.PLATFORM_MANAGEMENT_DB_NAME, query)
+
+                query = "select * from query_environment_info" 
+                instance_db = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
+                                                            info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
+                                                            info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                
+                management_db_dict = management_db[0]
+                instance_db_dict = instance_db[0]
+
+                management_db_dict.update(instance_db_dict)
+                    
+                return jsonify(management_db_dict)
+            except:
+                return "" 
+    elif action.startswith('modify'):
+        if request.method == 'POST':
+            try:
+                data = request.json
+                block_count = data['set_blockCount']
+                sched_algo = data['set_schedAlgo']
+                index_scan = data['set_Index']
+                
+                # 옵션 수정 반영하기
+                print(block_count)
+                print(sched_algo)
+                print(index_scan)
+                
+                return jsonify({'result': 0})
+            except:
+                return ""
+    else:
+        return "path error"
+
 # DB 스키마 -> 구현 전
 @query_bp.route('/schema', methods=['GET'])
 def schema_handler():
+    # descData = 
     if request.method == 'GET':
         try:
             return jsonify()
@@ -69,7 +115,7 @@ def log_handler(action):
             try:
                 data = request.json
                 user_id = data['user_id']
-                query_type = data['query_type'] #'all', 'select','update','insert','delete','dcl','ddl','other'
+                query_type = data['query_type'] #'all', 'select', 'dcl','ddl','other'
 
                 if query_type == "ALL": #'all'
                     query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
@@ -160,6 +206,7 @@ def desc_handler(action):
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
+                # print(result)
                 return jsonify(result)
             except:
                 return ""
@@ -212,6 +259,7 @@ def desc_handler(action):
                     }]
 
                 result = {"instance_debug_log":json1, "csd_debug_log":json2}
+                # print(result)
                 
                 return jsonify(result)
             except:

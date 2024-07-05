@@ -212,6 +212,18 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             popoverContent.appendChild(MetricButton);
             popoverContent.appendChild(LogButton);
 
+            function documentClickHandler(e) {
+                // 팝오버가 열려있을 때만 동작하도록 체크
+                if (popover._element && !popover._element.contains(e.target)) {
+                    popover.hide();
+                    document.removeEventListener('click', documentClickHandler);
+                }
+            }
+    
+            // document의 click 이벤트에 대한 핸들러 등록
+            document.addEventListener('click', documentClickHandler);
+
+
             return popoverContent;
         }
     }),
@@ -219,8 +231,6 @@ function dummyButtonCellEventHandler(dummyButtonCell){
 }
 
 const validatorLogTableBody = document.getElementById("validatorLogTableBody");
-const validatorLogPrevBtn = document.getElementById("validatorLogPrevBtn");
-const validatorLogNextBtn = document.getElementById("validatorLogNextBtn");
 
 // 스니펫 모달 내용 로드
 function validationLogSnippetLoad(validationID) {
@@ -502,23 +512,34 @@ function validationLogMetricLoad(validationID) {
     });
 }
 
-
-
-
 // 로그 모달 내용 로딩
-function modalContentsLoad(validationID){
-    console.log("LOG Modal Pop, Validation ID :", validationID)
-    $(function() {
-        var containerLog = document.getElementById("tab1");
-        containerLog.innerHTML = validatorLog;
-        $("#validatorModal").modal("show");
-        var modalDiv = $('#validatorModal');
-        modalDiv.modal({
-            backdrop: true,
-            show: true
-        });
-    });
-}
+// function modalContentsLoad(validationID){
+//     console.log("LOG Modal Pop, Validation ID :", validationID)
+//     var containerLog = document.getElementById("tab1");
+//     fetch('/validator/debug', {
+//         method: 'POST',
+//         mode: 'cors',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         redirect: 'follow',
+//         body: JSON.stringify({validation_id: validationID})
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data)
+//         containerLog.innerHTML = data.validation_log;
+//     })
+
+//     $(function() {
+//         $("#validatorModal").modal("show");
+//         var modalDiv = $('#validatorModal');
+//         modalDiv.modal({
+//             backdrop: true,
+//             show: true
+//         });
+//     });
+// }
 
 
 //###모달 기능#####
