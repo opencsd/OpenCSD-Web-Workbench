@@ -6,7 +6,10 @@ var detailCPUChart, detailCPUChartSeries = [];
 var detailPowerChart, detailPowerChartSeries = [];
 var detailNetworkChart, detailNetworkChartSeries = [];
 var detailTimeChart, detailTimeChartSeries = [];
+// var detailChart, detailChartSeries = [];
 var detailChartCategories = [], optionTableData = [];
+
+var cpuMetric, powerMetric, networkMetric, executionTime;
 
 document.addEventListener("DOMContentLoaded", function () { 
     metricCompareChart = new ApexCharts(document.getElementById("metricCompare"), metricCompareChartOption);
@@ -15,14 +18,19 @@ document.addEventListener("DOMContentLoaded", function () {
     detailNetworkChart = new ApexCharts(document.getElementById("detailNetwork"), detailNetworkChartOption);
     detailTimeChart = new ApexCharts(document.getElementById("detailTime"), detailTimeChartOption);
 
+    // detailChart = new ApexCharts(document.getElementById("detailChart"), detailChartOption);
+
     metricCompareChart.render();
     detailCPUChart.render();
     detailPowerChart.render();
     detailNetworkChart.render();
     detailTimeChart.render();
+    // detailChart.render();
+    // console.log(detailChart)
 
     viewUserID();
     drawLogTable();
+    getOptionList();
 });
 
 // 유저 아이디 
@@ -34,13 +42,15 @@ function viewUserID(){
 const detailMetricDropdown = document.querySelector("#detailMetricDropdown");
 const detailMetricDropdownItems = document.querySelectorAll(".detailMetricDropdownItem");
 
-detailMetricDropdownItems.forEach(function(item) {
+detailMetricDropdownItems.forEach(function(item) { // 드롭다운으로 차트 바꾸기
     item.addEventListener("click", function() {
-        detailMetricDropdown.text = item.textContent;
+        detailMetricDropdown.textContent = item.textContent;
+        // detailChart.style.display = "none"; 
 
         //visibility:hidden 상태와 visibility:visible
 
         //보여지는거 해결좀
+        // 차트 숨기기 / 보이기 -> 차트 데이터 series 바꾸기
 
         // detailCPUChart.updateOptions({ chart: { foreColor: '#000000' } });
         // detailPowerChart.updateOptions({ chart: { foreColor: '#000000' } });
@@ -52,17 +62,44 @@ detailMetricDropdownItems.forEach(function(item) {
 
         if(item.textContent == "Power"){
             detailPower.style.display = "block"; 
-            detailPowerChart.render();
+            detailPower.render();
         }else if(item.textContent == "Network"){
             detailNetwork.style.display = "block"; 
-            detailNetworkChart.render()
+            detailNetwork.render()
         }else if(item.textContent == "Time"){ 
             detailTime.style.display = "block"; 
-            detailTimeChart.render()
+            detailTime.render()
         }else{//"CPU"
             detailCPU.style.display = "block"; 
-            detailCPUChart.render()
+            detailCPU.render()
         }
+
+        // console.log(item.textContent)
+        console.log(powerMetric);
+        console.log(networkMetric);
+        console.log(executionTime);
+
+        // if(item.textContent == "Power"){
+        //     detailChartSeries = [];
+        //     detailChartSeries.push(powerMetric);
+        //     // detailChart.style.display = "block"; 
+        //     detailChart.update();
+        // }else if(item.textContent == "Network"){
+        //     detailChartSeries = [];
+        //     detailChartSeries.push(networkMetric);
+        //     // detailChart.style.display = "block";
+        //     detailChart.update()
+        // }else if(item.textContent == "Time"){ 
+        //     detailChartSeries = [];
+        //     detailChartSeries.push(executionTime);
+        //     // detailChart.style.display = "block";
+        //     detailChart.update()
+        // }else{ // "CPU"
+        //     detailChartSeries = [];
+        //     detailChartSeries.push(cpuMetric);
+        //     // detailChart.style.display = "block";
+        //     detailChart.update()
+        // }
     });
 });
 
@@ -83,6 +120,55 @@ function drawLogTable(){
     })
     .then(data => {
         addValidatorLog(data);
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    })
+}
+
+function clearOptionDropdown(){
+    var dropdown = document.querySelector(".opt_menu");
+    var option = document.createElement("option");
+    dropdown.innerHTML = '';
+
+    // New Option 요소 넣기
+    option.classList.add("dropdown-item", "opt_item");
+    option.href = "#";
+    option.text = "New Option+";
+    option.id = "new_option";
+    option.value = "";
+    dropdown.appendChild(option);
+}
+
+// 옵션 드롭다운 리스트 불러오기
+function getOptionList(){
+    clearOptionDropdown();
+
+    fetch('/validator/option/get-all', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            user_id: storeduserInfo.workbench_user_id,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data)
+        var dropdown = document.querySelector(".opt_menu");
+
+        data.forEach(function(item) {
+            var option = document.createElement("a");
+            option.classList.add("dropdown-item", "opt_item");
+            option.href = "#";
+            option.dataset.option = item["data-option"];
+            option.innerText = item.option_name;
+            option.value = item.option_id;
+            dropdown.appendChild(option);
+        })
     })
     .catch(error => {
         console.error('Fetch error: ', error);
@@ -127,7 +213,7 @@ runButton.addEventListener("click", function () {
 });
 
 function updateChartData(data){
-    var compareMetric, compareMetricReal, cpuMetric, powerMetric, networkMetric, executionTime;
+    var compareMetric, compareMetricReal;
     var color;
     var id = "ID " + data.validation_id;
 
@@ -182,6 +268,7 @@ function updateChartData(data){
         }
     }
 
+    // 차트 데이터 넣기...
     cpuMetric = {
         name: id,
         data: [data.storage_cpu_usage_predict],
@@ -205,12 +292,16 @@ function updateChartData(data){
 
     metricCompareChartSeriesReal.push(compareMetricReal);
     metricCompareChartSeries.push(compareMetric);
+
+    // 차트에 차트 데이터 적용하기
+    // detailChartSeries.push(powerMetric);
     detailCPUChartSeries.push(cpuMetric);
     detailPowerChartSeries.push(powerMetric);
     detailNetworkChartSeries.push(networkMetric);
     detailTimeChartSeries.push(executionTime);
     detailChartCategories.push(id);
 
+    // 3개 이상부터 선택되면 앞에 있는 차트 데이터 사라짐
     if(metricCompareChartSeries.length == 3){
         let firstID = detailChartCategories[0];
         let numberValue = parseInt(firstID.match(/\d+/)[0], 10);
@@ -220,6 +311,8 @@ function updateChartData(data){
 
         metricCompareChartSeriesReal.shift();
         metricCompareChartSeries.shift();
+
+        // detailChartSeries.shift();
         detailCPUChartSeries.shift();
         detailPowerChartSeries.shift();
         detailNetworkChartSeries.shift();
@@ -232,6 +325,13 @@ function drawChart(){
     metricCompareChart.updateOptions({
         series: metricCompareChartSeries,
     });
+
+    // detailChart.updateOptions({
+    //     series: detailChartSeries,
+    //     xaxis: {
+    //         categories: detailChartCategories
+    //     }
+    // });
 
     detailCPUChart.updateOptions({
         series: detailCPUChartSeries,
@@ -332,6 +432,7 @@ function logActivateEvent(validationID){
         drawChart();
         updateOptionTableData(validationID,data[0].option_id);
         queryTextArea.value = data[0].query_statement;
+        // console.log(data[0])
     })
     .catch(error => {
         console.error('Fetch error: ', error);
@@ -349,6 +450,7 @@ function deleteFromChart(validationID){
     let index = detailChartCategories.indexOf(lookupID);
     metricCompareChartSeriesReal.splice(index, 1);
     metricCompareChartSeries.splice(index, 1);
+    // detailChartSeries.splice(index, 1);
     detailCPUChartSeries.splice(index, 1);
     detailPowerChartSeries.splice(index, 1);
     detailNetworkChartSeries.splice(index, 1);
@@ -507,46 +609,56 @@ opt_dropdownMenu.addEventListener("click", function (e) {
     if (e.target && e.target.classList.contains("opt_item")) {
         const opt_selectedOption = e.target.textContent;
         opt_dropdownToggle.textContent = opt_selectedOption;
-        
-        if (opt_selectedOption === "Offloading Option Set") {
-            optionID = 0;
-        } else if (opt_selectedOption === "Non Offloading Option Set") {
-            optionID = 1;
-        } else{
-            // 새로운 옵션 추가 모달 창
+        const opt_selectedOptionID = e.target.value;
+
+        optionID = opt_selectedOptionID;
+
+        if(optionID){
+            fetch('/validator/option/get-one', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                redirect: 'follow',
+                body: JSON.stringify({
+                    option_id: optionID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
+                storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+                csdkindInfo.textContent = data[0].csd_type;
+                csdCountInfo.textContent = data[0].csd_count;
+                blockCountInfo.textContent = data[0].block_count;
+                algorithmInfo.textContent = data[0].scheduling_algorithm;
+                selectedOptionName = opt_selectedOption;
+                selectedStorageType = data[0].storage_type.toUpperCase();
+            })
+            .catch(error => {
+                console.error('Fetch 오류: ', error);
+            });
+        }
+        else {
             NewOptionmodalLoad();
         }
-
-        fetch('/validator/option/get-one', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            redirect: 'follow',
-            body: JSON.stringify({
-                option_id: optionID
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
-            storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
-            csdkindInfo.textContent = data[0].csd_type;
-            csdCountInfo.textContent = data[0].csd_count;
-            blockCountInfo.textContent = data[0].block_count;
-            algorithmInfo.textContent = data[0].scheduling_algorithm;
-            selectedOptionName = opt_selectedOption;
-            selectedStorageType = data[0].storage_type.toUpperCase();
-        })
-        .catch(error => {
-            console.error('Fetch 오류: ', error);
-        });
     }
 });
 
-// 새로운 옵션 추가 모달
+// 새로운 옵션 추가 모달 팝업
 function NewOptionmodalLoad(){
+    // New Option Modal 초기화
+    document.getElementById("NewOptionName").value = "";
+    document.getElementById("ssd_selected1").checked = false;
+    document.getElementById("csd_selected1").checked = false;
+    document.getElementById("new-random").checked = true;
+    document.getElementById("new_dbms").value = "mysql";
+    document.getElementById("new_csdkind").value = "ngd";
+    document.getElementById("newCsdCount").value = "";
+    document.getElementById("newBlockCount").value = "";
+    document.getElementById("new_using_index").checked = true;
+
     $(function() {
         $("#validator-newoption").modal("show");
         var modalDiv = $('#validator-newoption');
@@ -574,54 +686,68 @@ function addNewOption() {
     var csd_type = document.getElementById("new_csdkind").value;
     var csd_count = document.getElementById("newCsdCount").value;
     var block_count = document.getElementById("newBlockCount").value;
-
     var radioButtons = document.getElementsByName('btn-new-algo');
     var scheduling = '';
-    for (var i = 0; i < radioButtons.length; i++) {
-        if (radioButtons[i].checked) {
-            scheduling = document.querySelector('label[for="' + radioButtons[i].id + '"]').innerText;
-            break;
-        }
+    var usingIndex = 0;
+
+    if (document.getElementById("new-random").checked == true) {
+        scheduling = "random";
+    }
+    else if (document.getElementById("new-dcs").checked == true) {
+        scheduling = "dcs";
+    }
+    else if (document.getElementById("new-dsi").checked == true) {
+        scheduling = "dsi";
+    }
+    else {
+        scheduling = "auto";
+    }
+    
+    if (document.getElementById("new_using_index").checked == true) {
+        usingIndex = 1;
+    }
+    
+
+    if(storage_type === "SSD") {
+        csd_type = '';
+        csd_count = '';
+        block_count = '';
+        scheduling = '';
+        usingIndex = '';
     }
 
-    console.log(scheduling)
-    
-    // fetch('/validator/option/insert', {
-    //     method: 'POST',
-    //     mode: 'cors',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     redirect: 'follow',
-    //     body: JSON.stringify({
-    //         option_id: optionID
-    //     })
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
-    //     storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
-    //     csdkindInfo.textContent = data[0].csd_type;
-    //     csdCountInfo.textContent = data[0].csd_count;
-    //     blockCountInfo.textContent = data[0].block_count;
-    //     algorithmInfo.textContent = data[0].scheduling_algorithm;
-    //     selectedOptionName = opt_selectedOption;
-    //     selectedStorageType = data[0].storage_type.toUpperCase();
-    // })
-    // .catch(error => {
-    //     console.error('Fetch 오류: ', error);
-    // });
-    
-    
-    var newOption = document.createElement("option");
-    newOption.text = "새로운 항목"; // 저장 시 입력한 옵션 이름
-    newOption.value = "newItem";
+    var new_option = {
+        option_name: option_name,
+        user_id: storeduserInfo.workbench_user_id,
+        dbms_type: dbms_type,
+        storage_type: storage_type,
+        csd_count: csd_count,
+        csd_type: csd_type,
+        block_count: block_count,
+        scheduling_algorithm: scheduling,
+        using_index: usingIndex
+    }
 
-    var dropdown = document.getElementById("OptionDropdown");
-    var lastOption = dropdown.lastElementChild;
+    console.log(new_option)
 
-    dropdown.insertBefore(newOption, lastOption.nextSibling);
-    // dropdown.add(newOption);
+    fetch('/validator/option/new', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify(new_option)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        getOptionList();
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    });
+    
 }
 
 var new_selected_csdkind = $("#new_csdkind");
@@ -632,7 +758,6 @@ var new_using_index = $("#new_using_index");
 
 $("#csd_selected1").on("change", function() {
     if ($(this).is(":checked")){
-        console.log("CSD Checked")
         new_selected_csdkind.prop('disabled', false)
         new_SetCsdCount.prop('disabled', false)
         new_SetBlockCount.prop('disabled', false)
@@ -642,7 +767,6 @@ $("#csd_selected1").on("change", function() {
 });
 $("#ssd_selected1").on("change", function() {
     if ($(this).is(":checked")){
-        console.log("SSD Checked")
         new_selected_csdkind.prop('disabled', true)
         new_SetCsdCount.prop('disabled', true)
         new_SetBlockCount.prop('disabled', true)
@@ -659,7 +783,6 @@ var new_using_index = $("#new_using_index");
 
 $("#csd_selected1").on("change", function() {
     if ($(this).is(":checked")){
-        console.log("CSD Checked")
         new_selected_csdkind.prop('disabled', false)
         new_SetCsdCount.prop('disabled', false)
         new_SetBlockCount.prop('disabled', false)
@@ -669,7 +792,6 @@ $("#csd_selected1").on("change", function() {
 });
 $("#ssd_selected1").on("change", function() {
     if ($(this).is(":checked")){
-        console.log("SSD Checked")
         new_selected_csdkind.prop('disabled', true)
         new_SetCsdCount.prop('disabled', true)
         new_SetBlockCount.prop('disabled', true)
@@ -697,7 +819,6 @@ var using_index = $("#using_index");
 
 $("#csd_selected").on("change", function() {
     if ($(this).is(":checked")){
-        console.log("CSD Checked")
         selected_csdkind.prop('disabled', false)
         SetCsdCount.prop('disabled', false)
         SetBlockCount.prop('disabled', false)
@@ -707,7 +828,6 @@ $("#csd_selected").on("change", function() {
 });
 $("#ssd_selected").on("change", function() {
     if ($(this).is(":checked")){
-        console.log("SSD Checked")
         selected_csdkind.prop('disabled', true)
         SetCsdCount.prop('disabled', true)
         SetBlockCount.prop('disabled', true)
@@ -717,6 +837,7 @@ $("#ssd_selected").on("change", function() {
 });
 
 function envSettingmodalLoad(b){
+    
     $(function() {
         var OptionName = $("#inputOptionname");
         var using_index = $("#using_index");
@@ -739,3 +860,109 @@ function envSettingmodalLoad(b){
         });
     });
 }
+
+// 옵션 수정 버튼 클릭 시
+document.getElementById("optionModify").addEventListener('click', function() {
+
+    const option_name = document.getElementById("inputOptionname").value;
+    var storage_type = '';
+    var radios = document.getElementsByName('report-type');
+
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            storage_type = radios[i].parentNode.querySelector('.form-selectgroup-title').innerText;
+            break;
+        }
+    }
+
+    var dbms_type = document.getElementById("selected_dbms").value;
+    var csd_type = document.getElementById("selected_csdkind").value;
+    var csd_count = document.getElementById("val_SetCsdCount").value;
+    var block_count = document.getElementById("val_SetBlockCount").value;
+    var radioButtons = document.getElementsByName('scheduling_algorithm');
+    var scheduling = '';
+    var usingIndex = 0;
+
+    if (document.getElementById("modi-random").checked == true) {
+        scheduling = "random";
+    }
+    else if (document.getElementById("modi-dcs").checked == true) {
+        scheduling = "dcs";
+    }
+    else if (document.getElementById("modi-dsi").checked == true) {
+        scheduling = "dsi";
+    }
+    else {
+        scheduling = "auto";
+    }
+    
+    if (document.getElementById("using_index").checked == true) {
+        usingIndex = 1;
+    }
+    
+
+    if(storage_type === "SSD") {
+        csd_type = '';
+        csd_count = '';
+        block_count = '';
+        scheduling = '';
+        usingIndex = '';
+    }
+
+    var update_option = {
+        option_name: option_name,
+        user_id: storeduserInfo.workbench_user_id,
+        dbms_type: dbms_type,
+        storage_type: storage_type,
+        csd_count: csd_count,
+        csd_type: csd_type,
+        block_count: block_count,
+        scheduling_algorithm: scheduling,
+        using_index: usingIndex,
+        option_id: optionID
+    }
+
+    console.log(update_option)
+
+    fetch('/validator/option/update', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify(update_option)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        getOptionList();
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    });
+})
+
+// 옵션 삭제
+document.getElementById("optionDelete").addEventListener('click', function() {
+    console.log(optionID)
+    
+    fetch('/validator/option/delete', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            option_id: optionID
+        })
+    })
+    .then(response => {
+        console.log(response);
+        getOptionList();
+    })
+    .catch(error => {
+        console.error('Fetch 오류: ', error);
+    });
+})

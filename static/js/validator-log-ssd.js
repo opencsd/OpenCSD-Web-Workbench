@@ -211,6 +211,18 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             popoverContent.appendChild(MetricButton);
             popoverContent.appendChild(LogButton);
 
+            function documentClickHandler(e) {
+                // 팝오버가 열려있을 때만 동작하도록 체크
+                if (popover._element && !popover._element.contains(e.target)) {
+                    popover.hide();
+                    document.removeEventListener('click', documentClickHandler);
+                }
+            }
+    
+            // document의 click 이벤트에 대한 핸들러 등록
+            document.addEventListener('click', documentClickHandler);
+
+
             return popoverContent;
         }
     }),

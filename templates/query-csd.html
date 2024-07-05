@@ -92,7 +92,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-          <a href=".">
+          <a href="/">
             <img src="../static/image/logo.svg" width="135" height="40" class="navbar-brand-image" />
           </a>
         </h1>
@@ -510,21 +510,21 @@
                     <div class="row">
                       <h3 class="card-title col-9">Query Log</h3>
                       <div class="col-3 text-end">
-                        <div class="dropdown" align="right">
+                        <div class="dropdown">
                           <a href="#" id="queryDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">ALL</a>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item queryDropdownItem">ALL</a>
-                            <a class="dropdown-item queryDropdownItem">SELECT</a>
-                            <a class="dropdown-item queryDropdownItem">DCL</a>
-                            <a class="dropdown-item queryDropdownItem">DDL</a>
-                            <a class="dropdown-item queryDropdownItem">OTHER</a>
+                            <a class="dropdown-item queryDropdownItem" id="queryALL">ALL</a>
+                            <a class="dropdown-item queryDropdownItem" id="querySelect">SELECT</a>
+                            <a class="dropdown-item queryDropdownItem" id="queryDCL">DCL</a>
+                            <a class="dropdown-item queryDropdownItem" id="queryDDL">DDL</a>
+                            <a class="dropdown-item queryDropdownItem" id="queryOther">OTHER</a>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="table-responsive table-wrapper">
                       <table id="queryLogtable" class="table table-vcenter text-nowrap table-hover datatable">
-                        <thead class="sticky-top">
+                        <thead class="sticky-top" style="z-index: 500;">
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>
                             <th style="width: 5%;">Type</th>
