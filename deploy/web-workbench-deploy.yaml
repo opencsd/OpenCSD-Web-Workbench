@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencsd-web-workbench
+  namespace: management-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: opencsd-web-workbench
+      namespace: management-controller
+  template:
+    metadata:
+      labels:
+        name: opencsd-web-workbench
+        namespace: management-controller
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: opencsd-web-workbench
+          image: ketidevit2/opencsd-web-workbench:v0.0.1
+          imagePullPolicy: Always
+      nodeSelector:
+        key: master

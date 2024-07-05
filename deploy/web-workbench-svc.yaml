@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opencsd-web-workbench
+  namespace: management-controller
+  labels:
+    name: opencsd-web-workbench
+    namespace: management-controller
+spec:
+  type: NodePort
+  ports:
+    - port: 40803
+      targetPort: 40803
+      nodePort: 30803
+      protocol: TCP
+  selector:
+    name: opencsd-web-workbench
+    namespace: management-controller

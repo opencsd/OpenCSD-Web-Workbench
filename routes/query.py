@@ -148,7 +148,11 @@ def log_handler(action):
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
                 # memory -> power로 바꾸기!!
+<<<<<<< HEAD
+                query = "select cpu_usage, power_usage from node_monitoring \
+=======
                 query = "select cpu_usage_tick, power_usage from node_monitoring \
+>>>>>>> 7e9217194440a61e7ef3d065e36e4e82f381a0f7
                         where time > '{}' - 5s and time < '{}' + 5s order by time desc tz('Asia/Seoul')".format(start_time,end_time)
                 query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
@@ -282,7 +286,11 @@ def run_handler():
                 end_time = query_result[0]['end_time']
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
+<<<<<<< HEAD
+                query = "select cpu_usage, power_usage from node_monitoring \
+=======
                 query = "select cpu_usage_tick, power_usage from node_monitoring \
+>>>>>>> 7e9217194440a61e7ef3d065e36e4e82f381a0f7
                         where time > '{}' - 5s and time < '{}' + 5s order by time desc limit 10 tz('Asia/Seoul')".format(start_time,end_time)
                 query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
@@ -302,7 +310,11 @@ def run_handler():
 def metric_handler():
     if request.method == 'GET':
         try:
+<<<<<<< HEAD
+            query = "select cpu_usage, power_usage from node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+=======
             query = "select cpu_usage_tick, power_usage from node_monitoring order by time desc limit 10 tz('Asia/Seoul')"
+>>>>>>> 7e9217194440a61e7ef3d065e36e4e82f381a0f7
             metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
                                             info.INSTANCE_NODE_METRIC_DB_NAME, query)
@@ -318,7 +330,11 @@ def metric_handler():
             end_time = data['end_time']
 
             # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
+<<<<<<< HEAD
+            query = "select cpu_usage, power_usage from node_monitoring \
+=======
             query = "select cpu_usage_tick, power_usage from node_monitoring \
+>>>>>>> 7e9217194440a61e7ef3d065e36e4e82f381a0f7
                     where time > '{}' - 5s and time < '{}' + 5s order by time desc limit 10 tz('Asia/Seoul')".format(start_time,end_time)
             query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
                                             info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
