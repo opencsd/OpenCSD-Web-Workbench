@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencsd-web-workbench-g
+  namespace: gluesys
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: opencsd-web-workbench-g
+      namespace: gluesys
+  template:
+    metadata:
+      labels:
+        name: opencsd-web-workbench-g
+        namespace: gluesys
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: opencsd-web-workbench
+          image: ketidevit2/opencsd-web-workbench:v1.0
+          imagePullPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: operator-node2
