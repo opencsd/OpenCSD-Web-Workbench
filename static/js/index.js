@@ -1,6 +1,8 @@
 const connect_btn = document.querySelector('#connect_btn');
 
-connect_btn.addEventListener('click', () => {
+connect_btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    
     var workbench_user_id = document.getElementById("workbench_user_id").value;
     var db_instance_name = document.getElementById("instance_name").value;
 
@@ -32,14 +34,11 @@ connect_btn.addEventListener('click', () => {
     })
     .then(response => response.json())  // JSON 파싱
     .then(data => {
-        console.log(data);
-        if (data.loginto === 'csd') {
-            window.location.href = '/monitoring';
+        if (data.error) {
+            alert(data.error);
+        } else if (data.redirect_url) {
+            window.location.href = data.redirect_url;
         } 
-        else if (data.loginto === 'ssd'){
-            window.location.href = '/monitoring-ssd';
-        }
-        // window.location.href = '/monitoring';
     })
     .catch(error => {
         alert(error); 

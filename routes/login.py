@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, request, render_template, redirect
 
 login_bp = Blueprint('login', __name__)
 
@@ -18,8 +18,8 @@ def login():
         # 입력한 DB 연결해서 유저 아이디와 패스워드 일치하는지 확인
         if workbench_user_id == "keti-opencsd-admin":
             print("Login to CSD")
-            return jsonify({'loginto': 'csd'})
+            return jsonify({'redirect_url': '/monitoring'}), 200
         elif workbench_user_id == "keti-mysql-admin":
             print("Login to SSD")
-            return jsonify({'loginto': 'ssd'})
+            return jsonify({'redirect_url': '/monitoring-ssd'}), 200
     return render_template('index.html')
