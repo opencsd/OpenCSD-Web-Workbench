@@ -168,17 +168,17 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             popoverContent.style.maxWidth = '200px';
 
             // 로그 버튼
-            const LogButton = document.createElement('button');
-            LogButton.setAttribute('type', 'button');
-            LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
-            LogButton.style.padding = '5px';
-            LogButton.style.width = '80px';
-            LogButton.textContent = 'LOG';
-            LogButton.addEventListener('click', function () {
-                console.log(dummyButtonCell.parentNode.id)
-                modalContentsLoad(dummyButtonCell.parentNode.id);
-                popover.hide();
-            });
+            // const LogButton = document.createElement('button');
+            // LogButton.setAttribute('type', 'button');
+            // LogButton.classList.add('btn', 'btn-azure', 'd-block', 'mr-2');
+            // LogButton.style.padding = '5px';
+            // LogButton.style.width = '80px';
+            // LogButton.textContent = 'LOG';
+            // LogButton.addEventListener('click', function () {
+            //     console.log(dummyButtonCell.parentNode.id)
+            //     modalContentsLoad(dummyButtonCell.parentNode.id);
+            //     popover.hide();
+            // });
 
             // 스니펫 버튼
             const SnippetButton = document.createElement('button');
@@ -210,7 +210,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
 
             popoverContent.appendChild(SnippetButton);
             popoverContent.appendChild(MetricButton);
-            popoverContent.appendChild(LogButton);
+            // popoverContent.appendChild(LogButton);
 
             function documentClickHandler(e) {
                 // 팝오버가 열려있을 때만 동작하도록 체크
@@ -234,17 +234,28 @@ const validatorLogTableBody = document.getElementById("validatorLogTableBody");
 
 // 스니펫 모달 내용 로드
 function validationLogSnippetLoad(validationID) {
+    const user_id = getCookie("user_id");
+    var instance_name = getCookie("instance_name");
+    const node_ip = getCookie("node_ip");
+    if(instance_name === "keti-opencsd"){
+        instance_name = "keti_opencsd";
+    }
     console.log("Snippet Modal Pop, Validation ID :", validationID)
     const logSnippetTableBody = document.getElementById("logSnippetTableBody");
     // 웹 서버와 연결해서 스니펫 테이블 채우기
-    fetch('/validator-ssd/snippet', {
+    fetch('/validator/snippet', {
         method: 'POST',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
         },
         redirect: 'follow',
-        body: JSON.stringify({validation_id: validationID})
+        body: JSON.stringify({
+            validation_id: validationID,
+            node_ip,
+            user_id,
+            instance_name
+        })
     })
         .then(response => response.json())
         .then(data => {
@@ -343,7 +354,9 @@ function validationLogSnippetLoad(validationID) {
         },
         redirect: 'follow',
         body: JSON.stringify({
-            'user_id': storeduserInfo.workbench_user_id,
+            node_ip,
+            user_id,
+            instance_name,
             'validation_id': validationID
         })
     })
@@ -367,6 +380,12 @@ function validationLogSnippetLoad(validationID) {
 
 // 메트릭 모달 내용 로드
 function validationLogMetricLoad(validationID) {
+    const user_id = getCookie("user_id");
+    var instance_name = getCookie("instance_name");
+    const node_ip = getCookie("node_ip");
+    if(instance_name === "keti-opencsd"){
+        instance_name = "keti_opencsd";
+    }
     console.log("Metric Modal Pop, Validation ID :", validationID)
     const MetricTableBody = document.getElementById("MetricTableBody");
     const cpuRow = document.createElement("tr");
@@ -401,7 +420,12 @@ function validationLogMetricLoad(validationID) {
             'Content-Type': 'application/json',
         },
         redirect: 'follow',
-        body: JSON.stringify({validation_id: validationID})
+        body: JSON.stringify({
+            validation_id: validationID,
+            user_id,
+            node_ip,
+            instance_name
+        })
     })
     .then(response => response.json())
     .then(data => {

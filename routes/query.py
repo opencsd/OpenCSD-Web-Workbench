@@ -272,29 +272,20 @@ def desc_handler(action):
 def run_handler():
     if request.method == 'POST':
         try:
-            data = request.json
+            data = request.get_json()
+            print(data)
             response = requests.get('http://10.0.4.87:30100/query/run', json=data)
-            query_result = []
 
             if response.status_code == 200:
                 query_result.append(response.json()) 
-                start_time = query_result[0]['start_time']
-                end_time = query_result[0]['end_time']
-                
-                # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
-                query = "select cpu_usage_tick, power_usage from node_monitoring \
-                        where time > '{}' - 5s and time < '{}' + 5s order by time desc limit 10 tz('Asia/Seoul')".format(start_time,end_time)
-                query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_NODE_METRIC_DB_NAME, query)
             
-                result = {"query_result":query_result, "query_metric":query_metric[0]}
+                result = {"query_result":query_result}
 
                 return jsonify(result)
             else:
                 return 'Error: Unable to fetch data from the remote server'
         except:
-            return {}
+            return {"SHIT"}
         
 
 # Metric 그래프 데이터 요청

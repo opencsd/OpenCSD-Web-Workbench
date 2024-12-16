@@ -258,19 +258,19 @@
                           <tbody class="text-center">
                             <tr>
                               <th scope="row" class="w-26">DB Name</th>
-                              <td class="bg-light" id="dbName"></td>
+                              <td class="bg-light" id="ssddbname"></td>
                             </tr>
                             <tr>
                               <th scope="row" class="w-26">DBMS</th>
-                              <td class="bg-light" id="dbms"></td>
+                              <td class="bg-light" id="ssddbms"></td>
                             </tr>
                             <tr>
                               <th scope="row" class="w-26">DBMS Size</th>
-                              <td class="bg-light" id="dbSize"></td>
+                              <td class="bg-light" id="ssddbms_size"></td>
                             </tr>
                             <tr>
                               <th scope="row" class="w-26">Storage Type</th>
-                              <td class="bg-light" id="storageType"></td>
+                              <td class="bg-light" id="ssdstorageType"></td>
                             </tr>
                           </tbody>
                         </table>
@@ -373,47 +373,35 @@
             </div>
           </div>
 
-            <div class="row">
-              <div class="col-7" style="margin-bottom: 15px;">
-                <div class="card" style="min-height:305px;">
-                  <div class="card-body row" style="padding-bottom: 1.5rem;">
-                    <div class="col-lg-12">
-                      <h3 class="card-title">Query Result</h3>
-                      <div id="resultContainer">
-                        <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
-                      </div>
-                      <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
-                        <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
-                      </div>
+          <div class="row">
+            <!-- Query Result 영역 -->
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <!-- Query Result 제목과 실행시간을 한 줄로 표시 -->
+                    <h3 class="card-title" style="margin-bottom: 0;">Query Result</h3>
+                    
+                    <!-- Query Execution Time 텍스트와 시간을 오른쪽 정렬 -->
+                    <div class="ml-auto">
+                      <span id="executionTimeLabel" style="font-size: 1.2em; margin-right: 10px;">Query Execution Time:</span>
+                      <span id="executionTime" style="font-size: 1.2em;">-</span>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="col-5">
-                <div class="card" style="min-height:305px;">
-                  <div class="card-body row">
-                    <div class="col-lg-12">
-                      <h3 class="card-title">Query Metric</h3>
-                      <div id="metricContainer">
-                        <div class="table-responsive">
-                          <table class="table text-nowrap datatable">
-                            <tbody class="text-center">
-                              <tr>
-                                <th scope="row" class="w-25">Execution Time</th>
-                                <td class="bg-light qtable_1">-</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
-                        <div class="loadingIcon spinner-border text-secondary" role="status"></div>                    
-                      </div>
-                    </div>
+          
+                  <!-- Query Result 내용은 여기에 동적으로 추가 -->
+                  <div id="resultContainer">
+                    <!-- 데이터가 여기에 동적으로 추가됩니다. -->
+                  </div>
+          
+                  <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
+                    <div class="loadingIcon spinner-border text-secondary" role="status"></div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          
 
             <div class="row">
               <div class="col-12" style="margin-bottom: 15px;">
@@ -439,14 +427,16 @@
                         <div class="col-6" style="padding-right: 5px;">
                           <div class="card" style="padding: 0 15px 10px 0;">
                             <div style="margin: 5px 15px 15px;">Host Server CPU</div>
-                            <div id="queryHostServerCPU"></div>
+                            <p id="ssdaverageCpu" style="margin: 5px 15px 15px;">Total CPU Utilization: 0%</p>
+                            <div id="cpuChart"></div>
                           </div>
                         </div>
   
                         <div class="col-6" style="padding-left: 5px;">
                           <div class="card" style="padding: 0 15px 10px 0;">
                             <div style="margin: 5px 15px 15px;">Host Server Power</div>
-                            <div id="queryHostServerPower"></div>
+                            <p id="ssdtotalPower" style="margin: 5px 15px 15px;">Total Power Used: 0W</p>
+                            <div id="powerChart"></div>
                           </div>
                         </div>                    
                       </div>
@@ -616,7 +606,9 @@
       </div>
     </div>
   </div>
-
+  <!-- Libs JS -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/timeline.js"></script>
   <!-- Libs JS -->
   <script src="../static/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
   <script src="../static/libs/jsvectormap/dist/maps/world.js" defer></script>

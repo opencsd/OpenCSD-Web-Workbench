@@ -19,7 +19,7 @@ spec:
         - name: regcred
       containers:
         - name: opencsd-web-workbench
-          image: ketidevit2/opencsd-web-workbench:v0.0.1
+          image: ketidevit2/opencsd-web-workbench:v1.0
           imagePullPolicy: Always
       nodeSelector:
         key: master

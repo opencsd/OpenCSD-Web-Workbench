@@ -319,6 +319,8 @@
                             <p style="margin:2px;margin-left:20px;"><strong>c_acctbal</strong> / decimal(15,2) / NOT NULL</p>
                             <p style="margin:2px;margin-left:20px;"><strong>c_mktsegment</strong> / char(10) / NOT NULL</p>
                             <p style="margin:2px;margin-left:20px;"><strong>c_comment</strong> / varchar(117) / NOT NULL</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> c_custkey</p>
+                            <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> c_nationkey_index / (c_nationkey)</p>
                         </details>
                         <details>
                           <summary>lineitem</summary>
@@ -338,6 +340,9 @@
                           <p style="margin:2px;margin-left:20px;"><strong>l_shipnstruct</strong> / char(25) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>l_shipmode</strong> / char(10) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>l_comment</strong> / varchar(44) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> l_orderkey / l_linenumber</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> l_orderkey_index / (l_orderkey)</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> l_partkey_and_l_suppkey_index / (l_partkey, l_suppkey)</p>
                         </details>
                         <details>
                           <summary>nation</summary>
@@ -345,6 +350,8 @@
                           <p style="margin:2px;margin-left:20px;"><strong>n_name</strong> / char(25) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>n_regionkey</strong> / int(11) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>n_comment</strong> / varchar(152) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> n_nationkey</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> n_nationkey_index / (n_regionkey)</p>
                         </details>
                         <details>
                           <summary>orders</summary>
@@ -357,6 +364,8 @@
                           <p style="margin:2px;margin-left:20px;"><strong>o_clerk</strong> / char(15) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>o_shippriority</strong> / int(11) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>o_comment</strong> / varchar(79) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> o_orderkey</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> o_custkey_index / (o_custkey)</p>
                         </details>
                         <details>
                           <summary>part</summary>
@@ -369,6 +378,7 @@
                           <p style="margin:2px;margin-left:20px;"><strong>p_container</strong> / char(10) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>p_retailprice</strong> / decimal(15,2) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>p_comment</strong> / varchar(23) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> p_partkey</p>
                         </details>
                         <details>
                           <summary>partsupp</summary>
@@ -377,12 +387,16 @@
                           <p style="margin:2px;margin-left:20px;"><strong>ps_availqty</strong> / int(11) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>ps_supplycost</strong> / decimal(15,2) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>ps_comment</strong> / varchar(199) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> ps_partkey / ps_suppkey</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> ps_suppkey_index / (ps_suppkey)</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> ps_partkey_index / (ps_partkey)</p>
                         </details>
                         <details>
                           <summary>region</summary>
                           <p style="margin:2px;margin-left:20px;"><strong>r_regionkey</strong> / int(11) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>r_name</strong> / char(25) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>r_comment</strong> / varchar(152) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> r_regionkey</p>
                         </details>
                         <details>
                           <summary>supplier</summary>
@@ -393,6 +407,8 @@
                           <p style="margin:2px;margin-left:20px;"><strong>s_phone</strong> / char(15) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>s_acctbal</strong> / decimal(15,2) / NOT NULL</p>
                           <p style="margin:2px;margin-left:20px;"><strong>s_comment</strong> / varchar(101) / NOT NULL</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>PRIMARY KEY</strong> s_suppkey</p>
+                          <p style="margin:2px;margin-left:20px;"><strong>INDEX KEY</strong> s_nationkey_index / (s_nationkey)</p>
                         </details>
                       </div>
                     </div>
@@ -470,7 +486,7 @@
                     <div class="row">
                       <h3 class="card-title col-3">Metric</h3>
                       <div class="card-title col-9" style=" display: flex; flex-direction: row-reverse; align-items: center;">
-                        <button class="btn btn-link p-0" id="metricViewBtn">
+                        <button class="btn btn-link p-0" id="csdmetricViewBtn">
                           <svg id="metricViewPauseIcon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black" class="bi bi-pause-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                             <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
@@ -486,13 +502,13 @@
                       <div class="col-6" style="padding-right: 5px;">
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div style="margin: 5px 15px 15px;">Host Server CPU</div>
-                          <div id="queryHostServerCPU"></div>
+                          <div id="csdcpuChart"></div>
                         </div>
                       </div>
                       <div class="col-6" style="padding-left: 5px;">
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div style="margin: 5px 15px 15px;">Host Server Power</div>
-                          <div id="queryHostServerPower"></div>
+                          <div id="csdpowerChart"></div>
                         </div>
                       </div>                    
                     </div>
@@ -611,6 +627,9 @@
 
 
   <!-- Libs JS -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/timeline.js"></script>
+
   <script src="../static/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>
   <script src="../static/libs/jsvectormap/dist/maps/world.js" defer></script>
   <script src="../static/libs/jsvectormap/dist/maps/world-merc.js" defer></script>

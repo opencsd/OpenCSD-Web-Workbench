@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request, render_template
 from connectDB import mysql, influx, info
 from datetime import datetime
 from prettytable import PrettyTable
+import traceback
 
 query_ssd_bp = Blueprint('query_ssd', __name__, url_prefix='/query-ssd')
 
@@ -76,29 +77,54 @@ def run_handler():
     if request.method == 'POST':
         try:
             data = request.json
-            
-            start_time = datetime.now()
+            executeQuery = data['query']
+            if not data or 'query' not in data:
+                return jsonify({"error": "Invalid input: 'query' is required"}), 400
 
-            query_result = mysql.execute_query_mysql_get_string_result(info.MYSQL_DB_HOST, info.MYSQL_DB_PORT,
-                                                                    info.MYSQL_DB_USER, info.MYSQL_DB_PASSWORD,
-                                                                    info.MYSQL_DB_NAME, data['query'])    
-                        
+            start_time = datetime.now()
+            query_result = mysql.execute_query_mysql(
+                info.MYSQL_DB_HOST,
+                info.MYSQL_DB_PORT,
+                info.MYSQL_DB_USER,
+                info.MYSQL_DB_PASSWORD,
+                info.MYSQL_DB_NAME,
+                executeQuery
+            )
             end_time = datetime.now()
 
-            query = "select cpu_usage_tick, power_usage from node_monitoring \
-                        where time > '{}' - 5s and time < '{}' + 5s order by time desc limit 10 tz('Asia/Seoul')".format(start_time,end_time)
+            metric_query = f"""
+                select cpu_usage_tick, power_usage 
+                from node_monitoring
+                where time > '{start_time}' - 5s and time < '{end_time}' + 5s
+                order by time desc
+                limit 10
+                tz('Asia/Seoul')
+            """
+            query_metric = influx.execute_query_influxdb(
+                info.INSTANCE_METRIC_DB_HOST,
+                info.INSTANCE_METRIC_DB_PORT,
+                info.INSTANCE_METRIC_DB_USER,
+                info.INSTANCE_METRIC_DB_PASSWORD,
+                info.INSTANCE_NODE_METRIC_DB_NAME,
+                metric_query
+            )
             
-            query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                            info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                            info.INSTANCE_NODE_METRIC_DB_NAME, query)
-                        
             execution_time = (end_time - start_time)
-        
-            result = {"result":query_result.get_string(), "query_metric":query_metric[0], "execution_time":str(execution_time)}
-            
+            # 응답 데이터 구성
+            result = {
+                "result": query_result,
+                "query_metric": query_metric[0] if query_metric else {},
+                "execution_time": str(execution_time)
+            }
             return jsonify(result)
-        except:
-            return ""
+        except Exception as e:
+            # 디버깅용 로그 출력
+            print("Error occurred:", e)
+            traceback.print_exc()
+
+            # 명확한 에러 응답 반환
+            traceback.print_exc()
+            return jsonify({"error": "Internal Server Error", "message": str(e)}), 500
 
 # Metric 그래프 데이터 요청
 @query_ssd_bp.route('/metric', methods=['GET', 'POST'])

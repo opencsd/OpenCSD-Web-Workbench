@@ -22,4 +22,9 @@ spec:
           image: ketidevit2/opencsd-web-workbench:v1.0
           imagePullPolicy: Always
       nodeSelector:
-        kubernetes.io/hostname: operator-node2
+        kubernetes.io/hostname: operation-node2
+      tolerations:
+      - key: "use"
+        operator: "Equal"
+        value: "no"
+        effect: "NoSchedule"

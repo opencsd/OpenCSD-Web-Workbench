@@ -1,5 +1,5 @@
 select
-    sum(l_extendedprice * l_discount) as revenue
+    count(l_extendedprice * l_discount) as revenue
 from
     lineitem
 where

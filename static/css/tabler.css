@@ -29,12 +29,12 @@
   --tblr-gray-200: #eef1f4;
   --tblr-gray-300: #dadfe5;
   --tblr-gray-400: #bbc3cd;
-  --tblr-gray-500: #929dab;
+  --tblr-gray-500: #929dab;./
   --tblr-gray-600: #667382;
   --tblr-gray-700: #3a4859;
   --tblr-gray-800: #182433;
   --tblr-gray-900: #040a11;
-  --tblr-primary: #0054a6;
+  --tblr-primary: #4ed1e1;
   --tblr-secondary: #667382;
   --tblr-success: #2fb344;
   --tblr-info: #4299e1;
@@ -81,7 +81,7 @@
   --tblr-gray-rgb: 73, 76, 80;
   --tblr-muted-rgb: 102, 115, 130;
   --tblr-blue-rgb: 0, 84, 166;
-  --tblr-azure-rgb: 66, 153, 225;
+  --tblr-azure-rgb: 66, 193, 225;
   --tblr-indigo-rgb: 66, 99, 235;
   --tblr-purple-rgb: 174, 62, 201;
   --tblr-pink-rgb: 214, 51, 108;
@@ -142,7 +142,7 @@
   --tblr-body-line-height: 1.4285714286;
   --tblr-body-color: #182433;
   --tblr-body-color-rgb: 24, 36, 51;
-  --tblr-body-bg: #f6f8fb;
+  --tblr-body-bg: #f6fefb;
   --tblr-body-bg-rgb: 246, 248, 251;
   --tblr-emphasis-color: #182433;
   --tblr-emphasis-color-rgb: 24, 36, 51;
@@ -17172,7 +17172,7 @@ body[data-bs-theme="dark"] [data-bs-theme="light"] .btn-close {
   --tblr-blue-darken: #004c95;
   --tblr-blue-lt: #e6eef6;
   --tblr-blue-lt-rgb: 230, 238, 246;
-  --tblr-azure: #4299e1;
+  --tblr-azure: #4ec1e1;
   --tblr-azure-rgb: 66, 153, 225;
   --tblr-azure-fg: var(--tblr-light);
   --tblr-azure-darken: #3b8acb;

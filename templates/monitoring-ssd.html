@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>
-    KETI Web Workbench SSD Monitoring Tab
+    KETI Web Workbench CSD Monitoring Tab
   </title>
   <!-- <script defer data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script> -->
   <meta name="msapplication-TileColor" content="" />
@@ -55,7 +55,7 @@
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/timeline.js"></script>
-  
+
   <style>
     @import url("https://rsms.me/inter/inter.css");
 
@@ -71,8 +71,9 @@
 </head>
 
 <body>
-
+  
   <div class="page">
+
     <!-- Header -->
     <header class="navbar navbar-expand-md d-print-none">
       <div class="container-xl">
@@ -177,14 +178,14 @@
       </div>
     </header>
 
+    <!-- Page -->
     <div class="page-wrapper">
       <!-- Page header -->
       <div class="page-header d-print-none">
         <div class="container-xl">
-          <div class="row g-2 align-items-center">
-            <div class="col-lg-6">
-              <!-- Page pre-title -->
-              <p class="page-title">DB Monitoring</p>
+          <div class="row g-2 align-items-center" style="display: flex;">
+             <div class="col-lg-6">
+                <p class="page-title">DB Monitoring</p>
             </div>
             <div class="col-lg-6 justify-content-end" style="text-align: right; display: flex;">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-square-rounded" style="margin-top: 3px;" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -198,13 +199,14 @@
           </div>
         </div>
       </div>
+
       <!-- Page body -->
       <div class="page-body">
         <div class="container-xl">
           <div class="row row-deck row-cards">
-
             <div class="col-lg-12">
               <div class="row row-deck row-cards">
+
                 <div class="col-lg-12">
                   <div class="card">
                     <div class="card-body">
@@ -212,42 +214,74 @@
                         <div class="col-3 mt-0">
                           <p class="card-title">Connected Database Info</p>
                         </div>
+                        <div class="col-3 mt-0">
+                          <button class="btn btn-link p-0" id="dbInfoSlideBtn">
+                            <svg id="dbInfoSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                              <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                            </svg>
+                            <svg id="dbInfoSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
+                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                       <p class="card-title border-bottom"></p>
                       <div class="row">
-                        <div class="col-3">
-                          <h2 class="mb-1">DBMS</h2>
-                          <span>{{dashboard_summary.dbms_type}}</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Instance Name</h2>
+                          <span id="ssdinstanceName"></span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">DB Size</h2>
-                          <span>{{dashboard_summary.db_size}}</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Opeartion Node</h2>
+                          <span id="ssdoperationNode"></span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">DB Name</h2>
-                          <span>{{dashboard_summary.db_name}}</span>
-                        </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">Storage</h2>
-                          <span>{{dashboard_summary.storage_type}}</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Storage Node</h2>
+                          <span id="ssdstorageNode"></span>
                         </div>
                       </div>
                       <div class="row mt-3">
-                        <div class="col-3">
-                          <h2 class="mb-1">DB User</h2>
-                          <span>{{dashboard_summary.db_user}}</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Query Engine Status</h2>
+                          <span id="ssdqueryEngineStatus"></span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">Workbench User</h2>
-                          <span>{{dashboard_summary.workbench_user}}</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Storage Engine Status</h2>
+                          <span id="ssdstorageEngineStatus"></span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">DB Host Address</h2>
-                          <span>{{dashboard_summary.db_host_ip}}</span>
+                        <div class="col-4">
+                          <h2 class="mb-1">Instance Status</h2>
+                          <span id="ssdinstanceStatus"></span>
                         </div>
-                        <div class="col-3">
-                          <h2 class="mb-1">Store Type</h2>
-                          <span>{{dashboard_summary.data_store_type}}</span>
+                      </div>
+                      <div id="hiddenDBInfo" style="display: none;">
+                        <div class="row mt-3">
+                          <div class="col-4">
+                            <h2 class="mb-1">Instance Type</h2>
+                            <span id="ssdinstanceType"></span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Storage Type</h2>
+                            <span id="ssdstorageType"></span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Volume Type</h2>
+                            <span id="ssdvolumeType"></span>
+                          </div>
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-4">
+                            <h2 class="mb-1">Volume Name</h2>
+                            <span id="ssdvolumeName"></span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Volume Path</h2>
+                            <span id="ssdvolumePath"></span>
+                          </div>
+                          <div class="col-4">
+                            <h2 class="mb-1">Access Port</h2>
+                            <span id="ssdaccessPort"></span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -259,40 +293,40 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-3 mt-0">
-                          <p class="card-title">Host Metric Monitoring</p>
+                          <p class="card-title">Host/Instance Metric Monitoring</p>
                         </div>
                       </div>
                       <p class="card-title border-bottom"></p>
                       <div>
                         <div class="row">
                           <div class="col-6">
-                            <div id="cpuChart"></div>
+                            <div id="ssdcpuChart"></div>
                           </div>
                           <div class="col-6">
-                            <div id="powerChart"></div>
+                            <div id="ssdpowerChart"></div>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-4">
-                            <div id="memoryChart"></div>
+                            <div id="ssdmemoryChart"></div>
                           </div>
                           <div class="col-4">
-                            <div id="networkChart"></div>
+                            <div id="ssdnetworkChart"></div>
                           </div>
                           <div class="col-4">
-                            <div id="diskChart"></div>
+                            <div id="ssddiskChart"></div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <footer class="footer footer-transparent d-print-none">
         <div class="container-xl">
           <div class="row text-center align-items-center flex-row-reverse">
@@ -450,15 +484,15 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Libs JS -->
   <script src="../static/js/libs/demo-theme.min.js"></script>
   <script src="../static/js/libs/tabler.min.js" defer></script>
   <script src="../static/js/libs/demo.min.js" defer></script>
-
-  <script src="../static/js/monitoring-ssd-chart-options.js"></script>
+  
   <script src="../static/js/monitoring-ssd.js" defer></script>
-
+  <script src="../static/js/monitoring-ssd-chart-options.js"></script>
+  
 </body>
 
 </html>

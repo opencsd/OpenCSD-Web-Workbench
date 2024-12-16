@@ -228,59 +228,59 @@
                       <p class="card-title border-bottom"></p>
                       <div class="row">
                         <div class="col-4">
-                          <h2 class="mb-1">DBMS</h2>
-                          <span>{{dashboard_summary.dbms_type}}</span>
+                          <h2 class="mb-1">Instance Name</h2>
+                          <span id="instanceName"></span>
                         </div>
                         <div class="col-4">
-                          <h2 class="mb-1">DB Size</h2>
-                          <span>{{dashboard_summary.db_size}}</span>
+                          <h2 class="mb-1">Opeartion Node</h2>
+                          <span id="operationNode"></span>
                         </div>
                         <div class="col-4">
-                          <h2 class="mb-1">CSD Count</h2>
-                          <span>{{dashboard_summary.csd_count}}</span>
+                          <h2 class="mb-1">Storage Node</h2>
+                          <span id="storageNode"></span>
                         </div>
                       </div>
                       <div class="row mt-3">
                         <div class="col-4">
-                          <h2 class="mb-1">DB Name</h2>
-                          <span>{{dashboard_summary.db_name}}</span>
+                          <h2 class="mb-1">Query Engine Status</h2>
+                          <span id="queryEngineStatus"></span>
                         </div>
                         <div class="col-4">
-                          <h2 class="mb-1">Storage Type</h2>
-                          <span>{{dashboard_summary.storage_type}}</span>
+                          <h2 class="mb-1">Storage Engine Status</h2>
+                          <span id="storageEngineStatus"></span>
                         </div>
                         <div class="col-4">
-                          <h2 class="mb-1">CSD Kind</h2>
-                          <span>{{dashboard_summary.csd_kind}}</span>
+                          <h2 class="mb-1">Instance Status</h2>
+                          <span id="instanceStatus"></span>
                         </div>
                       </div>
                       <div id="hiddenDBInfo" style="display: none;">
                         <div class="row mt-3">
                           <div class="col-4">
-                            <h2 class="mb-1">Store Type</h2>
-                            <span>{{dashboard_summary.data_store_type}}</span>
+                            <h2 class="mb-1">Instance Type</h2>
+                            <span id="instanceType"></span>
                           </div>
                           <div class="col-4">
-                            <h2 class="mb-1">Block Size</h2>
-                            <span>{{dashboard_summary.block_size}}</span>
+                            <h2 class="mb-1">Storage Type</h2>
+                            <span id="storageType"></span>
                           </div>
                           <div class="col-4">
-                            <h2 class="mb-1">Algorithm</h2>
-                            <span>{{dashboard_summary.scheduling_algorithm}}</span>
+                            <h2 class="mb-1">Volume Type</h2>
+                            <span id="volumeType"></span>
                           </div>
                         </div>
                         <div class="row mt-3">
                           <div class="col-4">
-                            <h2 class="mb-1">DB User</h2>
-                            <span>{{dashboard_summary.db_user}}</span>
+                            <h2 class="mb-1">Volume Name</h2>
+                            <span id="volumeName"></span>
                           </div>
                           <div class="col-4">
-                            <h2 class="mb-1">Workbench User</h2>
-                            <span>{{dashboard_summary.workbench_user}}</span>
+                            <h2 class="mb-1">Volume Path</h2>
+                            <span id="volumePath"></span>
                           </div>
                           <div class="col-4">
-                            <h2 class="mb-1">DB Host Address</h2>
-                            <span>{{dashboard_summary.db_host_ip}}</span>
+                            <h2 class="mb-1">Access Port</h2>
+                            <span id="accessPort"></span>
                           </div>
                         </div>
                       </div>
@@ -333,7 +333,7 @@
                       <p class="card-title border-bottom"></p>
                       <div id="csdCapacityChart"></div>
                       <p class="card-title border-bottom"></p>
-                      <div id="csdMetricArea" style="display: none;">
+                      <div id="csdMetricArea" style="display: always;">
                         <h3 id="selectedCSDID"></h3>
                         <div class="row">
                           <div class="col-4">

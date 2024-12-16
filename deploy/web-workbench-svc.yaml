@@ -9,9 +9,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 40803
-      targetPort: 40803
-      nodePort: 30803
+    - port: 40805
+      targetPort: 40805
+      nodePort: 30805
       protocol: TCP
   selector:
     name: opencsd-web-workbench

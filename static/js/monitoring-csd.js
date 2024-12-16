@@ -1,43 +1,408 @@
-const twentyFourHours = 86400000;
-const fiveSeconds = 5000;
 const KBToGB = 1048576;
-const nanocoreTomillicore = 1000000;
 
-let metricIntervalID, csdIntervalID;
-let selectedCSDID = -1;
+let cpuChart, powerChart, memoryChart, networkChart, diskChart;
+let hostCpuChartData = [], instanceCpuChartData = [];
+let powerChartData = [];
+let hostMemoryChartData = [], instanceMemoryChartData = [];
+let hostNetworkRxData = [], hostNetworkTxData = [], instanceNetworkRxData = [], instanceNetworkTxData = [];
+let hostDiskChartData = [], instanceDiskChartData = [];
+let chartCategories = [];
+let csdCapacityChart, csdCpuChart, csdMemoryChart, csdNetworkChart;
+let csdCapacityData = [], csdCpuData = [], csdMemoryData = [], csdNetworkDataRx = [], csdNetworkDataTx = [];
+let csdCategories = [];
 
-let cpuChart, hostCpuChartData, instanceCpuChartData;
-let powerChart, hostPowerChartData;
-let memoryChart, hostMemoryChartData, instanceMemoryChartData;
-let networkChart, hostNetworkRXChartData, hostNetworkTXChartData, instanceNetworkRXChartData, instanceNetworkTXChartData;
-let diskChart, hostDiskChartData, instanceDiskChartData;
-let csdCapacityChart, csdCapacityChartTotalData, csdCapacityChartUsageData, csdCapacityChartCategories;
-let csdCpuChart, csdCpuChartData;
-let csdMemoryChart, csdMemoryChartData;
-let csdNetworkChart, csdNetworkRXChartData, csdNetwockTXChartData;
-let hostChartCategories, csdChartCategories;
 
 document.addEventListener("DOMContentLoaded", function(){
-  cpuChart = Highcharts.chart(document.getElementById("cpuChart"), cpuChartOption);
-  powerChart = Highcharts.chart(document.getElementById("powerChart"), powerChartOption);
-  memoryChart = Highcharts.chart(document.getElementById("memoryChart"), memoryChartOption);
-  networkChart = Highcharts.chart(document.getElementById("networkChart"), networkChartOption);
-  diskChart = Highcharts.chart(document.getElementById("diskChart"), diskChartOption);
-  csdCapacityChart = Highcharts.chart(document.getElementById("csdCapacityChart"), csdCapacityChartOption);
-  csdCpuChart = Highcharts.chart(document.getElementById("csdCpuChart"), csdCpuChartOption);
-  csdMemoryChart = Highcharts.chart(document.getElementById("csdMemoryChart"), csdMemoryChartOption);
-  csdNetworkChart = Highcharts.chart(document.getElementById("csdNetworkChart"), csdNetworkChartOption);
+  initializeCharts();
+  fetchMetrics();
+  setInterval(fetchMetrics, 10000);
+  csdCapacityChart.update({
+    plotOptions: {
+      series: {
+        point: {
+          events: {
+            click: handleCSDPointClick
+          }
+        }
+      }
+    }
+  });
 
-  viewUserID();
-  getLatestChartData();
-  getLatestCSDChartData();
-  startInterval();
+  window.selectedCSD = "csd1";
 })
 
-function viewUserID(){
-  const user_id = document.getElementById("user_info");
-  user_id.textContent = "User : " + storeduserInfo.workbench_user_id;
+document.addEventListener('DOMContentLoaded', () => {
+  // 쿠키에서 session_id 읽기
+  const sessionId = getCookie('session_id');
+  
+  if (!sessionId) {
+    console.error('Session ID not found in cookies');
+    return;
+  }
+
+  fetch(`http://10.0.4.87:30800/workbench/monitoring/connection-info?session-id=${sessionId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {updateInstanceInfo(data);
+    const operationNode = data.instanceInfo?.operationNode;
+    const instanceType = data.instanceInfo?.instanceType;
+    const dbName = data.connectionInfo?.dbName;
+    const storageType = data.volumeInfo?.storageType;
+    const accessPort = data.instanceInfo?.accessPort;
+
+    document.cookie = `instance_type=${instanceType};path=/;samesite=lax`;
+    document.cookie = `db_name=${dbName};path=/;samesite=lax`;
+    document.cookie = `storage_type=${storageType};path=/;samesite=lax`;
+    document.cookie = `access_port=${accessPort};path=/;samesite=lax`;
+
+    if (!operationNode) {
+      console.error('Operation node not found in connection-info');
+      return;
+    }
+    fetch('http://10.0.4.87:30800/cluster/node-list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(nodeData => {
+        const nodeList = nodeData.nodeList || {};
+        const node = nodeList[operationNode]; // operationNode 이름으로 노드 검색
+        if (node && node.nodeIp) {
+          const nodeIp = node.nodeIp;
+
+          // 쿠키에 nodeIp 저장
+          document.cookie = `node_ip=${nodeIp}; path=/; samesite=lax`;
+          console.log(`Node IP saved in cookie: ${nodeIp}`);
+        } else {
+          console.error('Node IP not found for the operationNode');
+        }
+      })
+      .catch(error => console.error('Error fetching node-list:', error));
+})
+    .catch(error => console.error('Error fetching data:', error));
+});
+
+function updateInstanceInfo(data) {
+  const { instanceInfo, volumeInfo } = data;
+
+  document.getElementById('instanceName').textContent = instanceInfo?.instanceName || '-';
+  document.getElementById('accessPort').textContent = instanceInfo?.accessPort || '-';
+  document.getElementById('instanceType').textContent = instanceInfo?.instanceType || '-';
+  document.getElementById('operationNode').textContent = instanceInfo?.operationNode || '-';
+  document.getElementById('storageNode').textContent = instanceInfo?.storageNode || '-';
+  document.getElementById('instanceStatus').textContent = instanceInfo?.instanceStatus || '-';
+  document.getElementById('queryEngineStatus').textContent = instanceInfo?.queryEngineStatus || '-';
+  document.getElementById('storageEngineStatus').textContent = instanceInfo?.storageEngineStatus || '-';
+  document.getElementById('storageNode').textContent = instanceInfo?.storageNode || '-';
+  document.getElementById('volumeName').textContent = volumeInfo?.volumeName || '-';
+  document.getElementById('volumePath').textContent = volumeInfo?.volumePath || '-';
+  document.getElementById('volumeType').textContent = volumeInfo?.volumeType || '-';
+  document.getElementById('storageType').textContent = volumeInfo?.storageType || '-';
+
 }
+
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift();
+  }
+  return null;
+}
+
+
+function initializeCharts() {
+  cpuChart = Highcharts.chart("cpuChart", {
+    title: { text: "CPU Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "Node CPU", data: [] }, { name: "Instance CPU", data: [] }]
+  });
+
+  powerChart = Highcharts.chart("powerChart", {
+    title: { text: "Power Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "Node Power", data: [] }]
+  });
+
+  memoryChart = Highcharts.chart("memoryChart", {
+    title: { text: "Memory Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "Node Memory", data: [] }, { name: "Instance Memory", data: [] }]
+  });
+
+  networkChart = Highcharts.chart("networkChart", {
+    title: { text: "Network Usage" },
+    xAxis: { categories: [] },
+    series: [
+      { name: "Node RX", data: [] },
+      { name: "Node TX", data: [] },
+      { name: "Instance RX", data: [] },
+      { name: "Instance TX", data: [] }
+    ]
+  });
+
+  diskChart = Highcharts.chart("diskChart", {
+    title: { text: "Disk Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "Node Disk", data: [] }, { name: "Instance Disk", data: [] }]
+  });
+
+  csdCapacityChart = Highcharts.chart("csdCapacityChart", {
+    title: { text: "CSD Capacity Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "CSD Usage", data: [] }]
+  });
+
+  csdCpuChart = Highcharts.chart("csdCpuChart", {
+    title: { text: "CSD CPU Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "CPU Usage", data: [] }]
+  });
+
+  csdMemoryChart = Highcharts.chart("csdMemoryChart", {
+    title: { text: "CSD Memory Usage" },
+    xAxis: { categories: [] },
+    series: [{ name: "Memory Usage", data: [] }]
+  });
+
+  csdNetworkChart = Highcharts.chart("csdNetworkChart", {
+    title: { text: "CSD Network Usage" },
+    xAxis: { categories: [] },
+    series: [
+      { name: "Network RX", data: [] },
+      { name: "Network TX", data: [] }
+    ]
+  });
+}
+
+
+function fetchMetrics() {
+  const sessionId = getCookie("session_id");
+
+  if (!sessionId) {
+    console.error("Session ID not found");
+    return;
+  }
+  const csdUrl = `http://10.0.4.87:30800/workbench/monitoring/metric/csd?session-id=${sessionId}&count=15`;
+  const instanceUrl = `http://10.0.4.87:30800/workbench/monitoring/metric/instance?session-id=${sessionId}&count=15`;
+  const nodeUrl = `http://10.0.4.87:30800/workbench/monitoring/metric/node?session-id=${sessionId}&count=15`;
+
+  Promise.all([fetch(instanceUrl), fetch(nodeUrl), fetch(csdUrl)])
+    .then(responses => Promise.all(responses.map(res => res.json())))
+    .then(([instanceData, nodeData, csdData]) => {
+      updateCharts(instanceData, nodeData);
+      updateCSDCharts(csdData);
+
+      // 선택된 CSD가 있다면 해당 CSD 차트 갱신
+      if (window.selectedCSD) {
+        updateSelectedCSDCharts(window.selectedCSD);
+      }
+    })
+    .catch(error => console.error("Error fetching metrics:", error));
+}
+
+function updateCSDCharts(csdData) {
+  if (typeof csdData !== 'object' || Array.isArray(csdData)) {
+    console.error("CSD data is not valid:", csdData);
+    return;
+  }
+
+  csdCategories = [];
+  const csdSeries = [];
+  const csdDetails = {};
+
+  Object.entries(csdData).forEach(([csdKey, csdArray]) => {
+    if (!Array.isArray(csdArray)) {
+      console.error(`${csdKey} data is not an array`);
+      return;
+    }
+
+    const seriesData = [];
+    const cpuData = [];
+    const memoryData = [];
+    const networkRxData = [];
+    const networkTxData = [];
+
+    csdArray.reverse().forEach(item => {
+      const timestamp = formatTime(item.timestamp);
+      if (!csdCategories.includes(timestamp)) {
+        csdCategories.push(timestamp);
+      }
+
+      seriesData.push(item.diskUtilization);
+      cpuData.push(item.cpuUtilization);
+      memoryData.push(item.memoryUtilization);
+      networkRxData.push(item.networkRxData);
+      networkTxData.push(item.networkTxData);
+    });
+
+    csdSeries.push({
+      name: csdKey,
+      data: seriesData
+    });
+
+    csdDetails[csdKey] = {
+      cpu: cpuData,
+      memory: memoryData,
+      networkRx: networkRxData,
+      networkTx: networkTxData,
+    };
+  });
+
+  // 차트 갱신
+  redrawCSDCharts(csdSeries);
+
+  // 데이터 저장
+  window.csdDetails = csdDetails;
+
+  // 초기 csd1 표시
+  if (window.selectedCSD) {
+    updateSelectedCSDCharts(window.selectedCSD);
+  }
+}
+
+
+function updateCharts(instanceData, nodeData) {
+  hostCpuChartData = [];
+  instanceCpuChartData = [];
+  powerChartData = [];
+  hostMemoryChartData = [];
+  instanceMemoryChartData = [];
+  hostNetworkRxData = [];
+  hostNetworkTxData = [];
+  instanceNetworkRxData = [];
+  instanceNetworkTxData = [];
+  hostDiskChartData = [];
+  instanceDiskChartData = [];
+  chartCategories = [];
+
+  nodeData.reverse().forEach(item => {
+    hostCpuChartData.push(item.cpuUtilization);
+    powerChartData.push(item.powerUsed);
+    hostMemoryChartData.push(item.memoryUtilization);
+    hostNetworkRxData.push(item.networkRxData / KBToGB);
+    hostNetworkTxData.push(item.networkTxData / KBToGB);
+    hostDiskChartData.push(item.diskUtilization);
+    chartCategories.push(formatTime(item.timestamp));
+  });
+
+  instanceData.reverse().forEach(item => {
+    instanceCpuChartData.push(item.cpuUsage);
+    instanceMemoryChartData.push(item.memoryUsage / KBToGB);
+    instanceNetworkRxData.push(item.networkRxUsage / KBToGB);
+    instanceNetworkTxData.push(item.networkTxUsage / KBToGB);
+    instanceDiskChartData.push(item.storageUsage / KBToGB);
+  });
+
+  redrawCharts();
+}
+
+function updateSelectedCSDCharts(csdId) {
+  const selectedData = window.csdDetails?.[csdId];
+
+  if (!selectedData) {
+    console.error(`No data found for ${csdId}`);
+    return;
+  }
+
+  console.log(`Updating charts for ${csdId}`, selectedData);
+
+  // 하단 그래프 갱신
+  csdCpuChart.series[0].update({
+    data: selectedData.cpu,
+    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+  });
+
+  csdMemoryChart.series[0].update({
+    data: selectedData.memory,
+    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+  });
+
+  csdNetworkChart.series[0].update({
+    data: selectedData.networkRx,
+    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+  });
+
+  csdNetworkChart.series[1].update({
+    data: selectedData.networkTx,
+    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+  });
+
+  // x축 (시간) 갱신
+  csdCpuChart.xAxis[0].setCategories(csdCategories);
+  csdMemoryChart.xAxis[0].setCategories(csdCategories);
+  csdNetworkChart.xAxis[0].setCategories(csdCategories);
+
+  // 선택된 CSD 저장
+  window.selectedCSD = csdId;
+}
+
+
+
+function redrawCSDCharts(csdSeries) {
+  // 기존 시리즈 초기화
+  while (csdCapacityChart.series.length > 0) {
+    csdCapacityChart.series[0].remove(false); // 데이터 제거 (reflow 방지)
+  }
+
+  // 새로운 데이터 추가
+  csdSeries.forEach(series => {
+    csdCapacityChart.addSeries(series, false);
+  });
+
+  // x축 업데이트
+  csdCapacityChart.xAxis[0].setCategories(csdCategories);
+
+  // 차트 다시 그리기
+  csdCapacityChart.redraw();
+}
+
+function handleCSDPointClick(event) {
+  const csdId = event.point.series.name; // 클릭된 CSD의 이름
+  const seriesColor = event.point.series.color; // 클릭된 시리즈의 색상
+
+  console.log(`Selected CSD: ${csdId}, Color: ${seriesColor}`);
+
+  // 선택된 CSD 데이터로 업데이트
+  window.selectedCSD = csdId;  // 선택된 CSD 저장
+  updateSelectedCSDCharts(csdId); // 선택된 CSD 차트 갱신
+}
+function redrawCharts() {
+  cpuChart.series[0].setData(hostCpuChartData);
+  cpuChart.series[1].setData(instanceCpuChartData);
+  cpuChart.xAxis[0].setCategories(chartCategories);
+
+  powerChart.series[0].setData(powerChartData);
+  powerChart.xAxis[0].setCategories(chartCategories);
+
+  memoryChart.series[0].setData(hostMemoryChartData);
+  memoryChart.series[1].setData(instanceMemoryChartData);
+  memoryChart.xAxis[0].setCategories(chartCategories);
+
+  networkChart.series[0].setData(hostNetworkRxData);
+  networkChart.series[1].setData(hostNetworkTxData);
+  networkChart.series[2].setData(instanceNetworkRxData);
+  networkChart.series[3].setData(instanceNetworkTxData);
+  networkChart.xAxis[0].setCategories(chartCategories);
+
+  diskChart.series[0].setData(hostDiskChartData);
+  diskChart.series[1].setData(instanceDiskChartData);
+  diskChart.xAxis[0].setCategories(chartCategories);
+}
+
+
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+
 
 const dbInfoSlideBtn = document.getElementById('dbInfoSlideBtn');
 const dbInfoSlideUpIcon = document.getElementById('dbInfoSlideUpIcon');
@@ -59,189 +424,3 @@ dbInfoSlideBtn.addEventListener('click', () => {
   }
   isDBInfoSlideBtnClicked = !isDBInfoSlideBtnClicked;
 });
-
-function getLatestChartData(){
-  fetch('/monitoring/metric', {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-  })
-  .then(response => response.json())
-  .then(data => {updateChartData(data)})
-}
-
-function updateChartData(data){
-  hostCpuChartData = [];
-  instanceCpuChartData = [];
-  hostPowerChartData = [];
-  hostMemoryChartData = [];
-  instanceMemoryChartData = [];
-  hostNetworkRXChartData = [];
-  hostNetworkTXChartData = [];
-  instanceNetworkRXChartData = [];
-  instanceNetworkTXChartData = [];
-  hostDiskChartData = [];
-  instanceDiskChartData = [];
-  hostChartCategories = [];
-
-  data["host_metric"].reverse().forEach(item => {
-    hostCpuChartData.push((item.cpu_usage_nanocore)/nanocoreTomillicore);
-    hostPowerChartData.push((item.power_usage));
-    hostMemoryChartData.push((item.memory_usage)/KBToGB);
-    hostNetworkRXChartData.push((item.network_rx_byte)/KBToGB);
-    hostNetworkTXChartData.push((item.network_tx_byte)/KBToGB);
-    hostDiskChartData.push((item.disk_usage)/KBToGB);
-    var date = new Date(item.time);
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var seconds = date.getSeconds();
-    var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-    var formattedHour = hour < 10 ? '0' + hour : hour;
-    var formattedMinute = minute < 10 ? '0' + minute : minute;
-    var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
-    hostChartCategories.push(time);
-  })
-
-  data["instance_metric"].reverse().forEach(item => {
-    instanceCpuChartData.push((item.cpu_usage)/nanocoreTomillicore);
-    instanceMemoryChartData.push((item.memory_usage)/KBToGB);
-    instanceNetworkRXChartData.push((item.network_rx_usage)/KBToGB);
-    instanceNetworkTXChartData.push((item.network_tx_usage)/KBToGB);
-    instanceDiskChartData.push((item.disk_usage)/KBToGB);
-  })
-
-  drawChart();
-}
-
-function drawChart(){
-  cpuChart.series[0].setData(hostCpuChartData);
-  cpuChart.series[1].setData(instanceCpuChartData);
-  cpuChart.xAxis[0].setCategories(hostChartCategories);
-  powerChart.series[0].setData(hostPowerChartData);
-  powerChart.xAxis[0].setCategories(hostChartCategories);
-  memoryChart.series[0].setData(hostMemoryChartData);
-  memoryChart.series[1].setData(instanceMemoryChartData);
-  memoryChart.xAxis[0].setCategories(hostChartCategories);
-  networkChart.series[0].setData(hostNetworkRXChartData);
-  networkChart.series[1].setData(hostNetworkTXChartData);
-  networkChart.series[2].setData(instanceNetworkRXChartData);
-  networkChart.series[3].setData(instanceNetworkTXChartData);
-  networkChart.xAxis[0].setCategories(hostChartCategories);
-  diskChart.series[0].setData(hostDiskChartData);
-  diskChart.series[1].setData(instanceDiskChartData);
-  diskChart.xAxis[0].setCategories(hostChartCategories);
-
-  cpuChart.redraw();
-  powerChart.redraw();
-  memoryChart.redraw();
-  networkChart.redraw();
-  diskChart.redraw();
-}
-
-function getLatestCSDChartData(){
-  fetch('/monitoring/csd/capacity', {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-  })
-  .then(response => response.json())
-  .then(data => {updateCSDChartData(data)})
-}
-
-function updateCSDChartData(data){
-  csdCapacityChartTotalData = [];
-  csdCapacityChartUsageData = [];
-  csdCapacityChartCategories = [];
-
-  for (let csd_id in data) {
-    csdCapacityChartTotalData.push(["CSD"+csd_id, data[csd_id].disk_total / KBToGB]);
-    csdCapacityChartUsageData.push({
-      name: "CSD"+csd_id,
-      y: data[csd_id].disk_usage / KBToGB,
-      color: 'rgba(135,206,250,0.7)',
-    });
-    csdCapacityChartCategories.push("CSD "+csd_id);
-  }
-
-  drawCSDChart();
-}
-
-function drawCSDChart(){
-  csdCapacityChart.series[0].setData(csdCapacityChartTotalData);
-  csdCapacityChart.series[1].setData(csdCapacityChartUsageData);
-  csdCapacityChart.xAxis[0].setCategories(csdCapacityChartCategories);
-  csdCapacityChart.redraw();
-}
-
-function getLatestCSDMetricChartData(){
-  fetch('/monitoring/csd/metric', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      body: JSON.stringify({
-        "csd_id": selectedCSDID,
-    })
-  })
-  .then(response => response.json())
-  .then(data => {updateCSDMetricChartData(data)})
-}
-
-function updateCSDMetricChartData(data){
-  csdCpuChartData = [];
-  csdMemoryChartData = [];
-  csdNetworkRXChartData = [];
-  csdNetwockTXChartData = [];
-  csdChartCategories = [];
-
-  data.reverse().forEach(function(item){
-    csdCpuChartData.push(item.cpu_usage);
-    csdMemoryChartData.push(item.memory_usage);
-    csdNetworkRXChartData.push(item.network_rx_byte);
-    csdNetwockTXChartData.push(item.network_tx_byte);
-    var date = new Date(item.time);
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var seconds = date.getSeconds();
-    var formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-    var formattedHour = hour < 10 ? '0' + hour : hour;
-    var formattedMinute = minute < 10 ? '0' + minute : minute;
-    var time = formattedHour+":"+formattedMinute+":"+formattedSeconds;
-    csdChartCategories.push(time);
-  });
-
-  drawCSDMetricChart();
-}
-
-function drawCSDMetricChart(){
-  let serieseName = "CSD"+selectedCSDID;
-  csdCpuChart.series[0].setData(csdCpuChartData);
-  csdCpuChart.xAxis[0].setCategories(csdChartCategories);
-  csdCpuChart.series[0].update({name:serieseName + " CPU"}, false);
-  csdMemoryChart.series[0].setData(csdMemoryChartData);
-  csdMemoryChart.xAxis[0].setCategories(csdChartCategories);
-  csdMemoryChart.series[0].update({name:serieseName + " Memory"}, false);
-  csdNetworkChart.series[0].setData(csdNetworkRXChartData);
-  csdNetworkChart.series[1].setData(csdNetwockTXChartData);
-  csdNetworkChart.xAxis[0].setCategories(csdChartCategories);
-  csdNetworkChart.series[0].update({name:serieseName + " RX Net"}, false);
-  csdNetworkChart.series[1].update({name:serieseName + " TX Net"}, false);
-
-  csdCpuChart.redraw();
-  csdMemoryChart.redraw();
-  csdNetworkChart.redraw();
-}
-
-function startInterval(){
-  metricIntervalID = setInterval(getLatestChartData, fiveSeconds);
-  csdIntervalID = setInterval(getLatestCSDChartData, twentyFourHours);
-}
-
