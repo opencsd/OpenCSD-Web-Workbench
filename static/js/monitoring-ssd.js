@@ -105,7 +105,7 @@ function initializeCharts() {
   cpuChart = Highcharts.chart("ssdcpuChart", {
     title: { text: "CPU Usage" },
     xAxis: { categories: [] },
-    series: [{ name: "Node CPU", data: [] }, { name: "Instance CPU", data: [] }]
+    series: [{ name: "Node CPU", data: [] }]
   });
 
   powerChart = Highcharts.chart("ssdpowerChart", {
@@ -117,7 +117,7 @@ function initializeCharts() {
   memoryChart = Highcharts.chart("ssdmemoryChart", {
     title: { text: "Memory Usage" },
     xAxis: { categories: [] },
-    series: [{ name: "Node Memory", data: [] }, { name: "Instance Memory", data: [] }]
+    series: [{ name: "Node Memory", data: [] }]
   });
 
   networkChart = Highcharts.chart("ssdnetworkChart", {
@@ -125,16 +125,14 @@ function initializeCharts() {
     xAxis: { categories: [] },
     series: [
       { name: "Node RX", data: [] },
-      { name: "Node TX", data: [] },
-      { name: "Instance RX", data: [] },
-      { name: "Instance TX", data: [] }
+      { name: "Node TX", data: [] }
     ]
   });
 
   diskChart = Highcharts.chart("ssddiskChart", {
     title: { text: "Disk Usage" },
     xAxis: { categories: [] },
-    series: [{ name: "Node Disk", data: [] }, { name: "Instance Disk", data: [] }]
+    series: [{ name: "Node Disk", data: [] }]
   });
 }
 
@@ -193,24 +191,23 @@ function updateCharts(instanceData, nodeData) {
 
 function redrawCharts() {
   cpuChart.series[0].setData(hostCpuChartData);
-  cpuChart.series[1].setData(instanceCpuChartData);
+
   cpuChart.xAxis[0].setCategories(chartCategories);
 
   powerChart.series[0].setData(powerChartData);
   powerChart.xAxis[0].setCategories(chartCategories);
 
   memoryChart.series[0].setData(hostMemoryChartData);
-  memoryChart.series[1].setData(instanceMemoryChartData);
+
   memoryChart.xAxis[0].setCategories(chartCategories);
 
   networkChart.series[0].setData(hostNetworkRxData);
   networkChart.series[1].setData(hostNetworkTxData);
-  networkChart.series[2].setData(instanceNetworkRxData);
-  networkChart.series[3].setData(instanceNetworkTxData);
+
   networkChart.xAxis[0].setCategories(chartCategories);
 
   diskChart.series[0].setData(hostDiskChartData);
-  diskChart.series[1].setData(instanceDiskChartData);
+
   diskChart.xAxis[0].setCategories(chartCategories);
 }
 
