@@ -425,7 +425,7 @@
                   <div class="col-lg-12">
                     <h3 class="card-title">Query Result</h3>
                     <div id="resultContainer">
-                      <textarea readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></textarea>
+                      <div readonly id="queryResult" class="form-control form-control-xl" value="" rows="10" style="resize:none;"></div>
                     </div>
                     <!-- <div id="loading" class="spinner-border" style="display: none; position: absolute; top: 50%; left: 50%;"></div> -->
                     <div class="spinnerContainer" style="display: none; justify-content: center; align-items: center; height: 100px;">
@@ -502,12 +502,14 @@
                       <div class="col-6" style="padding-right: 5px;">
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div style="margin: 5px 15px 15px;">Host Server CPU</div>
+                          <p id="csdaverageCpu" style="margin: 5px 15px 15px;">Total CPU Utilization: 0%</p>
                           <div id="csdcpuChart"></div>
                         </div>
                       </div>
                       <div class="col-6" style="padding-left: 5px;">
                         <div class="card" style="padding: 0 15px 10px 0;">
                           <div style="margin: 5px 15px 15px;">Host Server Power</div>
+                          <p id="csdtotalPower" style="margin: 5px 15px 15px;">Total Power Used: 0W</p>
                           <div id="csdpowerChart"></div>
                         </div>
                       </div>                    
