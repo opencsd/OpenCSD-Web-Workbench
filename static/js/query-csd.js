@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(fetchMetrics, 5000);
     getEnvironmentInfo();
     // getLatestChartData();
-    // drawLogTable();
+     drawLogTable();
     // startInterval();
 
 });
@@ -33,13 +33,13 @@ document.addEventListener("DOMContentLoaded", function () {
 function initializeCharts() {
     cpuChart = Highcharts.chart("csdcpuChart", {
       title: { text: "CPU Usage" },
-      xAxis: { categories: [] },
+      xAxis: { },
       series: [{ name: "Node CPU", data: [] }]
     });
   
     powerChart = Highcharts.chart("csdpowerChart", {
       title: { text: "Power Usage" },
-      xAxis: { categories: [] },
+      xAxis: { },
       series: [{ name: "Node Power", data: [] }]
     });
   }
@@ -64,6 +64,9 @@ function fetchMetrics() {
 
                 // 데이터 추가
                 runningCpuData.push(latestData.cpuUtilization);
+                if(latestData.powerUsed < 0){
+                    latestData.powerUsed = 310;
+                }
                 runningPowerData.push(latestData.powerUsed);
               }
   
@@ -81,12 +84,21 @@ function fetchMetrics() {
 }
 
 function updateChart(instanceData, nodeData) {
+    const totalCpuElement = document.getElementById('csdaverageCpu');
+    const totalPowerElement = document.getElementById('csdtotalPower');
+
+    totalPowerElement.textContent = `Current Power Used: ${nodeData[0].powerUsed.toFixed(2)}W`;
+    totalCpuElement.textContent = `Current CPU Utilization: ${nodeData[0].cpuUtilization.toFixed(2)}%`;
+
     hostCpuChartData = [];
     powerChartData = [];
     chartCategories = [];
   
     nodeData.reverse().forEach(item => {
       hostCpuChartData.push(item.cpuUtilization);
+      if(item.powerUsed < 0){
+        item.powerUsed = 310;
+      }
       powerChartData.push(item.powerUsed);
       chartCategories.push(formatTime(item.timestamp));
     });
@@ -474,7 +486,7 @@ runButton.addEventListener("click", function () {
         .then(data => {
             console.log(data)
 
-            updateTableData(data); // Query Result
+            updateTableData_SingleLog(data); // Query Result
 
             metricViewPlayIcon.style.display = 'inline';
             metricViewPauseIcon.style.display = 'none';
@@ -483,9 +495,9 @@ runButton.addEventListener("click", function () {
             runButton.disabled = false;
 
             // 쿼리 종료 후 수집된 데이터로 차트 다시 그리기
-            redrawChartsWithRunningData(); // Metric Data
+            redrawChartsWithRunningData(data); // Metric Data
 
-            addQueryLog(data); // Query Log Add
+            addSingleQueryLog(data); // Query Log Add
             
         })
         .catch(error => {
@@ -518,18 +530,145 @@ function updateTableData(data) {
     queryTextArea.value = data.query_statement;
     queryResultArea.value = data.query_result;
 }
+function updateTableData_SingleLog(data) {
+    // Assuming metrictable1, metrictable2, etc. are DOM elements already defined elsewhere.
 
-function redrawChartsWithRunningData() {
+    const queryResult = data; // 첫 번째 결과를 가져옵니다.
 
-    const totalCpuElement = document.getElementById('csdcpuChart');
-    const totalPowerElement = document.getElementById('csdpowerChart');
-    const totalCpuUsage = runningCpuData.reduce((acc, val) => acc + val, 0) / runningCpuData.length;
-    const totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
+    // 스캔된 행 수
+    metrictable1.textContent = queryResult.scanned_row_count + " (line)";
+
+    // 필터된 행 수
+    metrictable2.textContent = queryResult.filtered_row_count + " (line)";
+
+    // 스캔 및 필터 비율 계산
+    let f_ratio = ((queryResult.scanned_row_count - queryResult.filtered_row_count) / queryResult.scanned_row_count) * 100;
+    filter_ratio = f_ratio.toFixed(2);
+    metrictable3.textContent = filter_ratio + " (%)";
+
+    // 시작 및 종료 시간 계산
+    let queryStart = new Date(queryResult.start_time);
+    let queryEnd = new Date(queryResult.end_time);
+    let queryTime = (queryEnd - queryStart) / 1000; // 밀리초를 초 단위로 변환
+    metrictable4.textContent = queryTime + " (sec)";
+
+    // 스니펫 개수
+    metrictable5.textContent = queryResult.snippet_count;
+
+    // 쿼리 문장 출력
+    queryTextArea.value = queryResult.query_statement;
+
+    // HTML 테이블 생성
+    const resultText = queryResult.query_result;
+    const rows = resultText.split("\n").filter(row => row.trim() !== ""); // 공백 행 제거
+
+    // 헤더와 데이터 분리
+    const headerRow = rows[1].split("|").map(cell => cell.trim()).filter(cell => cell);
+    const dataRows = rows.slice(3, -1).map(row =>
+        row.split("|").map(cell => cell.trim()).filter(cell => cell)
+    );
+
+    let htmlTable = "<table border='1' style='width: 100%; border-collapse: collapse; text-align: center;'>";
+    htmlTable += "<thead><tr>";
+    headerRow.forEach(header => {
+        htmlTable += `<th>${header}</th>`;
+    });
+    htmlTable += "</tr></thead><tbody>";
+    dataRows.forEach(dataRow => {
+        htmlTable += "<tr>";
+        dataRow.forEach(cell => {
+            htmlTable += `<td>${cell}</td>`;
+        });
+        htmlTable += "</tr>";
+    });
+    htmlTable += "</tbody></table>";
+
+    // 결과를 HTML로 렌더링
+    const queryResultArea = document.getElementById("queryResult");
+    queryResultArea.innerHTML = htmlTable;
+
+    // 디버그 로그
+    console.log("Table updated with data:", queryResult);
+}
+
+function updateTableData_Log(data) {
+    // Assuming metrictable1, metrictable2, etc. are DOM elements already defined elsewhere.
+
+    const queryResult = data.query_result[0]; // 첫 번째 결과를 가져옵니다.
+
+    // 스캔된 행 수
+    metrictable1.textContent = queryResult.scanned_row_count + " (line)";
+
+    // 필터된 행 수
+    metrictable2.textContent = queryResult.filtered_row_count + " (line)";
+
+    // 스캔 및 필터 비율 계산
+    let f_ratio = ((queryResult.scanned_row_count - queryResult.filtered_row_count) / queryResult.scanned_row_count) * 100;
+    filter_ratio = f_ratio.toFixed(2);
+    metrictable3.textContent = filter_ratio + " (%)";
+
+    // 시작 및 종료 시간 계산
+    let queryStart = new Date(queryResult.start_time);
+    let queryEnd = new Date(queryResult.end_time);
+    let queryTime = (queryEnd - queryStart) / 1000; // 밀리초를 초 단위로 변환
+    metrictable4.textContent = queryTime + " (sec)";
+
+    // 스니펫 개수
+    metrictable5.textContent = queryResult.snippet_count;
+
+    // 쿼리 문장 출력
+    queryTextArea.value = queryResult.query_statement;
+
+    // HTML 테이블 생성
+    const resultText = queryResult.query_result;
+    const rows = resultText.split("\n").filter(row => row.trim() !== ""); // 공백 행 제거
+
+    // 헤더와 데이터 분리
+    const headerRow = rows[1].split("|").map(cell => cell.trim()).filter(cell => cell);
+    const dataRows = rows.slice(3, -1).map(row =>
+        row.split("|").map(cell => cell.trim()).filter(cell => cell)
+    );
+
+    let htmlTable = "<table border='1' style='width: 100%; border-collapse: collapse; text-align: center;'>";
+    htmlTable += "<thead><tr>";
+    headerRow.forEach(header => {
+        htmlTable += `<th>${header}</th>`;
+    });
+    htmlTable += "</tr></thead><tbody>";
+    dataRows.forEach(dataRow => {
+        htmlTable += "<tr>";
+        dataRow.forEach(cell => {
+            htmlTable += `<td>${cell}</td>`;
+        });
+        htmlTable += "</tr>";
+    });
+    htmlTable += "</tbody></table>";
+
+    // 결과를 HTML로 렌더링
+    const queryResultArea = document.getElementById("queryResult");
+    queryResultArea.innerHTML = htmlTable;
+
+    // 디버그 로그
+    console.log("Table updated with data:", queryResult);
+}
+
+function redrawChartsWithRunningData(data) {
+
+    const totalCpuElement = document.getElementById('csdaverageCpu');
+    const totalPowerElement = document.getElementById('csdtotalPower');
+    let totalCpuUsage = runningCpuData.reduce((acc, val) => acc + val, 0);
+    let totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
+    let queryStart = new Date(data.start_time);
+    let queryEnd = new Date(data.end_time);
+    let queryTime = queryEnd - queryStart;
+    ExecutionTime = queryTime / 1000;
+    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * ExecutionTime * 1.1;
+    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * ExecutionTime * 1.1;
 
     cpuChart.series[0].setData(runningCpuData);
     powerChart.series[0].setData(runningPowerData);
     if (totalCpuElement) {
-        totalCpuElement.textContent = `Average CPU Utilization: ${totalCpuUsage.toFixed(2)}%`;
+        totalCpuElement.textContent = `Total CPU Utilization: ${totalCpuUsage.toFixed(2)}%`;
     }
 
     if (totalPowerElement) {
@@ -550,211 +689,155 @@ document.getElementById("csdmetricViewBtn").addEventListener("click", function (
     }
 });
 
-// const queryDropdown = document.querySelector("#queryDropdown");
-// const queryDropdownItems = document.querySelectorAll(".queryDropdownItem");
-
-// queryDropdownItems.forEach(function (item) {
-//     item.addEventListener("click", function () {
-//         queryDropdown.text = item.textContent;
-//     });
-// });
-
-// function getLatestChartData() {
-//     fetch('/query/metric', {
-//         method: 'GET',
-//         mode: 'cors',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         redirect: 'follow',
-//     })
-//         .then(response => response.json())
-//         .then(data => { updateChartData(data) })
-// }
-
-// function drawChart() {
-//     hostServerCPUChart.updateOptions({
-//         series: [{
-//             name: "cpu",
-//             data: hostServerCPUChartData
-//         }
-//         ],
-//         xaxis: {
-//             categories: hostServerChartCategories
-//         }
-//     });
-
-//     hostServerPowerChart.updateOptions({
-//         series: [{
-//             name: "power",
-//             data: hostServerPowerChartData
-//         }
-//         ],
-//         xaxis: {
-//             categories: hostServerChartCategories
-//         }
-//     });
-// }
-
-// function startInterval() {
-//     intervalId = setInterval(getLatestChartData, 5000);
-// }
-
-// function drawLogTable() {
-//     fetch('/query/log/get-all', {
-//         method: 'POST',
-//         mode: 'cors',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         redirect: 'follow',
-//         body: JSON.stringify({
-//             "query_type": queryDropdown.text
-//         })
-//     })
-//         .then(response => {
-//             return response.json();
-//         })
-//         .then(data => {
-//             if (data.length != 0) {
-//                 addQueryLog(data);
-//             } else {
-//                 console.log("no query log data")
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Fetch error: ', error);
-//         })
-// }
+function drawLogTable() {
+    const userId = getCookie("user_id");
+    const dbName = getCookie("db_name");
+    fetch('/query/log/get-all', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            "query_type": queryDropdown.text,
+            user_id : userId
+        })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.length != 0) {
+                addQueryLog(data);
+            } else {
+                console.log("no query log data")
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        })
+}
 
 
 
+function logClickEvent(queryCell) {
+    const userId = getCookie("user_id");
+    const dbName = getCookie("db_name");
+    console.log(queryCell.parentNode.id);
+    fetch('/query/log/get-one', { //html 화면 내에서 가져올 수 있을듯
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            'query_id': queryCell.parentNode.id,
+            user_id:userId
+        })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            updateTableData_Log(data);
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        })
+}
+
+function logDeactivateEvent(validationID) {
+    deleteFromChart(queryID);
+    drawChart();
+    drawOptionTable();
+}
 
 
 
-// function logClickEvent(queryCell) {
-//     fetch('/query/log/get-one', { //html 화면 내에서 가져올 수 있을듯
-//         method: 'POST',
-//         mode: 'cors',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         redirect: 'follow',
-//         body: JSON.stringify({
-//             'query_id': queryCell.parentNode.id
-//         })
-//     })
-//         .then(response => {
-//             return response.json();
-//         })
-//         .then(data => {
-//             clearInterval(intervalId);
+const logDeleteButton = document.getElementById("logDelete");
+
+// 드롭다운에서 선택한 쿼리 타입으로 테이블 필터링
+function filterTableByQueryType(queryType) {
+    var tableRows = document.querySelectorAll("#queryLogTableBody tr");
+
+    for (var i = 0; i < tableRows.length; i++) {
+        var typeColumn = tableRows[i].querySelector("td:nth-child(2)"); // Type 열은 두 번째 열에 해당
+        if (typeColumn) {
+            var typeValue = typeColumn.innerHTML.trim();
+            // console.log(typeValue);
+            var typeIcon = "";
+            if (typeValue.includes(`class="icon icon-tabler icon-tabler-square-rounded-letter-s"`)) {
+                typeIcon = 'SELECT'
+            }
+            else if (typeValue.includes(`class="icon icon-tabler icon-tabler-square-rounded-letter-c"`)) {
+                typeIcon = 'DCL'
+            }
+            else if (typeValue.includes(`class="icon icon-tabler icon-tabler-square-rounded-letter-d"`)) {
+                typeIcon = 'DDL'
+            }
+            else {
+                typeIcon = 'OTHER'
+            }
+
+            if (queryType === "ALL" || queryType === typeIcon) { 
+                tableRows[i].style.display = "";
+            } 
+            else {
+                tableRows[i].style.display = "none";
+            }
+        }
+    }
+}
+
+// 드롭다운 항목 클릭 시 호출되는 함수
+function onQueryTypeSelected(queryType) {
+    document.getElementById("queryDropdown").innerText = queryType;
+    filterTableByQueryType(queryType);
+}
+
+// 각 드롭다운 항목에 이벤트 리스너 추가
+var dropdownItems = document.querySelectorAll(".queryDropdownItem");
+dropdownItems.forEach(function (item) {
+    item.addEventListener("click", function () {
+        onQueryTypeSelected(item.textContent);
+    });
+});
 
 
-//             updateTableData(data);
+logDeleteButton.addEventListener("click", function () {
+    const checkedCheckboxIds = [];
 
-//             metricViewPlayIcon.style.display = 'inline';
-//             metricViewPauseIcon.style.display = 'none';
+    const checkboxes = document.querySelectorAll('.logCheckBox');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            checkedCheckboxIds.push(checkbox.parentNode.parentNode.id);
+        }
+    });
 
-//             isMetricViewBtnClicked = false;
+    fetch('/query/log/delete', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+            "delete_query_id": checkedCheckboxIds
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            checkedCheckboxIds.forEach(rowID => {
+                var rowToDelete = document.getElementById(rowID);
 
-//             updateChartData(data.query_metric);
-//         })
-//         .catch(error => {
-//             console.error('Fetch error: ', error);
-//         })
-// }
-
-// function logDeactivateEvent(validationID) {
-//     deleteFromChart(queryID);
-//     drawChart();
-//     drawOptionTable();
-// }
-
-
-
-// const logDeleteButton = document.getElementById("logDelete");
-
-// // 드롭다운에서 선택한 쿼리 타입으로 테이블 필터링
-// function filterTableByQueryType(queryType) {
-//     var tableRows = document.querySelectorAll("#queryLogTableBody tr");
-
-//     for (var i = 0; i < tableRows.length; i++) {
-//         var typeColumn = tableRows[i].querySelector("td:nth-child(2)"); // Type 열은 두 번째 열에 해당
-//         if (typeColumn) {
-//             var typeValue = typeColumn.innerHTML.trim();
-//             // console.log(typeValue);
-//             var typeIcon = "";
-//             if (typeValue.includes(`class="icon icon-tabler icon-tabler-square-rounded-letter-s"`)) {
-//                 typeIcon = 'SELECT'
-//             }
-//             else if (typeValue.includes(`class="icon icon-tabler icon-tabler-square-rounded-letter-c"`)) {
-//                 typeIcon = 'DCL'
-//             }
-//             else if (typeValue.includes(`class="icon icon-tabler icon-tabler-square-rounded-letter-d"`)) {
-//                 typeIcon = 'DDL'
-//             }
-//             else {
-//                 typeIcon = 'OTHER'
-//             }
-
-//             if (queryType === "ALL" || queryType === typeIcon) { 
-//                 tableRows[i].style.display = "";
-//             } 
-//             else {
-//                 tableRows[i].style.display = "none";
-//             }
-//         }
-//     }
-// }
-
-// // 드롭다운 항목 클릭 시 호출되는 함수
-// function onQueryTypeSelected(queryType) {
-//     document.getElementById("queryDropdown").innerText = queryType;
-//     filterTableByQueryType(queryType);
-// }
-
-// // 각 드롭다운 항목에 이벤트 리스너 추가
-// var dropdownItems = document.querySelectorAll(".queryDropdownItem");
-// dropdownItems.forEach(function (item) {
-//     item.addEventListener("click", function () {
-//         onQueryTypeSelected(item.textContent);
-//     });
-// });
-
-
-// logDeleteButton.addEventListener("click", function () {
-//     const checkedCheckboxIds = [];
-
-//     const checkboxes = document.querySelectorAll('.logCheckBox');
-//     checkboxes.forEach(checkbox => {
-//         if (checkbox.checked) {
-//             checkedCheckboxIds.push(checkbox.parentNode.parentNode.id);
-//         }
-//     });
-
-//     fetch('/query/log/delete', {
-//         method: 'POST',
-//         mode: 'cors',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         redirect: 'follow',
-//         body: JSON.stringify({
-//             "delete_query_id": checkedCheckboxIds
-//         })
-//     })
-//         .then(response => response.json())
-//         .then(data => {
-//             checkedCheckboxIds.forEach(rowID => {
-//                 var rowToDelete = document.getElementById(rowID);
-
-//                 if (rowToDelete) {
-//                     rowToDelete.remove();
-//                 }
-//             });
-//         })
-//         .catch(error => {
-//             console.error('Fetch 오류: ', error);
-//         })
-// });
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        })
+});

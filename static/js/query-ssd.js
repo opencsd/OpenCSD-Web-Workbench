@@ -61,6 +61,9 @@ function initializeCharts() {
 
                 // 데이터 추가
                 runningCpuData.push(latestData.cpuUtilization);
+                if(latestData.powerUsed < 0){
+                    latestData.powerUsed = 310;
+                }
                 runningPowerData.push(latestData.powerUsed);
               }
   
@@ -78,6 +81,9 @@ function updateChart(instanceData, nodeData) {
   
     nodeData.reverse().forEach(item => {
       hostCpuChartData.push(item.cpuUtilization);
+      if(item.powerUsed< 0){
+        item.powerUsed = 310;
+    }
       powerChartData.push(item.powerUsed);
       chartCategories.push(formatTime(item.timestamp));
     });
@@ -297,6 +303,7 @@ runButton.addEventListener("click", function () {
         // Execution Time 업데이트
         const executionTimeElement = document.getElementById('executionTime');
         executionTimeElement.textContent = data.execution_time;
+        console.log
 
         // Query Result 테이블 업데이트
         updateTableData(data.result);
@@ -309,30 +316,41 @@ runButton.addEventListener("click", function () {
         runButton.disabled = false;
 
         // 쿼리 종료 후 수집된 데이터로 차트 다시 그리기
-        redrawChartsWithRunningData();
+        redrawChartsWithRunningData(data);
     })
     .catch(error => {
         console.error('Fetch 오류: ', error);
     });
 });
 
-function redrawChartsWithRunningData() {
+function parseExecutionTimeToSeconds(executionTime) {
+    const [hours, minutes, seconds] = executionTime.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + parseFloat(seconds);
+}
+
+function redrawChartsWithRunningData(data) {
 
     const totalCpuElement = document.getElementById('ssdaverageCpu');
     const totalPowerElement = document.getElementById('ssdtotalPower');
-    const totalCpuUsage = runningCpuData.reduce((acc, val) => acc + val, 0) / runningCpuData.length ;
-    const totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
+    let totalCpuUsage = runningCpuData.reduce((acc, val) => acc + val, 0) ;
+    let totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
 
+    const executionTimeInSeconds = parseExecutionTimeToSeconds(data.execution_time);
+    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * executionTimeInSeconds * 1.1;
+    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * executionTimeInSeconds * 1.1;
+    
     cpuChart.series[0].setData(runningCpuData);
     powerChart.series[0].setData(runningPowerData);
     if (totalCpuElement) {
-        totalCpuElement.textContent = `Total CPU Utilization: ${totalCpuUsage.toFixed(2)}`;
+        totalCpuElement.textContent = `Total CPU Utilization: ${totalCpuUsage.toFixed(2)}%`;
     }
 
     if (totalPowerElement) {
         totalPowerElement.textContent = `Total Power Used: ${totalPowerUsed.toFixed(2)}W`;
     }
 }
+
+
 
 document.getElementById("metricViewBtn").addEventListener("click", function () {
     isQueryRunning = false;  // 쿼리 실행 종료 상태로 설정
