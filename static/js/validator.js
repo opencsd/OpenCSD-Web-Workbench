@@ -12,6 +12,7 @@ var detailChartCategories = [], optionTableData = [];
 var cpuMetric, powerMetric, networkMetric, executionTime;
 
 document.addEventListener("DOMContentLoaded", function () { 
+    document.cookie = `instance_name=keti-opencsd; path=/; samsite=lax`;
     // 드롭다운 항목과 컨테이너 엘리먼트 참조
 const detailMetricDropdown = document.querySelector("#detailMetricDropdown");
 const detailMetricDropdownItems = document.querySelectorAll(".detailMetricDropdownItem");
