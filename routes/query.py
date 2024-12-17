@@ -119,10 +119,10 @@ def log_handler(action):
 
                 if query_type == "ALL": #'all'
                     query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
-                        from query_log where user_id='{}' order by query_id".format(user_id)
+                        from query_log where user_name='{}' order by query_id".format(user_id)
                 else: #'SELECT','DCL','DDL','OTHER' -> 구현 확인 필요
                     query = "select query_id, query_statement, query_type, execution_time, scanned_row_count, filtered_row_count \
-                        from query_log where user_id='{}' and query_type='{}' order by query_id".format(user_id,query_type)
+                        from query_log where user_name='{}' and query_type='{}' order by query_id".format(user_id,query_type)
 
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
@@ -148,13 +148,13 @@ def log_handler(action):
                 
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
                 # memory -> power로 바꾸기!!
-                query = "select cpu_usage_tick, power_usage from node_monitoring \
-                        where time > '{}' - 5s and time < '{}' + 5s order by time desc tz('Asia/Seoul')".format(start_time,end_time)
-                query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
-                                                info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
-                                                info.INSTANCE_NODE_METRIC_DB_NAME, query)
+                # query = "select cpu_usage_tick, power_usage from node_monitoring \
+                #         where time > '{}' - 5s and time < '{}' + 5s order by time desc tz('Asia/Seoul')".format(start_time,end_time)
+                # query_metric = influx.execute_query_influxdb(info.INSTANCE_METRIC_DB_HOST, info.INSTANCE_METRIC_DB_PORT,
+                #                                 info.INSTANCE_METRIC_DB_USER, info.INSTANCE_METRIC_DB_PASSWORD,
+                #                                 info.INSTANCE_NODE_METRIC_DB_NAME, query)
 
-                result = {"query_result":query_log, "query_metric":query_metric[0]}
+                result = {"query_result":query_log}
 
                 return jsonify(result)
             except:
@@ -202,7 +202,7 @@ def desc_handler(action):
                 data = request.json
                 query_id = data['query_id']
 
-                query = "select * from query_snippet where query_id={}".format(query_id)
+                query = "select * from snippet where query_id={}".format(query_id)
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
