@@ -336,8 +336,8 @@ function redrawChartsWithRunningData(data) {
     let totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
 
     const executionTimeInSeconds = parseExecutionTimeToSeconds(data.execution_time);
-    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * executionTimeInSeconds * 1.1;
-    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * executionTimeInSeconds * 1.1;
+    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * executionTimeInSeconds * 1.07;
+    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * executionTimeInSeconds * 1.07;
     
     cpuChart.series[0].setData(runningCpuData);
     powerChart.series[0].setData(runningPowerData);

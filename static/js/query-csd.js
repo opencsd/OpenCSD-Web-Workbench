@@ -662,8 +662,8 @@ function redrawChartsWithRunningData(data) {
     let queryEnd = new Date(data.end_time);
     let queryTime = queryEnd - queryStart;
     ExecutionTime = queryTime / 1000;
-    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * ExecutionTime * 1.1;
-    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * ExecutionTime * 1.1;
+    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * ExecutionTime * 1.07;
+    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * ExecutionTime * 1.07;
 
     cpuChart.series[0].setData(runningCpuData);
     powerChart.series[0].setData(runningPowerData);
