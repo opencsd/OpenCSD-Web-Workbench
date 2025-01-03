@@ -21,8 +21,6 @@ KETI-Web-Workbench enables users to monitor databases, perform query pushdown, a
 >   Werkzeug 2.2.3
 
 
-
-
 ## How To Install
 -------------
 ```bash
@@ -34,15 +32,16 @@ python3 main.py
 -------------
 ### 1. Access a Web page
 ```bash
-http://10.0.4.87:5001/login
+http://{address}:40805
 ```
-<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/879b628c-5383-4f0a-8ec0-3825ff781471">
+![Main](image/main.png)
 
 ### 2. Access a DB Monitoring Page
 - Check DB Info
 - Monitor DB Metrics
 - Monitor Host Server Metrics
-<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/441c7c77-fd86-4049-90ea-e4ddf230c298">
+
+![Monitoring](image/monitoring.png)
 
 ### 3. Access a Query Pushdown Page
 - Run Query
@@ -50,17 +49,18 @@ http://10.0.4.87:5001/login
 - Check Query Metric
 - Check Host Server Metrics
 - Check Query Log
-<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/20b9868c-7e02-4c24-b834-5523b05caa73">
-<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/f6bf749c-b1bd-4cbc-969b-0f25ad259db1">
+
+![Result](image/result.png)
+![Popup](image/popup.png)
 
 ### 4. Access a Validation Page
 - Run Query
 - Set Query Pushdown Option
 - Check Query Log
 - Compare two query results
-<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/26273d40-72c6-4c34-9b18-66abc592fb1c">
-<img width="70%" heigth="70%" src="https://github.com/opencsd/KETI-Web-Workbench/assets/57175313/f887cfdc-8f1f-408c-b2c5-cdf41f1d06b9">
 
+![Validator](image/validator.png)
+![Valudator-Result](image/validator_result.png)
 
 ## Governance
 -------------
