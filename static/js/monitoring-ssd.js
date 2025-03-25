@@ -8,7 +8,7 @@ let hostNetworkRxData = [], hostNetworkTxData = [], instanceNetworkRxData = [], 
 let hostDiskChartData = [], instanceDiskChartData = [];
 let chartCategories = [];
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
   initializeCharts();
   fetchMetrics();
   setInterval(fetchMetrics, 5000);
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
 document.addEventListener('DOMContentLoaded', () => {
   // 쿠키에서 session_id 읽기
   const sessionId = getCookie('session_id');
-  
+
   if (!sessionId) {
     console.error('Session ID not found in cookies');
     return;
@@ -31,49 +31,51 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   })
     .then(response => response.json())
-    .then(data => {updateInstanceInfo(data);
-    const operationNode = data.instanceInfo?.operationNode;
-    const instanceType = data.instanceInfo?.instanceType;
-    const dbName = data.connectionInfo?.dbName;
-    const storageType = data.volumeInfo?.storageType;
-    const accessPort = data.instanceInfo?.accessPort;
+    .then(data => {
+      updateInstanceInfo(data);
+      const operationNode = data.instanceInfo?.operationNode;
+      const instanceType = data.instanceInfo?.instanceType;
+      const dbName = data.connectionInfo?.dbName;
+      const storageType = data.volumeInfo?.storageType;
+      const accessPort = data.instanceInfo?.accessPort;
 
-    document.cookie = `instance_type=${instanceType};path=/;samesite=lax`;
-    document.cookie = `db_name=${dbName};path=/;samesite=lax`;
-    document.cookie = `storage_type=${storageType};path=/;samesite=lax`;
-    document.cookie = `access_port=${accessPort};path=/;samesite=lax`;
+      document.cookie = `instance_type=${instanceType};path=/;samesite=lax`;
+      document.cookie = `db_name=${dbName};path=/;samesite=lax`;
+      document.cookie = `storage_type=${storageType};path=/;samesite=lax`;
+      document.cookie = `access_port=${accessPort};path=/;samesite=lax`;
 
-    if (!operationNode) {
-      console.error('Operation node not found in connection-info');
-      return;
-    }
-    fetch('http://10.0.4.87:30800/cluster/node-list', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(nodeData => {
-        const nodeList = nodeData.nodeList || {};
-        const node = nodeList[operationNode]; // operationNode 이름으로 노드 검색
-        if (node && node.nodeIp) {
-          const nodeIp = node.nodeIp;
-
-          // 쿠키에 nodeIp 저장
-          document.cookie = `node_ip=${nodeIp}; path=/; samesite=lax`;
-          console.log(`Node IP saved in cookie: ${nodeIp}`);
-        } else {
-          console.error('Node IP not found for the operationNode');
-        }
+      if (!operationNode) {
+        console.error('Operation node not found in connection-info');
+        return;
+      }
+      fetch('http://10.0.4.87:30800/cluster/node-list', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch(error => console.error('Error fetching node-list:', error));
-})
+        .then(response => response.json())
+        .then(nodeData => {
+          const nodeList = nodeData.nodeList || {};
+          const node = nodeList[operationNode]; // operationNode 이름으로 노드 검색
+          if (node && node.nodeIp) {
+            const nodeIp = node.nodeIp;
+
+            // 쿠키에 nodeIp 저장
+            document.cookie = `node_ip=${nodeIp}; path=/; samesite=lax`;
+            console.log(`Node IP saved in cookie: ${nodeIp}`);
+          } else {
+            console.error('Node IP not found for the operationNode');
+          }
+        })
+        .catch(error => console.error('Error fetching node-list:', error));
+    })
     .catch(error => console.error('Error fetching data:', error));
 });
 
 function updateInstanceInfo(data) {
-  const { instanceInfo, volumeInfo } = data;
+  const { connectionInfo, instanceInfo, volumeInfo } = data;
+  document.getElementById('user_info').textContent = connectionInfo?.userName || '-';
 
   document.getElementById('ssdinstanceName').textContent = instanceInfo?.instanceName || '-';
   document.getElementById('ssdaccessPort').textContent = instanceInfo?.accessPort || '-';
@@ -105,35 +107,61 @@ function initializeCharts() {
   cpuChart = Highcharts.chart("ssdcpuChart", {
     title: { text: "CPU Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Core"
+      }
+    },
     series: [{ name: "Node CPU", data: [] }]
   });
 
   powerChart = Highcharts.chart("ssdpowerChart", {
     title: { text: "Power Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Watts"
+      }
+    },
     series: [{ name: "Node Power", data: [] }]
   });
 
   memoryChart = Highcharts.chart("ssdmemoryChart", {
     title: { text: "Memory Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "GB"
+      }
+    },
     series: [{ name: "Node Memory", data: [] }]
   });
 
   networkChart = Highcharts.chart("ssdnetworkChart", {
     title: { text: "Network Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Bytes"
+      }
+    },
     series: [
       { name: "Node RX", data: [] },
       { name: "Node TX", data: [] }
     ]
   });
-
-  diskChart = Highcharts.chart("ssddiskChart", {
-    title: { text: "Disk Usage" },
-    xAxis: { categories: [] },
-    series: [{ name: "Node Disk", data: [] }]
-  });
+  /**
+   * disk delete
+   */
+  // diskChart = Highcharts.chart("ssddiskChart", {
+  //   title: { text: "Disk Usage" },
+  //   xAxis: { categories: [] },
+  //   series: [{ name: "Node Disk", data: [] }]
+  // });
 }
 
 
@@ -206,9 +234,6 @@ function redrawCharts() {
 
   networkChart.xAxis[0].setCategories(chartCategories);
 
-  diskChart.series[0].setData(hostDiskChartData);
-
-  diskChart.xAxis[0].setCategories(chartCategories);
 }
 
 
@@ -226,15 +251,15 @@ let storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
 dbInfoSlideBtn.addEventListener('click', () => {
   const hiddenDBInfo = document.getElementById('hiddenDBInfo');
-  
+
   if (isDBInfoSlideBtnClicked) {
-      dbInfoSlideUpIcon.style.display = 'none';
-      dbInfoSlideDownIcon.style.display = 'inline';
-      hiddenDBInfo.style.display = 'block';
+    dbInfoSlideUpIcon.style.display = 'none';
+    dbInfoSlideDownIcon.style.display = 'inline';
+    hiddenDBInfo.style.display = 'block';
   } else {
-      dbInfoSlideUpIcon.style.display = 'inline';
-      dbInfoSlideDownIcon.style.display = 'none';
-      hiddenDBInfo.style.display = 'none';
+    dbInfoSlideUpIcon.style.display = 'inline';
+    dbInfoSlideDownIcon.style.display = 'none';
+    hiddenDBInfo.style.display = 'none';
   }
   isDBInfoSlideBtnClicked = !isDBInfoSlideBtnClicked;
 });

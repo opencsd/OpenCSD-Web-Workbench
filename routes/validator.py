@@ -36,7 +36,11 @@ def run_handler():
             instance_name = data['instance_name']
             node_ip = data['node_ip']
             print("Response data from validator:", data)  # 입력 데이터
-            response = requests.post('http://validator-svc.keti-opencsd.svc.cluster.local:40000/validator/run', json=data)
+            # response = requests.post('http://validator-svc.keti-opencsd.svc.cluster.local:40000/validator/run', json=data)
+            response = requests.post('http://10.0.4.80:40000/validator/run', json=data) #local
+            # response = requests.post('http://10.0.4.80:30000/validator/run', json=data) # cloud
+
+            # response = requests.post('http://10.109.162.205:40000/validator/run', json=data)
             
             print("Response from external server:", response.content)  # 외부 서버 응답
             
@@ -95,7 +99,7 @@ def option_handler(action):
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             instance_name, query)
                 
-                # print(resulat.)
+                print(result)
                 return jsonify(result)
             except:
                 return "get-one error\n"

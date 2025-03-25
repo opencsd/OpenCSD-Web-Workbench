@@ -1,13 +1,13 @@
 let popover;
 var maxList = {
-    "cpuMax" : 10000,
-    "powerMax" : 10000,
-    "networkMax" : 1000,
-    "timeMax" : 1000,
+    "cpuMax": 10000,
+    "powerMax": 10000,
+    "networkMax": 1000,
+    "timeMax": 1000,
 }
 
-function addValidatorLog(data){
-    data.forEach(function(result){
+function addValidatorLog(data) {
+    data.forEach(function (result) {
         const queryLogTableBody = document.getElementById("validatorLogTableBody");
 
         var query = result.query_statement;
@@ -27,9 +27,11 @@ function addValidatorLog(data){
         const modeIconCell = document.createElement("td");
         modeIconCell.style.width = "5%";
         modeIconCell.style.textAlign = "center";
-        if(result.storage_type == "csd"){
+        console.log("query log result", result);
+        if (result.storage_type == "csd") {
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-c.png" width="20" height="20"/></div>`;
-        }else{//SSD Option 조건일 경우
+        } else {//SSD Option 조건일 경우
+
             modeIconCell.innerHTML = `<div><img src="../static/image/free-icon-letter-s.png" width="20" height="20"/></div>`;
         }
 
@@ -39,7 +41,7 @@ function addValidatorLog(data){
         queryCell.textContent = `${shortenedQuery}`;
         queryCell.className = "queryCells";
         queryCell.clicked = false;
-        queryCell.addEventListener('click', function() {logClickEvent(queryCell);});
+        queryCell.addEventListener('click', function () { logClickEvent(queryCell); });
         // queryCell.addEventListener("mouseenter", function() {queryCell.style.backgroundColor="#f6f8fb"});
         // queryCell.addEventListener("mouseleave", function() {queryCell.style.backgroundColor=originalColor});
 
@@ -51,7 +53,7 @@ function addValidatorLog(data){
 
             let value, max, width;
 
-            if(i==0){//cpu
+            if (i == 0) {//cpu
                 value = result.storage_cpu_usage_predict;
                 // if(maxList.cpuMax < value){
                 //     maxList.cpuMax = value;
@@ -66,7 +68,7 @@ function addValidatorLog(data){
                 //     }
                 // }
                 max = maxList.cpuMax;
-            }else if(i==1){//power
+            } else if (i == 1) {//power
                 value = result.storage_power_usage_predict;
                 // if(maxList.powerMax < value){
                 //     maxList.powerMax = value;
@@ -81,7 +83,7 @@ function addValidatorLog(data){
                 //     }
                 // }
                 max = maxList.powerMax;
-            }else if(i==2){//network
+            } else if (i == 2) {//network
                 value = result.network_usage_predict;
                 // if(maxList.networkMax < value){
                 //     maxList.networkMax = value;
@@ -96,7 +98,7 @@ function addValidatorLog(data){
                 //     }
                 // }
                 max = maxList.networkMax;
-            }else if(i==3){//time
+            } else if (i == 3) {//time
                 value = result.execution_time_predict;
                 // if(maxList.timeMax < value){
                 //     maxList.timeMax = value;
@@ -137,8 +139,8 @@ function addValidatorLog(data){
                 </svg>
             </span>
         `;
-        dummyButtonCell.addEventListener('click', function() {dummyButtonCellEventHandler(dummyButtonCell)});
-        
+        dummyButtonCell.addEventListener('click', function () { dummyButtonCellEventHandler(dummyButtonCell) });
+
         newRow.appendChild(checkboxCell);
         newRow.appendChild(queryIDCell);
         newRow.appendChild(modeIconCell);
@@ -153,7 +155,7 @@ function addValidatorLog(data){
     });
 }
 
-function dummyButtonCellEventHandler(dummyButtonCell){
+function dummyButtonCellEventHandler(dummyButtonCell) {
     if (popover) {
         popover.dispose(); // 기존 팝업 제거
     }
@@ -219,7 +221,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
                     document.removeEventListener('click', documentClickHandler);
                 }
             }
-    
+
             // document의 click 이벤트에 대한 핸들러 등록
             document.addEventListener('click', documentClickHandler);
 
@@ -227,7 +229,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             return popoverContent;
         }
     }),
-    popover.show();
+        popover.show();
 }
 
 const validatorLogTableBody = document.getElementById("validatorLogTableBody");
@@ -237,7 +239,7 @@ function validationLogSnippetLoad(validationID) {
     const user_id = getCookie("user_id");
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     console.log("Snippet Modal Pop, Validation ID :", validationID)
@@ -287,7 +289,7 @@ function validationLogSnippetLoad(validationID) {
 
                 WIDCell.textContent = item.work_id;
                 // TypeCell.textContent = item.snippet_type;
-                switch(item.snippet_type) {
+                switch (item.snippet_type) {
                     case 0:
                         TypeCell.textContent = "CSD_SCAN_SNIPPET";
                         break;
@@ -360,13 +362,13 @@ function validationLogSnippetLoad(validationID) {
             'validation_id': validationID
         })
     })
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-        document.getElementById("validationQuery").value = data[0].query_statement;
-    })
-    .catch(console.error(error => console.error('Error: ', error)));
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById("validationQuery").value = data[0].query_statement;
+        })
+        .catch(console.error(error => console.error('Error: ', error)));
 
     $(function () {
         $("#snippetModal").modal("show");
@@ -383,7 +385,7 @@ function validationLogMetricLoad(validationID) {
     const user_id = getCookie("user_id");
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     console.log("Metric Modal Pop, Validation ID :", validationID)
@@ -412,7 +414,7 @@ function validationLogMetricLoad(validationID) {
 
     MetricTableBody.innerHTML = ``;
 
-    
+
     fetch('/validator/metric/getAll', {
         method: 'POST',
         mode: 'cors',
@@ -427,104 +429,104 @@ function validationLogMetricLoad(validationID) {
             instance_name
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
 
-        var csdCpuArr = [];
-        var csdPowerArr = [];
-        
-        data.result2.forEach(function (item) {
-            csdCpuArr.push(item.csd_cpu_usage_predict);
-            csdPowerArr.push(item.csd_power_usage_predict);
+            var csdCpuArr = [];
+            var csdPowerArr = [];
+
+            data.result2.forEach(function (item) {
+                csdCpuArr.push(item.csd_cpu_usage_predict);
+                csdPowerArr.push(item.csd_power_usage_predict);
+            })
+            csdCPUTotal = csdCpuArr.reduce((acc, curr) => acc + curr, 0);
+            csdCPUTotal = csdCPUTotal.toFixed(2);
+            csdPowerTotal = csdPowerArr.reduce((acc, curr) => acc + curr, 0);
+            csdPowerTotal = csdPowerTotal.toFixed(2);
+
+            var preCpuTotal = parseFloat(data.result1[0].storage_cpu_usage_predict) + parseFloat(csdCPUTotal);
+            var prePowerTotal = parseFloat(data.result1[0].storage_power_usage_predict) + parseFloat(csdPowerTotal);
+
+            var CpuTotal = preCpuTotal.toFixed(2)
+            var PowerTotal = prePowerTotal.toFixed(2)
+
+            const CPUTotalCell = document.createElement("td");
+            CPUTotalCell.style.width = "10%";
+            CPUTotalCell.style.textAlign = "center";
+            CPUTotalCell.textContent = `${CpuTotal}`;
+            cpuRow.appendChild(CPUTotalCell);
+
+            const PowerTotalCell = document.createElement("td");
+            PowerTotalCell.style.width = "10%";
+            PowerTotalCell.style.textAlign = "center";
+            PowerTotalCell.textContent = `${PowerTotal}`;
+            powerRow.appendChild(PowerTotalCell);
+
+            const HostCPUCell = document.createElement("td");
+            HostCPUCell.style.width = "10%";
+            HostCPUCell.style.textAlign = "center";
+            HostCPUCell.textContent = `${data.result1[0].storage_cpu_usage_predict}`;
+            const HostCPU = data.result1[0].storage_cpu_usage_predict;
+            cpuRow.appendChild(HostCPUCell);
+
+            const HostPowerCell = document.createElement("td");
+            HostPowerCell.style.width = "10%";
+            HostPowerCell.style.textAlign = "center";
+            HostPowerCell.textContent = `${data.result1[0].storage_power_usage_predict}`;
+            const HostPower = data.result1[0].storage_power_usage_predict;
+            powerRow.appendChild(HostPowerCell);
+
+            const csdCPUTotalCell = document.createElement("td");
+            csdCPUTotalCell.style.width = "10%";
+            csdCPUTotalCell.style.textAlign = "center";
+            csdCPUTotalCell.textContent = `${csdCPUTotal}`;
+            const csdCpu = parseFloat(csdCPUTotal);
+            cpuRow.appendChild(csdCPUTotalCell);
+
+            const csdPowerTotalCell = document.createElement("td");
+            csdPowerTotalCell.style.width = "10%";
+            csdPowerTotalCell.style.textAlign = "center";
+            csdPowerTotalCell.textContent = `${csdPowerTotal}`;
+            const csdPower = parseFloat(csdPowerTotal);
+            powerRow.appendChild(csdPowerTotalCell);
+
+            csdCpuArr.forEach(function (item) {
+                const csdCPUCell = document.createElement("td");
+                csdCPUCell.style.width = "10%";
+                csdCPUCell.style.textAlign = "center";
+                csdCPUCell.textContent = `${item}`;
+                cpuRow.appendChild(csdCPUCell)
+            })
+
+            csdPowerArr.forEach(function (item) {
+                const csdPowerCell = document.createElement("td");
+                csdPowerCell.style.width = "10%";
+                csdPowerCell.style.textAlign = "center";
+                csdPowerCell.textContent = `${item}`;
+                powerRow.appendChild(csdPowerCell)
+            })
+
+            MetricTableBody.appendChild(cpuRow);
+            MetricTableBody.appendChild(powerRow);
+
+            var cpudataArray = [HostCPU, csdCpu]
+            HostCSDCPUChartOption.series[0].data = cpudataArray;
+            var HostCSDCPUChart = new ApexCharts(document.querySelector("#HostCSDCPU"), HostCSDCPUChartOption);
+            HostCSDCPUChart.render();
+
+            var powerdataArray = [HostPower, csdPower]
+            HostCSDPowerChartOption.series[0].data = powerdataArray;
+            var HostCSDPowerChart = new ApexCharts(document.querySelector("#HostCSDPower"), HostCSDPowerChartOption);
+            HostCSDPowerChart.render();
+
+            CSDCpuPowerChartOption.series[0].data = csdCpuArr;
+            CSDCpuPowerChartOption.series[1].data = csdPowerArr;
+            var CSDCpuPowerChart = new ApexCharts(document.querySelector("#CSDCpuPower"), CSDCpuPowerChartOption);
+            CSDCpuPowerChart.render();
+
         })
-        csdCPUTotal = csdCpuArr.reduce((acc, curr) => acc + curr, 0);
-        csdCPUTotal = csdCPUTotal.toFixed(2);
-        csdPowerTotal = csdPowerArr.reduce((acc, curr) => acc + curr, 0);
-        csdPowerTotal = csdPowerTotal.toFixed(2);
-
-        var preCpuTotal = parseFloat(data.result1[0].storage_cpu_usage_predict) + parseFloat(csdCPUTotal);
-        var prePowerTotal = parseFloat(data.result1[0].storage_power_usage_predict) + parseFloat(csdPowerTotal);
-
-        var CpuTotal = preCpuTotal.toFixed(2)
-        var PowerTotal = prePowerTotal.toFixed(2)
-
-        const CPUTotalCell = document.createElement("td");
-        CPUTotalCell.style.width = "10%";
-        CPUTotalCell.style.textAlign = "center";
-        CPUTotalCell.textContent = `${CpuTotal}`;
-        cpuRow.appendChild(CPUTotalCell);
-
-        const PowerTotalCell = document.createElement("td");
-        PowerTotalCell.style.width = "10%";
-        PowerTotalCell.style.textAlign = "center";
-        PowerTotalCell.textContent = `${PowerTotal}`;
-        powerRow.appendChild(PowerTotalCell);
-
-        const HostCPUCell = document.createElement("td");
-        HostCPUCell.style.width = "10%";
-        HostCPUCell.style.textAlign = "center";
-        HostCPUCell.textContent = `${data.result1[0].storage_cpu_usage_predict}`;
-        const HostCPU = data.result1[0].storage_cpu_usage_predict;
-        cpuRow.appendChild(HostCPUCell);
-
-        const HostPowerCell = document.createElement("td");
-        HostPowerCell.style.width = "10%";
-        HostPowerCell.style.textAlign = "center";
-        HostPowerCell.textContent = `${data.result1[0].storage_power_usage_predict}`;
-        const HostPower = data.result1[0].storage_power_usage_predict;
-        powerRow.appendChild(HostPowerCell);
-
-        const csdCPUTotalCell = document.createElement("td");
-        csdCPUTotalCell.style.width = "10%";
-        csdCPUTotalCell.style.textAlign = "center";
-        csdCPUTotalCell.textContent = `${csdCPUTotal}`;
-        const csdCpu = parseFloat(csdCPUTotal);
-        cpuRow.appendChild(csdCPUTotalCell);
-
-        const csdPowerTotalCell = document.createElement("td");
-        csdPowerTotalCell.style.width = "10%";
-        csdPowerTotalCell.style.textAlign = "center";
-        csdPowerTotalCell.textContent = `${csdPowerTotal}`;
-        const csdPower = parseFloat(csdPowerTotal);
-        powerRow.appendChild(csdPowerTotalCell);
-
-        csdCpuArr.forEach(function (item) {
-            const csdCPUCell = document.createElement("td");
-            csdCPUCell.style.width = "10%";
-            csdCPUCell.style.textAlign = "center";
-            csdCPUCell.textContent = `${item}`;
-            cpuRow.appendChild(csdCPUCell)
-        })
-
-        csdPowerArr.forEach(function (item) {
-            const csdPowerCell = document.createElement("td");
-            csdPowerCell.style.width = "10%";
-            csdPowerCell.style.textAlign = "center";
-            csdPowerCell.textContent = `${item}`;
-            powerRow.appendChild(csdPowerCell)
-        })
-
-        MetricTableBody.appendChild(cpuRow);
-        MetricTableBody.appendChild(powerRow);
-
-        var cpudataArray = [HostCPU, csdCpu]
-        HostCSDCPUChartOption.series[0].data = cpudataArray;
-        var HostCSDCPUChart = new ApexCharts(document.querySelector("#HostCSDCPU"), HostCSDCPUChartOption);
-        HostCSDCPUChart.render();
-
-        var powerdataArray = [HostPower, csdPower]
-        HostCSDPowerChartOption.series[0].data = powerdataArray;
-        var HostCSDPowerChart = new ApexCharts(document.querySelector("#HostCSDPower"), HostCSDPowerChartOption);
-        HostCSDPowerChart.render();
-
-        CSDCpuPowerChartOption.series[0].data = csdCpuArr;
-        CSDCpuPowerChartOption.series[1].data = csdPowerArr;
-        var CSDCpuPowerChart = new ApexCharts(document.querySelector("#CSDCpuPower"), CSDCpuPowerChartOption);
-        CSDCpuPowerChart.render();
-
-    })
-    .catch(console.error(error => console.error('Error: ', error)));
+        .catch(console.error(error => console.error('Error: ', error)));
 
     $(function () {
         $("#metricModal").modal("show");
@@ -569,7 +571,7 @@ function validationLogMetricLoad(validationID) {
 //###모달 기능#####
 // 1. 모달 닫기 
 $("#closeLogModal").click(function () {
-    $(function() {
+    $(function () {
         //컨테이너 로그 출력 데이터 초기화
         var containerLog = document.getElementById("tab1");
         containerLog.innerHTML = "";

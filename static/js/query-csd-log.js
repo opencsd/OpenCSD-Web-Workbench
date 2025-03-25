@@ -9,10 +9,10 @@ var totalCSDLog = [];
 
 let popover;
 var maxList = {
-    "scannedMax" : 1000000,
-    "filteredMax" : 1000000,
-    "ratioMax" : 100,
-    "timeMax" : 500,
+    "scannedMax": 1000000,
+    "filteredMax": 1000000,
+    "ratioMax": 100,
+    "timeMax": 500,
 }
 
 var selectIcon = "";
@@ -20,8 +20,8 @@ var dclIcon = "";
 var ddlIcon = "";
 var otherIcon = "";
 
-function addQueryLog(data){
-    data.forEach(function(result){
+function addQueryLog(data) {
+    data.forEach(function (result) {
         const queryLogTableBody = document.getElementById("queryLogTableBody");
 
         var query = result.query_statement;
@@ -31,35 +31,44 @@ function addQueryLog(data){
 
         const checkboxCell = document.createElement("td");
         checkboxCell.style.width = "5%";
+        checkboxCell.style.textAlign = "center";
         checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input logCheckBox" name="form-type[]">`;
+        checkboxCell.addEventListener('change', function () {
+            const checkboxes = Array.from(document.querySelectorAll(".logCheckBox")); // NodeList -> Array 변환
+            const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+
+            // 모든 체크박스가 체크되었는지 확인
+            if (checkboxes.every(checkbox => checkbox.checked)) {
+                selectAllCheckbox.checked = true;
+            } else {
+                selectAllCheckbox.checked = false;
+            }
+        });
+
 
         const typeCell = document.createElement("td");
         typeCell.style.width = "5%";
         typeCell.style.textAlign = "center";
-        if (result.query_type == "select" || result.query_type == 1) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
-                        <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`;
-                    selectIcon = typeCell.innerHTML;
-                    
-        }
-        else if (result.query_type == "dcl" || result.query_type == 2) {
+
+        //query_type = 1 - select 
+        if (result.query_type == "select") {
+            typeCell.innerHTML = `<img src="../static/image/free-icon-letter-c.png" alt="Select Icon" width="24" height="24">`;
+            selectIcon = typeCell.innerHTML;
+
+        } else if (result.query_type == "dcl") {
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-c" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`;
-                    dclIcon = typeCell.innerHTML;
-        }
-        else if (result.query_type == "ddl" || result.query_type == 3) {
+            dclIcon = typeCell.innerHTML;
+        } else if (result.query_type == "ddl") {
             typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M12 8v8" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`;
-                    ddlIcon = typeCell.innerHTML;
+            ddlIcon = typeCell.innerHTML;
         }
         // else if (result.query_type == "delete" || result.query_type == 4) {
         //     typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -74,7 +83,7 @@ function addQueryLog(data){
                         <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`;
-                    otherIcon = typeCell.innerHTML;
+            otherIcon = typeCell.innerHTML;
         }
 
         const queryIDCell = document.createElement("td");
@@ -88,7 +97,7 @@ function addQueryLog(data){
         queryCell.textContent = `${shortenedQuery}`;
         queryCell.className = "queryCells";
         queryCell.clicked = false;
-        queryCell.addEventListener('click', function() {logClickEvent(queryCell);});
+        queryCell.addEventListener('click', function () { logClickEvent(queryCell); });
         // queryCell.addEventListener("mouseenter", function() {queryCell.style.backgroundColor="#f6f8fb"});
         // queryCell.addEventListener("mouseleave", function() {queryCell.style.backgroundColor=originalColor});
 
@@ -99,7 +108,7 @@ function addQueryLog(data){
 
             let value, max, width;
 
-            if(i==0){//scanned row
+            if (i == 0) {//scanned row
                 value = result.scanned_row_count;
                 // if(maxList.scannedMax < value){
                 //     maxList.scannedMax = value;
@@ -114,7 +123,7 @@ function addQueryLog(data){
                 //     }
                 // }
                 max = maxList.scannedMax;
-            }else if(i==1){//filtered row
+            } else if (i == 1) {//filtered row
                 value = result.filtered_row_count;
                 // if(maxList.filteredMax < value){
                 //     maxList.filteredMax = value;
@@ -129,11 +138,11 @@ function addQueryLog(data){
                 //     }
                 // }
                 max = maxList.filteredMax;
-            }else if(i==2){//filter ratio
+            } else if (i == 2) {//filter ratio
                 let filterRatio = ((result.scanned_row_count - result.filtered_row_count) / result.scanned_row_count) * 100;
                 value = filterRatio.toFixed(2);
                 max = maxList.ratioMax;
-            }else if(i==3){//time
+            } else if (i == 3) {//time
                 value = (result.execution_time).toFixed(2);
                 // if(maxList.timeMax < value){
                 //     maxList.timeMax = value;
@@ -174,10 +183,10 @@ function addQueryLog(data){
                 </svg>
             </a>
         `;
-        dummyButtonCell.addEventListener('click', function() {
+        dummyButtonCell.addEventListener('click', function () {
             dummyButtonCellEventHandler(dummyButtonCell)
         });
-        
+
         newRow.appendChild(checkboxCell);
         newRow.appendChild(typeCell);
         newRow.appendChild(queryIDCell);
@@ -193,138 +202,154 @@ function addQueryLog(data){
 }
 
 
-function addSingleQueryLog(result){
-        const queryLogTableBody = document.getElementById("queryLogTableBody");
+function addSingleQueryLog(result) {
+    const queryLogTableBody = document.getElementById("queryLogTableBody");
+    const dbmsType = getCookie("instance_type");
+    var query = result.query_statement;
+    var shortenedQuery = query.length > 40 ? query.slice(0, 50) + "..." : query;
 
-        var query = result.query_statement;
-        var shortenedQuery = query.length > 40 ? query.slice(0, 50) + "..." : query;
+    const newRow = document.createElement("tr");
 
-        const newRow = document.createElement("tr");
+    const checkboxCell = document.createElement("td");
+    checkboxCell.style.width = "5%";
+    checkboxCell.style.textAlign = "center";
+    checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input logCheckBox" name="form-type[]">`;
+    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+    selectAllCheckbox.checked = false;
+    checkboxCell.addEventListener('change', function () {
+        // 모든 체크박스가 체크되었는지 확인
+        const checkboxes = Array.from(document.querySelectorAll(".logCheckBox")); // NodeList -> Array 변환
 
-        const checkboxCell = document.createElement("td");
-        checkboxCell.style.width = "5%";
-        checkboxCell.innerHTML = `<input type="checkbox" class="form-check-input logCheckBox" name="form-type[]">`;
-
-        const typeCell = document.createElement("td");
-        typeCell.style.width = "5%";
-        typeCell.style.textAlign = "center";
-        if (result.query_type == "select" || result.query_type == 1) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-s" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="Red" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M10 15a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1" />
-                        <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-                    </svg>`;
-                    selectIcon = typeCell.innerHTML;
-                    
+        if (checkboxes.every(checkbox => checkbox.checked)) {
+            selectAllCheckbox.checked = true;
+        } else {
+            selectAllCheckbox.checked = false;
         }
-        else if (result.query_type == "dcl" || result.query_type == 2) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-c" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    });
+
+
+    const typeCell = document.createElement("td");
+    typeCell.style.width = "5%";
+    typeCell.style.textAlign = "center";
+    //query type = 1 - select 문
+    if (result.query_type == "1" && dbmsType == "OPENCSD") {
+        typeCell.innerHTML = `<img src="../static/image/free-icon-letter-c.png" alt="Select Icon" width="24" height="24">`;
+        selectIcon = typeCell.innerHTML;
+
+    } else if (result.query_type == "1" && dbmsType == "MYSQL") {
+        typeCell.innerHTML = `<img src="../static/image/free-icon-letter-s.png" alt="Select Icon" width="24" height="24">`;
+        selectIcon = typeCell.innerHTML;
+
+    }
+    else if (result.query_type == "dcl" && result.query_type == 2) {
+        typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-c" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 8v6a2 2 0 1 0 4 0v-6" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`;
-                    dclIcon = typeCell.innerHTML;
-        }
-        else if (result.query_type == "ddl" || result.query_type == 3) {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        dclIcon = typeCell.innerHTML;
+    }
+    else if (result.query_type == "ddl" && result.query_type == 3) {
+        typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M12 8v8" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`;
-                    ddlIcon = typeCell.innerHTML;
-        }
-        // else if (result.query_type == "delete" || result.query_type == 4) {
-        //     typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        //                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        //                 <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
-        //                 <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-        //             </svg>`
-        // }
-        else {
-            typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-o" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        ddlIcon = typeCell.innerHTML;
+    }
+    // else if (result.query_type == "delete" || result.query_type == 4) {
+    //     typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-d" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#0070C0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    //                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    //                 <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z" />
+    //                 <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+    //             </svg>`
+    // }
+    else {
+        console.log("여기 들어간다고?");
+        typeCell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-letter-o" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M14 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                     </svg>`;
-                    otherIcon = typeCell.innerHTML;
+        otherIcon = typeCell.innerHTML;
+    }
+
+    const queryIDCell = document.createElement("td");
+    queryIDCell.style.width = "1%";
+    queryIDCell.style.textAlign = "center";
+    queryIDCell.textContent = result.query_id;
+
+    const queryCell = document.createElement("td");
+    queryCell.style.width = "30%";
+    queryCell.style.backgroundColor = "#fcfdfe";
+    queryCell.textContent = `${shortenedQuery}`;
+    queryCell.className = "queryCells";
+    queryCell.clicked = false;
+    queryCell.addEventListener('click', function () { logClickEvent(queryCell); });
+    // queryCell.addEventListener("mouseenter", function() {queryCell.style.backgroundColor="#f6f8fb"});
+    // queryCell.addEventListener("mouseleave", function() {queryCell.style.backgroundColor=originalColor});
+
+    const progressBarCells = [];
+    for (let i = 0; i < 4; i++) {
+        const progressBarCell = document.createElement("td");
+        progressBarCell.style.width = "12%";
+
+        let value, max, width;
+
+        if (i == 0) {//scanned row
+            value = result.scanned_row_count;
+            // if(maxList.scannedMax < value){
+            //     maxList.scannedMax = value;
+
+            //     var tbody = document.getElementById("queryLogTableBody");
+            //     var trList = tbody.getElementsByTagName('tr');
+            //     for (var j = 0; j < trList.length; j++) {
+            //         var tdList = trList[j].getElementsByTagName('td');
+            //         var tdValue = tdList[4].querySelector('.progress-bar').ariaValueNow;
+            //         tdList[4].querySelector('.progress-bar').style.width = (tdValue / maxList.scannedMax) * 100 + "%";
+            //         tdList[4].querySelector('.progress-bar').ariaValueMax = maxList.scannedMax;
+            //     }
+            // }
+            max = maxList.scannedMax;
+        } else if (i == 1) {//filtered row
+            value = result.filtered_row_count;
+            // if(maxList.filteredMax < value){
+            //     maxList.filteredMax = value;
+
+            //     var tbody = document.getElementById("queryLogTableBody");
+            //     var trList = tbody.getElementsByTagName('tr');
+            //     for (var j = 0; j < trList.length; j++) {
+            //         var tdList = trList[j].getElementsByTagName('td');
+            //         var tdValue = tdList[5].querySelector('.progress-bar').ariaValueNow;
+            //         tdList[5].querySelector('.progress-bar').style.width = (tdValue / maxList.filteredMax) * 100 + "%";
+            //         tdList[5].querySelector('.progress-bar').ariaValueMax = maxList.filteredMax;
+            //     }
+            // }
+            max = maxList.filteredMax;
+        } else if (i == 2) {//filter ratio
+            let filterRatio = ((result.scanned_row_count - result.filtered_row_count) / result.scanned_row_count) * 100;
+            value = filterRatio.toFixed(2);
+            max = maxList.ratioMax;
+        } else if (i == 3) {//time
+            value = (result.execution_time).toFixed(2);
+            // if(maxList.timeMax < value){
+            //     maxList.timeMax = value;
+
+            //     var tbody = document.getElementById("queryLogTableBody");
+            //     var trList = tbody.getElementsByTagName('tr');
+            //     for (var j = 0; j < trList.length; j++) {
+            //         var tdList = trList[j].getElementsByTagName('td');
+            //         var tdValue = tdList[7].querySelector('.progress-bar').ariaValueNow;
+            //         tdList[7].querySelector('.progress-bar').style.width = (tdValue / maxList.timeMax) * 100 + "%";
+            //         tdList[7].querySelector('.progress-bar').ariaValueMax = maxList.timeMax;
+            //     }
+            // }
+            max = maxList.timeMax;
         }
 
-        const queryIDCell = document.createElement("td");
-        queryIDCell.style.width = "1%";
-        queryIDCell.style.textAlign = "center";
-        queryIDCell.textContent = result.query_id;
+        width = (value / max) * 100;
 
-        const queryCell = document.createElement("td");
-        queryCell.style.width = "30%";
-        queryCell.style.backgroundColor = "#fcfdfe";
-        queryCell.textContent = `${shortenedQuery}`;
-        queryCell.className = "queryCells";
-        queryCell.clicked = false;
-        queryCell.addEventListener('click', function() {logClickEvent(queryCell);});
-        // queryCell.addEventListener("mouseenter", function() {queryCell.style.backgroundColor="#f6f8fb"});
-        // queryCell.addEventListener("mouseleave", function() {queryCell.style.backgroundColor=originalColor});
-
-        const progressBarCells = [];
-        for (let i = 0; i < 4; i++) {
-            const progressBarCell = document.createElement("td");
-            progressBarCell.style.width = "12%";
-
-            let value, max, width;
-
-            if(i==0){//scanned row
-                value = result.scanned_row_count;
-                // if(maxList.scannedMax < value){
-                //     maxList.scannedMax = value;
-
-                //     var tbody = document.getElementById("queryLogTableBody");
-                //     var trList = tbody.getElementsByTagName('tr');
-                //     for (var j = 0; j < trList.length; j++) {
-                //         var tdList = trList[j].getElementsByTagName('td');
-                //         var tdValue = tdList[4].querySelector('.progress-bar').ariaValueNow;
-                //         tdList[4].querySelector('.progress-bar').style.width = (tdValue / maxList.scannedMax) * 100 + "%";
-                //         tdList[4].querySelector('.progress-bar').ariaValueMax = maxList.scannedMax;
-                //     }
-                // }
-                max = maxList.scannedMax;
-            }else if(i==1){//filtered row
-                value = result.filtered_row_count;
-                // if(maxList.filteredMax < value){
-                //     maxList.filteredMax = value;
-
-                //     var tbody = document.getElementById("queryLogTableBody");
-                //     var trList = tbody.getElementsByTagName('tr');
-                //     for (var j = 0; j < trList.length; j++) {
-                //         var tdList = trList[j].getElementsByTagName('td');
-                //         var tdValue = tdList[5].querySelector('.progress-bar').ariaValueNow;
-                //         tdList[5].querySelector('.progress-bar').style.width = (tdValue / maxList.filteredMax) * 100 + "%";
-                //         tdList[5].querySelector('.progress-bar').ariaValueMax = maxList.filteredMax;
-                //     }
-                // }
-                max = maxList.filteredMax;
-            }else if(i==2){//filter ratio
-                let filterRatio = ((result.scanned_row_count - result.filtered_row_count) / result.scanned_row_count) * 100;
-                value = filterRatio.toFixed(2);
-                max = maxList.ratioMax;
-            }else if(i==3){//time
-                value = (result.execution_time).toFixed(2);
-                // if(maxList.timeMax < value){
-                //     maxList.timeMax = value;
-
-                //     var tbody = document.getElementById("queryLogTableBody");
-                //     var trList = tbody.getElementsByTagName('tr');
-                //     for (var j = 0; j < trList.length; j++) {
-                //         var tdList = trList[j].getElementsByTagName('td');
-                //         var tdValue = tdList[7].querySelector('.progress-bar').ariaValueNow;
-                //         tdList[7].querySelector('.progress-bar').style.width = (tdValue / maxList.timeMax) * 100 + "%";
-                //         tdList[7].querySelector('.progress-bar').ariaValueMax = maxList.timeMax;
-                //     }
-                // }
-                max = maxList.timeMax;
-            }
-
-            width = (value / max) * 100;
-
-            progressBarCell.innerHTML = `
+        progressBarCell.innerHTML = `
                 <div class="progress">
                     <div class="progress-bar" style="width: ${width}%" role="progressbar" aria-valuenow="${value}"
                         aria-valuemin="0" aria-valuemax="${max}" aria-label="${value}% Complete">
@@ -334,42 +359,42 @@ function addSingleQueryLog(result){
                     <h6 style="margin-top:5px; margin-bottom:0px;">${value}</h6>
                 </div>
             `;
-            progressBarCells.push(progressBarCell);
-        }
+        progressBarCells.push(progressBarCell);
+    }
 
-        const dummyButtonCell = document.createElement("td");
-        dummyButtonCell.style.width = "5%";
-        dummyButtonCell.innerHTML = `
+    const dummyButtonCell = document.createElement("td");
+    dummyButtonCell.style.width = "5%";
+    dummyButtonCell.innerHTML = `
             <a class="btn btn-link p-0 ssd_btn queryLogDetailClass" data-bs-toggle="popover" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                 </svg>
             </a>
         `;
-        dummyButtonCell.addEventListener('click', function() {
-            dummyButtonCellEventHandler(dummyButtonCell)
-        });
-        
-        newRow.appendChild(checkboxCell);
-        newRow.appendChild(typeCell);
-        newRow.appendChild(queryIDCell);
-        newRow.appendChild(queryCell);
-        for (let i = 0; i < 4; i++) {
-            newRow.appendChild(progressBarCells[i]);
-        }
-        newRow.appendChild(dummyButtonCell);
-        newRow.id = result.query_id;
+    dummyButtonCell.addEventListener('click', function () {
+        dummyButtonCellEventHandler(dummyButtonCell)
+    });
 
-        queryLogTableBody.appendChild(newRow);
+    newRow.appendChild(checkboxCell);
+    newRow.appendChild(typeCell);
+    newRow.appendChild(queryIDCell);
+    newRow.appendChild(queryCell);
+    for (let i = 0; i < 4; i++) {
+        newRow.appendChild(progressBarCells[i]);
+    }
+    newRow.appendChild(dummyButtonCell);
+    newRow.id = result.query_id;
+
+    queryLogTableBody.appendChild(newRow);
 }
 
-function dummyButtonCellEventHandler(dummyButtonCell){
+function dummyButtonCellEventHandler(dummyButtonCell) {
     var queryRow = dummyButtonCell.parentNode;
     var getScan = queryRow.cells[4].querySelectorAll('div');
     var scannedRows = getScan[2].outerText;
     var getFilter = queryRow.cells[5].querySelectorAll('div');
     var filteredRows = getFilter[2].outerText;
-    
+
     if (popover) {
         popover.dispose(); // 기존 팝업 제거
     }
@@ -380,7 +405,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
         trigger: 'focus',
         html: true,
         content: function () {
-            
+
             const popoverContent = document.createElement('div');
             popoverContent.classList.add('text-center');
             popoverContent.style.maxWidth = '200px';
@@ -406,7 +431,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
             DetailButton.addEventListener('click', function () {
                 // 스니펫 테이블
                 queryLogDetailLoad(queryRow.id);
-                
+
                 // 스캔 필터 비율 차트
                 var dataArray = [scannedRows, filteredRows];
                 ScanFilterChartOption.series[0].data = dataArray;
@@ -426,7 +451,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
                     document.removeEventListener('click', documentClickHandler);
                 }
             }
-    
+
             // document의 click 이벤트에 대한 핸들러 등록
             document.addEventListener('click', documentClickHandler);
 
@@ -436,6 +461,7 @@ function dummyButtonCellEventHandler(dummyButtonCell){
     popover.show();
 }
 
+
 // 쿼리 로그
 function modalContentsLoad(query_id) {
     const containerButton = document.getElementById("containerButton");
@@ -443,7 +469,7 @@ function modalContentsLoad(query_id) {
 
     // 드롭다운에서 선택한 항목 보이기
     dropdownItems.forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             containerButton.textContent = item.textContent;
         });
     });
@@ -538,7 +564,7 @@ $(function () {
 // 3. 모달 탭 전환 
 $('a[data-toggle="tab"]').click(function (e) {
     var targetTab = $(e.target).attr('href');
-    
+
     // 탭 1로 전환 시 내용 업데이트
     if (targetTab === '#tab1') {
         $("#containerButton").show();
@@ -571,7 +597,7 @@ function queryLogDetailLoad(query_id) {
     })
         .then(response => response.json())
         .then(data => {
-
+            console.log("data", data);
             queryDetailTableBody.innerHTML = ``;
 
             data.forEach(function (item) {
@@ -598,12 +624,12 @@ function queryLogDetailLoad(query_id) {
                 LimitCell.style.width = "10%";
                 LimitCell.style.textAlign = "center";
                 const HavingCell = document.createElement("td");
-                LimitCell.style.width = "10%";
-                LimitCell.style.textAlign = "center";
+                HavingCell.style.width = "10%";
+                HavingCell.style.textAlign = "center";
 
                 WIDCell.textContent = item.work_id;
                 // TypeCell.textContent = item.snippet_type;
-                switch(item.snippet_type) {
+                switch (item.snippet_type) {
                     case 0:
                         TypeCell.textContent = "CSD_SCAN_SNIPPET";
                         break;
@@ -662,7 +688,9 @@ function queryLogDetailLoad(query_id) {
                 queryDetailTableBody.appendChild(SnippetRow);
             })
         })
-        .catch(console.error(error => console.error('Error: ', error)));
+        .catch(error => {
+            console.log("Error : " + error);
+        })
 
     // 모달 창 열기
     $(function () {

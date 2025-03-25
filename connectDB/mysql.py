@@ -27,6 +27,7 @@ def execute_query_mysql_get_string_result(host_, port_, user_, password_, db_, q
 
 def execute_query_mysql(host_, port_, user_, password_, db_, query_):
     try:
+        
         db = pymysql.connect(
             host=host_,
             port=port_,

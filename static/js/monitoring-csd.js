@@ -7,16 +7,16 @@ let hostMemoryChartData = [], instanceMemoryChartData = [];
 let hostNetworkRxData = [], hostNetworkTxData = [], instanceNetworkRxData = [], instanceNetworkTxData = [];
 let hostDiskChartData = [], instanceDiskChartData = [];
 let chartCategories = [];
-let csdCapacityChart, csdCpuChart, csdMemoryChart, csdNetworkChart;
+let csdCpuChart, csdMemoryChart, csdNetworkChart, csdScoreChart;
 let csdCapacityData = [], csdCpuData = [], csdMemoryData = [], csdNetworkDataRx = [], csdNetworkDataTx = [];
 let csdCategories = [];
 
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
   initializeCharts();
   fetchMetrics();
   setInterval(fetchMetrics, 10000);
-  csdCapacityChart.update({
+  csdScoreChart.update({
     plotOptions: {
       series: {
         point: {
@@ -34,12 +34,15 @@ document.addEventListener("DOMContentLoaded", function(){
 document.addEventListener('DOMContentLoaded', () => {
   // 쿠키에서 session_id 읽기
   const sessionId = getCookie('session_id');
-  
+  const userId = getCookie("user_id");
   if (!sessionId) {
     console.error('Session ID not found in cookies');
     return;
   }
+  if (userId) {
 
+    document.getElementById("user_info").textContent = userId;
+  }
   fetch(`http://10.0.4.87:30800/workbench/monitoring/connection-info?session-id=${sessionId}`, {
     method: 'GET',
     headers: {
@@ -47,44 +50,45 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   })
     .then(response => response.json())
-    .then(data => {updateInstanceInfo(data);
-    const operationNode = data.instanceInfo?.operationNode;
-    const instanceType = data.instanceInfo?.instanceType;
-    const dbName = data.connectionInfo?.dbName;
-    const storageType = data.volumeInfo?.storageType;
-    const accessPort = data.instanceInfo?.accessPort;
+    .then(data => {
+      updateInstanceInfo(data);
+      const operationNode = data.instanceInfo?.operationNode;
+      const instanceType = data.instanceInfo?.instanceType;
+      const dbName = data.connectionInfo?.dbName;
+      const storageType = data.volumeInfo?.storageType;
+      const accessPort = data.instanceInfo?.accessPort;
 
-    document.cookie = `instance_type=${instanceType};path=/;samesite=lax`;
-    document.cookie = `db_name=${dbName};path=/;samesite=lax`;
-    document.cookie = `storage_type=${storageType};path=/;samesite=lax`;
-    document.cookie = `access_port=${accessPort};path=/;samesite=lax`;
+      document.cookie = `instance_type=${instanceType};path=/;samesite=lax`;
+      document.cookie = `db_name=${dbName};path=/;samesite=lax`;
+      document.cookie = `storage_type=${storageType};path=/;samesite=lax`;
+      document.cookie = `access_port=${accessPort};path=/;samesite=lax`;
 
-    if (!operationNode) {
-      console.error('Operation node not found in connection-info');
-      return;
-    }
-    fetch('http://10.0.4.87:30800/cluster/node-list', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(nodeData => {
-        const nodeList = nodeData.nodeList || {};
-        const node = nodeList[operationNode]; // operationNode 이름으로 노드 검색
-        if (node && node.nodeIp) {
-          const nodeIp = node.nodeIp;
-
-          // 쿠키에 nodeIp 저장
-          document.cookie = `node_ip=${nodeIp}; path=/; samesite=lax`;
-          console.log(`Node IP saved in cookie: ${nodeIp}`);
-        } else {
-          console.error('Node IP not found for the operationNode');
-        }
+      if (!operationNode) {
+        console.error('Operation node not found in connection-info');
+        return;
+      }
+      fetch('http://10.0.4.87:30800/cluster/node-list', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch(error => console.error('Error fetching node-list:', error));
-})
+        .then(response => response.json())
+        .then(nodeData => {
+          const nodeList = nodeData.nodeList || {};
+          const node = nodeList[operationNode]; // operationNode 이름으로 노드 검색
+          if (node && node.nodeIp) {
+            const nodeIp = node.nodeIp;
+
+            // 쿠키에 nodeIp 저장
+            document.cookie = `node_ip=${nodeIp}; path=/; samesite=lax`;
+            console.log(`Node IP saved in cookie: ${nodeIp}`);
+          } else {
+            console.error('Node IP not found for the operationNode');
+          }
+        })
+        .catch(error => console.error('Error fetching node-list:', error));
+    })
     .catch(error => console.error('Error fetching data:', error));
 });
 
@@ -122,57 +126,123 @@ function initializeCharts() {
   cpuChart = Highcharts.chart("cpuChart", {
     title: { text: "CPU Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      max: 20,
+      title: {
+        text: "Core"
+      }
+    },
     series: [{ name: "Node CPU", data: [] }]
   });
 
   powerChart = Highcharts.chart("powerChart", {
     title: { text: "Power Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      max: 200,
+      title: {
+        text: "Watts"
+      }
+    },
     series: [{ name: "Node Power", data: [] }]
   });
 
   memoryChart = Highcharts.chart("memoryChart", {
     title: { text: "Memory Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "GB"
+      }
+    },
     series: [{ name: "Node Memory", data: [] }]
   });
 
   networkChart = Highcharts.chart("networkChart", {
     title: { text: "Network Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Bytes"
+      }
+    },
     series: [
       { name: "Node RX", data: [] },
       { name: "Node TX", data: [] }
     ]
   });
 
-  diskChart = Highcharts.chart("diskChart", {
-    title: { text: "Disk Usage" },
-    xAxis: { categories: [] },
-    series: [{ name: "Node Disk", data: [] }]
-  });
 
-  csdCapacityChart = Highcharts.chart("csdCapacityChart", {
-    title: { text: "CSD Capacity Usage" },
-    xAxis: { categories: [] },
-    series: [{ name: "CSD Usage", data: [] }]
+
+  csdScoreChart = Highcharts.chart("csdScoreChart", {
+    chart: {
+      type: 'column'
+    },
+    title: { text: "CSD Status Score" },
+    tooltip: {
+      headerFormat: '<b>CSD # ID</b><br>', // ✅ "CSD # ID"로 고정
+    },
+    colors: ['#A7C7E7', '#C3B1E1', '#77DD77', '#FFB347', '#AEC6CF', '#FFB6C1', '#FFDAC1', '#B5EAD7'],
+    xAxis: {
+      categories: [],
+      labels: {
+        formatter: function () {
+          return `CSD # ID`;
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: "Score"
+      }
+    },
+    plotOptions: {
+      column: {
+        pointWidth: 80, // ✅ 막대 너비 강제 설정
+        groupPadding: 0, // ✅ 그룹 간 간격 제거
+        pointPadding: 0.2 // ✅ 개별 막대 간 간격 최소화
+      }
+    },
+    series: [{ name: "CSD Score", data: [] }]
   });
 
   csdCpuChart = Highcharts.chart("csdCpuChart", {
     title: { text: "CSD CPU Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Core"
+      }
+    },
     series: [{ name: "CPU Usage", data: [] }]
   });
 
   csdMemoryChart = Highcharts.chart("csdMemoryChart", {
     title: { text: "CSD Memory Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "GB"
+      }
+    },
     series: [{ name: "Memory Usage", data: [] }]
   });
 
   csdNetworkChart = Highcharts.chart("csdNetworkChart", {
     title: { text: "CSD Network Usage" },
     xAxis: { categories: [] },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Bytes"
+      }
+    },
     series: [
       { name: "Network RX", data: [] },
       { name: "Network TX", data: [] }
@@ -222,11 +292,11 @@ function updateCSDCharts(csdData) {
       return;
     }
 
-    const seriesData = [];
     const cpuData = [];
     const memoryData = [];
     const networkRxData = [];
     const networkTxData = [];
+    const metricScores = [];
 
     csdArray.reverse().forEach(item => {
       const timestamp = formatTime(item.timestamp);
@@ -234,16 +304,16 @@ function updateCSDCharts(csdData) {
         csdCategories.push(timestamp);
       }
 
-      seriesData.push(item.diskUtilization);
       cpuData.push(item.cpuUtilization);
       memoryData.push(item.memoryUtilization);
       networkRxData.push(item.networkRxData);
       networkTxData.push(item.networkTxData);
+      metricScores.push(item.csdMetricScore);
     });
 
     csdSeries.push({
       name: csdKey,
-      data: seriesData
+      data: metricScores
     });
 
     csdDetails[csdKey] = {
@@ -280,9 +350,10 @@ function updateCharts(instanceData, nodeData) {
   hostDiskChartData = [];
   instanceDiskChartData = [];
   chartCategories = [];
+  metricScore = [];
 
   nodeData.reverse().forEach(item => {
-    hostCpuChartData.push(item.cpuUtilization);
+    hostCpuChartData.push(item.cpuUsed);
     powerChartData.push(item.powerUsed);
     hostMemoryChartData.push(item.memoryUtilization);
     hostNetworkRxData.push(item.networkRxData / KBToGB);
@@ -292,11 +363,13 @@ function updateCharts(instanceData, nodeData) {
   });
 
   instanceData.reverse().forEach(item => {
+
     instanceCpuChartData.push(item.cpuUsage);
     instanceMemoryChartData.push(item.memoryUsage / KBToGB);
     instanceNetworkRxData.push(item.networkRxUsage / KBToGB);
     instanceNetworkTxData.push(item.networkTxUsage / KBToGB);
     instanceDiskChartData.push(item.storageUsage / KBToGB);
+    metricScore.push(item.csdMetricScore);
   });
 
   redrawCharts();
@@ -315,22 +388,22 @@ function updateSelectedCSDCharts(csdId) {
   // 하단 그래프 갱신
   csdCpuChart.series[0].update({
     data: selectedData.cpu,
-    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+    color: csdScoreChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
   });
 
   csdMemoryChart.series[0].update({
     data: selectedData.memory,
-    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+    color: csdScoreChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
   });
 
   csdNetworkChart.series[0].update({
     data: selectedData.networkRx,
-    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+    color: csdScoreChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
   });
 
   csdNetworkChart.series[1].update({
     data: selectedData.networkTx,
-    color: csdCapacityChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
+    color: csdScoreChart.series.find(s => s.name === csdId)?.color || "gray" // 선택된 CSD의 색상
   });
 
   // x축 (시간) 갱신
@@ -346,24 +419,29 @@ function updateSelectedCSDCharts(csdId) {
 
 function redrawCSDCharts(csdSeries) {
   // 기존 시리즈 초기화
-  while (csdCapacityChart.series.length > 0) {
-    csdCapacityChart.series[0].remove(false); // 데이터 제거 (reflow 방지)
+  while (csdScoreChart.series.length > 0) {
+    csdScoreChart.series[0].remove(false); // 데이터 제거 (reflow 방지)
+  }
+  const csdScoreCategories = csdSeries.map(series => series.name);
+  csdScoreChart.xAxis[0].setCategories(csdScoreCategories);
+
+  // Y축 데이터 (각 시리즈에서 마지막 값만 가져오기)
+  const yData = csdSeries.map(series => series.data.at(-1)); // 마지막 값만 가져옴
+
+  for (let i = 0; i < csdSeries.length; i++) {
+    csdScoreChart.addSeries({
+      name: csdSeries[i].name,
+      data: [yData[i]]
+    }, false);
   }
 
-  // 새로운 데이터 추가
-  csdSeries.forEach(series => {
-    csdCapacityChart.addSeries(series, false);
-  });
-
-  // x축 업데이트
-  csdCapacityChart.xAxis[0].setCategories(csdCategories);
-
   // 차트 다시 그리기
-  csdCapacityChart.redraw();
+  csdScoreChart.redraw();
 }
 
 function handleCSDPointClick(event) {
   const csdId = event.point.series.name; // 클릭된 CSD의 이름
+  console.log("handle id ", csdId);
   const seriesColor = event.point.series.color; // 클릭된 시리즈의 색상
 
   console.log(`Selected CSD: ${csdId}, Color: ${seriesColor}`);
@@ -389,9 +467,8 @@ function redrawCharts() {
 
   networkChart.xAxis[0].setCategories(chartCategories);
 
-  diskChart.series[0].setData(hostDiskChartData);
 
-  diskChart.xAxis[0].setCategories(chartCategories);
+
 }
 
 
@@ -409,15 +486,15 @@ let storeduserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
 dbInfoSlideBtn.addEventListener('click', () => {
   const hiddenDBInfo = document.getElementById('hiddenDBInfo');
-  
+
   if (isDBInfoSlideBtnClicked) {
-      dbInfoSlideUpIcon.style.display = 'none';
-      dbInfoSlideDownIcon.style.display = 'inline';
-      hiddenDBInfo.style.display = 'block';
+    dbInfoSlideUpIcon.style.display = 'none';
+    dbInfoSlideDownIcon.style.display = 'inline';
+    hiddenDBInfo.style.display = 'block';
   } else {
-      dbInfoSlideUpIcon.style.display = 'inline';
-      dbInfoSlideDownIcon.style.display = 'none';
-      hiddenDBInfo.style.display = 'none';
+    dbInfoSlideUpIcon.style.display = 'inline';
+    dbInfoSlideDownIcon.style.display = 'none';
+    hiddenDBInfo.style.display = 'none';
   }
   isDBInfoSlideBtnClicked = !isDBInfoSlideBtnClicked;
 });

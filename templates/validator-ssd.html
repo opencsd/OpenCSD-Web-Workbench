@@ -121,7 +121,7 @@
           <div class="container-xl">
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
-                <a class="nav-link" href="/monitoring">
+                <a class="nav-link" href="/monitoring-ssd">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@
                 </a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link" href="/query">
+                <a class="nav-link" href="/query-ssd">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google-big-query"
@@ -160,7 +160,7 @@
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/validator">
+                <a class="nav-link" href="/validator-ssd">
                   <span
                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cardboards" width="44"
@@ -187,11 +187,13 @@
       <div class="page-header d-print-none">
         <div class="container-xl">
           <div class="row g-2 align-items-center" style="display: flex;">
-             <div class="col-lg-6">
-                <p class="page-title">Validator</p>
+            <div class="col-lg-6">
+              <p class="page-title">Validator</p>
             </div>
             <div class="col-lg-6 justify-content-end" style="text-align: right; display: flex;">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-square-rounded" style="margin-top: 3px;" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-square-rounded"
+                style="margin-top: 3px;" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6z" />
                 <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
@@ -209,13 +211,15 @@
           <div class="row">
             <div class="col-7" style="margin-bottom: 15px;">
               <div class="col-lg-12">
-                <div class="card" style="height: 420px;"> 
+                <div class="card" style="height: 420px;">
                   <div class="card-body row justify-content-center">
                     <h3 class="card-title col-5">Query Input</h3>
                     <div class="text-end col-7">
                       <div class="d-none d-sm-inline">
-                        <a href="#" id="dropdownToggle" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px;">tpc-h</a>
-                        <div id="dropdownMenu" class="dropdown-menu" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
+                        <a href="#" id="dropdownToggle" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                          style="padding: 5px 15px;">tpc-h</a>
+                        <div id="dropdownMenu" class="dropdown-menu"
+                          style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
                           <a class="dropdown-item" href="#">none</a>
                         </div>
                       </div>
@@ -223,9 +227,11 @@
                         <a href="#" id="newQuery" class="btn bg-azure" style="padding: 5px 15px;"> New Query </a>
                       </span>
                     </div>
-                    <textarea id="queryTextarea" class="form-control form-control-xl" rows="13" style="resize:none;"></textarea>
+                    <textarea id="queryTextarea" class="form-control form-control-xl" rows="13"
+                      style="resize:none;"></textarea>
                     <div class="d-flex justify-content-center">
-                      <button id="runButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto" style="padding-top: 1rem;">Run</button>
+                      <button id="runButton" class="pushbtn btn btn-azure mt-3 col-6 mx-auto"
+                        style="padding-top: 1rem;">Run</button>
                     </div>
                   </div>
                 </div>
@@ -241,9 +247,10 @@
                       </div>
                       <div class="col-6" style=" display: flex; flex-direction: row-reverse;">
                         <div class="dropdown" style="width: auto;">
-                          <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown" id="OptionDropdown">Select Validation Option</a>
+                          <a href="#" class="btn dropdown-toggle opt_toggle" data-bs-toggle="dropdown"
+                            id="OptionDropdown">Select Validation Option</a>
                           <div class="dropdown-menu opt_menu">
-                            <a class="dropdown-item opt_item" href="#" id="new_option">New Option+</a>
+                            <a class="dropdown-item opt_item" href="#" id="new_option">Select Option</a>
                           </div>
                         </div>
                       </div>
@@ -252,8 +259,10 @@
                       </div>
                       <div class="col-1" style="margin-top: 10px;">
                         <button class="btn btn-link p-0" id="optionSetButton">
-                          <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-gear-fill" viewBox="0 0 16 16">
-                            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black"
+                            class="bi bi-gear-fill" viewBox="0 0 16 16">
+                            <path
+                              d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
                           </svg>
                         </button>
                         <div class="modal fade" id="validator-optionSettingModal" tabindex="-1">
@@ -312,7 +321,8 @@
                       <h3 class="card-title col-9">Query Log</h3>
                     </div>
                     <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                      <table id="validatorLogTable" class="table table-vcenter text-nowrap datatable table-hover" style="width: 100%;">
+                      <table id="validatorLogTable" class="table table-vcenter text-nowrap datatable table-hover"
+                        style="width: 100%;">
                         <thead class="sticky-top">
                           <tr style="text-align: center;">
                             <th style="width: 5%;"></th>
@@ -327,7 +337,9 @@
                           </tr>
                         </thead>
                         <tbody id="validatorLogTableBody">
-                          <div id="validatorModal" class="modal fade" tabindex="-1" roll="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp" ng-controller="myCtrl">
+                          <div id="validatorModal" class="modal fade" tabindex="-1" roll="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true" ng-app="myApp"
+                            ng-controller="myCtrl">
                             {% include 'validator-modal.html' %}
                           </div>
                         </tbody>
@@ -336,164 +348,166 @@
                         {% include 'validator-snippetModal.html' %}
                       </div>
                     </div>
-                        <div class="modal fade" id="metricModal" tabindex="-1" role="dialog" aria-hidden="true">
-                          {% include 'validator-metricModal.html' %}
-                        </div>
-                    </div>
-                  
-                    </div>
-                    <div class="card-footer d-flex align-items-center">
-                      <p class="m-0 text-secondary">
-                        <button id="logDelete" type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log Delete</button>
-                      </p>
+                    <div class="modal fade" id="metricModal" tabindex="-1" role="dialog" aria-hidden="true">
+                      {% include 'validator-metricModal.html' %}
                     </div>
                   </div>
+
+                </div>
+                <div class="card-footer d-flex align-items-center">
+                  <p class="m-0 text-secondary">
+                    <button id="logDelete" type="button" class="btn btn-danger btn-sm" style="margin-right:20px;">Log
+                      Delete</button>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="row">
-            <div class="col-12" style="margin-bottom: 15px;">
-              <div class="card">
-                <div class="card-body row">
-                  <div class="col-lg-12">
-                    <div class="row">
-                      <h3 class="card-title col-9">Selected Validation Query Metric Info</h3>
-                      <div class="col-3">
-                        <div class="dropdown" align="right">
-                          <a href="#" id="detailMetricDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown" style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">CPU</a>
-                          <div id="detailMetric" class="dropdown-menu">
-                            <a class="dropdown-item detailMetricDropdownItem" id="cpuMetric">CPU</a>
-                            <a class="dropdown-item detailMetricDropdownItem" id="powerMetric">Power</a>
-                            <a class="dropdown-item detailMetricDropdownItem" id="networkMetric">Network</a>
-                            <a class="dropdown-item detailMetricDropdownItem" id="executionTime">Time</a>
-                          </div>
-                        </div>
+      <div class="row">
+        <div class="col-12" style="margin-bottom: 15px;">
+          <div class="card">
+            <div class="card-body row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <h3 class="card-title col-9">Selected Validation Query Metric Info</h3>
+                  <div class="col-3">
+                    <div class="dropdown" align="right">
+                      <a href="#" id="detailMetricDropdown" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                        style="padding: 5px 15px; margin-bottom: 10px; width: 100px;">CPU</a>
+                      <div id="detailMetric" class="dropdown-menu">
+                        <a class="dropdown-item detailMetricDropdownItem" id="cpuMetric">CPU</a>
+                        <a class="dropdown-item detailMetricDropdownItem" id="powerMetric">Power</a>
+                        <a class="dropdown-item detailMetricDropdownItem" id="networkMetric">Network</a>
+                        <a class="dropdown-item detailMetricDropdownItem" id="executionTime">Time</a>
                       </div>
                     </div>
-                    <div class="row" style="display: flex;">
-                      <div class="col-6" style="padding-right: 5px;">
-                        <div class="card" style="padding: 0 15px 10px 0;">
-                          <div class="row" style="padding-top: 5px;">
-                            <div style="margin: 5px 15px 15px;">Metric Compare</div>
-                            <div id="metricCompare" style="display: block;"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" style="padding-left: 5px;">
-                        <div class="card" style="padding: 0 15px 10px 0;">
-                          <div class="row" style="padding-top: 5px;">
-                            <div style="margin: 5px 15px 15px;">Detail Compare</div>
-                              <div id="detailCPU" style="display: block;"></div>
-                              <div id="detailPower" style="display: none;"></div>
-                              <div id="detailNetwork" style="display: none;"></div>
-                              <div id="detailTime" style="display: none;"></div>
-                              <!-- <div id="detailChart" style="display: block;"></div> -->
-                            </div>
-                          </div>
-                        </div>
+                  </div>
+                </div>
+                <div class="row" style="display: flex;">
+                  <div class="col-6" style="padding-right: 5px;">
+                    <div class="card" style="padding: 0 15px 10px 0;">
+                      <div class="row" style="padding-top: 5px;">
+                        <div style="margin: 5px 15px 15px;">Metric Compare</div>
+                        <div id="metricCompare" style="display: block;"></div>
                       </div>
                     </div>
-                    <div class="row" style="display: flex;">
-                      <h4 class="col-10" style="margin-top: 15px; margin-bottom: 0px; padding-left: 10px;">Selected Validation Query Option Info</h4>
-                      <div class="col-12">
-                        <table class="simul_table" style="width: 100%;">
-                          <thead class="simul_thead">
-                            <tr class="simul_tr">
-                              <th class="simul_th">Selected ID</th>
-                              <th class="simul_th">Option Name</th>
-                              <th class="simul_th">DBMS</th>
-                              <th class="simul_th">Storage Type</th>
-                              <th class="simul_th">CSD Type</th>
-                              <th class="simul_th">CSD Count</th>
-                              <th class="simul_th">Block Count</th>
-                              <th class="simul_th">Scheduling Algorithm</th>
-                            </tr>
-                          </thead>
-                          <tbody class="simul_tbody">
-                            <tr class="simul_tr">
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                              <td class="simul_td firstCol">-</td>
-                            </tr>
-                            <tr class="simul_tr">
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                              <td class="simul_td secondCol">-</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                  </div>
+                  <div class="col-6" style="padding-left: 5px;">
+                    <div class="card" style="padding: 0 15px 10px 0;">
+                      <div class="row" style="padding-top: 5px;">
+                        <div style="margin: 5px 15px 15px;">Detail Compare</div>
+                        <div id="detailCPU" style="display: block;"></div>
+                        <div id="detailPower" style="display: none;"></div>
+                        <div id="detailNetwork" style="display: none;"></div>
+                        <div id="detailTime" style="display: none;"></div>
+                        <!-- <div id="detailChart" style="display: block;"></div> -->
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div class="row" style="display: flex;">
+                <h4 class="col-10" style="margin-top: 15px; margin-bottom: 0px; padding-left: 10px;">Selected Validation
+                  Query Option Info</h4>
+                <div class="col-12">
+                  <table class="simul_table" style="width: 100%;">
+                    <thead class="simul_thead">
+                      <tr class="simul_tr">
+                        <th class="simul_th">Selected ID</th>
+                        <th class="simul_th">Option Name</th>
+                        <th class="simul_th">DBMS</th>
+                        <th class="simul_th">Storage Type</th>
+                        <th class="simul_th">CSD Type</th>
+                        <th class="simul_th">CSD Count</th>
+                        <th class="simul_th">Block Count</th>
+                        <th class="simul_th">Scheduling Algorithm</th>
+                      </tr>
+                    </thead>
+                    <tbody class="simul_tbody">
+                      <tr class="simul_tr">
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                        <td class="simul_td firstCol">-</td>
+                      </tr>
+                      <tr class="simul_tr">
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                        <td class="simul_td secondCol">-</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
+  </div>
+  </div>
+  <!-- Page body End -->
+
+  <footer class="footer footer-transparent d-print-none">
+    <div class="container-xl">
+      <div class="row text-center align-items-center flex-row-reverse">
+        <div class="col-lg-auto ms-lg-auto">
+          <ul class="list-inline list-inline-dots mb-0">
+            <li class="list-inline-item">
+              <a href="https://tabler.io/docs" target="_blank" class="link-secondary" rel="noopener">Documentation</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="./license.html" class="link-secondary">License</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source
+                code</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24"
+                  height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                </svg>
+                Sponsor
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+          <ul class="list-inline list-inline-dots mb-0">
+            <li class="list-inline-item">
+              Copyright &copy; 2023
+              <a href="." class="link-secondary">Tabler</a>. All rights
+              reserved.
+            </li>
+            <li class="list-inline-item">
+              <a href="./changelog.html" class="link-secondary" rel="noopener">
+                v1.0.0-beta19
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-      <!-- Page body End -->
-
-      <footer class="footer footer-transparent d-print-none">
-        <div class="container-xl">
-          <div class="row text-center align-items-center flex-row-reverse">
-            <div class="col-lg-auto ms-lg-auto">
-              <ul class="list-inline list-inline-dots mb-0">
-                <li class="list-inline-item">
-                  <a href="https://tabler.io/docs" target="_blank" class="link-secondary"
-                    rel="noopener">Documentation</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="./license.html" class="link-secondary">License</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary"
-                    rel="noopener">Source code</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24"
-                      height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
-                    </svg>
-                    Sponsor
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-              <ul class="list-inline list-inline-dots mb-0">
-                <li class="list-inline-item">
-                  Copyright &copy; 2023
-                  <a href="." class="link-secondary">Tabler</a>. All rights
-                  reserved.
-                </li>
-                <li class="list-inline-item">
-                  <a href="./changelog.html" class="link-secondary" rel="noopener">
-                    v1.0.0-beta19
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
+  </footer>
+  </div>
   </div>
   <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -616,7 +630,7 @@
   <script src="../static/js/temp-log.js" defer></script>
   <script src="../static/js/validator-chart-option.js" defer></script>
   <script src="../static/js/validator-log.js" defer></script>
-  <script src="../static/js/validator.js" defer></script>
+  <script src="../static/js/validator-ssd.js" defer></script>
 
   <style>
     .simul_table {
@@ -628,48 +642,49 @@
       display: flex;
       text-align: center;
     }
-    
+
     .simul_tr {
       height: 100%;
       width: 100%;
       text-align: center;
     }
-    
-    .simul_tbody{
-      display:flex;
+
+    .simul_tbody {
+      display: flex;
       text-align: center;
       width: 80%;
     }
 
-    .simul_thead{
-      display:flex;
+    .simul_thead {
+      display: flex;
       text-align: center;
       width: 20%;
     }
-    
-    .simul_th, .simul_td {
+
+    .simul_th,
+    .simul_td {
       display: flex;
       padding: 8px;
       text-align: center;
       border-bottom: 1px solid #ddd;
     }
-    
+
     .simul_th {
       background-color: #f2f2f2;
       text-align: center;
     }
-    
+
     .simul_td {
       padding-left: 15px;
       text-align: center;
     }
 
     #tab1::-webkit-scrollbar-thumb {
-      background: white; 
+      background: white;
       width: 6px;
-      border: 0px solid white; 
+      border: 0px solid white;
     }
-    </style>
+  </style>
 
 </body>
 

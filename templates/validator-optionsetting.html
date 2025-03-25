@@ -1,6 +1,5 @@
-
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Validation Option Setting</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -12,97 +11,86 @@
             </div>
             <label class="form-label">Storage Type</label>
             <div class="form-selectgroup-boxes row mb-3">
-            <div class="col-md-6">
-                <label class="form-selectgroup-item">
-                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" id="ssd_selected"/>
-                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                    <span class="me-3">
-                    <span class="form-selectgroup-check"></span>
-                    </span>
-                    <span class="form-selectgroup-label-content">
-                    <span class="form-selectgroup-title strong mb-1">SSD</span>
-                    </span>
-                </span>
-                </label>
-            </div>
-            <div class="col-md-6">
-                <label class="form-selectgroup-item">
-                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" id="csd_selected"/>
-                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                    <span class="me-3">
-                    <span class="form-selectgroup-check"></span>
-                    </span>
-                    <span class="form-selectgroup-label-content">
-                    <span class="form-selectgroup-title strong mb-1">CSD</span>
-                    </span>
-                </span>
-                </label>
-            </div>
-            </div>
-            <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">DBMS</label>
-                    <select class="form-select" id="selected_dbms">
-                        <option value="1" selected>MySQL</option>
-                        <option value="2">graphDB</option>
-                        <option value="3">OpenCSD</option>
-                    </select>
-                    </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                <label class="form-label">CSD Kind</label>
-                <select class="form-select" id="selected_csdkind">
-                    <option value="1" selected>NGD System</option>
-                    <option value="2">ScaleFlux</option>
-                    <option value="3">SmartSSD</option>
-                </select>
+                <div class="col-md-6">
+                    <label class="form-selectgroup-item">
+                        <input type="radio" name="report-type" value="1" class="form-selectgroup-input"
+                            id="ssd_selected" />
+                        <span class="form-selectgroup-label d-flex align-items-center p-3">
+                            <span class="me-3">
+                                <span class="form-selectgroup-check"></span>
+                            </span>
+                            <span class="form-selectgroup-label-content">
+                                <span class="form-selectgroup-title strong mb-1">SSD</span>
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-selectgroup-item">
+                        <input type="radio" name="report-type" value="1" class="form-selectgroup-input"
+                            id="csd_selected" />
+                        <span class="form-selectgroup-label d-flex align-items-center p-3">
+                            <span class="me-3">
+                                <span class="form-selectgroup-check"></span>
+                            </span>
+                            <span class="form-selectgroup-label-content">
+                                <span class="form-selectgroup-title strong mb-1">CSD</span>
+                            </span>
+                        </span>
+                    </label>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">DBMS</label>
+                        <select class="form-select" id="selected_dbms">
+                            <option value="1" selected>MySQL</option>
+                            <option value="2">GraphDB</option>
+                            <option value="3">OpenCSD</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Vendor</label>
+                        <input type="text" class="form-control" id="selected_csdkind" disabled>
+
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label">CSD Count</label>
                         <input type="number" class="form-control" id="val_SetCsdCount">
-                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="mb-3">
-                    <label class="form-label">Block Count</label>
-                    <input type="number" class="form-control" id="val_SetBlockCount">
+                        <label class="form-label">Block Count</label>
+                        <input type="number" class="form-control" id="val_SetBlockCount">
                     </div>
                 </div>
             </div>
-            <label class="form-label">Scheduling Algorithm</label>
-            <div class="btn-group w-100"role="group" id="scheduling_algorithm">
-                <input type="radio" class="btn-check" name="btn-new-algo" id="modi-random" autocomplete="off" checked>
-                <label for="modi-random" class="btn">Random</label>
+            <label class="form-label" id="scheduling_label">Scheduling Algorithm</label>
+            <div class="btn-group w-100" role="group" id="scheduling_algorithm">
+                <input type="radio" class="btn-check" name="btn-new-algo" id="modi-dfa" autocomplete="off">
+                <label for="modi-dfa" class="btn">DFA</label>
                 <input type="radio" class="btn-check" name="btn-new-algo" id="modi-dcs" autocomplete="off">
-                <label for="modi-dcs"  class="btn">DCS</label>
+                <label for="modi-dcs" class="btn">DCS</label>
                 <input type="radio" class="btn-check" name="btn-new-algo" id="modi-dsi" autocomplete="off">
-                <label for="modi-dsi"  class="btn">DSI</label>
-                <input type="radio" class="btn-check" name="btn-new-algo" id="modi_AutoSelection" autocomplete="off">
-                <label for="modi_AutoSelection" class="btn">Auto Selection</label>
-            </div>
-            <div class="mb-3">
-                <label class="row" style="margin-top: 15px;">
-                    <span class="col"><b>Using Index</b></span>
-                    <span class="col-lg-10">
-                    <label class="form-check form-check-single form-switch">
-                        <input class="form-check-input" type="checkbox" id="using_index" checked>
-                    </label>
-                    </span>
-                </label>
+                <label for="modi-dsi" class="btn">DSI</label>
+                <input type="radio" class="btn-check" name="btn-new-algo" id="modi-auto" autocomplete="off">
+                <label for="modi_auto" class="btn">Auto Selection</label>
             </div>
         </div>
         <div class="modal-footer">
             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-            Cancel
+                Cancel
             </a>
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="optionModify">Modify</button>
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="optionDelete">Delete</button>
         </div>
-        </div>
     </div>
+</div>

@@ -71,7 +71,7 @@
 </head>
 
 <body>
-  
+
   <div class="page">
 
     <!-- Header -->
@@ -184,11 +184,13 @@
       <div class="page-header d-print-none">
         <div class="container-xl">
           <div class="row g-2 align-items-center" style="display: flex;">
-             <div class="col-lg-6">
-                <p class="page-title">DB Monitoring</p>
+            <div class="col-lg-6">
+              <p class="page-title">DB Monitoring</p>
             </div>
             <div class="col-lg-6 justify-content-end" style="text-align: right; display: flex;">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-square-rounded" style="margin-top: 3px;" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-square-rounded"
+                style="margin-top: 3px;" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6z" />
                 <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
@@ -216,11 +218,15 @@
                         </div>
                         <div class="col-3 mt-0">
                           <button class="btn btn-link p-0" id="dbInfoSlideBtn">
-                            <svg id="dbInfoSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                              <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                            <svg id="dbInfoSlideUpIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                              fill="black" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                              <path
+                                d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                             </svg>
-                            <svg id="dbInfoSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
-                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                            <svg id="dbInfoSlideDownIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                              fill="black" class="bi bi-caret-up-fill" viewBox="0 0 16 16" style="display: none;">
+                              <path
+                                d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                             </svg>
                           </button>
                         </div>
@@ -307,14 +313,11 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-4">
+                          <div class="col-6">
                             <div id="memoryChart"></div>
                           </div>
-                          <div class="col-4">
+                          <div class="col-6">
                             <div id="networkChart"></div>
-                          </div>
-                          <div class="col-4">
-                            <div id="diskChart"></div>
                           </div>
                         </div>
                       </div>
@@ -331,7 +334,7 @@
                         </div>
                       </div>
                       <p class="card-title border-bottom"></p>
-                      <div id="csdCapacityChart"></div>
+                      <div id="csdScoreChart"></div>
                       <p class="card-title border-bottom"></p>
                       <div id="csdMetricArea" style="display: always;">
                         <h3 id="selectedCSDID"></h3>
@@ -519,10 +522,10 @@
   <script src="../static/js/libs/demo-theme.min.js"></script>
   <script src="../static/js/libs/tabler.min.js" defer></script>
   <script src="../static/js/libs/demo.min.js" defer></script>
-  
+
   <script src="../static/js/monitoring-csd.js" defer></script>
   <script src="../static/js/monitoring-csd-chart-options.js"></script>
-  
+
 </body>
 
 </html>

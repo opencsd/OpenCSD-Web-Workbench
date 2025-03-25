@@ -11,41 +11,46 @@ var detailChartCategories = [], optionTableData = [];
 
 var cpuMetric, powerMetric, networkMetric, executionTime;
 
-document.addEventListener("DOMContentLoaded", function () { 
+document.addEventListener("DOMContentLoaded", function () {
     document.cookie = `instance_name=keti-opencsd; path=/; samsite=lax`;
+    const userId = getCookie("user_id");
+    if (userId) {
+
+        document.getElementById("user_info").textContent = userId;
+    }
     // 드롭다운 항목과 컨테이너 엘리먼트 참조
-const detailMetricDropdown = document.querySelector("#detailMetricDropdown");
-const detailMetricDropdownItems = document.querySelectorAll(".detailMetricDropdownItem");
+    const detailMetricDropdown = document.querySelector("#detailMetricDropdown");
+    const detailMetricDropdownItems = document.querySelectorAll(".detailMetricDropdownItem");
 
-// 차트 컨테이너 목록
-const chartContainers = {
-    CPU: document.querySelector("#detailCPU"),
-    Power: document.querySelector("#detailPower"),
-    Network: document.querySelector("#detailNetwork"),
-    Time: document.querySelector("#detailTime"),
-};
+    // 차트 컨테이너 목록
+    const chartContainers = {
+        CPU: document.querySelector("#detailCPU"),
+        Power: document.querySelector("#detailPower"),
+        Network: document.querySelector("#detailNetwork"),
+        Time: document.querySelector("#detailTime"),
+    };
 
-// 드롭다운 항목 클릭 이벤트 리스너 추가
-detailMetricDropdownItems.forEach(function(item) {
-    item.addEventListener("click", function() {
-        // 드롭다운 버튼의 텍스트 변경
-        detailMetricDropdown.textContent = item.textContent;
+    // 드롭다운 항목 클릭 이벤트 리스너 추가
+    detailMetricDropdownItems.forEach(function (item) {
+        item.addEventListener("click", function () {
+            // 드롭다운 버튼의 텍스트 변경
+            detailMetricDropdown.textContent = item.textContent;
 
-        // 모든 차트 숨기기
-        Object.values(chartContainers).forEach(function(container) {
-            container.style.display = "none";
+            // 모든 차트 숨기기
+            Object.values(chartContainers).forEach(function (container) {
+                container.style.display = "none";
+            });
+
+            // 선택된 차트만 보이기
+            const selectedChart = chartContainers[item.textContent];
+            if (selectedChart) {
+                selectedChart.style.display = "block";
+            } else {
+                console.error("Unknown chart type:", item.textContent);
+            }
+            drawChart();
         });
-
-        // 선택된 차트만 보이기
-        const selectedChart = chartContainers[item.textContent];
-        if (selectedChart) {
-            selectedChart.style.display = "block";
-        } else {
-            console.error("Unknown chart type:", item.textContent);
-        }
-        drawChart();
     });
-});
 
     metricCompareChart = new ApexCharts(document.getElementById("metricCompare"), metricCompareChartOption);
     detailCPUChart = new ApexCharts(document.getElementById("detailCPU"), detailCPUChartOption);
@@ -71,14 +76,14 @@ function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
-      return parts.pop().split(';').shift();
+        return parts.pop().split(';').shift();
     }
     return null;
 }
 
 // new query 버튼 누르면 쿼리입력창 초기화
 const newQueryButton = document.getElementById("newQuery");
-newQueryButton.addEventListener("click", function() {
+newQueryButton.addEventListener("click", function () {
     queryTextArea.value = "";
 });
 
@@ -88,7 +93,7 @@ runButton.addEventListener("click", function () {
     const user_id = getCookie("user_id");
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     var queryText = dropdownToggle.textContent;
@@ -117,16 +122,12 @@ runButton.addEventListener("click", function () {
             return response.json();
         })
         .then(data => {
+            console.log("run data", data);
             runButton.disabled = false;
-            console.log(1);
             addValidatorLog(data);
-            console.log(2);
             updateChartData(data[0]);
-            console.log(3);
             drawChart();
-            console.log(4);
             updateOptionTableData(data[0].validation_id, optionID);
-            console.log(5);
         })
         .catch(error => {
             console.error('Fetch error:', error);
@@ -150,21 +151,21 @@ queryNumbers.forEach((number) => {
     dropdownMenu.appendChild(dropdownItem);
 
     dropdownItem.addEventListener("click", function (event) {
-        event.preventDefault(); 
-            dropdownToggle.textContent = dropdownItem.textContent;
+        event.preventDefault();
+        dropdownToggle.textContent = dropdownItem.textContent;
 
-            // 선택한 쿼리 서버로부터 GET
-            fetch('/validator/tpch', {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                redirect: 'follow',
-                body: JSON.stringify({
-                    "selected_tpch_num": number
-                })
+        // 선택한 쿼리 서버로부터 GET
+        fetch('/validator/tpch', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            body: JSON.stringify({
+                "selected_tpch_num": number
             })
+        })
             .then(response => response.json())
             .then(data => {
                 queryTextArea.value = data.selected_tpch_query;
@@ -172,16 +173,16 @@ queryNumbers.forEach((number) => {
             .catch(error => {
                 console.error('Fetch 오류: ', error);
             })
-    }); 
+    });
 });
 
 
 // 옵션 드롭다운 리스트 불러오기
-function getOptionList(){
+function getOptionList() {
     clearOptionDropdown();
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
 
@@ -197,27 +198,27 @@ function getOptionList(){
             node_ip
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        // console.log(data)
-        var dropdown = document.querySelector(".opt_menu");
+        .then(response => response.json())
+        .then(data => {
+            console.log("getOptionList() ", data);
+            var dropdown = document.querySelector(".opt_menu");
 
-        data.forEach(function(item) {
-            var option = document.createElement("a");
-            option.classList.add("dropdown-item", "opt_item");
-            option.href = "#";
-            option.dataset.option = item["data-option"];
-            option.innerText = item.option_name;
-            option.value = item.option_id;
-            dropdown.appendChild(option);
+            data.forEach(function (item) {
+                var option = document.createElement("a");
+                option.classList.add("dropdown-item", "opt_item");
+                option.href = "#";
+                option.dataset.option = item["data-option"];
+                option.innerText = item.option_name;
+                option.value = item.option_id;
+                dropdown.appendChild(option);
+            })
         })
-    })
-    .catch(error => {
-        console.error('Fetch error: ', error);
-    })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        })
 }
 
-function clearOptionDropdown(){
+function clearOptionDropdown() {
     var dropdown = document.querySelector(".opt_menu");
     var option = document.createElement("option");
     dropdown.innerHTML = '';
@@ -230,11 +231,13 @@ function clearOptionDropdown(){
     option.value = "";
     dropdown.appendChild(option);
 }
+let selected_option = {}
 
-function updateOptionTableData(validationID,optionID){
+function updateOptionTableData(validationID, optionID) {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     fetch('/validator/option/get-one', {
@@ -250,30 +253,33 @@ function updateOptionTableData(validationID,optionID){
             instance_name
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        var option = {
-            "selected_id" : validationID,
-            "option_name" : data[0].option_name,
-            "dbms" : data[0].dbms_type,
-            "storage_type" : data[0].storage_type,
-            "csd_type" : data[0].csd_type,
-            "csd_count" : data[0].csd_count,
-            "block_count" : data[0].block_count,
-            "scheduling_algorithm" : data[0].scheduling_algorithm
-        }
+        .then(response => response.json())
+        .then(data => {
+            console.log("updateOptionTableData ", data);
+            selected_option = {
+                selected_id: validationID,
+                option_name: data[0].option_name,
+                dbms: data[0].dbms_type,
+                storage_type: data[0].storage_type,
+                csd_type: data[0].csd_type,
+                csd_count: data[0].csd_count,
+                block_count: data[0].block_count,
+                scheduling_algorithm: data[0].scheduling_algorithm,
 
-        optionTableData.push(option);
 
-        if(optionTableData.length == 3){
-            optionTableData.shift();
-        }
+            }
 
-        drawOptionTable();
-    })
-    .catch(error => {
-        console.error('Fetch error: ', error);
-    })    
+            optionTableData.push(selected_option);
+
+            if (optionTableData.length == 3) {
+                optionTableData.shift();
+            }
+
+            drawOptionTable();
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        })
 }
 
 // 옵션 드롭다운 선택 시 동작
@@ -282,18 +288,21 @@ const opt_dropdownToggle = document.querySelector(".opt_toggle");
 var selectedOptionName = "";
 var selectedStorageType = "";
 
+const dbName = document.getElementById("dbName");
 const dbmsInfo = document.getElementById("dbmsInfo");
 const storageTypeInfo = document.getElementById("storageTypeInfo");
 const csdkindInfo = document.getElementById("csdkindInfo");
 const csdCountInfo = document.getElementById("csdCountInfo");
 const blockCountInfo = document.getElementById("blockCountInfo");
 const algorithmInfo = document.getElementById("algorithmInfo");
-var optionID = 0;
+const index = document.getElementById("index");
 
+var optionID = 0;
 opt_dropdownMenu.addEventListener("click", function (e) {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    const db_name = getCookie("db_name");
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     if (e.target && e.target.classList.contains("opt_item")) {
@@ -303,7 +312,7 @@ opt_dropdownMenu.addEventListener("click", function (e) {
 
         optionID = opt_selectedOptionID;
 
-        if(optionID){
+        if (optionID) {
             fetch('/validator/option/get-one', {
                 method: 'POST',
                 mode: 'cors',
@@ -317,20 +326,33 @@ opt_dropdownMenu.addEventListener("click", function (e) {
                     instance_name,
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                dbmsInfo.textContent = data[0].dbms_type.toUpperCase(); 
-                storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
-                csdkindInfo.textContent = data[0].csd_type;
-                csdCountInfo.textContent = data[0].csd_count;
-                blockCountInfo.textContent = data[0].block_count;
-                algorithmInfo.textContent = data[0].scheduling_algorithm;
-                selectedOptionName = opt_selectedOption;
-                selectedStorageType = data[0].storage_type.toUpperCase();
-            })
-            .catch(error => {
-                console.error('Fetch 오류: ', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log("dropdown data ", data);
+                    selected_option = {
+                        db_name: db_name,
+                        dbms_info: data[0].dbms_type,
+                        storage_type_info: data[0].storage_type,
+                        csd_kind_info: data[0].csd_type,
+                        csd_count_info: data[0].csd_count,
+                        block_count_info: data[0].block_count,
+                        scheduling_algorithm: data[0].scheduling_algorithm,
+
+                    }
+                    dbName.textContent = db_name.toUpperCase();
+                    dbmsInfo.textContent = data[0].dbms_type.toUpperCase();
+                    storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+                    csdkindInfo.textContent = data[0].csd_type ? data[0].csd_type.toUpperCase() : "-";
+                    csdCountInfo.textContent = data[0].csd_count ? data[0].csd_count : "-";
+                    blockCountInfo.textContent = data[0].block_count ? data[0].block_count : "-";
+                    algorithmInfo.textContent = data[0].scheduling_algorithm ? data[0].scheduling_algorithm.toUpperCase() : "-";
+                    selectedOptionName = opt_selectedOption;
+                    selectedStorageType = data[0].storage_type.toUpperCase();
+                    index.textContent = data[0].using_index ? "Use" : "Not Use";
+                })
+                .catch(error => {
+                    console.error('Fetch 오류: ', error);
+                });
         }
         else {
             NewOptionmodalLoad();
@@ -339,19 +361,18 @@ opt_dropdownMenu.addEventListener("click", function (e) {
 });
 
 // 새로운 옵션 추가 모달 팝업
-function NewOptionmodalLoad(){
+function NewOptionmodalLoad() {
     // New Option Modal 초기화
     document.getElementById("NewOptionName").value = "";
     document.getElementById("ssd_selected1").checked = false;
     document.getElementById("csd_selected1").checked = false;
-    document.getElementById("new-random").checked = true;
+    document.getElementById("new-dcs").checked = true;
     document.getElementById("new_dbms").value = "mysql";
-    document.getElementById("new_csdkind").value = "ngd";
+    document.getElementById("new_csdkind").value = "NGD";
     document.getElementById("newCsdCount").value = "";
     document.getElementById("newBlockCount").value = "";
-    document.getElementById("new_using_index").checked = true;
 
-    $(function() {
+    $(function () {
         $("#validator-newoption").modal("show");
         var modalDiv = $('#validator-newoption');
         modalDiv.modal({
@@ -360,18 +381,77 @@ function NewOptionmodalLoad(){
         });
     });
 }
+let envData = {};
 
+function getEnvironmentInfo() {
+
+    //get
+    const userId = getCookie("user_id");
+    const nodeIp = getCookie("node_ip");
+    //env info
+    const dbName = getCookie("db_name"); //tpch_origin
+    const dbmsType = getCookie("instance_type"); //opencsd
+    const storageType = getCookie("storage_type"); //csd
+
+    let accessPort = getCookie("access_port");
+    // node_ip와 access_port 값이 없을 경우 예외 처리
+    if (!accessPort) {
+        accessPort = 30100;
+    }
+    if (!nodeIp || !accessPort) {
+        console.error("node_ip 또는 access_port가 쿠키에서 누락되었습니다.");
+        return;
+    }
+    if (userId) {
+        document.getElementById("user_info").textContent = userId;
+    }
+    const apiUrl = `http://${nodeIp}:${accessPort}/metadata/environment?db-name=` + dbName;
+
+    fetch(apiUrl, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => { //block_count, db_size, scheduling_algorithm, using_index; ++csd_count, csd_vendor
+            // 쿠키 데이터를 DOM에 설정
+            console.log("env data ", data);
+            envData = {
+                dbName: dbName,
+                dbmsType: dbmsType,
+                storageType: storageType,
+                csdCount: data.csd_count || 8,
+                csdVendor: data.csd_vendor || "NGD System",
+                dbsize: data.db_size ? Math.trunc(data.db_size) + " (MB)" : "-",
+                blockCount: data.block_count || "-",
+                schedulingAlgorithm: data.scheduling_algorithm || "-",
+                usingIndex: data.using_index
+            };
+
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        });
+}
 // 새로운 옵션 입력 후 저장 버튼 클릭 시 동작
 function addNewOption() {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     const option_name = document.getElementById("NewOptionName").value;
     var storage_type = '';
     var radios = document.getElementsByName('storage_type');
 
+    // SSD/CSD 선택 여부 확인
     for (var i = 0; i < radios.length; i++) {
         if (radios[i].checked) {
             storage_type = radios[i].parentNode.querySelector('.form-selectgroup-title').innerText;
@@ -385,10 +465,11 @@ function addNewOption() {
     var block_count = document.getElementById("newBlockCount").value;
     var radioButtons = document.getElementsByName('btn-new-algo');
     var scheduling = '';
-    var usingIndex = 0;
-
-    if (document.getElementById("new-random").checked == true) {
-        scheduling = "random";
+    getEnvironmentInfo();
+    var usingIndex = envData.usingIndex ? true : false;
+    console.log("usingIndex ", envData.usingIndex);
+    if (document.getElementById("new-auto").checked == true) {
+        scheduling = "auto";
     }
     else if (document.getElementById("new-dcs").checked == true) {
         scheduling = "dcs";
@@ -397,20 +478,14 @@ function addNewOption() {
         scheduling = "dsi";
     }
     else {
-        scheduling = "auto";
+        scheduling = "dfa";
     }
-    
-    if (document.getElementById("new_using_index").checked == true) {
-        usingIndex = 1;
-    }
-    
 
-    if(storage_type === "SSD") {
+    if (storage_type === "SSD") {
         csd_type = '';
         csd_count = '';
         block_count = '';
         scheduling = '';
-        usingIndex = '';
     }
 
     var new_option = {
@@ -422,8 +497,8 @@ function addNewOption() {
         block_count: block_count,
         scheduling_algorithm: scheduling,
         using_index: usingIndex,
-        instance_name : instance_name,
-        node_ip : node_ip,
+        instance_name: instance_name,
+        node_ip: node_ip,
     }
 
     console.log(new_option)
@@ -437,66 +512,16 @@ function addNewOption() {
         redirect: 'follow',
         body: JSON.stringify(new_option)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        getOptionList();
-    })
-    .catch(error => {
-        console.error('Fetch 오류: ', error);
-    });
-    
+        .then(response => response.json())
+        .then(data => {
+            console.log("option post ", data);
+            getOptionList();
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        });
+
 }
-
-var new_selected_csdkind = $("#new_csdkind");
-var new_SetCsdCount = $("#newCsdCount");
-var new_SetBlockCount = $("#newBlockCount");
-var new_scheduling_algorithm = $("#new_scheduling_algorithm");
-var new_using_index = $("#new_using_index");
-
-$("#csd_selected1").on("change", function() {
-    if ($(this).is(":checked")){
-        new_selected_csdkind.prop('disabled', false)
-        new_SetCsdCount.prop('disabled', false)
-        new_SetBlockCount.prop('disabled', false)
-        new_using_index.prop('disabled', false)
-        new_scheduling_algorithm.prop('disabled', false)
-    }
-});
-$("#ssd_selected1").on("change", function() {
-    if ($(this).is(":checked")){
-        new_selected_csdkind.prop('disabled', true)
-        new_SetCsdCount.prop('disabled', true)
-        new_SetBlockCount.prop('disabled', true)
-        new_using_index.prop('disabled', true)
-        new_scheduling_algorithm.prop('disabled', true)
-    }
-});
-
-var new_selected_csdkind = $("#new_csdkind");
-var new_SetCsdCount = $("#newCsdCount");
-var new_SetBlockCount = $("#newBlockCount");
-var new_scheduling_algorithm = $("#new_scheduling_algorithm");
-var new_using_index = $("#new_using_index");
-
-$("#csd_selected1").on("change", function() {
-    if ($(this).is(":checked")){
-        new_selected_csdkind.prop('disabled', false)
-        new_SetCsdCount.prop('disabled', false)
-        new_SetBlockCount.prop('disabled', false)
-        new_using_index.prop('disabled', false)
-        new_scheduling_algorithm.prop('disabled', false)
-    }
-});
-$("#ssd_selected1").on("change", function() {
-    if ($(this).is(":checked")){
-        new_selected_csdkind.prop('disabled', true)
-        new_SetCsdCount.prop('disabled', true)
-        new_SetBlockCount.prop('disabled', true)
-        new_using_index.prop('disabled', true)
-        new_scheduling_algorithm.prop('disabled', true)
-    }
-});
 
 
 // 옵션 수정 버튼 클릭 시 모달
@@ -504,7 +529,7 @@ const optSettingButton = document.getElementById("optionSetButton");
 const optSettingModal = document.getElementById("validator-optionSettingModal")
 const modalContainer = document.getElementById('modalContainer');
 
-optSettingButton.addEventListener('click', function() {
+optSettingButton.addEventListener('click', function () {
     console.log("Validation option setting")
     envSettingmodalLoad()
 });
@@ -513,40 +538,68 @@ var selected_csdkind = $("#selected_csdkind");
 var SetCsdCount = $("#val_SetCsdCount");
 var SetBlockCount = $("#val_SetBlockCount");
 var scheduling_algorithm = $("#scheduling_algorithm");
-var using_index = $("#using_index");
 
-$("#csd_selected").on("change", function() {
-    if ($(this).is(":checked")){
+$("#csd_selected").on("change", function () {
+    if ($(this).is(":checked")) {
         selected_csdkind.prop('disabled', false)
         SetCsdCount.prop('disabled', false)
         SetBlockCount.prop('disabled', false)
-        using_index.prop('disabled', false)
         scheduling_algorithm.prop('disabled', false)
     }
 });
-$("#ssd_selected").on("change", function() {
-    if ($(this).is(":checked")){
+$("#ssd_selected").on("change", function () {
+    if ($(this).is(":checked")) {
         selected_csdkind.prop('disabled', true)
         SetCsdCount.prop('disabled', true)
         SetBlockCount.prop('disabled', true)
-        using_index.prop('disabled', true)
         scheduling_algorithm.prop('disabled', true)
     }
 });
+var new_dbms = $("#new_csdkind");
+var new_csdkind = $("#new_csdkind");
+var newCsdCount = $("#newCsdCount");
+var newBlockCount = $("#newBlockCount");
+var new_scheduling_algorithm = $("#new_scheduling_algorithm");
+$("#csd_selected1").on("change", function () {
+    if ($(this).is(":checked")) {
+        new_csdkind.prop('disabled', false).val("1")
+        new_csdkind.prop('disabled', false)
+        newCsdCount.prop('disabled', false)
+        newBlockCount.prop('disabled', false)
+        $("#scheduling_label").css("display", "block");
+        new_scheduling_algorithm.prop('disabled', false).css("display", "flex");
+        $("#new_dbms option[value='1']").hide();
+        $("#new_dbms option[value='2']").hide();
+        $("#new_dbms option[value='3']").show();
 
-function envSettingmodalLoad(b){
-    
-    $(function() {
+    }
+});
+$("#ssd_selected1").on("change", function () {
+    if ($(this).is(":checked")) {
+        new_csdkind.prop('disabled', false).val("2")
+        new_csdkind.prop('disabled', true)
+        newCsdCount.prop('disabled', true)
+        newBlockCount.prop('disabled', true)
+        $("#scheduling_label").css("display", "none");
+        new_scheduling_algorithm.prop('disabled', true).css("display", "none");
+        $("#new_dbms option[value='1']").show();
+        $("#new_dbms option[value='2']").show();
+        $("#new_dbms option[value='3']").hide();
+    }
+});
+
+function envSettingmodalLoad(b) {
+
+    $(function () {
         var OptionName = $("#inputOptionname");
-        var using_index = $("#using_index");
-        var ssd_selected = $("#ssd_selected");
-        var csd_selected = $("#csd_selected");
 
-        if(selectedStorageType === "CSD" ) {
-            csd_selected.prop("checked", true)
-        }
-        else {
-            ssd_selected.prop("checked", true)
+
+        if (selectedStorageType === "CSD") {
+            setCSDOption();
+
+        } else {
+            setSSDOption();
+
         }
 
         OptionName.val(selectedOptionName);
@@ -558,12 +611,79 @@ function envSettingmodalLoad(b){
         });
     });
 }
+function setCSDOption() {
+    const selected_csdkind_element = document.getElementById("selected_csdkind");
+    const selected_dbms_element = document.getElementById("selected_dbms");
+    const val_SetCsdCount_element = document.getElementById("val_SetCsdCount");
+    const val_SetBlockCount_element = document.getElementById("val_SetBlockCount");
+    const scheduling_label_div = document.getElementById("scheduling_label");
+    const scheduling_algorithm_div = document.getElementById("scheduling_algorithm");
+    let algo_radio;
+    if (selected_option.scheduling_algorithm == "dfa") {
+        algo_radio = document.getElementById("modi-dfa");
+        algo_radio.checked = true;
+    } else if (selected_option.scheduling_algorithm == "dsi") {
+        algo_radio = document.getElementById("modi-dsi");
+        algo_radio.checked = true;
+    } else if (selected_option.scheduling_algorithm == "auto") {
+        algo_radio = document.getElementById("modi-auto");
+        algo_radio.checked = true;
+    } else {
+        algo_radio = document.getElementById("modi-dcs");
+        algo_radio.checked = true;
+    }
 
+    selected_csdkind_element.value = "NGD";
+    document.getElementById("csd_selected").checked = true; // 체크 선택
+    const ssd_selected_element = document.getElementById("ssd_selected");
+    ssd_selected_element.disabled = true; // 비활성화
+    ssd_selected_element.closest('.form-selectgroup-item').querySelector('.form-selectgroup-label').style.backgroundColor = "#f6f8fb";
+    selected_dbms_element.value = 3;
+    selected_dbms_element.disabled = true;
+    val_SetCsdCount_element.value = 8;
+    val_SetCsdCount_element.disabled = false;
+    val_SetBlockCount_element.value = 15;
+    val_SetBlockCount_element.disabled = false;
+
+    scheduling_label_div.style.display = "block";
+    scheduling_algorithm_div.style.display = "flex";
+
+}
+function setSSDOption() {
+    const selected_csdkind_element = document.getElementById("selected_csdkind");
+    const selected_dbms_element = document.getElementById("selected_dbms");
+    const val_SetCsdCount_element = document.getElementById("val_SetCsdCount");
+    const val_SetBlockCount_element = document.getElementById("val_SetBlockCount");
+    const scheduling_label_div = document.getElementById("scheduling_label");
+    const scheduling_algorithm_div = document.getElementById("scheduling_algorithm");
+
+    selected_csdkind_element.value = "Samsung";
+    document.getElementById("ssd_selected").checked = true;
+    const csd_selected_element = document.getElementById("csd_selected");
+    csd_selected_element.disabled = true;
+    selected_dbms_element.disabled = false;
+    csd_selected_element.closest('.form-selectgroup-item').querySelector('.form-selectgroup-label').style.backgroundColor = "#f6f8fb";
+    selected_dbms_element.value = 1;
+
+    val_SetCsdCount_element.value = 0;
+    val_SetCsdCount_element.disabled = true;
+
+    val_SetBlockCount_element.value = 0;
+    val_SetBlockCount_element.disabled = true;
+
+    scheduling_label_div.style.display = "none";
+    scheduling_algorithm_div.style.display = "none";
+
+    const openCSDOption = selected_dbms_element.querySelector('option[value="3"]');
+    if (openCSDOption) {
+        openCSDOption.style.display = "none"; // 선택지는 남겨두되 숨김
+    }
+}
 // 옵션 수정 버튼 클릭 시
-document.getElementById("optionModify").addEventListener('click', function() {
+document.getElementById("optionModify").addEventListener('click', function () {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     const option_name = document.getElementById("inputOptionname").value;
@@ -585,8 +705,8 @@ document.getElementById("optionModify").addEventListener('click', function() {
     var scheduling = '';
     var usingIndex = 0;
 
-    if (document.getElementById("modi-random").checked == true) {
-        scheduling = "random";
+    if (document.getElementById("modi-dfa").checked == true) {
+        scheduling = "dfa";
     }
     else if (document.getElementById("modi-dcs").checked == true) {
         scheduling = "dcs";
@@ -597,20 +717,15 @@ document.getElementById("optionModify").addEventListener('click', function() {
     else {
         scheduling = "auto";
     }
-    
-    if (document.getElementById("using_index").checked == true) {
-        usingIndex = 1;
-    }
-    
 
-    if(storage_type === "SSD") {
+
+    if (storage_type === "SSD") {
         csd_type = '';
         csd_count = '';
         block_count = '';
         scheduling = '';
         usingIndex = '';
     }
-
     var update_option = {
         option_name: option_name,
         dbms_type: dbms_type,
@@ -621,8 +736,8 @@ document.getElementById("optionModify").addEventListener('click', function() {
         scheduling_algorithm: scheduling,
         using_index: usingIndex,
         option_id: optionID,
-        instance_name : instance_name,
-        node_ip : node_ip
+        instance_name: instance_name,
+        node_ip: node_ip
     }
 
     console.log(update_option)
@@ -636,25 +751,26 @@ document.getElementById("optionModify").addEventListener('click', function() {
         redirect: 'follow',
         body: JSON.stringify(update_option)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        getOptionList();
-    })
-    .catch(error => {
-        console.error('Fetch 오류: ', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            getOptionList();
+
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        });
 })
 
 // 옵션 삭제
-document.getElementById("optionDelete").addEventListener('click', function() {
+document.getElementById("optionDelete").addEventListener('click', function () {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     console.log(optionID)
-    
+
     fetch('/validator/option/delete', {
         method: 'POST',
         mode: 'cors',
@@ -668,23 +784,24 @@ document.getElementById("optionDelete").addEventListener('click', function() {
             instance_name
         })
     })
-    .then(response => {
-        console.log(response);
-        getOptionList();
-    })
-    .catch(error => {
-        console.error('Fetch 오류: ', error);
-    });
+        .then(response => {
+            console.log(response);
+            getOptionList();
+
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        });
 })
 
 
 
-  
 
-function drawLogTable(){
+
+function drawLogTable() {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     fetch('/validator/log/get-all', {
@@ -699,18 +816,18 @@ function drawLogTable(){
             node_ip
         })
     })
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-        addValidatorLog(data);
-    })
-    .catch(error => {
-        console.error('Fetch error: ', error);
-    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            addValidatorLog(data);
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        })
 }
 
-function updateChartData(data){
+function updateChartData(data) {
     var compareMetric, compareMetricReal;
     var color;
     var id = "ID " + data.validation_id;
@@ -724,35 +841,35 @@ function updateChartData(data){
         ]
     }
 
-    if(metricCompareChartSeries.length == 0){
+    if (metricCompareChartSeries.length == 0) {
         color = "#78b86fff";
         compareMetric = {
             name: id,
             data: [100, 100, 100, 100],
-            color: color 
+            color: color
         }
-    }else{
-        if(metricCompareChartSeries[metricCompareChartSeries.length-1].color == "#e6c333ff"){
+    } else {
+        if (metricCompareChartSeries[metricCompareChartSeries.length - 1].color == "#e6c333ff") {
             color = "#78b86fff";
-        }else{
+        } else {
             color = "#e6c333ff";
         }
 
-        var compareMetricDataFirst = [], compareMetricDataSecond =[];
+        var compareMetricDataFirst = [], compareMetricDataSecond = [];
 
-        for(let i = 0; i<4; i++){
-            let first = metricCompareChartSeriesReal[metricCompareChartSeriesReal.length-1].data[i];
+        for (let i = 0; i < 4; i++) {
+            let first = metricCompareChartSeriesReal[metricCompareChartSeriesReal.length - 1].data[i];
             let second = compareMetricReal.data[i];
-            
-            if(first > second){
+
+            if (first > second) {
                 let ratio = Math.round((second / first) * 100);
                 compareMetricDataFirst.push(100);
                 compareMetricDataSecond.push(ratio);
-            }else if(first < second){
+            } else if (first < second) {
                 let ratio = Math.round((first / second) * 100);
                 compareMetricDataFirst.push(ratio);
                 compareMetricDataSecond.push(100);
-            }else{
+            } else {
                 compareMetricDataFirst.push(100);
                 compareMetricDataSecond.push(100);
             }
@@ -760,9 +877,9 @@ function updateChartData(data){
             compareMetric = {
                 name: id,
                 data: compareMetricDataSecond,
-                color: color 
+                color: color
             }
-            metricCompareChartSeries[metricCompareChartSeries.length-1].data = compareMetricDataFirst;
+            metricCompareChartSeries[metricCompareChartSeries.length - 1].data = compareMetricDataFirst;
         }
     }
 
@@ -770,12 +887,12 @@ function updateChartData(data){
     cpuMetric = {
         name: id,
         data: [data.storage_cpu_usage_predict],
-        color: color 
+        color: color
     }
     powerMetric = {
         name: id,
         data: [data.storage_power_usage_predict],
-        color: color 
+        color: color
     }
     networkMetric = {
         name: id,
@@ -785,7 +902,7 @@ function updateChartData(data){
     executionTime = {
         name: id,
         data: [data.execution_time_predict],
-        color: color 
+        color: color
     }
 
     metricCompareChartSeriesReal.push(compareMetricReal);
@@ -800,7 +917,7 @@ function updateChartData(data){
     detailChartCategories.push(id);
 
     // 3개 이상부터 선택되면 앞에 있는 차트 데이터 사라짐
-    if(metricCompareChartSeries.length == 3){
+    if (metricCompareChartSeries.length == 3) {
         let firstID = detailChartCategories[0];
         let numberValue = parseInt(firstID.match(/\d+/)[0], 10);
         const firstCell = document.getElementById(numberValue);
@@ -855,21 +972,21 @@ function drawChart() {
     console.log("Charts updated successfully.");
 }
 
-function logClickEvent(queryCell){
-    if(queryCell.clicked){
-        queryCell.style.backgroundColor="#fcfdfe";
+function logClickEvent(queryCell) {
+    if (queryCell.clicked) {
+        queryCell.style.backgroundColor = "#fcfdfe";
         logDeactivateEvent(queryCell.parentNode.id);
-    }else{
-        queryCell.style.backgroundColor="#f6f8fb";
+    } else {
+        queryCell.style.backgroundColor = "#f6f8fb";
         logActivateEvent(queryCell.parentNode.id);
     }
     queryCell.clicked = !queryCell.clicked;
 }
 
-function logActivateEvent(validationID){
+function logActivateEvent(validationID) {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
 
@@ -886,28 +1003,28 @@ function logActivateEvent(validationID){
             'validation_id': validationID
         })
     })
-    .then(response => {
-        return response.json();
-    })
-    .then(data => {
-        updateChartData(data[0]);
-        drawChart();
-        updateOptionTableData(validationID,data[0].option_id);
-        queryTextArea.value = data[0].query_statement;
-        // console.log(data[0])
-    })
-    .catch(error => {
-        console.error('Fetch error: ', error);
-    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            updateChartData(data[0]);
+            drawChart();
+            updateOptionTableData(validationID, data[0].option_id);
+            queryTextArea.value = data[0].query_statement;
+            // console.log(data[0])
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        })
 }
 
-function logDeactivateEvent(validationID){
+function logDeactivateEvent(validationID) {
     deleteFromChart(validationID);
     drawChart();
     drawOptionTable();
 }
 
-function deleteFromChart(validationID){
+function deleteFromChart(validationID) {
     var lookupID = "ID " + validationID;
     let index = detailChartCategories.indexOf(lookupID);
     metricCompareChartSeriesReal.splice(index, 1);
@@ -920,23 +1037,22 @@ function deleteFromChart(validationID){
     detailChartCategories.splice(index, 1);
     optionTableData.splice(index, 1);
 
-    if(metricCompareChartSeries.length == 1){
-        metricCompareChartSeries[0].data = [100,100,100,100];
+    if (metricCompareChartSeries.length == 1) {
+        metricCompareChartSeries[0].data = [100, 100, 100, 100];
     }
 }
 
-function drawOptionTable(){
+function drawOptionTable() {
     var tbody = document.querySelector('.simul_tbody');
     var allTdElements = tbody.querySelectorAll('td');
 
-    allTdElements.forEach(function(td) {
+    allTdElements.forEach(function (td) {
         document.querySelector(".firstCol:nth-child(1)").style.backgroundColor = "rgb(252, 253, 254)";
         document.querySelector(".secondCol:nth-child(1)").style.backgroundColor = "rgb(252, 253, 254)";
         td.textContent = '-';
     });
-
-    for(var i = 0; i < optionTableData.length; i++){
-        if(i==0){
+    for (var i = 0; i < optionTableData.length; i++) {
+        if (i == 0) {
             document.querySelector(".firstCol:nth-child(1)").style.backgroundColor = metricCompareChartSeries[i].color;
             document.querySelector(".firstCol:nth-child(1)").textContent = optionTableData[i].selected_id;
             document.querySelector(".firstCol:nth-child(2)").textContent = optionTableData[i].option_name;
@@ -946,7 +1062,7 @@ function drawOptionTable(){
             document.querySelector(".firstCol:nth-child(6)").textContent = optionTableData[i].csd_count ? optionTableData[i].csd_count : '-';
             document.querySelector(".firstCol:nth-child(7)").textContent = optionTableData[i].block_count ? optionTableData[i].block_count : '-';
             document.querySelector(".firstCol:nth-child(8)").textContent = optionTableData[i].scheduling_algorithm ? optionTableData[i].scheduling_algorithm : '-';
-        }else{
+        } else {
             document.querySelector(".secondCol:nth-child(1)").style.backgroundColor = metricCompareChartSeries[i].color;
             document.querySelector(".secondCol:nth-child(1)").textContent = optionTableData[i].selected_id;
             document.querySelector(".secondCol:nth-child(2)").textContent = optionTableData[i].option_name;
@@ -963,10 +1079,10 @@ function drawOptionTable(){
 
 const logDeleteButton = document.getElementById("logDelete");
 
-logDeleteButton.addEventListener("click", function() {
+logDeleteButton.addEventListener("click", function () {
     var instance_name = getCookie("instance_name");
     const node_ip = getCookie("node_ip");
-    if(instance_name === "keti-opencsd"){
+    if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
     const checkedCheckboxIds = [];
@@ -993,26 +1109,26 @@ logDeleteButton.addEventListener("click", function() {
             node_ip
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        checkedCheckboxIds.forEach(rowID => {
-            var rowToDelete = document.getElementById(rowID);
+        .then(response => response.json())
+        .then(data => {
+            checkedCheckboxIds.forEach(rowID => {
+                var rowToDelete = document.getElementById(rowID);
 
-            if (rowToDelete) {
-                rowToDelete.remove();
-            }
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                }
 
-            let possibleID = "ID " + rowID;
-            const indexOfValue = detailChartCategories.indexOf(possibleID);
+                let possibleID = "ID " + rowID;
+                const indexOfValue = detailChartCategories.indexOf(possibleID);
 
-            if (indexOfValue != -1) {
-                logDeactivateEvent(rowID);
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Fetch 오류: ', error);
-    })
+                if (indexOfValue != -1) {
+                    logDeactivateEvent(rowID);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Fetch 오류: ', error);
+        })
 });
 
 

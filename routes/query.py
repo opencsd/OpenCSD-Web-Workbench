@@ -81,17 +81,19 @@ def environment_hadler(action):
     elif action.startswith('modify'):
         if request.method == 'POST':
             try:
-                data = request.json
-                block_count = data['set_blockCount']
-                sched_algo = data['set_schedAlgo']
-                index_scan = data['set_Index']
-                
-                # 옵션 수정 반영하기
-                print(block_count)
-                print(sched_algo)
-                print(index_scan)
-                
-                return jsonify({'result': 0})
+                data = request.get_json()
+                block_count = int(data['block_count'])
+                sched_algo = data['scheduling_algorithm']
+                json_data = {
+                    "block_count": block_count, 
+                    "scheduling_algorithm": sched_algo
+                }
+                response = requests.post('http://10.0.4.87:30100/metadata/environment', json=json_data)
+                if response.status_code == 200:
+                    return json_data
+                    
+                else:
+                    return 'Error: Unable to fetch data from the remote server'
             except:
                 return ""
     else:
@@ -138,14 +140,17 @@ def log_handler(action):
                 query_id = data['query_id']
 
                 query = "select query_id, query_statement, query_result, query_type, execution_time, start_time, end_time, \
-                        scanned_row_count, filtered_row_count, snippet_count from query_log where query_id='{}'".format(query_id)
+                        scanned_row_count, filtered_row_count, snippet_count, cpu_usage, power_usage, data_size from query_log where query_id='{}'".format(query_id)
                 query_log = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
                 
+                
                 start_time = query_log[0]['start_time']
                 end_time = query_log[0]['end_time']
-                
+                print("start_time query_log[0] ", query_log[0])
+
+                print("start_time start_time", start_time)
                 # 너무 많으면 어떻게 나타내지? -> 차트 옵션 수정해야할듯?
                 # memory -> power로 바꾸기!!
                 # query = "select cpu_usage_tick, power_usage from node_monitoring \
@@ -206,7 +211,7 @@ def desc_handler(action):
                 result = mysql.execute_query_mysql(info.INSTANCE_MANAGEMENT_DB_HOST, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             info.INSTANCE_MANAGEMENT_DB_NAME, query)
-                # print(result)
+                # print("jsonify(result) ",jsonify(result))
                 return jsonify(result)
             except:
                 return ""

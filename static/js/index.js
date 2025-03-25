@@ -81,6 +81,8 @@ connect_btn.addEventListener('click', (e) => {
         document.cookie = `instance_name=${document.getElementById("instanceName").value}; path=/; samsite=lax`;
         document.cookie = `session_id=${sessionId}; path=/; samesite=lax`;
         document.cookie = `user_id=${document.getElementById("userName").value}; path=/; samesite=lax`;
+        document.cookie = `db_user=${document.getElementById("dbUser").value}; path=/; samesite=lax`;
+        document.cookie = `db_password=${document.getElementById("dbPassword").value}; path=/; samesite=lax`;
         
         localStorage.setItem('session_id', sessionId);
 
