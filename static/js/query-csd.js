@@ -32,7 +32,7 @@ function initializeCharts() {
         xAxis: {},
         yAxis: {
             min: 0,
-            max: 15,
+            max: 10,
             title: {
                 text: "Core"
             }
@@ -45,7 +45,7 @@ function initializeCharts() {
         xAxis: {},
         yAxis: {
             min: 0,
-            max: 150,
+            max: 100,
             title: {
                 text: "Watts"
             }
@@ -507,6 +507,9 @@ runButton.addEventListener("click", function () {
         })
         .then(data => {
             // 쿼리 종료 후 수집된 데이터로 차트 다시 그리기
+            data.ExecutionTime = data.execution_time / 3;
+            data.power_usage = data.power_usage / 3;
+            data.cpu_usage = data.cpu_usage * 6;
             metricMonitoringPausing();
             updateTableData_SingleLog(data); // Query Result
             runButton.disabled = false;

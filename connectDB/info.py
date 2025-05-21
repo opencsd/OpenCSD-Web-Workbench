@@ -34,4 +34,4 @@ MYSQL_DB_HOST = "10.0.4.80"
 MYSQL_DB_PORT = 3306
 MYSQL_DB_USER = 'root'
 MYSQL_DB_PASSWORD = ''
-MYSQL_DB_NAME = 'tpch_10_index'
+MYSQL_DB_NAME = 'tpch_100_index'

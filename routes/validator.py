@@ -111,11 +111,12 @@ def option_handler(action):
                 print(data)
                 instance_name = data['instance_name']
                 node_ip = data['node_ip']
-
+                
                 query = "select MAX(option_id) as id from validation_option"
                 option_id = mysql.execute_query_mysql(node_ip, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             instance_name, query)
+                
                 print(option_id[0]['id'] + 1)
                 query = "insert validation_option values ({},\"{}\",\"{}\",\"{}\",{},\"{}\",{},\"{}\",{})" \
                     .format(option_id[0]['id'] + 1,data['option_name'],data['dbms_type'],data['storage_type'] \
@@ -123,11 +124,14 @@ def option_handler(action):
                 result = mysql.execute_query_mysql(node_ip, info.INSTANCE_MANAGEMENT_DB_PORT,
                                                             info.INSTANCE_MANAGEMENT_DB_USER, info.INSTANCE_MANAGEMENT_DB_PASSWORD,
                                                             instance_name, query)
+                print(result)
                 print("success")
                 return str(option_id[0]['id'] + 1) + "\n"
             except:
-                print("fail")
-                return "insert error"   
+                # print("fail")
+                # return "insert error" 
+                print("fail:", e)
+                return jsonify({"error": "insert error", "detail": str(e)}), 500  
     elif action.startswith('update'):
         if request.method == 'POST':
             try:

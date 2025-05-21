@@ -32,6 +32,7 @@ function initializeCharts() {
         xAxis: { categories: [] },
         yAxis: {
             min: 0,
+            max: 10,
             title: {
                 text: "Core"
             },
@@ -44,6 +45,7 @@ function initializeCharts() {
         xAxis: { categories: [] },
         yAxis: {
             min: 0,
+            max: 100,
             title: {
                 text: "Watts"
             },
@@ -405,27 +407,71 @@ const metrictable7 = document.querySelector('td.qtable_7');
 const metrictable8 = document.querySelector('td.qtable_8');
 
 function redrawChartsWithRunningData(data) {
+    const sessionId = getCookie("session_id");
+
     console.log("redrawChartsWithRunningData ", data);
     const totalCpuElement = document.getElementById('ssdaverageCpu');
     const totalPowerElement = document.getElementById('ssdtotalPower');
-    let totalCpuUsage = runningCpuData.reduce((acc, val) => acc + val, 0);
-    let totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
+    let totalCpuUsage = data.cpu_usage;
+    let totalPowerUsed = data.power_usage;
+    // let totalCpuUsage = runningCpuData.reduce((acc, val) => acc + val, 0);
+    // let totalPowerUsed = runningPowerData.reduce((acc, val) => acc + val, 0);
 
-    const executionTimeInSeconds = data.execution_time;
-    totalCpuUsage = (totalCpuUsage / (runningCpuData.length * 5)) * executionTimeInSeconds * 1.07;
-    totalPowerUsed = (totalPowerUsed / (runningPowerData.length * 5)) * executionTimeInSeconds * 1.07;
+    let queryStart = data.start_time;
+    let queryEnd = data.end_time;
 
-    cpuChart.series[0].setData(runningCpuData);
-    powerChart.series[0].setData(runningPowerData);
-    if (totalCpuElement) {
-        totalCpuElement.textContent = `Total CPU Usage: ${totalCpuUsage.toFixed(2)} tick`;
-    }
+    const metricUrl = `http://10.0.4.87:30800/workbench/query/metric?session-id=${sessionId}&start-time=${queryStart}&end-time=${queryEnd}`;
 
-    if (totalPowerElement) {
-        totalPowerElement.textContent = `Total Power Usage: ${totalPowerUsed.toFixed(2)} W`;
-    }
+    fetch(metricUrl, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("redraw running data ", data);
+            const reversedData = data.slice().reverse();
+
+            let runningCpuData = reversedData.map(item => {
+
+                return [
+                    formatTime(item.timestamp), // x값
+                    item.cpuUsed                        // y값
+                ];
+            });
+
+            let runningPowerData = reversedData.map(item => {
+                return [
+                    formatTime(item.timestamp),
+                    item.powerUsed
+                ];
+            });
+
+            cpuChart.series[0].setData(runningCpuData);
+            cpuChart.xAxis[0].setCategories(runningCpuData.map(item => item[0]));
+
+            powerChart.series[0].setData(runningPowerData);
+            powerChart.xAxis[0].setCategories(runningPowerData.map(item => item[0]));
+
+            if (totalCpuElement) {
+                totalCpuElement.textContent = `Total CPU Usage: ${totalCpuUsage} tick`;
+            }
+
+            if (totalPowerElement) {
+                totalPowerElement.textContent = `Total Power Usage: ${totalPowerUsed} W`;
+            }
+        }
+        )
+
 }
-
 
 
 document.getElementById("metricViewBtn").addEventListener("click", function () {

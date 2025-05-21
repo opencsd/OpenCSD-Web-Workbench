@@ -482,10 +482,10 @@ function addNewOption() {
     }
 
     if (storage_type === "SSD") {
-        csd_type = '';
-        csd_count = '';
-        block_count = '';
-        scheduling = '';
+        csd_type = 0;
+        csd_count = 0;
+        block_count = 0;
+        scheduling = 0;
     }
 
     var new_option = {

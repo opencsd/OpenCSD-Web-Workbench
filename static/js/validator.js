@@ -204,6 +204,7 @@ function getOptionList() {
             var dropdown = document.querySelector(".opt_menu");
 
             data.forEach(function (item) {
+                console.log(item.option_name);
                 var option = document.createElement("a");
                 option.classList.add("dropdown-item", "opt_item");
                 option.href = "#";
@@ -217,19 +218,21 @@ function getOptionList() {
             console.error('Fetch error: ', error);
         })
 }
-
 function clearOptionDropdown() {
     var dropdown = document.querySelector(".opt_menu");
-    var option = document.createElement("option");
-    dropdown.innerHTML = '';
+    var option = document.createElement("a");  // ⬅ 올바르게 <a> 태그 생성
 
-    // New Option 요소 넣기
+    dropdown.innerHTML = '';  // 기존 항목 비우기
+
+    // New Option 요소 생성 및 설정
     option.classList.add("dropdown-item", "opt_item");
     option.href = "#";
-    option.text = "New Option+";
+    option.innerText = "New Option+";
     option.id = "new_option";
     option.value = "";
+
     dropdown.appendChild(option);
+
 }
 let selected_option = {}
 
@@ -341,6 +344,12 @@ opt_dropdownMenu.addEventListener("click", function (e) {
                     }
                     dbName.textContent = db_name.toUpperCase();
                     dbmsInfo.textContent = data[0].dbms_type.toUpperCase();
+                    if(dbmsInfo.textContent == "OPENCSD"){
+                        dbmsInfo.textContent = "OPENCSD_RDBMS";
+                    }
+                    if(dbmsInfo.textContent == "TIBERO_DB"){
+                        dbmsInfo.textContent = "OPENCSD_GraphDB";
+                    }
                     storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
                     csdkindInfo.textContent = data[0].csd_type ? data[0].csd_type.toUpperCase() : "-";
                     csdCountInfo.textContent = data[0].csd_count ? data[0].csd_count : "-";
@@ -466,7 +475,7 @@ function addNewOption() {
     var radioButtons = document.getElementsByName('btn-new-algo');
     var scheduling = '';
     getEnvironmentInfo();
-    var usingIndex = envData.usingIndex ? true : false;
+    var usingIndex = envData.usingIndex ? 1 : 0;
     console.log("usingIndex ", envData.usingIndex);
     if (document.getElementById("new-auto").checked == true) {
         scheduling = "auto";
@@ -482,10 +491,10 @@ function addNewOption() {
     }
 
     if (storage_type === "SSD") {
-        csd_type = '';
-        csd_count = '';
-        block_count = '';
-        scheduling = '';
+        csd_type = 0;
+        csd_count = 0;
+        block_count = 0;
+        scheduling = 0;
     }
 
     var new_option = {
@@ -516,6 +525,7 @@ function addNewOption() {
         .then(data => {
             console.log("option post ", data);
             getOptionList();
+            selectOption(data);
         })
         .catch(error => {
             console.error('Fetch 오류: ', error);
@@ -523,7 +533,67 @@ function addNewOption() {
 
 }
 
+function selectOption(optionID) {
+    var instance_name = getCookie("instance_name");
+    const node_ip = getCookie("node_ip");
+    const db_name = getCookie("db_name");
 
+    if (instance_name === "keti-opencsd") {
+        instance_name = "keti_opencsd";
+    }
+
+    if (optionID != 0) {
+        fetch('/validator/option/get-one', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            body: JSON.stringify({
+                option_id: optionID,
+                node_ip,
+                instance_name,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("dropdown data ", data);
+                document.getElementById("OptionDropdown").innerText = data[0].option_name;
+
+                selected_option = {
+                    db_name: db_name,
+                    dbms_info: data[0].dbms_type,
+                    storage_type_info: data[0].storage_type,
+                    csd_kind_info: data[0].csd_type,
+                    csd_count_info: data[0].csd_count,
+                    block_count_info: data[0].block_count,
+                    scheduling_algorithm: data[0].scheduling_algorithm,
+
+                }
+                dbName.textContent = db_name.toUpperCase();
+                dbmsInfo.textContent = data[0].dbms_type.toUpperCase();
+                dbmsInfo.textContent = data[0].dbms_type.toUpperCase();
+                    if(dbmsInfo.textContent == "OPENCSD"){
+                        dbmsInfo.textContent = "OPENCSD_RDBMS";
+                    }
+                    if(dbmsInfo.textContent == "TIBERO_DB"){
+                        dbmsInfo.textContent = "OPENCSD_GraphDB";
+                    }
+                storageTypeInfo.textContent = data[0].storage_type.toUpperCase();
+                csdkindInfo.textContent = data[0].csd_type ? data[0].csd_type.toUpperCase() : "-";
+                csdCountInfo.textContent = data[0].csd_count ? data[0].csd_count : "-";
+                blockCountInfo.textContent = data[0].block_count ? data[0].block_count : "-";
+                algorithmInfo.textContent = data[0].scheduling_algorithm ? data[0].scheduling_algorithm.toUpperCase() : "-";
+                selectedOptionName = data[0].option_name;
+                selectedStorageType = data[0].storage_type.toUpperCase();
+                index.textContent = data[0].using_index ? "Use" : "Not Use";
+            })
+            .catch(error => {
+                console.error('Fetch 오류: ', error);
+            });
+    }
+}
 // 옵션 수정 버튼 클릭 시 모달
 const optSettingButton = document.getElementById("optionSetButton");
 const optSettingModal = document.getElementById("validator-optionSettingModal")
@@ -639,7 +709,7 @@ function setCSDOption() {
     ssd_selected_element.disabled = true; // 비활성화
     ssd_selected_element.closest('.form-selectgroup-item').querySelector('.form-selectgroup-label').style.backgroundColor = "#f6f8fb";
     selected_dbms_element.value = 3;
-    selected_dbms_element.disabled = true;
+    selected_dbms_element.disabled = false;
     val_SetCsdCount_element.value = 8;
     val_SetCsdCount_element.disabled = false;
     val_SetBlockCount_element.value = 15;
@@ -647,6 +717,15 @@ function setCSDOption() {
 
     scheduling_label_div.style.display = "block";
     scheduling_algorithm_div.style.display = "flex";
+
+    const SSDOption = selected_dbms_element.querySelector('option[value="1"]');
+    const SSDOption_Graph = selected_dbms_element.querySelector('option[value="2"]');
+    if (SSDOption) {
+        SSDOption.style.display = "none"; // 선택지는 남겨두되 숨김
+    }
+    if (SSDOption_Graph) {
+        SSDOption_Graph.style.display = "none"; // 선택지는 남겨두되 숨김
+    }
 
 }
 function setSSDOption() {
@@ -675,8 +754,12 @@ function setSSDOption() {
     scheduling_algorithm_div.style.display = "none";
 
     const openCSDOption = selected_dbms_element.querySelector('option[value="3"]');
+    const openCSDOption_Graph = selected_dbms_element.querySelector('option[value="4"]');
     if (openCSDOption) {
         openCSDOption.style.display = "none"; // 선택지는 남겨두되 숨김
+    }
+    if (openCSDOption_Graph) {
+        openCSDOption_Graph.style.display = "none"; // 선택지는 남겨두되 숨김
     }
 }
 // 옵션 수정 버튼 클릭 시
@@ -769,7 +852,6 @@ document.getElementById("optionDelete").addEventListener('click', function () {
     if (instance_name === "keti-opencsd") {
         instance_name = "keti_opencsd";
     }
-    console.log(optionID)
 
     fetch('/validator/option/delete', {
         method: 'POST',
@@ -786,6 +868,8 @@ document.getElementById("optionDelete").addEventListener('click', function () {
     })
         .then(response => {
             console.log(response);
+            document.getElementById("OptionDropdown").textContent = selectedOptionName;
+
             getOptionList();
 
         })
